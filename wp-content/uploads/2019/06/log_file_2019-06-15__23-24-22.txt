@@ -1,0 +1,17 @@
+
+---Downloaded files---
+The import files for: Demo Import were successfully downloaded!
+Initial max execution time = 30
+Files info:
+Site URL = http://liminalvillage.com
+Data file = /home/content/74/9044874/html/liminalvillage/wp-content/themes/october//inc/demo/content.xml
+Widget file = not defined!
+Customizer file = /home/content/74/9044874/html/liminalvillage/wp-content/themes/october//inc/demo/customizer.dat
+Redux files:
+not defined!
+
+---Importing customizer settings---
+Error: The customizer import file is not in a correct format. Please make sure to use the correct customizer import file.
+
+---pt-ocdi/after_import---
+
