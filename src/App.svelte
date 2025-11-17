@@ -6,6 +6,8 @@
   import InBetween from './lib/InBetween.svelte';
   import Village from './lib/Village.svelte';
   import Lunations from './lib/Lunations.svelte';
+  import Events from './lib/Events.svelte';
+  import Booking from './lib/Booking.svelte';
   import Contact from './lib/Contact.svelte';
   import Footer from './lib/Footer.svelte';
 </script>
@@ -18,6 +20,8 @@
   <InBetween />
   <Village />
   <Lunations />
+  <Events />
+  <Booking />
   <Contact />
   <Footer />
 </main>
