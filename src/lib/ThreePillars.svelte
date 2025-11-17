@@ -1,27 +1,27 @@
-<section class="three-pillars">
-  <div class="container">
-    <div class="pillars-grid">
-      <div class="pillar pillar-1">
+<section class="section top">
+  <div class="section-content">
+    <div class="row text-center">
+      <div class="box1">
         <i class="fas fa-user-cog"></i>
-        <h3>Personal</h3>
-        <p>
+        <h2>Personal</h2>
+        <p class="hidden-xs">
           Contribute something to yourself. During your stay at the village, you can set
           your personal goals and directions. Outgrow your old self, find your Ikigai,
           learn something new, write your book or your own TED talk!
         </p>
       </div>
-      <div class="pillar pillar-2">
+      <div class="box2">
         <i class="fas fa-street-view"></i>
-        <h3>Local</h3>
-        <p>
+        <h2>Local</h2>
+        <p class="hidden-xs">
           Do something for the people around you and for your surrounding: Teach something
           you know, build something, create art, regenerate the place around you.
         </p>
       </div>
-      <div class="pillar pillar-3">
+      <div class="box3">
         <i class="fas fa-globe-americas"></i>
-        <h3>Global</h3>
-        <p>
+        <h2>Global</h2>
+        <p class="hidden-xs">
           Do something for the planet and the people living on it: Find a cause that you
           deem important in the world, find out more about it, then find ways to help and improve!
         </p>
@@ -30,24 +30,88 @@
   </div>
 </section>
 
-<section class="cta-section">
+<section class="section dark">
   <div class="container">
     <h2>Would you like to visit us?</h2>
-    <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
-      class="btn"
-      target="_blank"
-      rel="noopener"
-    >
-      Apply Here
-    </a>
+    <div class="text-center">
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
+        class="btn"
+        target="_blank"
+        rel="noopener"
+      >
+        Apply Here
+      </a>
+    </div>
   </div>
 </section>
 
 <style>
-  .three-pillars {
-    padding: 4rem 0;
-    background: #f8f9fa;
+  .section {
+    float: left;
+    width: 100%;
+  }
+
+  .section.top .row {
+    margin: 0;
+    display: flex;
+    width: 100%;
+  }
+
+  .section.top .section-content .row > div {
+    flex: 1;
+    padding: 50px 30px;
+    text-align: center;
+  }
+
+  .section.top .section-content .row p {
+    padding: 20px 50px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  .section.top .section-content h2 {
+    font-size: 18px;
+    letter-spacing: 5px;
+    padding-top: 30px;
+    color: var(--dark-color);
+  }
+
+  .section.top .section-content i {
+    padding-top: 30px;
+    color: var(--dark-color);
+    font-size: 3em;
+  }
+
+  .section.top .box1 {
+    background-color: #FFDC91;
+  }
+
+  .section.top .box2 {
+    background-color: #FFC972;
+  }
+
+  .section.top .box3 {
+    background-color: var(--primary-color);
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .section.dark {
+    background-color: var(--dark-color);
+    padding: 50px 0;
+  }
+
+  .section.dark h2 {
+    font-weight: 300;
+    letter-spacing: 10px;
+    line-height: 1.5;
+    text-align: center;
+    color: #FFF;
+    font-size: 50px;
+    margin-bottom: 30px;
   }
 
   .container {
@@ -56,84 +120,93 @@
     padding: 0 2rem;
   }
 
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-  }
-
-  .pillar {
-    text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .pillar:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
-  }
-
-  .pillar i {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    color: #4a9d5f;
-  }
-
-  .pillar h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 1rem;
-  }
-
-  .pillar p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #666;
-  }
-
-  .cta-section {
-    padding: 5rem 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    text-align: center;
-    color: white;
-  }
-
-  .cta-section h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-  }
-
   .btn {
     display: inline-block;
-    padding: 1rem 3rem;
-    background: white;
-    color: #667eea;
+    padding: 15px 60px;
+    background: var(--primary-color);
+    color: var(--dark-color);
     text-decoration: none;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: all 0.5s ease-in-out 0.1s;
+    border: 2px solid var(--primary-color);
   }
 
   .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: transparent;
+    color: var(--primary-color);
   }
 
   @media (max-width: 968px) {
-    .pillars-grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
+    .section.top .section-content .row > div {
+      padding: 40px 20px;
     }
 
-    .cta-section h2 {
-      font-size: 2rem;
+    .section.dark h2 {
+      font-size: 35px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section.top .row {
+      flex-direction: column;
+    }
+
+    .section.top .section-content .row > div {
+      padding: 30px 10px;
+    }
+
+    .section.top .section-content .row p {
+      padding: 20px 20px;
+    }
+
+    .section.top .section-content i {
+      font-size: 2.5em;
+      padding-top: 10px;
+    }
+
+    .section.top .section-content h2 {
+      font-size: 16px;
+      padding-top: 20px;
+    }
+
+    .section.dark {
+      padding: 40px 0;
+    }
+
+    .section.dark h2 {
+      font-size: 25px;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .btn {
+      padding: 10px 40px;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section.top .section-content .row > div {
+      padding: 20px 5px;
+    }
+
+    .section.top .section-content i {
+      font-size: 2em;
+    }
+
+    .section.top .section-content h2 {
+      font-size: 14px;
+      letter-spacing: 3px;
+      padding-top: 15px;
+    }
+
+    .section.dark h2 {
+      font-size: 18px;
+      padding-bottom: 30px;
     }
   }
 </style>

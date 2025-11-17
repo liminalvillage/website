@@ -38,61 +38,49 @@
 
 <style>
   .about {
-    padding: 6rem 0;
+    float: left;
+    width: 100%;
+    padding-top: 100px;
     background: #fff;
   }
 
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 100px;
   }
 
   .section-heading {
-    text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 50px;
+    text-align: left;
   }
 
   .section-heading h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #333;
-    letter-spacing: 2px;
-    position: relative;
-    display: inline-block;
-  }
-
-  .section-heading h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: #4a9d5f;
+    font-size: 50px;
+    letter-spacing: 5px;
+    color: var(--text-color);
+    font-weight: 400;
   }
 
   .section-content {
-    max-width: 900px;
-    margin: 0 auto;
+    text-align: left;
   }
 
   p {
-    font-size: 1.1rem;
+    font-size: 14px;
     line-height: 1.8;
-    color: #555;
-    margin-bottom: 2rem;
+    letter-spacing: 1px;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
   }
 
   a {
-    color: #4a9d5f;
-    text-decoration: none;
-    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: underline;
   }
 
   a:hover {
-    text-decoration: underline;
+    color: var(--dark-color);
   }
 
   .video-container {
@@ -102,25 +90,46 @@
 
   iframe {
     max-width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  @media (max-width: 968px) {
+    .container {
+      padding: 0 50px;
+    }
+
+    .section-heading h2 {
+      font-size: 40px;
+    }
   }
 
   @media (max-width: 768px) {
     .about {
-      padding: 4rem 0;
+      padding-top: 80px;
+    }
+
+    .container {
+      padding: 0 30px;
     }
 
     .section-heading h2 {
-      font-size: 2rem;
-    }
-
-    p {
-      font-size: 1rem;
+      font-size: 35px;
+      letter-spacing: 3px;
     }
 
     iframe {
       height: 250px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-heading h2 {
+      font-size: 28px;
+    }
+
+    iframe {
+      height: 200px;
     }
   }
 </style>

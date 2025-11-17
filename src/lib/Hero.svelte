@@ -9,46 +9,46 @@
 
 <style>
   .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-image: url('/images/droneview.jpg');
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    position: relative;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
   }
 
   .hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    color: white;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.0);
+    display: table;
   }
 
-  h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    animation: fadeInDown 1s ease;
+  .hero-content h1 {
+    color: #FFF;
+    font-size: 50px;
+    font-weight: 300;
+    letter-spacing: 5px;
+    width: 700px;
+    max-width: 90%;
+    margin: 0 auto;
+    border: 3px solid var(--primary-color);
+    padding: 20px 15px;
+    animation: fadeInDown 2s;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
   }
 
   .scroll-down {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: inline-block;
-    margin-top: 3rem;
     text-decoration: none;
   }
 
@@ -56,21 +56,10 @@
     display: block;
     width: 30px;
     height: 30px;
-    border-left: 3px solid white;
-    border-bottom: 3px solid white;
+    border-left: 3px solid var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
     transform: rotate(-45deg);
     animation: bounce 2s infinite;
-  }
-
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   @keyframes bounce {
@@ -86,12 +75,24 @@
   }
 
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2.5rem;
-    }
-
     .hero {
       background-attachment: scroll;
+    }
+
+    .hero-content h1 {
+      font-size: 30px;
+      width: 90%;
+      padding: 15px 10px;
+      letter-spacing: 3px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-content h1 {
+      font-size: 20px;
+      width: 300px;
+      padding: 10px 3px;
+      letter-spacing: 2px;
     }
   }
 </style>
