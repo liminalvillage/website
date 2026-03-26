@@ -6,8 +6,7 @@
  */
 import HoloSphere from '/Users/robertovalenti/Projects/holosphere/holosphere.js';
 
-// The bot resolves chatId 235114395 to this pubkey via KeyManager
-const HOLON_ID = 'e1e76079351820597b3f48fd3a8bf9bbfefd3b5494c754fd44647c826a8beb76';
+const HOLON_ID = '235114395';
 const APP_NAME = 'Holons';
 
 // Extended quest schema — superset of holonsbot quest.json
