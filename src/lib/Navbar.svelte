@@ -11,6 +11,7 @@
     { label: 'IN BETWEEN …', href: '#aplaceinbetween' },
     { label: 'THE VILLAGE', href: '#thevillage' },
     { label: 'LUNATIONS', href: '#lunations' },
+    { label: 'QUESTS', href: '/quests.html', external: true },
     { label: 'PROJECTS', href: 'https://async.hackalong.io/', external: true },
     { label: 'ALL INFO', href: 'https://docs.liminalvillage.com/', external: true },
     { label: 'CONTACT', href: '#contact' },
