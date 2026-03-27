@@ -45,10 +45,8 @@
 </section>
 
 <section class="newsletter">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Subscribe To Our Newsletter</h2>
-    </div>
+  <div class="newsletter-content">
+    <h2>Subscribe To Our Newsletter</h2>
     <form
       action="https://liminalvillage.us10.list-manage.com/subscribe/post?u=f34ed3a710cf1faef9f335534&id=4f9e07d0c2"
       method="post"
@@ -69,11 +67,11 @@
 <style>
   .lunations {
     padding: 6rem 0;
-    background: #fff;
+    background: #faf8f5;
   }
 
   .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 2rem;
   }
@@ -84,107 +82,125 @@
   }
 
   .section-heading h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #333;
-    letter-spacing: 2px;
-    position: relative;
-    display: inline-block;
-  }
-
-  .section-heading h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: #4a9d5f;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #222;
+    text-transform: uppercase;
   }
 
   .section-content {
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
   }
 
   p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #8a8274;
     margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  strong {
+    color: #222;
+    font-size: 100%;
   }
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 1rem;
   }
 
   .gallery-item {
     overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    transition: all 0.35s ease;
   }
 
   .gallery-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
   }
 
   .gallery-item img {
     width: 100%;
-    height: 250px;
+    height: 220px;
     object-fit: cover;
     display: block;
   }
 
+  /* Newsletter */
   .newsletter {
-    padding: 5rem 0;
-    background: linear-gradient(135deg, #4a9d5f 0%, #2d7a3e 100%);
-    color: white;
+    padding: 4rem 2rem;
+    background: #222;
+    text-align: center;
   }
 
-  .newsletter .section-heading h2 {
-    color: white;
+  .newsletter-content {
+    max-width: 600px;
+    margin: 0 auto;
   }
 
-  .newsletter .section-heading h2::after {
-    background: white;
+  .newsletter h2 {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
   }
 
   .newsletter-form {
-    max-width: 600px;
-    margin: 0 auto;
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .newsletter-form input {
     flex: 1;
-    padding: 1rem 1.5rem;
-    border: none;
-    border-radius: 50px;
-    font-size: 1rem;
+    padding: 14px 20px;
+    border: 2px solid rgba(214,161,91,0.3);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: "Open Sans", sans-serif;
+    background: transparent;
+    color: #fff;
+    transition: border-color 0.3s;
+  }
+
+  .newsletter-form input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .newsletter-form input:focus {
+    outline: none;
+    border-color: #D6A15B;
   }
 
   .newsletter-form button {
-    padding: 1rem 2.5rem;
-    background: white;
-    color: #4a9d5f;
-    border: none;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 1rem;
+    padding: 14px 32px;
+    background: transparent;
+    color: #D6A15B;
+    border: 2px solid #D6A15B;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    font-family: "Open Sans", sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
   }
 
   .newsletter-form button:hover {
+    background: #D6A15B;
+    color: #222;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(214,161,91,0.25);
   }
 
   @media (max-width: 768px) {
@@ -193,7 +209,7 @@
     }
 
     .section-heading h2 {
-      font-size: 2rem;
+      font-size: 1.3rem;
     }
 
     .gallery {

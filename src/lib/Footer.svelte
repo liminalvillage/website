@@ -15,15 +15,15 @@
 
 <style>
   .footer {
-    background: #2c3e50;
-    color: white;
+    background: #222;
+    color: #8a8274;
     padding: 2rem 0;
     text-align: center;
     position: relative;
   }
 
   .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
@@ -34,29 +34,31 @@
 
   p {
     margin: 0;
-    font-size: 1rem;
-    color: #bdc3c7;
+    font-size: 0.85rem;
+    color: #8a8274;
+    letter-spacing: 1px;
   }
 
   .back-to-top {
-    background: #4a9d5f;
-    color: white;
+    background: rgba(214,161,91,0.15);
+    color: #D6A15B;
     border: none;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .back-to-top:hover {
-    background: #2d7a3e;
+    background: #D6A15B;
+    color: #222;
     transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(74, 157, 95, 0.4);
+    box-shadow: 0 4px 15px rgba(214,161,91,0.3);
   }
 
   @media (max-width: 576px) {

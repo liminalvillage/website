@@ -1,212 +1,172 @@
-<section class="section top">
-  <div class="section-content">
-    <div class="row text-center">
-      <div class="box1">
-        <i class="fas fa-user-cog"></i>
-        <h2>Personal</h2>
-        <p class="hidden-xs">
-          Contribute something to yourself. During your stay at the village, you can set
-          your personal goals and directions. Outgrow your old self, find your Ikigai,
-          learn something new, write your book or your own TED talk!
-        </p>
+<section class="pillars">
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-icon" style="background: rgba(214,161,91,0.1)">
+        <i class="fas fa-user-cog" style="color: #D6A15B"></i>
       </div>
-      <div class="box2">
-        <i class="fas fa-street-view"></i>
-        <h2>Local</h2>
-        <p class="hidden-xs">
-          Do something for the people around you and for your surrounding: Teach something
-          you know, build something, create art, regenerate the place around you.
-        </p>
+      <h2>Personal</h2>
+      <p>
+        Contribute something to yourself. During your stay at the village, you can set
+        your personal goals and directions. Outgrow your old self, find your Ikigai,
+        learn something new, write your book or your own TED talk!
+      </p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon" style="background: rgba(74,157,95,0.1)">
+        <i class="fas fa-street-view" style="color: #4a9d5f"></i>
       </div>
-      <div class="box3">
-        <i class="fas fa-globe-americas"></i>
-        <h2>Global</h2>
-        <p class="hidden-xs">
-          Do something for the planet and the people living on it: Find a cause that you
-          deem important in the world, find out more about it, then find ways to help and improve!
-        </p>
+      <h2>Local</h2>
+      <p>
+        Do something for the people around you and for your surrounding: Teach something
+        you know, build something, create art, regenerate the place around you.
+      </p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon" style="background: rgba(123,158,107,0.1)">
+        <i class="fas fa-globe-americas" style="color: #7B9E6B"></i>
       </div>
+      <h2>Global</h2>
+      <p>
+        Do something for the planet and the people living on it: Find a cause that you
+        deem important in the world, find out more about it, then find ways to help and improve!
+      </p>
     </div>
   </div>
 </section>
 
-<section class="section dark">
-  <div class="container">
+<section class="cta-dark">
+  <div class="cta-content">
     <h2>Would you like to visit us?</h2>
-    <div class="text-center">
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
-        class="btn"
-        target="_blank"
-        rel="noopener"
-      >
-        Apply Here
-      </a>
-    </div>
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
+      class="btn"
+      target="_blank"
+      rel="noopener"
+    >
+      Apply Here
+    </a>
   </div>
 </section>
 
 <style>
-  .section {
-    float: left;
+  .pillars {
     width: 100%;
+    padding: 4rem 2rem;
+    background: #faf8f5;
   }
 
-  .section.top .row {
-    margin: 0;
-    display: flex;
-    width: 100%;
-  }
-
-  .section.top .section-content .row > div {
-    flex: 1;
-    padding: 50px 30px;
-    text-align: center;
-  }
-
-  .section.top .section-content .row p {
-    padding: 20px 50px;
-    letter-spacing: 1px;
-    line-height: 1.8;
-  }
-
-  .section.top .section-content h2 {
-    font-size: 18px;
-    letter-spacing: 5px;
-    padding-top: 30px;
-    color: var(--dark-color);
-  }
-
-  .section.top .section-content i {
-    padding-top: 30px;
-    color: var(--dark-color);
-    font-size: 3em;
-  }
-
-  .section.top .box1 {
-    background-color: #FFDC91;
-  }
-
-  .section.top .box2 {
-    background-color: #FFC972;
-  }
-
-  .section.top .box3 {
-    background-color: var(--primary-color);
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .section.dark {
-    background-color: var(--dark-color);
-    padding: 50px 0;
-  }
-
-  .section.dark h2 {
-    font-weight: 300;
-    letter-spacing: 10px;
-    line-height: 1.5;
-    text-align: center;
-    color: #FFF;
-    font-size: 50px;
-    margin-bottom: 30px;
-  }
-
-  .container {
-    max-width: 1200px;
+  .pillars-grid {
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .pillar-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    transition: all 0.35s ease;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  }
+
+  .pillar-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .pillar-icon i {
+    font-size: 2rem;
+  }
+
+  .pillar-card h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #222;
+    margin-bottom: 1rem;
+  }
+
+  .pillar-card p {
+    font-size: 0.9rem;
+    color: #8a8274;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+
+  /* CTA Section */
+  .cta-dark {
+    width: 100%;
+    background: #222;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .cta-dark h2 {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 2rem;
   }
 
   .btn {
     display: inline-block;
-    padding: 15px 60px;
-    background: var(--primary-color);
-    color: var(--dark-color);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    border-radius: 0;
-    transition: all 0.5s ease-in-out 0.1s;
+    padding: 16px 48px;
     border: 2px solid var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: transparent;
+    transition: all 0.4s ease;
   }
 
   .btn:hover {
-    background: transparent;
-    color: var(--primary-color);
-  }
-
-  @media (max-width: 968px) {
-    .section.top .section-content .row > div {
-      padding: 40px 20px;
-    }
-
-    .section.dark h2 {
-      font-size: 35px;
-    }
+    background: var(--primary-color);
+    color: #222;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(214,161,91,0.3);
   }
 
   @media (max-width: 768px) {
-    .section.top .row {
-      flex-direction: column;
+    .pillars-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
 
-    .section.top .section-content .row > div {
-      padding: 30px 10px;
+    .pillars {
+      padding: 3rem 1.5rem;
     }
 
-    .section.top .section-content .row p {
-      padding: 20px 20px;
-    }
-
-    .section.top .section-content i {
-      font-size: 2.5em;
-      padding-top: 10px;
-    }
-
-    .section.top .section-content h2 {
-      font-size: 16px;
-      padding-top: 20px;
-    }
-
-    .section.dark {
-      padding: 40px 0;
-    }
-
-    .section.dark h2 {
-      font-size: 25px;
-      text-align: center;
-      padding-bottom: 20px;
+    .cta-dark h2 {
+      font-size: 1.4rem;
+      letter-spacing: 4px;
     }
 
     .btn {
-      padding: 10px 40px;
-      font-size: 12px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .section.top .section-content .row > div {
-      padding: 20px 5px;
-    }
-
-    .section.top .section-content i {
-      font-size: 2em;
-    }
-
-    .section.top .section-content h2 {
-      font-size: 14px;
-      letter-spacing: 3px;
-      padding-top: 15px;
-    }
-
-    .section.dark h2 {
-      font-size: 18px;
-      padding-bottom: 30px;
+      padding: 12px 36px;
+      font-size: 0.8rem;
     }
   }
 </style>

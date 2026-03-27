@@ -72,15 +72,15 @@
   }
 
   .village {
-    background: #fff;
+    background: #faf8f5;
   }
 
   .surroundings {
-    background: #f8f9fa;
+    background: #fff;
   }
 
   .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 2rem;
   }
@@ -91,23 +91,11 @@
   }
 
   .section-heading h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #333;
-    letter-spacing: 2px;
-    position: relative;
-    display: inline-block;
-  }
-
-  .section-heading h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: #4a9d5f;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #222;
+    text-transform: uppercase;
   }
 
   .section-content {
@@ -116,35 +104,35 @@
   }
 
   p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 3rem;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #8a8274;
+    margin-bottom: 2.5rem;
     text-align: center;
+    letter-spacing: 0.5px;
   }
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-top: 2rem;
   }
 
   .gallery-item {
     overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    transition: all 0.35s ease;
   }
 
   .gallery-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
   }
 
   .gallery-item img {
     width: 100%;
-    height: 250px;
+    height: 220px;
     object-fit: cover;
     display: block;
   }
@@ -155,7 +143,7 @@
     }
 
     .section-heading h2 {
-      font-size: 2rem;
+      font-size: 1.3rem;
     }
 
     .gallery {

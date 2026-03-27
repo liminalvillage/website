@@ -712,9 +712,6 @@ function normalizeQuest(raw) {
   };
 }
 
-// Manifest key — stores the list of quest IDs for this holon
-const MANIFEST_KEY = '_quest_index';
-
 // ── Load quests from Holosphere ──
 async function loadQuests() {
   const grid = document.getElementById('questGrid');
@@ -725,32 +722,34 @@ async function loadQuests() {
     // Give GunDB a moment to connect
     await new Promise(r => setTimeout(r, 2500));
 
-    // 1. Load the quest index to get all known IDs
-    const manifest = await holosphere.get(HOLON_ID, 'quests', MANIFEST_KEY);
-    let questIds = [];
+    // Enumerate all keys at the quests lens, then fetch each one
+    const lensPath = APP_NAME + '/' + HOLON_ID + '/quests';
+    const allKeys = await new Promise(resolve => {
+      holosphere.gun.get(lensPath).once(data => {
+        if (data) {
+          resolve(Object.keys(data).filter(k => k !== '_' && k !== '#'));
+        } else resolve([]);
+      });
+      setTimeout(() => resolve([]), 5000);
+    });
 
-    if (manifest && manifest.ids) {
-      questIds = parseArray(manifest.ids);
-      console.log(`Manifest found with ${questIds.length} quest IDs`);
-    } else {
-      console.warn('No quest manifest found');
-      grid.innerHTML = '<p style="text-align:center;color:var(--muted);grid-column:1/-1;padding:3rem;">No active quests found.</p>';
-      return;
-    }
+    console.log(`Found ${allKeys.length} keys at ${lensPath}`);
 
-    // 2. Fetch each quest by ID
+    // Fetch all keys in parallel, keep only those with a title
     const results = await Promise.all(
-      questIds.map(id => holosphere.get(HOLON_ID, 'quests', id).catch(() => null))
+      allKeys.map(key =>
+        holosphere.get(HOLON_ID, 'quests', key).catch(() => null)
+      )
     );
 
-    const raw = results.filter(Boolean);
+    const raw = results.filter(q => q && q.title);
     if (raw.length > 0) {
       quests = raw
-        .filter(q => q && q.title && q.status !== 'cancelled')
+        .filter(q => q.status !== 'cancelled' && q.status !== 'completed')
         .map(normalizeQuest);
       console.log(`Loaded ${quests.length} quests from Holosphere (holon ${HOLON_ID})`);
     } else {
-      console.warn('Manifest had IDs but no quests resolved');
+      console.warn('No quests found in Holosphere');
       grid.innerHTML = '<p style="text-align:center;color:var(--muted);grid-column:1/-1;padding:3rem;">No active quests found.</p>';
       return;
     }
@@ -819,7 +818,7 @@ function renderQuests() {
     const statusLabel = STATUS_LABELS[q.status] || q.status || '';
 
     return `
-    <div class="quest-card" onclick="openDetail('${q.id}')">
+    <div class="quest-card" data-quest-id="${String(q.id).replace(/"/g, '&quot;')}">
       ${q.image
         ? `<img class="hero-img" src="${q.image}" alt="${q.title}" onerror="this.outerHTML='<div class=\\'icon-hero\\' style=\\'background:${color}15\\'><i class=\\'fas ${icon}\\' style=\\'color:${color}\\'></i></div>'">`
         : `<div class="icon-hero" style="background:${color}15"><i class="fas ${icon}" style="color:${color}"></i></div>`
@@ -849,7 +848,7 @@ function renderQuests() {
 }
 
 function openDetail(id) {
-  const q = quests.find(x => x.id === id);
+  const q = quests.find(x => String(x.id) === String(id));
   if (!q) return;
 
   const skills = Array.isArray(q.skills) ? q.skills : [];
@@ -960,7 +959,7 @@ async function raiseHand(id) {
   btn.classList.add('raised');
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&ensp;Saving...';
 
-  const q = quests.find(x => x.id === id);
+  const q = quests.find(x => String(x.id) === String(id));
   if (q) {
     q.team.current = (q.team.current || 0) + 1;
 
@@ -993,10 +992,18 @@ async function raiseHand(id) {
 }
 
 function askQuestion(id) {
-  const q = quests.find(x => x.id === id);
+  const q = quests.find(x => String(x.id) === String(id));
   const subject = encodeURIComponent(`Question about quest: ${q.title}`);
   window.open(`mailto:info@liminalvillage.com?subject=${subject}`, '_blank');
 }
+
+// Quest card click delegation
+document.getElementById('questGrid').addEventListener('click', e => {
+  const card = e.target.closest('.quest-card');
+  if (card && card.dataset.questId) {
+    openDetail(card.dataset.questId);
+  }
+});
 
 // Handle escape key
 document.addEventListener('keydown', e => {

@@ -1,6 +1,9 @@
 <section id="main-top" class="hero">
   <div class="hero-content">
-    <h1>Liminal Village</h1>
+    <div class="hero-text">
+      <h1>Liminal Village</h1>
+      <p class="subtitle">Open Source Innovation Eco-Tech Hub</p>
+    </div>
     <a href="#about" class="scroll-down" aria-label="Scroll down to About section">
       <span class="arrow"></span>
     </a>
@@ -23,29 +26,39 @@
   .hero-content {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.0);
-    display: table;
+    background: linear-gradient(135deg, rgba(34,34,34,0.55), rgba(214,161,91,0.2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
-  .hero-content h1 {
-    color: #FFF;
-    font-size: 50px;
+  .hero-text {
+    text-align: center;
+    animation: fadeInDown 1.5s ease;
+  }
+
+  .hero-text h1 {
+    color: #fff;
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: 8px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    color: rgba(232, 196, 144, 0.9);
+    font-size: 1rem;
     font-weight: 300;
     letter-spacing: 5px;
-    width: 700px;
-    max-width: 90%;
-    margin: 0 auto;
-    border: 3px solid var(--primary-color);
-    padding: 20px 15px;
-    animation: fadeInDown 2s;
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
+    text-transform: uppercase;
+    margin-top: 1rem;
   }
 
   .scroll-down {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: inline-block;
@@ -54,12 +67,13 @@
 
   .arrow {
     display: block;
-    width: 30px;
-    height: 30px;
-    border-left: 3px solid var(--primary-color);
-    border-bottom: 3px solid var(--primary-color);
+    width: 24px;
+    height: 24px;
+    border-left: 2px solid var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
     transform: rotate(-45deg);
     animation: bounce 2s infinite;
+    opacity: 0.7;
   }
 
   @keyframes bounce {
@@ -79,19 +93,25 @@
       background-attachment: scroll;
     }
 
-    .hero-content h1 {
-      font-size: 30px;
-      width: 90%;
-      padding: 15px 10px;
+    .hero-text h1 {
+      font-size: 2.2rem;
+      letter-spacing: 5px;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
       letter-spacing: 3px;
     }
   }
 
   @media (max-width: 480px) {
-    .hero-content h1 {
-      font-size: 20px;
-      width: 300px;
-      padding: 10px 3px;
+    .hero-text h1 {
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+    }
+
+    .subtitle {
+      font-size: 0.7rem;
       letter-spacing: 2px;
     }
   }
