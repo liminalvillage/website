@@ -6,7 +6,7 @@
  */
 import HoloSphere from '/Users/robertovalenti/Projects/holosphere/holosphere.js';
 
-const HOLON_ID = '235114395';
+const HOLON_ID = '-1003864542239';
 const APP_NAME = 'Holons';
 
 // Extended quest schema — superset of holonsbot quest.json
