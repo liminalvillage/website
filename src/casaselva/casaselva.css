@@ -1,0 +1,85 @@
+/* Casa Selva — global styles
+   Earthy palette: forest greens, terracotta, moss, warm cream.
+*/
+
+:root {
+  --cs-text: #2f3a30;
+  --cs-muted: #6a7266;
+  --cs-cream: #f6f1e7;
+  --cs-cream-soft: #fbf8f1;
+  --cs-bark: #3b4236;
+  --cs-forest: #4a6b4a;
+  --cs-moss: #7a8c66;
+  --cs-terracotta: #b77a52;
+  --cs-terracotta-soft: #d69c7a;
+  --cs-water: #6f94a0;
+  --cs-line: #e3dccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--cs-text);
+  background-color: var(--cs-cream-soft);
+  line-height: 1.75;
+  overflow-x: hidden;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#casaselva-app {
+  width: 100%;
+  min-height: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Cormorant Garamond", "Open Sans", serif;
+  font-weight: 400;
+  color: var(--cs-bark);
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+p {
+  line-height: 1.85;
+  color: var(--cs-text);
+}
+
+a {
+  color: var(--cs-terracotta);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--cs-bark);
+}
+
+::selection {
+  background-color: var(--cs-terracotta);
+  color: #fff;
+}
+
+@keyframes cs-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cs-fade-in-slow {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
