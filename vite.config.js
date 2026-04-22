@@ -11,6 +11,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         quests: resolve(__dirname, 'quests.html'),
         casaselva: resolve(__dirname, 'casaselva.html'),
+        casaselvaQuests: resolve(__dirname, 'casaselva-quests.html'),
       },
     },
   },

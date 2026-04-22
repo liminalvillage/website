@@ -1,7 +1,15 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
 
-  const HOLON_ID = '-1003864542239';
+  let {
+    holonId = '-1003864542239',
+    brandName = 'Liminal Village',
+    homeHref = '/',
+    tagline = 'ReGenerativa × Liminal Village — ongoing actions funded through collaborative effort',
+    contactEmail = 'info@liminalvillage.com',
+  } = $props();
+
+  const HOLON_ID = holonId;
   const APP_NAME = 'Holons';
 
   const TYPE_STYLES = {
@@ -248,7 +256,7 @@
     const q = quests.find(x => String(x.id) === String(id));
     if (q) {
       const subject = encodeURIComponent(`Question about quest: ${q.title}`);
-      window.open(`mailto:info@liminalvillage.com?subject=${subject}`, '_blank');
+      window.open(`mailto:${contactEmail}?subject=${subject}`, '_blank');
     }
   }
 
@@ -273,7 +281,7 @@
   <!-- Welcome Screen -->
   <div class="welcome">
     <div class="welcome-box">
-      <h1>Liminal Village</h1>
+      <h1>{brandName}</h1>
       <div class="subtitle">Quest Portal</div>
       <p>
         Every quest is a living invitation. A piece of work that needs hands, hearts, and minds.
@@ -285,7 +293,7 @@
 {:else}
   <!-- Quest Board -->
   <nav class="quest-nav">
-    <a href="/">Liminal Village</a>
+    <a href={homeHref}>{brandName}</a>
     <div class="nav-right">
       <span class="nav-link">
         Quests <span class="badge-count">{quests.length}</span>
@@ -295,7 +303,7 @@
 
   <div class="board-header">
     <h2>Active Quests</h2>
-    <p>ReGenerativa &times; Liminal Village &mdash; ongoing actions funded through collaborative effort</p>
+    <p>{tagline}</p>
   </div>
 
   <div class="stats-bar">
@@ -369,7 +377,7 @@
   {/if}
 
   <footer class="quest-footer">
-    &copy; 2026 <a href="/">Liminal Village</a>. Quest data powered by Holosphere.
+    &copy; 2026 <a href={homeHref}>{brandName}</a>. Quest data powered by Holosphere.
   </footer>
 {/if}
 
