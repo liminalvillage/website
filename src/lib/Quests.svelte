@@ -1,24 +1,69 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
 
+  // Preset configs, selected at runtime from window.location.hostname
+  // so a single built Quests page adapts to whichever domain serves it.
+  const SITES = {
+    casaselva: {
+      holonId: '-1002964866719',
+      brandName: 'Casa Selva',
+      homeHref: '/',
+      tagline: 'Casa Selva — living quests for inner work, stewardship, and regeneration',
+      contactEmail: 'hello@casaselva.earth',
+      heroImage: '/images/casaselva/1.jpeg',
+      primary: '#b77a52',
+      primaryDark: '#9c6542',
+      accentLight: '#d69c7a',
+    },
+    liminal: {
+      holonId: '-1003864542239',
+      brandName: 'Liminal Village',
+      homeHref: '/',
+      tagline: 'ReGenerativa × Liminal Village — ongoing actions funded through collaborative effort',
+      contactEmail: 'info@liminalvillage.com',
+      heroImage: '/images/droneview.jpg',
+      primary: '#D6A15B',
+      primaryDark: '#b8873d',
+      accentLight: '#e8c490',
+    },
+  };
+
+  function detectSite() {
+    if (typeof window === 'undefined') return SITES.liminal;
+    const host = window.location.hostname.toLowerCase();
+    if (host.includes('casaselva')) return SITES.casaselva;
+    return SITES.liminal;
+  }
+
+  const detected = detectSite();
+
+  // Props override detection (explicit > domain) for preview or overrides
   let {
-    holonId = '-1003864542239',
-    brandName = 'Liminal Village',
-    homeHref = '/',
-    tagline = 'ReGenerativa × Liminal Village — ongoing actions funded through collaborative effort',
-    contactEmail = 'info@liminalvillage.com',
+    holonId = detected.holonId,
+    brandName = detected.brandName,
+    homeHref = detected.homeHref,
+    tagline = detected.tagline,
+    contactEmail = detected.contactEmail,
+    heroImage = detected.heroImage,
+    primary = detected.primary,
+    primaryDark = detected.primaryDark,
+    accentLight = detected.accentLight,
   } = $props();
 
   const HOLON_ID = holonId;
   const APP_NAME = 'Holons';
 
+  if (typeof document !== 'undefined') {
+    document.title = `Quests – ${brandName}`;
+  }
+
   const TYPE_STYLES = {
-    task:     { icon: 'fa-list-check',   color: '#D6A15B' },
+    task:     { icon: 'fa-list-check',   color: primary },
     event:    { icon: 'fa-calendar-star', color: '#7B9E6B' },
     proposal: { icon: 'fa-lightbulb',    color: '#C27D4E' },
     request:  { icon: 'fa-hand-holding', color: '#8B6F5D' },
     offer:    { icon: 'fa-gift',         color: '#4a9d5f' },
-    any:      { icon: 'fa-compass',      color: '#D6A15B' },
+    any:      { icon: 'fa-compass',      color: primary },
   };
 
   const STATUS_LABELS = {
@@ -277,6 +322,10 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
+<div
+  class="quest-root"
+  style="--q-primary: {primary}; --q-primary-dark: {primaryDark}; --q-accent-light: {accentLight}; --q-hero-image: url('{heroImage}');"
+>
 {#if !showBoard}
   <!-- Welcome Screen -->
   <div class="welcome">
@@ -522,6 +571,8 @@
   </div>
 {/if}
 
+</div>
+
 <style>
   .hidden { display: none !important; }
 
@@ -533,22 +584,22 @@
     justify-content: center;
     text-align: center;
     background: linear-gradient(135deg, rgba(34,34,34,0.7), rgba(214,161,91,0.3)),
-      url('/images/droneview.jpg') center/cover no-repeat fixed;
+      var(--q-hero-image) center/cover no-repeat fixed;
     padding: 2rem;
   }
   .welcome-box { max-width: 640px; animation: fadeInDown 1.2s ease; }
   .welcome h1 { color: #fff; font-size: 3rem; font-weight: 300; letter-spacing: 6px; margin-bottom: 0.5rem; }
-  .welcome .subtitle { color: #e8c490; font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 2rem; font-weight: 300; }
+  .welcome .subtitle { color: var(--q-accent-light); font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 2rem; font-weight: 300; }
   .welcome p { color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.5rem; }
-  .btn-enter { display: inline-block; padding: 16px 48px; border: 2px solid #D6A15B; color: #fff; font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.4s ease; }
-  .btn-enter:hover { background: #D6A15B; color: #222; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(214,161,91,0.3); }
+  .btn-enter { display: inline-block; padding: 16px 48px; border: 2px solid var(--q-primary); color: #fff; font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.4s ease; }
+  .btn-enter:hover { background: var(--q-primary); color: #222; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
 
   .quest-nav { position: sticky; top: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.08); z-index: 100; padding: 0 3%; height: 70px; display: flex; align-items: center; justify-content: space-between; }
   .quest-nav a { color: #222; text-decoration: none; font-weight: 300; font-size: 20px; letter-spacing: 4px; transition: color 0.3s; }
-  .quest-nav a:hover { color: #D6A15B; }
+  .quest-nav a:hover { color: var(--q-primary); }
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
   .nav-link { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #222; }
-  .badge-count { background: #D6A15B; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
+  .badge-count { background: var(--q-primary); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
 
   .board-header { text-align: center; padding: 3rem 2rem 1rem; }
   .board-header h2 { font-size: 1.6rem; font-weight: 300; letter-spacing: 4px; color: #222; margin-bottom: 0.5rem; }
@@ -556,7 +607,7 @@
 
   .stats-bar { display: flex; justify-content: center; gap: 2.5rem; padding: 1.5rem 2rem; flex-wrap: wrap; }
   .stat { text-align: center; }
-  .stat-value { font-size: 2rem; font-weight: 300; color: #D6A15B; letter-spacing: 2px; }
+  .stat-value { font-size: 2rem; font-weight: 300; color: var(--q-primary); letter-spacing: 2px; }
   .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #8a8274; }
 
   .loading-msg { text-align: center; color: #8a8274; padding: 3rem; }
@@ -577,7 +628,7 @@
   .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: #8a8274; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
 
   .card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #8a8274; border-top: 1px solid #f0ede8; padding-top: 0.75rem; }
-  .budget { font-weight: 600; color: #b8873d; }
+  .budget { font-weight: 600; color: var(--q-primary-dark); }
   .budget.muted { color: #8a8274; font-weight: 400; }
   .team { display: flex; align-items: center; gap: 4px; }
 
@@ -587,7 +638,7 @@
   .detail-icon-hero { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
   .detail-body { padding: 2rem 2.5rem 2.5rem; }
   .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #8a8274; background: none; border: none; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.25rem; transition: color 0.3s; font-family: "Open Sans", sans-serif; }
-  .back-btn:hover { color: #D6A15B; }
+  .back-btn:hover { color: var(--q-primary); }
   .detail-body h2 { font-size: 1.5rem; font-weight: 500; letter-spacing: 2px; margin-bottom: 1rem; color: #222; }
   .detail-desc { font-size: 0.95rem; color: #333; line-height: 1.9; margin-bottom: 2rem; }
 
@@ -600,12 +651,12 @@
   .budget-table th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #8a8274; padding: 0.5rem 0; border-bottom: 2px solid #eee; }
   .budget-table td { padding: 0.5rem 0; border-bottom: 1px solid #f0ede8; }
   .budget-table td:last-child { text-align: right; font-weight: 500; color: #222; }
-  .budget-table tr:last-child td { border-bottom: none; font-weight: 700; color: #b8873d; padding-top: 0.75rem; }
+  .budget-table tr:last-child td { border-bottom: none; font-weight: 700; color: var(--q-primary-dark); padding-top: 0.75rem; }
 
   .cta-section { text-align: center; padding-top: 1rem; border-top: 1px solid #f0ede8; }
   .cta-section p { font-size: 0.85rem; color: #8a8274; margin-bottom: 1rem; }
-  .btn-ask { display: inline-block; padding: 14px 40px; border: 2px solid #D6A15B; color: #b8873d; font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; margin-right: 1rem; }
-  .btn-ask:hover { background: #D6A15B; color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(214,161,91,0.25); }
+  .btn-ask { display: inline-block; padding: 14px 40px; border: 2px solid var(--q-primary); color: var(--q-primary-dark); font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; margin-right: 1rem; }
+  .btn-ask:hover { background: var(--q-primary); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
   .btn-raise-hand { display: inline-block; padding: 14px 40px; border: 2px solid #4a9d5f; color: #4a9d5f; font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; }
   .btn-raise-hand:hover { background: #4a9d5f; color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,157,95,0.25); }
   .btn-raise-hand.raised { background: #4a9d5f; color: #fff; cursor: default; }
@@ -613,8 +664,8 @@
 
   .logged-in-as { margin-top: 1rem; font-size: 0.8rem; color: #8a8274; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
   .logged-in-as i { color: #0088cc; font-size: 1rem; }
-  .logout-btn { background: none; border: none; color: #D6A15B; cursor: pointer; font-size: 0.75rem; text-decoration: underline; font-family: "Open Sans", sans-serif; }
-  .logout-btn:hover { color: #b8873d; }
+  .logout-btn { background: none; border: none; color: var(--q-primary); cursor: pointer; font-size: 0.75rem; text-decoration: underline; font-family: "Open Sans", sans-serif; }
+  .logout-btn:hover { color: var(--q-primary-dark); }
 
   .login-overlay { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn 0.3s ease; }
   .login-card { background: #fff; border-radius: 16px; padding: 2.5rem; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: slideInUp 0.4s ease; }
@@ -624,7 +675,7 @@
   .telegram-widget { display: flex; justify-content: center; min-height: 50px; }
 
   .quest-footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 2rem; font-size: 0.9rem; }
-  .quest-footer a { color: #e8c490; text-decoration: none; }
+  .quest-footer a { color: var(--q-accent-light); text-decoration: none; }
   .quest-footer a:hover { text-decoration: underline; }
 
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
