@@ -5,9 +5,10 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 
+// quests.html is domain-aware (reads window.location.hostname), so both sites
+// can serve it as-is. We only remap the homepage.
 const mappings = [
   ['casaselva.html', 'index.html'],
-  ['casaselva-quests.html', 'quests.html'],
 ];
 
 for (const [src, dest] of mappings) {

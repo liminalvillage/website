@@ -17,7 +17,7 @@
     { label: 'The Place', href: '#cs-place' },
     { label: 'Daily Life', href: '#cs-living' },
     { label: 'Network', href: '#cs-network' },
-    { label: 'Quests', href: '/casaselva-quests.html', external: true },
+    { label: 'Quests', href: '/quests.html', external: true },
     { label: 'Visit', href: '#cs-visit' },
   ];
 </script>
