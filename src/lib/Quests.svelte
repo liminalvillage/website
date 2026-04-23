@@ -16,8 +16,7 @@
       accentLight: '#d69c7a',
     },
     refactory: {
-      // TODO: replace with the real ReFactory Telegram holon ID
-      holonId: '0',
+      holonId: '-1003943146280',
       brandName: 'ReFactory',
       homeHref: '/',
       tagline: 'ReFactory — co-creation quests for symbiotic innovation and collaborative making',
