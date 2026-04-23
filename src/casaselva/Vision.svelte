@@ -2,7 +2,7 @@
   <div class="container">
     <div class="section-heading">
       <p class="eyebrow">Vision</p>
-      <h2>A midwife for a deep human transition</h2>
+      <h2>Midwifing the passage to wholeness</h2>
     </div>
 
     <div class="lead">
