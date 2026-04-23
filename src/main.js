@@ -3,10 +3,15 @@ import { mount } from 'svelte'
 const host = typeof window !== 'undefined'
   ? window.location.hostname.toLowerCase()
   : ''
-const isCasaSelva = host.includes('casaselva')
+
+const site = host.includes('casaselva')
+  ? 'casaselva'
+  : (host.includes('refactory') || host.includes('brickfactory'))
+    ? 'refactory'
+    : 'liminal'
 
 async function boot() {
-  if (isCasaSelva) {
+  if (site === 'casaselva') {
     document.documentElement.setAttribute('data-site', 'casaselva')
     document.title = 'Casa Selva — A living school for becoming more fully human'
     setMeta('description',
@@ -14,6 +19,18 @@ async function boot() {
     const [{ default: App }] = await Promise.all([
       import('./casaselva/App.svelte'),
       import('./casaselva/casaselva.css'),
+    ])
+    return mount(App, { target: document.getElementById('app') })
+  }
+
+  if (site === 'refactory') {
+    document.documentElement.setAttribute('data-site', 'refactory')
+    document.title = 'ReFactory — A co-creation space for symbiotic innovation'
+    setMeta('description',
+      'ReFactory — a co-creation space in the Marche region, Italy. Maker workshops, co-living community, and community-owned initiatives 10 minutes from Ascoli Piceno.')
+    const [{ default: App }] = await Promise.all([
+      import('./refactory/App.svelte'),
+      import('./refactory/refactory.css'),
     ])
     return mount(App, { target: document.getElementById('app') })
   }
@@ -37,3 +54,4 @@ function setMeta(name, content) {
 }
 
 export default boot()
+
