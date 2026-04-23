@@ -1,0 +1,93 @@
+/* ReFactory — global styles
+   Industrial warm palette: brick red, brass, warm charcoal, cream.
+*/
+
+:root {
+  --rf-text: #3a3530;
+  --rf-muted: #6d655b;
+  --rf-cream: #f5efe6;
+  --rf-cream-soft: #faf5ec;
+  --rf-dark: #2d2925;
+  --rf-brick: #b4593b;
+  --rf-brick-dark: #8f4128;
+  --rf-brass: #d4a055;
+  --rf-brass-soft: #e6c18a;
+  --rf-steel: #5a6266;
+  --rf-line: #e3d9c9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--rf-text);
+  background-color: var(--rf-cream-soft);
+  line-height: 1.7;
+  overflow-x: hidden;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  width: 100%;
+  min-height: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  color: var(--rf-dark);
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.display, .display * {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+p {
+  line-height: 1.85;
+  color: var(--rf-text);
+}
+
+a {
+  color: var(--rf-brick);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--rf-brick-dark);
+}
+
+::selection {
+  background-color: var(--rf-brick);
+  color: #fff;
+}
+
+@keyframes rf-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rf-fade-in-slow {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

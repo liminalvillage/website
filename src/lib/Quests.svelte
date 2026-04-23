@@ -15,6 +15,18 @@
       primaryDark: '#9c6542',
       accentLight: '#d69c7a',
     },
+    refactory: {
+      // TODO: replace with the real ReFactory Telegram holon ID
+      holonId: '0',
+      brandName: 'ReFactory',
+      homeHref: '/',
+      tagline: 'ReFactory — co-creation quests for symbiotic innovation and collaborative making',
+      contactEmail: 'hello@refactory.earth',
+      heroImage: '/images/refactory/1.jpeg',
+      primary: '#b4593b',
+      primaryDark: '#8f4128',
+      accentLight: '#d4a055',
+    },
     liminal: {
       holonId: '-1003864542239',
       brandName: 'Liminal Village',
@@ -32,6 +44,7 @@
     if (typeof window === 'undefined') return SITES.liminal;
     const host = window.location.hostname.toLowerCase();
     if (host.includes('casaselva')) return SITES.casaselva;
+    if (host.includes('refactory') || host.includes('brickfactory')) return SITES.refactory;
     return SITES.liminal;
   }
 
