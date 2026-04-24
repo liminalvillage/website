@@ -45,7 +45,7 @@
 
     <div class="inheritance">
       <div class="inheritance-text">
-        <h3>A living inheritance</h3>
+        <h3><img src="/images/casaselva/medallion.png" alt="" class="inheritance-symbol" /> A living inheritance</h3>
         <p>
           Casa Selva is designed to be rooted in collective care and resilient beyond any one individual. It is intended as a living inheritance for future generations.
         </p>
@@ -184,6 +184,15 @@
     font-style: italic;
     color: var(--cs-forest);
     margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .inheritance-symbol {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
   }
 
   .inheritance-text p {
