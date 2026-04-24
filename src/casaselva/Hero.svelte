@@ -21,7 +21,7 @@
     width: 100%;
     min-height: 100vh;
     background-image: url('/images/casaselva/1.jpeg');
-    background-position: center center;
+    background-position: center top;
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
