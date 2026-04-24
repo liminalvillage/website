@@ -45,15 +45,7 @@
 
     <div class="bioregion">
       <p>
-        Casa Selva also weaves with local initiatives — a Waldorf kindergarten and other
-        bioregional projects — grounding its vision in everyday community life. Within the
-        broader network, different places may emphasise inner or outer dimensions to varying
-        degrees, increasing the resilience of the whole bioregion.
-      </p>
-      <p class="bioregion-footer">
-        The deeper hope: that this network becomes more than a collection of projects — a living
-        ecosystem capable of growing through uncertainty, supporting human development even in
-        times of instability.
+        Casa Selva weaves with local initiatives, strengthening bioregional resilience, with the aim of becoming a living ecosystem that grows through uncertainty and supports human development.
       </p>
     </div>
   </div>
