@@ -35,11 +35,11 @@
   .vision::before {
     content: '';
     position: absolute;
-    top: 30%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 450px;
-    height: 360px;
+    width: 420px;
+    height: 336px;
     background-image: url('/images/casaselva/sacred-geometry.png');
     background-size: contain;
     background-repeat: no-repeat;
