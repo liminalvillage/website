@@ -27,7 +27,7 @@
 <nav class="nav" class:scrolled>
   <div class="nav-inner">
     <a href="#cs-top" class="brand" on:click={() => (mobileMenuOpen = false)}>
-      <span class="brand-mark">❦</span>
+      <img src="/images/casaselva/venus-logo.png" alt="Casa Selva" class="brand-logo" />
       <span class="brand-text">Casa Selva</span>
     </a>
 
@@ -91,9 +91,10 @@
     font-family: "Cormorant Garamond", serif;
   }
 
-  .brand-mark {
-    font-size: 1.4rem;
-    color: var(--cs-terracotta);
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
   }
 
   .brand-text {
