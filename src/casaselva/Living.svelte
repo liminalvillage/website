@@ -180,22 +180,6 @@
     overflow: hidden;
   }
 
-  .inheritance::before {
-    content: '';
-    position: absolute;
-    top: 60%;
-    left: 25%;
-    transform: translate(-50%, -50%);
-    width: 350px;
-    height: 350px;
-    background-image: url('/images/casaselva/medallion.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 0;
-  }
 
   .inheritance-text {
     position: relative;
