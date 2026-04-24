@@ -47,14 +47,7 @@
       <div class="inheritance-text">
         <h3>A living inheritance</h3>
         <p>
-          Casa Selva is designed to be resilient beyond any one individual. It is intended as a
-          living inheritance for future generations — able to continue thriving even if a
-          steward steps back, because it is rooted in <em>collective care</em> rather than
-          individual dependency.
-        </p>
-        <p>
-          It cultivates emotional maturity, interpersonal responsibility, and a culture of
-          mutual support — where people grow not in isolation but in relationship.
+          Casa Selva is designed to be rooted in collective care and resilient beyond any one individual. It is intended as a living inheritance for future generations.
         </p>
       </div>
       <div class="inheritance-image" style="background-image: url('/images/casaselva/6.jpeg');"></div>
