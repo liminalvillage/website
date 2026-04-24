@@ -35,7 +35,7 @@
   .vision::before {
     content: '';
     position: absolute;
-    top: 28%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 420px;
