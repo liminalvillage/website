@@ -3,7 +3,8 @@
   <div class="hero-content">
     <p class="eyebrow">Mountains near Ascoli Piceno · Italy</p>
     <h1>Casa Selva</h1>
-    <p class="tagline">A living school for becoming more fully human.</p>
+    <p class="tagline">A sanctuary for conscious ways of being human</p>
+    <p class="tagline">Supporting the rise of a new humanity</p>
     <div class="hero-actions">
       <a href="#cs-vision" class="btn btn-primary">Discover</a>
       <a href="#cs-visit" class="btn btn-ghost">Visit us</a>

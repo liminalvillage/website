@@ -9,7 +9,8 @@
     <div class="footer-grid">
       <div>
         <p class="brand">❦ Casa Selva</p>
-        <p class="tag">A living school for becoming more fully human.</p>
+        <p class="tag">A sanctuary for conscious ways of being human</p>
+        <p class="tag">Supporting the rise of a new humanity</p>
       </div>
 
       <div class="links">
