@@ -2,7 +2,7 @@
   <div class="container">
     <div class="section-heading">
       <p class="eyebrow">Essence</p>
-      <h2>A school for being human</h2>
+      <h2>A regenerative sanctuary for conscious evolution</h2>
     </div>
 
     <div class="intro">
