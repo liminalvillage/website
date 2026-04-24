@@ -32,12 +32,32 @@
     padding: 8rem 0 6rem;
     background: var(--cs-cream-soft);
     position: relative;
+    overflow: hidden;
+  }
+
+  .vision::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 900px;
+    background-image: url('/images/casaselva/sacred-geometry.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .container {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
   }
 
   .section-heading {
