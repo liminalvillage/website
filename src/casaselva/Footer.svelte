@@ -74,13 +74,13 @@
     margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
   }
 
   .footer-logo {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     object-fit: contain;
   }
 
