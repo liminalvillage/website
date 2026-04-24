@@ -31,14 +31,14 @@
     </div>
 
     <div class="gallery">
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/2.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/5.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/14.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/11.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/17.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/18.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/3.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/17.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/5.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/18.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/11.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/7.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/2.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/13.jpeg');"></div>
     </div>
   </div>
