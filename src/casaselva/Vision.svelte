@@ -35,9 +35,9 @@
   .vision::before {
     content: '';
     position: absolute;
-    bottom: -5%;
+    top: 30%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 600px;
     height: 900px;
     background-image: url('/images/casaselva/sacred-geometry.jpg');
