@@ -183,7 +183,7 @@
   .inheritance::before {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 25%;
     transform: translate(-50%, -50%);
     width: 350px;
