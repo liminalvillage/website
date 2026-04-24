@@ -22,9 +22,7 @@
         <div class="num">01</div>
         <h3>Shared responsibility</h3>
         <p>
-          Everyone contributes — through cooking, cleaning, gardening, and caring for the space
-          and each other. Like any village, it requires both daily tasks and financial
-          participation to sustain the space.
+          We each take responsibility for the whole, contributing in different ways — through time, presence, skills, or financial support. Like any ecosystem, it is sustained through a balance of daily participation and shared resources.
         </p>
       </div>
 
