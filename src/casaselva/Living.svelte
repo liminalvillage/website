@@ -30,8 +30,7 @@
         <div class="num">02</div>
         <h3>Cyclical timing</h3>
         <p>
-          Life at Casa Selva follows natural rhythms rather than busy, extractive schedules.
-          Energy awareness and non-extractive rhythms are woven into how the day unfolds.
+          At Casa Selva, daily life follows the body, the land, the seasons, and the cycles of the sun and moon. Energy is understood as both limited and renewable. The day unfolds through a balance of rest and action, supporting regeneration rather than depletion.
         </p>
       </div>
 
