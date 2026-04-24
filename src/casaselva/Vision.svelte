@@ -7,16 +7,10 @@
 
     <div class="lead">
       <p>
-        Casa Selva is imagined as a place that supports people through a deep human transition —
-        from older ways of thinking and living to more integrated, conscious, and collaborative
-        ways of being. It acts like a <em>midwife</em> for this process: not forcing change, but
-        holding and guiding it.
+        Casa Selva anchors a deep shift in how people live and relate — acting as a midwife to the transition from inherited patterns to more conscious, integrated, and collaborative ways of being.
       </p>
       <p>
-        It is both a physical place and a living system, where inner transformation and practical
-        daily life come together. At its heart, it is a place where people can rely on each other —
-        designed for those who want to grow, do their inner work, and evolve together, not just in
-        theory, but in real life.
+        Casa Selva exists as both a physical place and part of a living system where inner transformation meets everyday life through shared living, reflection, and practical collaboration. It is for those who want to grow, do their inner work, and evolve together — in lived experience, not just in theory.
       </p>
     </div>
 
