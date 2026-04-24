@@ -47,6 +47,17 @@
       <p>
         Casa Selva weaves with local initiatives, strengthening bioregional resilience, with the aim of becoming a living ecosystem that grows through uncertainty and supports human development.
       </p>
+      <div class="video-container">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/XdhPXocPf9g"
+          title="RegenerativeHubs Network 2030 Vision"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   </div>
 </section>
@@ -219,6 +230,18 @@
     line-height: 1.9;
     color: var(--cs-text);
     margin-bottom: 1.25rem;
+  }
+
+  .video-container {
+    max-width: 640px;
+    margin: 2rem auto 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-container iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
   }
 
   .bioregion-footer {
