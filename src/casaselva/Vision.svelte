@@ -40,7 +40,7 @@
     transform: translate(-50%, -50%);
     width: 720px;
     height: 576px;
-    background-image: url('/images/casaselva/sacred-geometry.jpg');
+    background-image: url('/images/casaselva/sacred-geometry.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
