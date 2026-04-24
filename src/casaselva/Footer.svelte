@@ -31,7 +31,7 @@
 
       <div class="links">
         <h5>Contact</h5>
-        <a href="mailto:hello@casaselva.earth">hello@casaselva.earth</a>
+        <a href="mailto:info@liminalvillage.com">info@liminalvillage.com</a>
         <p class="subtle">Ascoli Piceno · Italy</p>
       </div>
     </div>

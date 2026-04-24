@@ -26,8 +26,8 @@
             Get in touch to learn about upcoming retreats, residency programmes, and ways to
             contribute to the life of the place.
           </p>
-          <a href="mailto:hello@casaselva.earth" class="card-link">
-            hello@casaselva.earth <i class="fas fa-arrow-right"></i>
+          <a href="mailto:info@liminalvillage.com" class="card-link">
+            info@liminalvillage.com <i class="fas fa-arrow-right"></i>
           </a>
         </div>
 
@@ -42,7 +42,7 @@
       </div>
 
       <div class="cta">
-        <a href="mailto:hello@casaselva.earth?subject=Visit%20Casa%20Selva" class="btn">Reach out</a>
+        <a href="mailto:info@liminalvillage.com?subject=Visit%20Casa%20Selva" class="btn">Reach out</a>
       </div>
     </div>
   </div>
