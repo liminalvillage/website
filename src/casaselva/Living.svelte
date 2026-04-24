@@ -38,9 +38,7 @@
         <div class="num">03</div>
         <h3>Leadership at home</h3>
         <p>
-          This is a place for growing into mature adulthood, where leadership begins at home —
-          in presence, in how one speaks, in how one takes responsibility. Intergenerational
-          learning is central.
+          Here, leadership begins at home—in how we show up, how we speak, and how we take responsibility for our actions. Casa Selva is a place for growing into mature adulthood, supported by deep intergenerational learning.
         </p>
       </div>
     </div>
