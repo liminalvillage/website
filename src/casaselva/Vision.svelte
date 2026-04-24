@@ -7,9 +7,6 @@
 
     <div class="lead">
       <p>
-        Casa Selva anchors a deep shift in how people live and relate — acting as a midwife to the transition from inherited patterns to more conscious, integrated, and collaborative ways of being.
-      </p>
-      <p>
         Casa Selva exists as both a physical place and part of a living system where inner transformation meets everyday life through shared living, reflection, and practical collaboration. It is for those who want to grow, do their inner work, and evolve together — in lived experience, not just in theory.
       </p>
     </div>
