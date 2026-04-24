@@ -24,15 +24,14 @@
       </div>
 
       <div class="images">
-        <div class="img-tile tile-a" style="background-image: url('/images/casaselva/2.jpeg');"></div>
+        <div class="img-tile tile-a" style="background-image: url('/images/casaselva/19.jpeg');"></div>
         <div class="img-tile tile-b" style="background-image: url('/images/casaselva/4.jpeg');"></div>
-        <div class="img-tile tile-c" style="background-image: url('/images/casaselva/5.jpeg');"></div>
+        <div class="img-tile tile-c" style="background-image: url('/images/casaselva/20.jpeg');"></div>
       </div>
     </div>
 
     <div class="gallery">
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/19.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/20.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/2.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/5.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/8.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/14.jpeg');"></div>
