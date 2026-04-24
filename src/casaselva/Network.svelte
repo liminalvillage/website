@@ -9,9 +9,8 @@
       <p>
         Casa Selva is closely connected to <a href="https://liminalvillage.com" target="_blank" rel="noopener">Liminal Village</a>
         and other local and international projects, forming part of a wider mycelial network of
-        regenerative hubs. While Casa Selva focuses more on inner work and relationships, other
-        hubs may focus more on technology or external systems. Together, they create a balanced
-        network where inner and outer transformation support each other.
+        regenerative hubs. Together, they create a balanced network where inner and outer
+        transformation support each other.
       </p>
     </div>
 
