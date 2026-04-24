@@ -38,8 +38,8 @@
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
-    height: 400px;
+    width: 550px;
+    height: 440px;
     background-image: url('/images/casaselva/sacred-geometry.jpg');
     background-size: contain;
     background-repeat: no-repeat;
