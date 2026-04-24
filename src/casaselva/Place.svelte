@@ -38,7 +38,6 @@
       <div class="gallery-tile" style="background-image: url('/images/casaselva/10.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/11.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/9.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/12.jpeg');"></div>
     </div>
   </div>
 </section>
