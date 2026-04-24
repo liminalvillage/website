@@ -13,7 +13,7 @@
 
     <div class="pulls">
       <div class="pull">
-        <span class="pull-mark">❦</span>
+        <img src="/images/casaselva/venus-logo.png" alt="" class="pull-mark-img" />
         <p>
           “A place where people can rely on one another to follow through on their inner work, to
           evolve together, and to manifest that evolution in reality as an embodied, regenerative
@@ -109,11 +109,12 @@
     border-bottom: 1px solid var(--cs-line);
   }
 
-  .pull-mark {
+  .pull-mark-img {
     display: block;
-    color: var(--cs-terracotta);
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 1rem;
+    opacity: 0.6;
   }
 
   .pull p {

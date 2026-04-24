@@ -8,7 +8,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <p class="brand">❦ Casa Selva</p>
+        <p class="brand"><img src="/images/casaselva/venus-logo.png" alt="" class="footer-logo" /> Casa Selva</p>
         <p class="tag">A sanctuary for conscious ways of being human</p>
         <p class="tag">Supporting the rise of a new humanity</p>
       </div>
@@ -72,6 +72,16 @@
     font-size: 1.5rem;
     letter-spacing: 2px;
     margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .footer-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
   }
 
   .tag {
