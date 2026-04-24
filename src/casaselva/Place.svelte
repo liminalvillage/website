@@ -35,7 +35,7 @@
       <div class="gallery-tile" style="background-image: url('/images/casaselva/5.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/8.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/6.jpeg');"></div>
-      <div class="gallery-tile" style="background-image: url('/images/casaselva/10.jpeg');"></div>
+      <div class="gallery-tile" style="background-image: url('/images/casaselva/14.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/11.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/9.jpeg');"></div>
       <div class="gallery-tile" style="background-image: url('/images/casaselva/13.jpeg');"></div>
