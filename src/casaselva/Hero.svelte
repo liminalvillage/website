@@ -6,7 +6,6 @@
     <p class="tagline" style="margin-bottom: 0.3rem;">A sanctuary for conscious ways of being human</p>
     <p class="tagline">Supporting the rise of a new humanity</p>
     <div class="hero-actions">
-      <a href="#cs-vision" class="btn btn-primary">Discover</a>
       <a href="#cs-visit" class="btn btn-ghost">Visit us</a>
     </div>
     <a href="#cs-vision" class="scroll-hint" aria-label="Scroll down">
