@@ -7,7 +7,7 @@
 
     <div class="lead">
       <p>
-        Casa Selva exists as both a physical place and part of a living system where inner transformation meets everyday life through shared living, reflection, and practical collaboration. It is for those who want to grow, do their inner work, and evolve together — in lived experience, not just in theory.
+        Casa Selva exists as a physical place where inner transformation is practiced through shared living, reflection, and practical collaboration, not just in theory but as part of a living system.
       </p>
     </div>
 
@@ -15,9 +15,7 @@
       <div class="pull">
         <img src="/images/casaselva/venus-logo.png" alt="" class="pull-mark-img" />
         <p>
-          “A place where people can rely on one another to follow through on their inner work, to
-          evolve together, and to manifest that evolution in reality as an embodied, regenerative
-          upward spiral.”
+          "A place where mutual accountability turns inner work into visible change, expressed as an embodied, regenerative upward spiral."
         </p>
       </div>
     </div>
