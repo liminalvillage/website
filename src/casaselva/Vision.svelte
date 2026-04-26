@@ -7,7 +7,7 @@
 
     <div class="lead">
       <p>
-        Casa Selva exists as a physical place where inner transformation is practiced through shared living, reflection, and practical collaboration, not just in theory but as part of a living system.
+        Casa Selva exists as a physical place where inner transformation is practiced through shared living, reflection, and collaboration, not just in theory but as part of a living system.
       </p>
     </div>
 
