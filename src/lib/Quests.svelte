@@ -85,6 +85,20 @@
 
   const TELEGRAM_BOT = 'HolonsDevBot';
 
+  function imageServerBase() {
+    if (typeof window === 'undefined') return 'https://telegram.holons.io';
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:8080';
+    return 'https://telegram.holons.io';
+  }
+  const IMAGE_SERVER = imageServerBase();
+
+  function resolveImage(src) {
+    if (!src) return '';
+    if (/^(https?:|data:|\/)/i.test(src)) return src;
+    return `${IMAGE_SERVER}/getimage?file_id=${encodeURIComponent(src)}`;
+  }
+
   let showBoard = $state(false);
   let quests = $state([]);
   let selectedQuestId = $state(null);
@@ -148,7 +162,7 @@
       title: raw.title || 'Untitled Quest',
       icon: raw.icon || typeStyle.icon,
       color: raw.color || typeStyle.color,
-      image: raw.image || raw.picture || '',
+      image: resolveImage(raw.image || raw.picture || ''),
       shortDesc: raw.shortDesc || raw.description || '',
       fullDesc: raw.fullDesc || raw.description || '',
       skills: parseArray(raw.skills),
