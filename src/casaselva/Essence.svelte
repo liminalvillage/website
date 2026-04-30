@@ -7,10 +7,7 @@
 
     <div class="intro">
       <p>
-        Casa Selva places emotional intelligence, self-awareness, and relational depth at the
-        centre of any outer impact. It gives space to qualities often less valued in modern
-        systems — care, intuition, listening — helping to bring more balance into how we live
-        and work together.
+        Casa Selva places emotional intelligence, self-awareness, and relational depth as the foundation for outer impact. In practice, we bring awareness to our emotional response, work through conflict, and follow through on commitments.
       </p>
     </div>
 
