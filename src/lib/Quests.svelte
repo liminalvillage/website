@@ -83,7 +83,7 @@
     scheduled: 'Scheduled', active: 'Active',
   };
 
-  const TELEGRAM_BOT = 'HolonsDevBot';
+  const TELEGRAM_BOT = 'HolonsBot';
 
   function imageServerBase() {
     if (typeof window === 'undefined') return 'https://telegram.holons.io';
@@ -103,40 +103,41 @@
   let quests = $state([]);
   let selectedQuestId = $state(null);
   let loading = $state(false);
-  let saving = $state(false);
-  let showLoginPrompt = $state(false);
-  let pendingQuestId = $state(null);
-  let telegramUser = $state(null);
-  let raisedHands = $state(new Set());
+  let openedInTelegram = $state(new Set());
   let holosphere = null;
   let subscription = null;
 
   // Derived: always get fresh quest data from the array
   let selectedQuest = $derived(selectedQuestId ? quests.find(q => String(q.id) === String(selectedQuestId)) || null : null);
 
-  // Restore user from localStorage on load
-  try {
-    const stored = localStorage.getItem('telegramUser');
-    if (stored) telegramUser = JSON.parse(stored);
-  } catch {}
-
-  // Telegram login callback (called by the widget)
-  if (typeof window !== 'undefined') {
-    window.onTelegramAuth = (user) => {
-      telegramUser = user;
-      localStorage.setItem('telegramUser', JSON.stringify(user));
-      showLoginPrompt = false;
-      // If there was a pending participation, proceed
-      if (pendingQuestId) {
-        raiseHand(pendingQuestId);
-        pendingQuestId = null;
-      }
-    };
+  // Telegram start payload allows [A-Za-z0-9_-], up to 64 chars.
+  // Format expected by HolonsBot: join_<holon>_<lens>_<item>. The bot scans
+  // for a known lens segment (quests, offers, ...) to split holon from item,
+  // so the lens marker is required — without it the bot replies "Invalid join link."
+  // tg:// deep-links straight into the Telegram app/desktop client; we keep
+  // the https://t.me/ URL as a fallback when the native scheme isn't handled.
+  function joinPayload(q) {
+    return `join_${HOLON_ID}_quests_${q.id}`;
+  }
+  function joinUrl(q) {
+    return `tg://resolve?domain=${TELEGRAM_BOT}&start=${encodeURIComponent(joinPayload(q))}`;
+  }
+  function joinUrlWeb(q) {
+    return `https://t.me/${TELEGRAM_BOT}?start=${encodeURIComponent(joinPayload(q))}`;
   }
 
-  function logout() {
-    telegramUser = null;
-    localStorage.removeItem('telegramUser');
+  function openJoin(q, e) {
+    openedInTelegram.add(String(q.id));
+    openedInTelegram = openedInTelegram;
+    // Honor middle-click / cmd-click / ctrl-click — let the browser open the href
+    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)) return;
+    if (e) e.preventDefault();
+    // Try native Telegram first
+    window.location.href = joinUrl(q);
+    // Fall back to the web link if the deep scheme isn't handled within ~1s
+    setTimeout(() => {
+      if (!document.hidden) window.open(joinUrlWeb(q), '_blank', 'noopener');
+    }, 1000);
   }
 
   // Computed stats
@@ -270,57 +271,6 @@
     }
 
     loading = false;
-  }
-
-  function requestParticipation(id) {
-    if (raisedHands.has(id)) return;
-    if (!telegramUser) {
-      // Not logged in — show login prompt
-      pendingQuestId = id;
-      showLoginPrompt = true;
-      return;
-    }
-    raiseHand(id);
-  }
-
-  async function raiseHand(id) {
-    if (raisedHands.has(id) || saving || !telegramUser) return;
-    saving = true;
-
-    const q = quests.find(x => String(x.id) === String(id));
-    if (!q) { saving = false; return; }
-
-    const participant = {
-      id: telegramUser.id,
-      first_name: telegramUser.first_name,
-      last_name: telegramUser.last_name || '',
-      username: telegramUser.username || '',
-      date: Date.now(),
-    };
-
-    try {
-      const saveData = q._raw ? { ...q._raw } : { ...q };
-      delete saveData._raw;
-      const newCurrent = (q.team.current || 0) + 1;
-      if (saveData.team) saveData.team = { current: newCurrent, needed: q.team.needed };
-      if (Array.isArray(saveData.participants)) {
-        saveData.participants = [...saveData.participants, participant];
-      } else {
-        saveData.participants = [participant];
-      }
-      await holosphere.put(HOLON_ID, 'quests', saveData);
-
-      // Update local state after successful save
-      q.team.current = newCurrent;
-      q.participants = [...q.participants, participant];
-      quests = quests;
-      raisedHands.add(id);
-      raisedHands = raisedHands;
-    } catch (err) {
-      console.error('Failed to save:', err);
-    }
-
-    saving = false;
   }
 
   function askQuestion(id) {
@@ -530,69 +480,21 @@
         </div>
 
         <div class="cta-section">
-          <p>Interested in this quest? Raise your hand and the quest owner will reach out to you.</p>
+          <p>Interested in this quest? Open it in Telegram to join the team — the quest owner will see you there.</p>
           <button class="btn-ask" onclick={() => askQuestion(q.id)}>
             <i class="fas fa-comment"></i>&ensp;Ask a question
           </button>
-          {#if raisedHands.has(String(q.id))}
-            <button class="btn-raise-hand raised">
-              <i class="fas fa-check"></i>&ensp;Hand raised!
-            </button>
-          {:else if saving}
-            <button class="btn-raise-hand saving" disabled>
-              <i class="fas fa-spinner fa-spin"></i>&ensp;Saving...
-            </button>
+          {#if openedInTelegram.has(String(q.id))}
+            <a class="btn-raise-hand opened" href={joinUrlWeb(q)} target="_blank" rel="noopener noreferrer" onclick={(e) => openJoin(q, e)}>
+              <i class="fab fa-telegram"></i>&ensp;Opened in Telegram — finish there
+            </a>
           {:else}
-            <button class="btn-raise-hand" onclick={() => requestParticipation(String(q.id))}>
+            <a class="btn-raise-hand" href={joinUrlWeb(q)} target="_blank" rel="noopener noreferrer" onclick={(e) => openJoin(q, e)}>
               <i class="fas fa-hand"></i>&ensp;I'm in
-            </button>
-          {/if}
-          {#if telegramUser}
-            <div class="logged-in-as">
-              <i class="fab fa-telegram"></i>
-              {telegramUser.first_name}
-              <button class="logout-btn" onclick={logout}>logout</button>
-            </div>
+            </a>
           {/if}
         </div>
       </div>
-    </div>
-  </div>
-{/if}
-
-<!-- Telegram Login Prompt -->
-{#if showLoginPrompt}
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="login-overlay" onclick={(e) => { if (e.target === e.currentTarget) { showLoginPrompt = false; pendingQuestId = null; } }} role="dialog">
-    <div class="login-card">
-      <button class="back-btn" onclick={() => { showLoginPrompt = false; pendingQuestId = null; }}>
-        <i class="fas fa-times"></i> Close
-      </button>
-      <div class="login-icon">
-        <i class="fab fa-telegram"></i>
-      </div>
-      <h3>Login with Telegram</h3>
-      <p>To participate in this quest, please sign in with your Telegram account so we can add you to the team.</p>
-      <div class="telegram-widget" id="telegram-login-container"></div>
-      {#key showLoginPrompt}
-        {@const _ = (() => {
-          // Inject Telegram widget when prompt shows
-          setTimeout(() => {
-            const container = document.getElementById('telegram-login-container');
-            if (!container || container.hasChildNodes()) return;
-            const script = document.createElement('script');
-            script.src = 'https://telegram.org/js/telegram-widget.js?22';
-            script.setAttribute('data-telegram-login', TELEGRAM_BOT);
-            script.setAttribute('data-size', 'large');
-            script.setAttribute('data-radius', '6');
-            script.setAttribute('data-onauth', 'onTelegramAuth(user)');
-            script.setAttribute('data-request-access', 'write');
-            script.async = true;
-            container.appendChild(script);
-          }, 50);
-          return '';
-        })()}
-      {/key}
     </div>
   </div>
 {/if}
@@ -683,22 +585,10 @@
   .cta-section p { font-size: 0.85rem; color: #8a8274; margin-bottom: 1rem; }
   .btn-ask { display: inline-block; padding: 14px 40px; border: 2px solid var(--q-primary); color: var(--q-primary-dark); font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; margin-right: 1rem; }
   .btn-ask:hover { background: var(--q-primary); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-  .btn-raise-hand { display: inline-block; padding: 14px 40px; border: 2px solid #4a9d5f; color: #4a9d5f; font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; }
+  .btn-raise-hand { display: inline-block; padding: 14px 40px; border: 2px solid #4a9d5f; color: #4a9d5f; font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; text-decoration: none; }
   .btn-raise-hand:hover { background: #4a9d5f; color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,157,95,0.25); }
-  .btn-raise-hand.raised { background: #4a9d5f; color: #fff; cursor: default; }
-  .btn-raise-hand.saving { border-color: #8a8274; color: #8a8274; cursor: wait; opacity: 0.7; }
-
-  .logged-in-as { margin-top: 1rem; font-size: 0.8rem; color: #8a8274; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-  .logged-in-as i { color: #0088cc; font-size: 1rem; }
-  .logout-btn { background: none; border: none; color: var(--q-primary); cursor: pointer; font-size: 0.75rem; text-decoration: underline; font-family: "Open Sans", sans-serif; }
-  .logout-btn:hover { color: var(--q-primary-dark); }
-
-  .login-overlay { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn 0.3s ease; }
-  .login-card { background: #fff; border-radius: 16px; padding: 2.5rem; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: slideInUp 0.4s ease; }
-  .login-icon { font-size: 3rem; color: #0088cc; margin-bottom: 1rem; }
-  .login-card h3 { font-size: 1.2rem; font-weight: 500; letter-spacing: 2px; color: #222; margin-bottom: 0.75rem; }
-  .login-card p { font-size: 0.9rem; color: #8a8274; line-height: 1.7; margin-bottom: 1.5rem; }
-  .telegram-widget { display: flex; justify-content: center; min-height: 50px; }
+  .btn-raise-hand.opened { border-color: #0088cc; color: #0088cc; }
+  .btn-raise-hand.opened:hover { background: #0088cc; color: #fff; box-shadow: 0 8px 25px rgba(0,136,204,0.25); }
 
   .quest-footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 2rem; font-size: 0.9rem; }
   .quest-footer a { color: var(--q-accent-light); text-decoration: none; }
