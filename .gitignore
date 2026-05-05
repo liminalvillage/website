@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 pnpm-lock.yaml
+.env
+.env.*
+!.env.example
+.netlify
+deno.lock
 
 # Editor directories and files
 .vscode/*

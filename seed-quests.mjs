@@ -102,7 +102,8 @@ const questSchema = {
       },
       "default": []
     },
-    "total": { "type": "number", "description": "Total budget in EUR", "default": 0 }
+    "total": { "type": "number", "description": "Total budget in EUR", "default": 0 },
+    "openCollectiveSlug": { "type": "string", "description": "Slug of the OpenCollective Project that backs this quest", "default": "" }
   },
   "additionalProperties": true
 };

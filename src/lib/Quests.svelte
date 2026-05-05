@@ -14,6 +14,7 @@
       primary: '#b77a52',
       primaryDark: '#9c6542',
       accentLight: '#d69c7a',
+      openCollectiveSlug: 'casaselva',
     },
     refactory: {
       holonId: '-1003943146280',
@@ -25,17 +26,19 @@
       primary: '#b4593b',
       primaryDark: '#8f4128',
       accentLight: '#d4a055',
+      openCollectiveSlug: 'refactory',
     },
     liminal: {
       holonId: '-1003864542239',
       brandName: 'Liminal Village',
       homeHref: '/',
-      tagline: 'ReGenerativa × Liminal Village — ongoing actions funded through collaborative effort',
+      tagline: 'Liminal Village — ongoing actions funded through collaborative effort',
       contactEmail: 'info@liminalvillage.com',
       heroImage: '/images/droneview.jpg',
       primary: '#D6A15B',
       primaryDark: '#b8873d',
       accentLight: '#e8c490',
+      openCollectiveSlug: 'liminal',
     },
   };
 
@@ -60,9 +63,11 @@
     primary = detected.primary,
     primaryDark = detected.primaryDark,
     accentLight = detected.accentLight,
+    openCollectiveSlug = detected.openCollectiveSlug,
   } = $props();
 
   const HOLON_ID = holonId;
+  const OC_PARENT_SLUG = openCollectiveSlug;
   const APP_NAME = 'Holons';
 
   if (typeof document !== 'undefined') {
@@ -106,6 +111,11 @@
   let openedInTelegram = $state(new Set());
   let holosphere = null;
   let subscription = null;
+
+  // Sponsor (Open Collective) state, keyed by quest id.
+  let sponsoringId = $state(null);
+  let sponsorError = $state('');
+  let sponsorStats = $state({}); // { [ocSlug]: { total, currency, backers: [...], backersCount } }
 
   // Derived: always get fresh quest data from the array
   let selectedQuest = $derived(selectedQuestId ? quests.find(q => String(q.id) === String(selectedQuestId)) || null : null);
@@ -184,6 +194,7 @@
       until: raw.until || '',
       initiator: raw.initiator,
       where: raw.where,
+      openCollectiveSlug: raw.openCollectiveSlug || '',
       _raw: raw,
     };
   }
@@ -289,6 +300,110 @@
     e.target.style.display = 'none';
     e.target.nextElementSibling?.classList.remove('hidden');
   }
+
+  // ── Open Collective sponsorship ──
+  // Lazy-create an OC Project on first sponsor click, then write the slug back
+  // into Holosphere so subsequent loads skip the function and link directly.
+  async function sponsorQuest(q) {
+    if (!OC_PARENT_SLUG || sponsoringId) return;
+    sponsorError = '';
+
+    if (q.openCollectiveSlug) {
+      window.open(`https://opencollective.com/${q.openCollectiveSlug}`, '_blank', 'noopener');
+      return;
+    }
+
+    sponsoringId = q.id;
+    try {
+      const res = await fetch('/.netlify/functions/create-quest-project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          parentSlug: OC_PARENT_SLUG,
+          questId: q.id,
+          title: q.title,
+          description: q.shortDesc || q.fullDesc || '',
+          tags: q.skills,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.slug) {
+        sponsorError = data?.error || 'Could not create sponsorship project. Please try again.';
+        return;
+      }
+
+      // Persist slug to the live quest record so other clients pick it up.
+      try {
+        const merged = { ...(q._raw || {}), id: q.id, openCollectiveSlug: data.slug };
+        await holosphere.put(HOLON_ID, 'quests', merged);
+      } catch (err) {
+        console.warn('Failed to persist openCollectiveSlug to Holosphere', err);
+      }
+
+      // Optimistically reflect locally too.
+      const idx = quests.findIndex(x => String(x.id) === String(q.id));
+      if (idx !== -1) {
+        quests[idx] = { ...quests[idx], openCollectiveSlug: data.slug };
+        quests = quests;
+      }
+
+      window.open(data.url, '_blank', 'noopener');
+    } catch (err) {
+      console.error(err);
+      sponsorError = 'Network error. Please try again.';
+    } finally {
+      sponsoringId = null;
+    }
+  }
+
+  async function loadSponsorStats(slug) {
+    if (!slug || sponsorStats[slug]) return;
+    sponsorStats = { ...sponsorStats, [slug]: { loading: true } };
+    const query = `
+      query($slug: String!) {
+        account(slug: $slug) {
+          stats { totalAmountReceived { valueInCents currency } }
+          members(role: BACKER, limit: 5) {
+            totalCount
+            nodes { account { name slug imageUrl(height: 64) } }
+          }
+        }
+      }
+    `;
+    try {
+      const res = await fetch('https://api.opencollective.com/graphql/v2', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { slug } }),
+      });
+      const body = await res.json();
+      const acc = body?.data?.account;
+      if (!acc) {
+        sponsorStats = { ...sponsorStats, [slug]: { ready: true, missing: true } };
+        return;
+      }
+      const cents = acc.stats?.totalAmountReceived?.valueInCents || 0;
+      sponsorStats = {
+        ...sponsorStats,
+        [slug]: {
+          ready: true,
+          total: cents / 100,
+          currency: acc.stats?.totalAmountReceived?.currency || 'EUR',
+          backers: (acc.members?.nodes || []).map(n => n.account).filter(Boolean),
+          backersCount: acc.members?.totalCount || 0,
+        },
+      };
+    } catch (err) {
+      console.warn('Sponsor stats fetch failed', err);
+      sponsorStats = { ...sponsorStats, [slug]: { ready: true, missing: true } };
+    }
+  }
+
+  // Reactive: whenever a quest detail with an OC slug is opened, load its stats.
+  $effect(() => {
+    const q = selectedQuest;
+    if (q?.openCollectiveSlug) loadSponsorStats(q.openCollectiveSlug);
+  });
 
   onDestroy(() => {
     if (subscription?.unsubscribe) subscription.unsubscribe();
@@ -479,6 +594,59 @@
           </div>
         </div>
 
+        {#if OC_PARENT_SLUG}
+          {@const stats = q.openCollectiveSlug ? sponsorStats[q.openCollectiveSlug] : null}
+          <div class="sponsor-section">
+            <div class="sponsor-headline">
+              <i class="fas fa-heart" style="color: var(--q-primary)"></i>
+              <span>Sponsor this quest</span>
+            </div>
+            {#if q.openCollectiveSlug}
+              <a class="btn-sponsor" href="https://opencollective.com/{q.openCollectiveSlug}" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-hand-holding-heart"></i>&ensp;Contribute on Open Collective
+              </a>
+              {#if stats?.ready && !stats.missing}
+                <div class="backers-strip">
+                  <div class="backers-total">
+                    {stats.total > 0
+                      ? `${(stats.currency === 'EUR' ? '€' : stats.currency + ' ')}${stats.total.toLocaleString('it-IT')} raised`
+                      : 'Be the first sponsor'}
+                  </div>
+                  {#if stats.backers.length > 0}
+                    <div class="backers-avatars">
+                      {#each stats.backers as b}
+                        <a href="https://opencollective.com/{b.slug}" target="_blank" rel="noopener noreferrer" title={b.name}>
+                          {#if b.imageUrl}
+                            <img src={b.imageUrl} alt={b.name} />
+                          {:else}
+                            <span class="avatar-fallback">{(b.name || '?').charAt(0).toUpperCase()}</span>
+                          {/if}
+                        </a>
+                      {/each}
+                      {#if stats.backersCount > stats.backers.length}
+                        <a class="backers-more" href="https://opencollective.com/{q.openCollectiveSlug}" target="_blank" rel="noopener noreferrer">
+                          +{stats.backersCount - stats.backers.length}
+                        </a>
+                      {/if}
+                    </div>
+                  {/if}
+                </div>
+              {/if}
+            {:else}
+              <button class="btn-sponsor" disabled={sponsoringId === q.id} onclick={() => sponsorQuest(q)}>
+                {#if sponsoringId === q.id}
+                  <i class="fas fa-spinner fa-spin"></i>&ensp;Setting up sponsorship…
+                {:else}
+                  <i class="fas fa-hand-holding-heart"></i>&ensp;Sponsor this quest
+                {/if}
+              </button>
+              {#if sponsorError && sponsoringId === null}
+                <div class="sponsor-error">{sponsorError}</div>
+              {/if}
+            {/if}
+          </div>
+        {/if}
+
         <div class="cta-section">
           <p>Interested in this quest? Open it in Telegram to join the team — the quest owner will see you there.</p>
           <button class="btn-ask" onclick={() => askQuestion(q.id)}>
@@ -580,6 +748,21 @@
   .budget-table td { padding: 0.5rem 0; border-bottom: 1px solid #f0ede8; }
   .budget-table td:last-child { text-align: right; font-weight: 500; color: #222; }
   .budget-table tr:last-child td { border-bottom: none; font-weight: 700; color: var(--q-primary-dark); padding-top: 0.75rem; }
+
+  .sponsor-section { text-align: center; padding: 1.25rem 0 1.5rem; border-top: 1px solid #f0ede8; }
+  .sponsor-headline { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #8a8274; margin-bottom: 0.85rem; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-sponsor { display: inline-flex; align-items: center; justify-content: center; padding: 12px 32px; border: 2px solid var(--q-primary); color: var(--q-primary-dark); font-family: "Open Sans", sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; background: transparent; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; text-decoration: none; }
+  .btn-sponsor:hover:not([disabled]) { background: var(--q-primary); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+  .btn-sponsor[disabled] { opacity: 0.7; cursor: progress; }
+  .backers-strip { margin-top: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.85rem; flex-wrap: wrap; }
+  .backers-total { font-size: 0.78rem; color: #8a8274; letter-spacing: 1px; }
+  .backers-avatars { display: flex; align-items: center; gap: 4px; }
+  .backers-avatars a { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; background: #f0ede8; border: 1px solid #fff; box-shadow: 0 0 0 1px #f0ede8; transition: transform 0.2s; }
+  .backers-avatars a:hover { transform: scale(1.1); }
+  .backers-avatars img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-fallback { font-size: 0.75rem; font-weight: 600; color: var(--q-primary-dark); }
+  .backers-more { font-size: 0.7rem !important; color: #8a8274 !important; background: transparent !important; box-shadow: none !important; }
+  .sponsor-error { color: #b4593b; font-size: 0.78rem; margin-top: 0.6rem; }
 
   .cta-section { text-align: center; padding-top: 1rem; border-top: 1px solid #f0ede8; }
   .cta-section p { font-size: 0.85rem; color: #8a8274; margin-bottom: 1rem; }
