@@ -117,6 +117,15 @@
   let sponsorError = $state('');
   let sponsorStats = $state({}); // { [ocSlug]: { total, currency, backers: [...], backersCount } }
 
+  // Federation toggle: when on, also pull quests from inbound-federated holons
+  // via holosphere.getFederated(). Persisted per-holon in localStorage so the
+  // choice sticks across reloads.
+  const FEDERATION_LS_KEY = `quests:federated:${HOLON_ID}`;
+  let showFederated = $state(
+    typeof localStorage !== 'undefined' && localStorage.getItem(FEDERATION_LS_KEY) === '1'
+  );
+  let reloadingFederation = $state(false);
+
   // Derived: always get fresh quest data from the array
   let selectedQuest = $derived(selectedQuestId ? quests.find(q => String(q.id) === String(selectedQuestId)) || null : null);
 
@@ -195,6 +204,14 @@
       initiator: raw.initiator,
       where: raw.where,
       openCollectiveSlug: raw.openCollectiveSlug || '',
+      // _federation is stamped by holosphere.getFederated on items pulled from
+      // partner spaces; local items have it absent.
+      federation: raw._federation
+        ? {
+            origin: raw._federation.origin,
+            originName: raw._federation.originName || raw._federation.origin,
+          }
+        : null,
       _raw: raw,
     };
   }
@@ -221,6 +238,32 @@
       .map(p => typeof p === 'string' ? p : (p.name || [p.first_name, p.last_name].filter(Boolean).join(' ')));
   }
 
+  // Pulls the full quest set, either from this holon only or merged across the
+  // federation. Returns an array of normalized quests filtered to active ones.
+  async function fetchQuests({ federated }) {
+    if (federated) {
+      const items = await holosphere.getFederated(HOLON_ID, 'quests', { idField: 'id' });
+      return (items || [])
+        .filter(q => q && q.title && q.status !== 'cancelled' && q.status !== 'completed')
+        .map(normalizeQuest);
+    }
+
+    const lensPath = APP_NAME + '/' + HOLON_ID + '/quests';
+    const allKeys = await new Promise(resolve => {
+      holosphere.gun.get(lensPath).once(data => {
+        if (data) resolve(Object.keys(data).filter(k => k !== '_' && k !== '#'));
+        else resolve([]);
+      });
+      setTimeout(() => resolve([]), 5000);
+    });
+    const results = await Promise.all(
+      allKeys.map(key => holosphere.get(HOLON_ID, 'quests', key).catch(() => null))
+    );
+    return results
+      .filter(q => q && q.title && q.status !== 'cancelled' && q.status !== 'completed')
+      .map(normalizeQuest);
+  }
+
   async function enterBoard() {
     showBoard = true;
     loading = true;
@@ -229,25 +272,10 @@
       holosphere = new HoloSphere(APP_NAME);
       await new Promise(r => setTimeout(r, 2500));
 
-      const lensPath = APP_NAME + '/' + HOLON_ID + '/quests';
-      const allKeys = await new Promise(resolve => {
-        holosphere.gun.get(lensPath).once(data => {
-          if (data) resolve(Object.keys(data).filter(k => k !== '_' && k !== '#'));
-          else resolve([]);
-        });
-        setTimeout(() => resolve([]), 5000);
-      });
+      quests = await fetchQuests({ federated: showFederated });
 
-      const results = await Promise.all(
-        allKeys.map(key => holosphere.get(HOLON_ID, 'quests', key).catch(() => null))
-      );
-
-      const raw = results.filter(q => q && q.title);
-      quests = raw
-        .filter(q => q.status !== 'cancelled' && q.status !== 'completed')
-        .map(normalizeQuest);
-
-      // Subscribe for live updates (debounced)
+      // Subscribe for live updates on the local holon. Federated items refresh
+      // on toggle / reload — we don't open a federation-wide subscription here.
       let updateTimer = null;
       const pendingUpdates = new Map();
 
@@ -282,6 +310,23 @@
     }
 
     loading = false;
+  }
+
+  async function toggleFederation() {
+    if (reloadingFederation) return;
+    showFederated = !showFederated;
+    try {
+      localStorage.setItem(FEDERATION_LS_KEY, showFederated ? '1' : '0');
+    } catch {}
+    if (!holosphere) return;
+    reloadingFederation = true;
+    try {
+      quests = await fetchQuests({ federated: showFederated });
+    } catch (err) {
+      console.error('Failed to reload quests:', err);
+    } finally {
+      reloadingFederation = false;
+    }
   }
 
   function askQuestion(id) {
@@ -435,6 +480,17 @@
   <nav class="quest-nav">
     <a href={homeHref}>{brandName}</a>
     <div class="nav-right">
+      <button
+        class="fed-toggle"
+        class:active={showFederated}
+        disabled={reloadingFederation}
+        onclick={toggleFederation}
+        title={showFederated ? 'Showing this portal + federated holons' : 'Showing this portal only'}
+        aria-pressed={showFederated}
+      >
+        <span class="fed-dot" class:on={showFederated}></span>
+        <span class="fed-label">{reloadingFederation ? 'Loading…' : 'Federated'}</span>
+      </button>
       <span class="nav-link">
         Quests <span class="badge-count">{quests.length}</span>
       </span>
@@ -487,6 +543,11 @@
             </div>
           {/if}
           <div class="card-body">
+            {#if q.federation}
+              <div class="fed-badge" title="From federated holon: {q.federation.originName}">
+                <i class="fas fa-link"></i>&nbsp;from {q.federation.originName}
+              </div>
+            {/if}
             <h3>{q.title}</h3>
             <p class="desc">{q.shortDesc}</p>
             {#if q.progress > 0}
@@ -546,6 +607,11 @@
         <button class="back-btn" onclick={() => selectedQuestId = null}>
           <i class="fas fa-arrow-left"></i> Back to quests
         </button>
+        {#if q.federation}
+          <div class="fed-badge fed-badge-detail" title="From federated holon: {q.federation.originName}">
+            <i class="fas fa-link"></i>&nbsp;from {q.federation.originName}
+          </div>
+        {/if}
         <h2>{q.title}</h2>
         <p class="detail-desc">{q.fullDesc}</p>
 
@@ -696,6 +762,17 @@
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
   .nav-link { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #222; }
   .badge-count { background: var(--q-primary); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
+
+  .fed-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: transparent; border: 1px solid #d8d2c5; border-radius: 999px; cursor: pointer; font-family: "Open Sans", sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #8a8274; transition: all 0.25s ease; }
+  .fed-toggle:hover:not([disabled]) { border-color: var(--q-primary); color: var(--q-primary-dark); }
+  .fed-toggle.active { border-color: var(--q-primary); color: var(--q-primary-dark); background: color-mix(in srgb, var(--q-primary) 12%, transparent); }
+  .fed-toggle[disabled] { opacity: 0.6; cursor: progress; }
+  .fed-dot { width: 8px; height: 8px; border-radius: 50%; background: #d8d2c5; transition: background 0.25s ease, box-shadow 0.25s ease; }
+  .fed-dot.on { background: var(--q-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--q-primary) 25%, transparent); }
+  .fed-label { font-weight: 500; }
+
+  .fed-badge { display: inline-flex; align-items: center; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--q-primary-dark); background: color-mix(in srgb, var(--q-primary) 14%, transparent); padding: 3px 8px; border-radius: 999px; margin-bottom: 0.5rem; font-weight: 500; }
+  .fed-badge-detail { margin-bottom: 0.85rem; }
 
   .board-header { text-align: center; padding: 3rem 2rem 1rem; }
   .board-header h2 { font-size: 1.6rem; font-weight: 300; letter-spacing: 4px; color: #222; margin-bottom: 0.5rem; }
