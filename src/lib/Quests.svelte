@@ -135,8 +135,14 @@
   // so the lens marker is required — without it the bot replies "Invalid join link."
   // tg:// deep-links straight into the Telegram app/desktop client; we keep
   // the https://t.me/ URL as a fallback when the native scheme isn't handled.
+  // For federated quests, the join must route to the holon that *owns* the
+  // quest (and therefore the Telegram channel where the quest lives), not the
+  // viewing portal's holon.
+  function joinHolonFor(q) {
+    return q?.federation?.origin || HOLON_ID;
+  }
   function joinPayload(q) {
-    return `join_${HOLON_ID}_quests_${q.id}`;
+    return `join_${joinHolonFor(q)}_quests_${q.id}`;
   }
   function joinUrl(q) {
     return `tg://resolve?domain=${TELEGRAM_BOT}&start=${encodeURIComponent(joinPayload(q))}`;
@@ -531,23 +537,25 @@
         {@const teamCurrent = q.team.current || q.participants.length || 0}
         {@const teamNeeded = q.team.needed || 0}
         {@const statusLabel = STATUS_LABELS[q.status] || q.status || ''}
-        <div class="quest-card" onclick={() => selectedQuestId = q.id} role="button" tabindex="0">
-          {#if q.image}
-            <img class="hero-img" src={q.image} alt={q.title} onerror={handleImageError} />
-            <div class="icon-hero hidden" style="background:{q.color}15">
-              <i class="fas {q.icon}" style="color:{q.color}"></i>
-            </div>
-          {:else}
-            <div class="icon-hero" style="background:{q.color}15">
-              <i class="fas {q.icon}" style="color:{q.color}"></i>
-            </div>
-          {/if}
-          <div class="card-body">
-            {#if q.federation}
-              <div class="fed-badge" title="From federated holon: {q.federation.originName}">
-                <i class="fas fa-link"></i>&nbsp;from {q.federation.originName}
+        <div class="quest-card" class:is-federated={!!q.federation} onclick={() => selectedQuestId = q.id} role="button" tabindex="0">
+          <div class="hero-wrap">
+            {#if q.image}
+              <img class="hero-img" src={q.image} alt={q.title} onerror={handleImageError} />
+              <div class="icon-hero hidden" style="background:{q.color}15">
+                <i class="fas {q.icon}" style="color:{q.color}"></i>
+              </div>
+            {:else}
+              <div class="icon-hero" style="background:{q.color}15">
+                <i class="fas {q.icon}" style="color:{q.color}"></i>
               </div>
             {/if}
+            {#if q.federation}
+              <div class="fed-overlay" title="From federated holon: {q.federation.originName}">
+                <i class="fas fa-link"></i>&nbsp;{q.federation.originName}
+              </div>
+            {/if}
+          </div>
+          <div class="card-body">
             <h3>{q.title}</h3>
             <p class="desc">{q.shortDesc}</p>
             {#if q.progress > 0}
@@ -608,8 +616,9 @@
           <i class="fas fa-arrow-left"></i> Back to quests
         </button>
         {#if q.federation}
-          <div class="fed-badge fed-badge-detail" title="From federated holon: {q.federation.originName}">
-            <i class="fas fa-link"></i>&nbsp;from {q.federation.originName}
+          <div class="fed-banner" title="This quest lives in another holon: {q.federation.originName}">
+            <i class="fas fa-link"></i>
+            <span>From <strong>{q.federation.originName}</strong> via the federation</span>
           </div>
         {/if}
         <h2>{q.title}</h2>
@@ -714,7 +723,13 @@
         {/if}
 
         <div class="cta-section">
-          <p>Interested in this quest? Open it in Telegram to join the team — the quest owner will see you there.</p>
+          <p>
+            {#if q.federation}
+              This quest is hosted by <strong>{q.federation.originName}</strong>. Open it in their Telegram channel to join the team.
+            {:else}
+              Interested in this quest? Open it in Telegram to join the team — the quest owner will see you there.
+            {/if}
+          </p>
           <button class="btn-ask" onclick={() => askQuestion(q.id)}>
             <i class="fas fa-comment"></i>&ensp;Ask a question
           </button>
@@ -725,6 +740,7 @@
           {:else}
             <a class="btn-raise-hand" href={joinUrlWeb(q)} target="_blank" rel="noopener noreferrer" onclick={(e) => openJoin(q, e)}>
               <i class="fas fa-hand"></i>&ensp;I'm in
+              {#if q.federation}<span class="raise-hand-via">via {q.federation.originName}</span>{/if}
             </a>
           {/if}
         </div>
@@ -771,8 +787,33 @@
   .fed-dot.on { background: var(--q-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--q-primary) 25%, transparent); }
   .fed-label { font-weight: 500; }
 
-  .fed-badge { display: inline-flex; align-items: center; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--q-primary-dark); background: color-mix(in srgb, var(--q-primary) 14%, transparent); padding: 3px 8px; border-radius: 999px; margin-bottom: 0.5rem; font-weight: 500; }
-  .fed-badge-detail { margin-bottom: 0.85rem; }
+  .hero-wrap { position: relative; }
+  .fed-overlay {
+    position: absolute; top: 10px; left: 10px;
+    display: inline-flex; align-items: center; max-width: calc(100% - 20px);
+    font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+    color: #fff;
+    background: rgba(34, 34, 34, 0.78);
+    backdrop-filter: blur(6px);
+    padding: 5px 10px; border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .fed-overlay i { color: var(--q-accent-light); margin-right: 6px; }
+  .quest-card.is-federated { box-shadow: 0 2px 20px rgba(0,0,0,0.06), inset 0 0 0 1px color-mix(in srgb, var(--q-primary) 40%, transparent); }
+
+  .fed-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: color-mix(in srgb, var(--q-primary) 12%, transparent);
+    color: var(--q-primary-dark);
+    border-left: 3px solid var(--q-primary);
+    padding: 10px 14px; border-radius: 6px; margin-bottom: 1rem;
+    font-size: 0.85rem;
+  }
+  .fed-banner i { color: var(--q-primary); }
+  .fed-banner strong { font-weight: 600; }
+
+  .raise-hand-via { display: block; font-size: 0.65rem; font-weight: 400; letter-spacing: 1.5px; text-transform: none; opacity: 0.85; margin-top: 2px; }
 
   .board-header { text-align: center; padding: 3rem 2rem 1rem; }
   .board-header h2 { font-size: 1.6rem; font-weight: 300; letter-spacing: 4px; color: #222; margin-bottom: 0.5rem; }
