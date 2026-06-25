@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Villa tranquilla · Castorano</title>
+<style>
+  :root{ --ink:#222222; --grey:#717171; --line:#dddddd; --bg:#ffffff; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.4;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+
+  /* Language toggle */
+  .langbar{position:fixed;top:18px;right:24px;z-index:60;display:flex;border:1px solid var(--ink);border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+  .langbar button{border:none;background:none;padding:8px 16px;font-weight:700;font-size:13px;cursor:pointer;color:var(--grey);}
+  .langbar button.active{background:var(--ink);color:#fff;}
+
+  h1{font-size:26px;font-weight:600;margin:36px 0 8px;}
+  .subbar{display:flex;align-items:center;font-size:14px;margin-bottom:18px;flex-wrap:wrap;gap:6px;}
+
+  .gallery{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;border-radius:16px;overflow:hidden;position:relative;height:430px;}
+  .gallery img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:filter .2s;display:block;}
+  .gallery img:hover{filter:brightness(.92);}
+  .gallery .big{grid-column:1 / 3;grid-row:1 / 3;}
+  .showall{position:absolute;right:16px;bottom:16px;background:#fff;border:1px solid var(--ink);border-radius:8px;padding:7px 15px;font-weight:600;font-size:14px;cursor:pointer;}
+
+  .body{max-width:760px;padding:40px 0;}
+  .section{border-bottom:1px solid var(--line);padding:32px 0;}
+  .section h2{font-size:22px;font-weight:600;margin-bottom:18px;}
+  .head-line{border-bottom:1px solid var(--line);padding-bottom:24px;}
+  .head-line h2{margin:0;font-size:20px;}
+  .head-line .sub{color:var(--ink);font-size:15px;margin-top:4px;font-weight:400;}
+
+  .features{list-style:none;display:flex;flex-direction:column;gap:24px;padding:28px 0;border-bottom:1px solid var(--line);}
+  .features li{display:flex;gap:16px;align-items:flex-start;}
+  .features .ic{font-size:24px;width:24px;text-align:center;}
+  .features b{font-weight:600;display:block;}
+  .features span{color:var(--grey);font-size:14px;}
+
+  .desc{padding:28px 0;font-size:16px;border-bottom:1px solid var(--line);}
+  .desc p{margin-bottom:16px;}
+  .desc h3{font-size:17px;margin:20px 0 6px;}
+
+  .beds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .bed{border:1px solid var(--line);border-radius:12px;padding:20px;}
+  .bed .ic{font-size:26px;}
+  .bed b{display:block;margin-top:12px;}
+  .bed span{color:var(--grey);font-size:14px;}
+
+  .amen{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .amen div{display:flex;gap:14px;align-items:center;font-size:16px;padding:6px 0;}
+  .amen .ic{font-size:22px;width:24px;text-align:center;}
+  .btn-outline{margin-top:24px;background:#fff;border:1px solid var(--ink);border-radius:8px;padding:13px 23px;font-weight:600;font-size:16px;cursor:pointer;}
+  .btn-outline:hover{background:#f7f7f7;}
+
+  /* Amenities modal */
+  .amodal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:110;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:48px 16px;}
+  .amodal.open{display:flex;}
+  .amodal .panel{background:#fff;border-radius:16px;max-width:720px;width:100%;padding:24px 40px 48px;position:relative;}
+  .amodal .x{position:sticky;top:0;float:left;background:#fff;border:none;font-size:22px;cursor:pointer;width:34px;height:34px;border-radius:50%;margin:-4px 0 8px -8px;}
+  .amodal .x:hover{background:#f0f0f0;}
+  .amodal h2{font-size:24px;font-weight:600;margin:8px 0 8px;clear:both;}
+  .amodal .grp{padding:24px 0;border-bottom:1px solid var(--line);}
+  .amodal .grp:last-child{border-bottom:none;}
+  .amodal .grp h3{font-size:18px;font-weight:600;margin-bottom:14px;}
+  .amodal .row{display:flex;gap:14px;align-items:center;font-size:16px;padding:11px 0;border-bottom:1px solid #f0f0f0;}
+  .amodal .row:last-child{border-bottom:none;}
+  .amodal .row .ic{font-size:20px;width:24px;text-align:center;}
+  .amodal .row.off{color:var(--grey);text-decoration:line-through;}
+
+  .rev-head{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:600;margin-bottom:28px;}
+  .rev-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 48px;margin-bottom:40px;}
+  .rev-cats .cat .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+  .rev-cats .bar{height:4px;background:#ddd;border-radius:2px;overflow:hidden;}
+  .rev-cats .bar i{display:block;height:100%;background:var(--ink);}
+  .reviews{display:grid;grid-template-columns:1fr 1fr;gap:32px 64px;}
+  .review .who{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .review .who .ra{width:42px;height:42px;border-radius:50%;background:#717171;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;}
+  .review .who b{display:block;}
+  .review .who span{font-size:13px;color:var(--grey);}
+  .review .stars{font-size:12px;color:var(--ink);margin-bottom:8px;}
+  .review p{font-size:15px;color:#3a3a3a;}
+
+  .map{height:380px;border-radius:12px;background:linear-gradient(135deg,#cfe8d6,#a7d3b4);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .map .pin{font-size:46px;}
+  .map .lbl{position:absolute;bottom:16px;left:16px;background:#fff;padding:8px 14px;border-radius:8px;font-weight:600;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  .rules h4{font-size:16px;margin-bottom:12px;}
+  .rules ul{list-style:none;color:#3a3a3a;font-size:15px;display:flex;flex-direction:column;gap:10px;}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--grey);font-size:14px;text-align:center;}
+
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;align-items:center;justify-content:center;}
+  .lb.open{display:flex;}
+  .lb img{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:6px;}
+  .lb .x{position:absolute;top:20px;left:24px;color:#fff;font-size:30px;background:none;border:none;cursor:pointer;}
+  .lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer;}
+  .lb .prev{left:24px;} .lb .next{right:24px;}
+  .lb .count{position:absolute;top:24px;color:#fff;font-size:15px;}
+
+  @media(max-width:900px){
+    .reviews,.rev-cats,.rules,.beds{grid-template-columns:1fr;}
+    .gallery{grid-template-columns:1fr;grid-template-rows:none;height:auto;}
+    .gallery img{height:240px;}
+    .gallery .big{grid-column:auto;grid-row:auto;}
+    .gallery img:nth-child(n+3){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="langbar">
+  <button id="btIt" class="active" onclick="setLang('it')">IT</button>
+  <button id="btEn" onclick="setLang('en')">EN</button>
+</div>
+
+<main class="wrap">
+  <h1 data-it="Villa tranquilla (con piscina e vista mozzafiato)" data-en="Peaceful villa (with pool and breathtaking view)"></h1>
+  <div class="subbar">
+    <span data-it="★ 4,63" data-en="★ 4.63"></span><span>·</span>
+    <span data-it="8 recensioni" data-en="8 reviews"></span><span>·</span>
+    <span data-it="Castorano, Ascoli Piceno, Italia" data-en="Castorano, Ascoli Piceno, Italy"></span>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery" id="gallery">
+    <img class="big" src="/rent/photo-01.jpg" alt="Villa" data-i="0">
+    <img src="/rent/photo-02.jpg" alt="" data-i="1">
+    <img src="/rent/photo-03.jpg" alt="" data-i="2">
+    <img src="/rent/photo-04.jpg" alt="" data-i="3">
+    <img src="/rent/photo-05.jpg" alt="" data-i="4">
+    <button class="showall" onclick="openLb(0)" data-it="▦ Mostra tutte le foto" data-en="▦ Show all photos"></button>
+  </div>
+
+  <div class="body">
+    <div class="head-line">
+      <h2 data-it="Intero alloggio: villa" data-en="Entire place: villa"></h2>
+      <div class="sub" data-it="12 ospiti · 6 camere da letto · 7 letti · 3 bagni" data-en="12 guests · 6 bedrooms · 7 beds · 3 bathrooms"></div>
+    </div>
+
+    <ul class="features">
+      <li><div class="ic">💼</div><div><b data-it="Spazio di lavoro dedicato" data-en="Dedicated workspace"></b><span data-it="Una stanza con connessione wifi, adatta per lavorare." data-en="A room with wifi, well suited for working."></span></div></li>
+      <li><div class="ic">🔑</div><div><b data-it="Self check-in" data-en="Self check-in"></b><span data-it="Puoi effettuare il check-in con il personale dell'edificio." data-en="You can check in with the on-site staff."></span></div></li>
+      <li><div class="ic">🏊</div><div><b data-it="Tuffati" data-en="Dive in"></b><span data-it="Questo è uno dei pochi alloggi in zona dotati di piscina." data-en="One of the few places in the area with a pool."></span></div></li>
+    </ul>
+
+    <div class="desc">
+      <p data-it="Gli ospiti hanno accesso alla propria villa privata con cucina esterna e gazebo con amache. La piscina è condivisa con l'amministratore della proprietà, che si occupa della manutenzione della piscina e dell'assistenza su chiamata." data-en="Guests have access to their own private villa with an outdoor kitchen and a gazebo with hammocks. The pool is shared with the property manager, who handles pool maintenance and on-call assistance."></p>
+      <p data-it="La villa è circondata da splendide colline e montagne con incredibili viste panoramiche. Questo crea il luogo perfetto per godersi il pieno relax." data-en="The villa is surrounded by beautiful hills and mountains with incredible panoramic views — the perfect place to fully relax."></p>
+      <h3 data-it="Lo spazio" data-en="The space"></h3>
+      <p data-it="Recentemente la casa è stata oggetto di un intervento di ristrutturazione con coibentazione in fibra di canapa e installazione di pannelli solari. Le camere matrimoniali, la cucina e il soggiorno sono dotate di aria condizionata." data-en="The house was recently renovated with hemp-fibre insulation and solar panels. The double bedrooms, kitchen and living room have air conditioning."></p>
+      <p data-it="La villa dispone di 4 camere matrimoniali (una con vista su una terrazza), 2 camere singole e 3 bagni con wc e doccia." data-en="The villa has 4 double bedrooms (one with a terrace view), 2 single bedrooms and 3 bathrooms with toilet and shower."></p>
+      <h3 data-it="Accesso per gli ospiti" data-en="Guest access"></h3>
+      <p data-it="Intera proprietà." data-en="The entire property."></p>
+      <h3 data-it="Altre cose da tenere a mente" data-en="Other things to note"></h3>
+      <p data-it="Villa tranquilla e pittoresca immersa nelle colline marchigiane, con vista su dolci vigneti e uliveti. Avrai accesso a una cucina esterna accanto a una piscina condivisa di 65 m³, con una splendida vista sul paesaggio. Lo spazio fa parte di tre strutture che compongono il Liminal Village, che ospita changemaker da tutto il mondo durante la bassa stagione." data-en="A peaceful, picturesque villa nestled in the Marche hills, overlooking gentle vineyards and olive groves. You'll have access to an outdoor kitchen beside a shared 65 m³ pool, with a stunning view over the landscape. The space is part of three structures that make up the Liminal Village, which hosts changemakers from around the world during the low season."></p>
+    </div>
+
+    <div class="section">
+      <h2 data-it="Dove dormirai" data-en="Where you'll sleep"></h2>
+      <div class="beds">
+        <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 1" data-en="Bedroom 1"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
+        <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 2" data-en="Bedroom 2"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
+        <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 3" data-en="Bedroom 3"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 data-it="Cosa troverai" data-en="What this place offers"></h2>
+      <div class="amen">
+        <div><span class="ic">🏖️</span><span data-it="Accesso condiviso alla spiaggia" data-en="Shared beach access"></span></div>
+        <div><span class="ic">🍳</span><span data-it="Cucina" data-en="Kitchen"></span></div>
+        <div><span class="ic">📶</span><span data-it="Wifi" data-en="Wifi"></span></div>
+        <div><span class="ic">💼</span><span data-it="Spazio di lavoro dedicato" data-en="Dedicated workspace"></span></div>
+        <div><span class="ic">🅿️</span><span data-it="Parcheggio gratuito in loco" data-en="Free parking on premises"></span></div>
+        <div><span class="ic">🏊</span><span data-it="Piscina all'aperto privata: 24h" data-en="Private outdoor pool: available 24h"></span></div>
+        <div><span class="ic">🧺</span><span data-it="Lavatrice" data-en="Washer"></span></div>
+        <div><span class="ic">❄️</span><span data-it="Aria condizionata" data-en="Air conditioning"></span></div>
+        <div><span class="ic">🌿</span><span data-it="Patio o balcone privato" data-en="Private patio or balcony"></span></div>
+      </div>
+      <button class="btn-outline" onclick="openAmen()" data-it="Mostra tutti i servizi" data-en="Show all amenities"></button>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="section">
+    <div class="rev-head"><span data-it="★ 4,63 · 8 recensioni" data-en="★ 4.63 · 8 reviews"></span></div>
+    <div class="rev-cats">
+      <div class="cat"><div class="top"><span data-it="Ospitalità" data-en="Hospitality"></span><span>4,8</span></div><div class="bar"><i style="width:96%"></i></div></div>
+      <div class="cat"><div class="top"><span data-it="Pulizia" data-en="Cleanliness"></span><span>4,6</span></div><div class="bar"><i style="width:92%"></i></div></div>
+      <div class="cat"><div class="top"><span data-it="Posizione" data-en="Location"></span><span>4,5</span></div><div class="bar"><i style="width:90%"></i></div></div>
+      <div class="cat"><div class="top"><span data-it="Vista" data-en="View"></span><span>4,9</span></div><div class="bar"><i style="width:98%"></i></div></div>
+    </div>
+    <div class="reviews">
+      <div class="review">
+        <div class="who"><div class="ra">R</div><div><b>Robert</b><span>agosto 2023</span></div></div>
+        <div class="stars">★★★★☆ · agosto 2023</div>
+        <p data-it="Siamo arrivati la sera per il check-in e non ci sono stati problemi. Ci hanno fatto il tour della casa e dato tutte le indicazioni necessarie. Nonostante fossero nella casa adiacente non li abbiamo sentiti per nulla. C'è una piccola casetta che completa l'alloggio, privacy completa. Siamo stati in 6, esperienza fantastica. Unica pecca il Wi-Fi un po' scarso e la strada dissestata." data-en="We arrived in the evening for check-in with no problems. We were given a tour of the house and all the directions we needed. Even though they were in the adjacent house we didn't hear them at all. There's a small cottage that completes the place — total privacy. We were a group of 6, a fantastic experience. Only downside: slightly weak Wi-Fi and the bumpy road."></p>
+      </div>
+      <div class="review">
+        <div class="who"><div class="ra">L</div><div><b>Lorenzo</b><span>agosto 2019</span></div></div>
+        <div class="stars">★★★★☆ · agosto 2019</div>
+        <p data-it="Host fantastici, pur non essendo presenti ci hanno messo nelle migliori condizioni per usufruire di tutti i servizi e sempre disponibili telefonicamente. La piscina una fantastica risorsa. La casa a metà strada tra il mare e Ascoli, ottima posizione." data-en="Fantastic hosts — even without being present they set us up perfectly to use all the facilities and were always reachable by phone. The pool is a fantastic resource. The house is halfway between the sea and Ascoli, a great location."></p>
+      </div>
+      <div class="review">
+        <div class="who"><div class="ra">A</div><div><b>Annapaola</b><span>giugno 2019</span></div></div>
+        <div class="stars">★★★★★ · giugno 2019</div>
+        <p data-it="Io e i miei compagni di dottorato abbiamo soggiornato per un congresso. Ci siamo trovati benissimo, host gentili e disponibili, casa meravigliosa. Posizione isolata ma raggiungibile in auto, vista spettacolare. Il giardino con gazebo, amache e proiettore. Un soggiorno che ripeteremmo." data-en="My PhD colleagues and I stayed here for a conference. We had a wonderful time — kind, helpful hosts and a marvellous house. Isolated location but reachable by car, with a spectacular view. The garden has a gazebo, hammocks and a projector. A stay we would happily repeat."></p>
+      </div>
+      <div class="review">
+        <div class="who"><div class="ra">D</div><div><b>David</b><span data-it="Peseux, Svizzera" data-en="Peseux, Switzerland"></span></div></div>
+        <div class="stars">★★★★★ · agosto 2023</div>
+        <p data-it="Host reattivi alle nostre richieste. Gli intendenti sul posto ci hanno accolto molto bene. Giornata alla scoperta delle cascate e serata pizza alla villa. Casa di buona qualità, ben tenuta. Il posto è meraviglioso: la vista, gli arredi esterni, la piscina perfetta." data-en="Hosts responsive to our requests. The on-site managers welcomed us very warmly. A day discovering the waterfalls and a pizza evening at the villa. Good-quality, well-kept house. The place is wonderful: the view, the outdoor furnishings, the perfect pool."></p>
+      </div>
+      <div class="review">
+        <div class="who"><div class="ra">L</div><div><b>Lo</b><span>agosto 2018</span></div></div>
+        <div class="stars">★★★★★ · agosto 2018</div>
+        <p data-it="Ottima esperienza, lo spazio è come descritto, molto rilassante e tranquillo, bel panorama e vicino ai principali servizi." data-en="Great experience, the space is exactly as described, very relaxing and quiet, lovely panorama and close to the main services."></p>
+      </div>
+      <div class="review">
+        <div class="who"><div class="ra">J</div><div><b>Jake</b><span>luglio 2018</span></div></div>
+        <div class="stars">★★★★★ · luglio 2018</div>
+        <p data-it="Soggiorno bellissimo, gli host molto gentili. La struttura in una posizione incredibile e sarai completamente solo e lontano dagli altri. La strada è sterrata, prestare attenzione. La spiaggia raggiungibile in 15-20 minuti, servizi locali a 5-10 minuti." data-en="Lovely stay, very kind hosts. The property is in an incredible location and you'll be completely alone and far from others. The road is a dirt track, so take care approaching. The beach is an easy 15-20 minute drive, local services 5-10 minutes away."></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="section">
+    <h2 data-it="Dove sarai" data-en="Where you'll be"></h2>
+    <p style="margin-bottom:16px;color:var(--grey)" data-it="Castorano, Ascoli Piceno, Italia · La posizione esatta sarà comunicata dopo la prenotazione." data-en="Castorano, Ascoli Piceno, Italy · The exact location is provided after booking."></p>
+    <div class="map">
+      <div class="pin">📍</div>
+      <div class="lbl">Castorano, Marche</div>
+    </div>
+    <p style="margin-top:18px;font-size:15px;color:#3a3a3a;max-width:760px" data-it="La casa si trova a 15 minuti di auto dalla spiaggia, a 20 minuti da Ascoli Piceno (la capitale culturale della zona) e a 30 minuti dalle montagne. La città più vicina con servizi di base è a 2 km, raggiungibile in bicicletta. Ristoranti e negozi a 5 minuti. Un grande centro commerciale a 10 minuti di auto." data-en="The house is a 15-minute drive from the beach, 20 minutes from Ascoli Piceno (the cultural capital of the area) and 30 minutes from the mountains. The nearest town with basic services is 2 km away, reachable by bike. Restaurants and shops are 5 minutes away. A large shopping centre is just 10 minutes by car."></p>
+  </div>
+
+  <!-- KNOW -->
+  <div class="section">
+    <h2 data-it="Da sapere" data-en="Things to know"></h2>
+    <div class="rules">
+      <div>
+        <h4 data-it="Regole della casa" data-en="House rules"></h4>
+        <ul>
+          <li data-it="Check-in dopo le ore 15:00" data-en="Check-in after 3:00 PM"></li>
+          <li data-it="Check-out entro le ore 12:00" data-en="Check-out before 12:00 PM"></li>
+          <li data-it="Massimo 12 ospiti" data-en="Maximum 12 guests"></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-it="Alloggio e sicurezza" data-en="Safety &amp; property"></h4>
+        <ul>
+          <li data-it="Piscina senza cancellata o serratura" data-en="Pool without a gate or lock"></li>
+          <li data-it="Struttura da arrampicata o da gioco" data-en="Climbing or play structure"></li>
+          <li data-it="Rilevatore di monossido di carbonio" data-en="Carbon monoxide detector"></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-it="Termini di cancellazione" data-en="Cancellation policy"></h4>
+        <ul>
+          <li data-it="Aggiungi le date di viaggio per conoscere i dettagli relativi alla cancellazione." data-en="Add your travel dates for cancellation details."></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <span data-it="Villa tranquilla (con piscina e vista mozzafiato) · Castorano (AP), Italia" data-en="Peaceful villa (with pool and breathtaking view) · Castorano (AP), Italy"></span>
+</footer>
+
+<!-- AMENITIES MODAL -->
+<div class="amodal" id="amodal">
+  <div class="panel">
+    <button class="x" onclick="closeAmen()">✕</button>
+    <h2 data-it="Cosa troverai in questo alloggio" data-en="What this place offers"></h2>
+    <div id="amenList"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="x" onclick="closeLb()">✕</button>
+  <div class="count" id="lbCount"></div>
+  <button class="nav prev" onclick="step(-1)">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="nav next" onclick="step(1)">›</button>
+</div>
+
+<script>
+  // ---- amenities data (extracted from the original listing) ----
+  const AMENITIES = [
+    { it:"Bagno", en:"Bathroom", ic:"🛁", items:[
+      ["💨","Asciugacapelli","Hair dryer"],["🧴","Prodotti per la pulizia","Cleaning products"],
+      ["🧴","Shampoo","Shampoo"],["🧼","Sapone per il corpo","Body soap"],
+      ["🚽","Bidè","Bidet"],["🚿","Doccia all'aperto","Outdoor shower"],
+      ["♨️","Acqua calda","Hot water"],["🧴","Gel doccia","Shower gel"] ]},
+    { it:"Camera da letto e lavanderia", en:"Bedroom & laundry", ic:"🛏️", items:[
+      ["🧺","Lavatrice","Washer"],["🧻","Servizi di base (asciugamani, lenzuola, sapone, carta igienica)","Essentials (towels, sheets, soap, toilet paper)"],
+      ["🪝","Grucce","Hangers"],["🛏️","Biancheria da letto","Bed linen"],
+      ["🛌","Cuscini e coperte aggiuntivi","Extra pillows and blankets"],["🪟","Tende oscuranti","Blackout blinds"],
+      ["♨️","Ferro da stiro","Iron"],["👕","Stendibiancheria per abiti","Drying rack for clothing"],
+      ["🦟","Zanzariera","Mosquito net"],["🚪","Armadio per l'abbigliamento","Clothing storage: wardrobe"] ]},
+    { it:"Intrattenimento", en:"Entertainment", ic:"🎮", items:[
+      ["🎮","Console di gioco: Xbox 360","Game console: Xbox 360"],
+      ["📚","Libri e materiale di lettura","Books and reading material"] ]},
+    { it:"Famiglia", en:"Family", ic:"👶", items:[
+      ["🛏️","Culla","Crib"],["🪑","Seggiolone indipendente (su richiesta)","Free-standing high chair (on request)"],
+      ["🛁","Vaschetta da bagno per neonati","Baby bath"],["🍽️","Stoviglie per bambini","Children's tableware"],
+      ["🛝","Parco giochi all'aperto","Outdoor playground"],["🚲","Biciclette per bambini","Children's bikes"] ]},
+    { it:"Riscaldamento e climatizzazione", en:"Heating & cooling", ic:"❄️", items:[
+      ["❄️","Aria condizionata","Air conditioning"],["🔥","Caminetto interno","Indoor fireplace"],
+      ["🌀","Ventilatore portatile","Portable fan"],["♨️","Riscaldamento","Heating"] ]},
+    { it:"Sicurezza domestica", en:"Home safety", ic:"🚨", items:[
+      ["🚨","Allarme antincendio","Smoke alarm"],["🟢","Rilevatore di monossido di carbonio","Carbon monoxide detector"],
+      ["🧯","Estintore","Fire extinguisher"] ]},
+    { it:"Internet e ufficio", en:"Internet & office", ic:"📶", items:[
+      ["📶","Wifi","Wifi"],["💼","Spazio di lavoro dedicato (monitor e sedia ergonomica)","Dedicated workspace (monitor and ergonomic chair)"] ]},
+    { it:"Cucina e zona pranzo", en:"Kitchen & dining", ic:"🍳", items:[
+      ["🍳","Cucina","Kitchen"],["🧊","Frigorifero","Refrigerator"],
+      ["🍳","Servizi di base per cucinare","Cooking basics"],["🍽️","Piatti e posate","Dishes and silverware"],
+      ["❄️","Congelatore","Freezer"],["🔥","Fornello","Stove"],
+      ["🔥","Forno","Oven"],["☕","Macchina per il caffè","Coffee maker"],
+      ["🍷","Calici da vino","Wine glasses"],["🥤","Frullatore","Blender"],
+      ["🍢","Utensili da barbecue","Barbecue utensils"],["🍽️","Tavolo da pranzo","Dining table"] ]},
+    { it:"Caratteristiche dell'alloggio", en:"Property features", ic:"🏡", items:[
+      ["🏖️","Accesso condiviso alla spiaggia","Shared beach access"],["🚪","Ingresso privato","Private entrance"] ]},
+    { it:"All'aperto", en:"Outdoor", ic:"🌿", items:[
+      ["🌿","Patio o balcone privato","Private patio or balcony"],["🌳","Cortile","Backyard"],
+      ["🪑","Arredi da esterni","Outdoor furniture"],["🪢","Amaca","Hammock"],
+      ["🍽️","Zona pranzo all'aperto","Outdoor dining area"],["🍳","Cucina all'aperto","Outdoor kitchen"],
+      ["🔥","Griglia per barbecue","BBQ grill"],["⛱️","Lettini prendisole","Sun loungers"] ]},
+    { it:"Parcheggi e strutture", en:"Parking & facilities", ic:"🅿️", items:[
+      ["🅿️","Parcheggio gratuito in loco","Free parking on premises"],
+      ["🏊","Piscina all'aperto privata: disponibile 24h","Private outdoor pool: available 24h"] ]},
+    { it:"Servizi", en:"Services", ic:"🛎️", items:[
+      ["📅","Soggiorni a lungo termine permessi","Long-term stays allowed"],
+      ["🔑","Self check-in","Self check-in"],["👤","Personale dell'edificio","Building staff"] ]},
+    { it:"Non incluso", en:"Not included", ic:"🚫", items:[
+      ["🚫","Asciugatrice","Dryer", true] ]}
+  ];
+
+  function renderAmen(l){
+    const box = document.getElementById('amenList');
+    box.innerHTML = AMENITIES.map(g=>{
+      const rows = g.items.map(it=>{
+        const off = it[3] ? ' off' : '';
+        const label = l==='it' ? it[1] : it[2];
+        return `<div class="row${off}"><span class="ic">${it[0]}</span><span>${label}</span></div>`;
+      }).join('');
+      return `<div class="grp"><h3>${l==='it'?g.it:g.en}</h3>${rows}</div>`;
+    }).join('');
+  }
+
+  // ---- language ----
+  function setLang(l){
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-'+l+']').forEach(el=>{ el.textContent = el.getAttribute('data-'+l); });
+    document.getElementById('btIt').classList.toggle('active', l==='it');
+    document.getElementById('btEn').classList.toggle('active', l==='en');
+    renderAmen(l);
+  }
+  setLang('it');
+
+  // ---- amenities modal ----
+  const amodal = document.getElementById('amodal');
+  function openAmen(){ amodal.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeAmen(){ amodal.classList.remove('open'); document.body.style.overflow=''; }
+  amodal.addEventListener('click',e=>{ if(e.target===amodal) closeAmen(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && amodal.classList.contains('open')) closeAmen(); });
+
+  // ---- lightbox ----
+  const photos = Array.from({length:13},(_,i)=>`/rent/photo-${String(i+1).padStart(2,'0')}.jpg`);
+  let idx = 0;
+  const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCount = document.getElementById('lbCount');
+  function openLb(i){ idx=i; render(); lb.classList.add('open'); }
+  function closeLb(){ lb.classList.remove('open'); }
+  function step(d){ idx=(idx+d+photos.length)%photos.length; render(); }
+  function render(){ lbImg.src=photos[idx]; lbCount.textContent=`${idx+1} / ${photos.length}`; }
+  document.querySelectorAll('#gallery img').forEach(img=>img.addEventListener('click',()=>openLb(+img.dataset.i)));
+  lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
+  document.addEventListener('keydown',e=>{ if(!lb.classList.contains('open'))return; if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1); });
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/rent      /rent.html      200
+/rent/*    /rent/:splat    200
