@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,8 +111,8 @@
 <body>
 
 <div class="langbar">
-  <button id="btIt" class="active" onclick="setLang('it')">IT</button>
-  <button id="btEn" onclick="setLang('en')">EN</button>
+  <button id="btIt" onclick="setLang('it')">IT</button>
+  <button id="btEn" class="active" onclick="setLang('en')">EN</button>
 </div>
 
 <main class="wrap">
@@ -362,7 +362,7 @@
     document.getElementById('btEn').classList.toggle('active', l==='en');
     renderAmen(l);
   }
-  setLang('it');
+  setLang('en');
 
   // ---- amenities modal ----
   const amodal = document.getElementById('amodal');
