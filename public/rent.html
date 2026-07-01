@@ -111,8 +111,8 @@
 <body>
 
 <div class="langbar">
-  <button id="btIt" onclick="setLang('it')">IT</button>
   <button id="btEn" class="active" onclick="setLang('en')">EN</button>
+  <button id="btIt" onclick="setLang('it')">IT</button>
 </div>
 
 <main class="wrap">
@@ -127,16 +127,16 @@
   <div class="gallery" id="gallery">
     <img class="big" src="/rent/photo-01.jpg" alt="Villa" data-i="0">
     <img src="/rent/photo-02.jpg" alt="" data-i="1">
-    <img src="/rent/photo-03.jpg" alt="" data-i="2">
-    <img src="/rent/photo-04.jpg" alt="" data-i="3">
-    <img src="/rent/photo-05.jpg" alt="" data-i="4">
+    <img src="/rent/photo-06.jpg" alt="" data-i="2">
+    <img src="/rent/photo-07.jpg" alt="" data-i="3">
+    <img src="/rent/photo-08.jpg" alt="" data-i="4">
     <button class="showall" onclick="openLb(0)" data-it="▦ Mostra tutte le foto" data-en="▦ Show all photos"></button>
   </div>
 
   <div class="body">
     <div class="head-line">
       <h2 data-it="Intero alloggio: villa" data-en="Entire place: villa"></h2>
-      <div class="sub" data-it="12 ospiti · 6 camere da letto · 7 letti · 3 bagni" data-en="12 guests · 6 bedrooms · 7 beds · 3 bathrooms"></div>
+      <div class="sub" data-it="10 ospiti · 6 camere da letto · 6 letti · 2 bagni" data-en="10 guests · 6 bedrooms · 6 beds · 2 bathrooms"></div>
     </div>
 
     <ul class="features">
@@ -150,7 +150,7 @@
       <p data-it="La villa è circondata da splendide colline e montagne con incredibili viste panoramiche. Questo crea il luogo perfetto per godersi il pieno relax." data-en="The villa is surrounded by beautiful hills and mountains with incredible panoramic views — the perfect place to fully relax."></p>
       <h3 data-it="Lo spazio" data-en="The space"></h3>
       <p data-it="Recentemente la casa è stata oggetto di un intervento di ristrutturazione con coibentazione in fibra di canapa e installazione di pannelli solari. Le camere matrimoniali, la cucina e il soggiorno sono dotate di aria condizionata." data-en="The house was recently renovated with hemp-fibre insulation and solar panels. The double bedrooms, kitchen and living room have air conditioning."></p>
-      <p data-it="La villa dispone di 4 camere matrimoniali (una con vista su una terrazza), 2 camere singole e 3 bagni con wc e doccia." data-en="The villa has 4 double bedrooms (one with a terrace view), 2 single bedrooms and 3 bathrooms with toilet and shower."></p>
+      <p data-it="La villa dispone di 3 camere matrimoniali (una con vista su una terrazza), 2 camere singole e 1 stanza con divano letto, oltre a 2 bagni con wc e doccia." data-en="The villa has 3 double bedrooms (one with a terrace view), 2 single bedrooms and 1 room with a sofa bed, plus 2 bathrooms with toilet and shower."></p>
       <h3 data-it="Accesso per gli ospiti" data-en="Guest access"></h3>
       <p data-it="Intera proprietà." data-en="The entire property."></p>
       <h3 data-it="Altre cose da tenere a mente" data-en="Other things to note"></h3>
@@ -163,6 +163,9 @@
         <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 1" data-en="Bedroom 1"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
         <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 2" data-en="Bedroom 2"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
         <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 3" data-en="Bedroom 3"></b><span data-it="1 letto matrimoniale" data-en="1 double bed"></span></div>
+        <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 4" data-en="Bedroom 4"></b><span data-it="1 letto singolo" data-en="1 single bed"></span></div>
+        <div class="bed"><div class="ic">🛏️</div><b data-it="Camera da letto 5" data-en="Bedroom 5"></b><span data-it="1 letto singolo" data-en="1 single bed"></span></div>
+        <div class="bed"><div class="ic">🛋️</div><b data-it="Camera da letto 6" data-en="Bedroom 6"></b><span data-it="1 divano letto" data-en="1 sofa bed"></span></div>
       </div>
     </div>
 
@@ -246,7 +249,7 @@
         <ul>
           <li data-it="Check-in dopo le ore 15:00" data-en="Check-in after 3:00 PM"></li>
           <li data-it="Check-out entro le ore 12:00" data-en="Check-out before 12:00 PM"></li>
-          <li data-it="Massimo 12 ospiti" data-en="Maximum 12 guests"></li>
+          <li data-it="Massimo 10 ospiti" data-en="Maximum 10 guests"></li>
         </ul>
       </div>
       <div>
@@ -372,7 +375,7 @@
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && amodal.classList.contains('open')) closeAmen(); });
 
   // ---- lightbox ----
-  const photos = Array.from({length:13},(_,i)=>`/rent/photo-${String(i+1).padStart(2,'0')}.jpg`);
+  const photos = ['/rent/photo-01.jpg','/rent/photo-02.jpg','/rent/photo-06.jpg','/rent/photo-07.jpg','/rent/photo-08.jpg','/rent/photo-10.jpg','/rent/photo-11.jpg','/rent/photo-12.jpg','/rent/photo-13.jpg','/rent/photo-14.jpg'];
   let idx = 0;
   const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCount = document.getElementById('lbCount');
   function openLb(i){ idx=i; render(); lb.classList.add('open'); }
