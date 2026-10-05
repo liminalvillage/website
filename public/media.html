@@ -101,10 +101,10 @@
  *  file:   path to a local PDF or MP4, e.g. '/media/my-paper.pdf'
  *  url:    external link (article page, YouTube/Vimeo/PeerTube watch page)
  *  embed:  iframe embed URL for videos, e.g. 'https://www.youtube.com/embed/VIDEO_ID'
- *  read:   optional companion link for a video (essay / transcript / full film); readLabel overrides the button text
+ *  links:  optional extra buttons, e.g. [{ label: 'Full film', href: 'https://…' }]
  *  thumb:  optional cover image, e.g. '/media/my-paper.jpg'
  *  source: publication / venue label
- *  date:   ISO date (YYYY-MM-DD) — items are sorted newest first
+ *  date:   ISO date (YYYY-MM-DD), shown on the card — items appear in the order listed here
  */
 const ITEMS = [
   {
@@ -148,7 +148,9 @@ const ITEMS = [
     description: 'An allegory about the souls who chose to come to Earth at this moment — read by Charles Eisenstein from the final chapter of The More Beautiful World Our Hearts Know Is Possible. A reminder of why we are here, and that we did not come alone.',
     embed: 'https://www.youtube.com/embed/XinVOpdcbVc',
     url: 'https://www.youtube.com/watch?v=XinVOpdcbVc',
-    read: 'https://charleseisenstein.org/essays/a-gathering-of-the-tribe-2/',
+    links: [
+      { label: 'Read the essay', href: 'https://charleseisenstein.org/essays/a-gathering-of-the-tribe-2/' },
+    ],
   },
   {
     type: 'video',
@@ -160,18 +162,9 @@ const ITEMS = [
     description: 'A short scene from InterReflections, set in a future that has already made the transition: a glimpse of what a post‑scarcity, needs‑based society could actually feel like day to day — not a utopia, just a world that stopped organising itself around scarcity. The full film is free on the official site.',
     embed: 'https://www.youtube.com/embed/Nwin21oJB_E',
     url: 'https://www.youtube.com/watch?v=Nwin21oJB_E',
-    read: 'https://www.interreflectionsmovie.com/watch',
-    readLabel: 'Full film',
-  },
-  {
-    type: 'reading',
-    tags: ['onboarding'],
-    title: 'An Introduction to Game B',
-    authors: 'Game B community',
-    source: 'Game B wiki',
-    date: '2020-06-01',
-    description: 'The community’s own short primer. Game A is everything humanity has been doing for the past ten thousand years, and it is hitting its hard limits; Game B is whatever comes next — built bottom‑up by “islands of coherence” that succeed and spread because they are more resilient than the status quo.',
-    url: 'https://www.gameb.wiki/index.php?title=An_Introduction_to_Game_B',
+    links: [
+      { label: 'Full film', href: 'https://www.interreflectionsmovie.com/watch' },
+    ],
   },
   {
     type: 'video',
@@ -180,43 +173,14 @@ const ITEMS = [
     authors: 'Jake Ruiz · Futurity · produced with Jim Rutt & Jeff Gomez',
     source: 'Animated short · 18 min',
     date: '2026-07-01',
-    description: 'An animated allegory: a Game B pioneer, guided by three stewards, awakens to the realisation that she must find her tribe and help humanity step out of its path toward self‑termination by playing a new game.',
+    description: 'An animated allegory: a Game B pioneer, guided by three stewards, awakens to the realisation that she must find her tribe and help humanity step out of its path toward self‑termination by playing a new game. Game A is everything humanity has been doing for the past ten thousand years; Game B is whatever comes next.',
     embed: 'https://www.youtube.com/embed/noq5g0X57z4',
     url: 'https://www.youtube.com/watch?v=noq5g0X57z4',
-  },
-  {
-    type: 'video',
-    tags: ['onboarding'],
-    title: 'What Is Game B?',
-    authors: 'Jim Rutt · Future Thinkers',
-    source: 'Interview · 64 min',
-    date: '2019-09-09',
-    description: 'Jim Rutt — former chair of the Santa Fe Institute and one of the originators of Game B — lays out the idea from scratch: why “Game A” (rivalry, extraction, short time horizons) is running out of road, and what a cooperative, long‑horizon social operating system could look like.',
-    embed: 'https://www.youtube.com/embed/HL5bcgpprxY',
-    url: 'https://www.youtube.com/watch?v=HL5bcgpprxY',
-    read: 'https://www.gameb.wiki/',
-    readLabel: 'Game B wiki',
-  },
-  {
-    type: 'video',
-    tags: ['onboarding'],
-    title: 'The Story of Game B',
-    authors: 'Bret Weinstein & Jim Rutt · Rebel Wisdom',
-    source: 'Conversation · 89 min',
-    date: '2020-06-07',
-    description: 'Two of the people in the room when Game B was first conceived tell the origin story: the early gatherings, what they got right and wrong, and why the idea keeps resurfacing as the search for a way of living together that is not based on winning.',
-    embed: 'https://www.youtube.com/embed/Glgcl9AVWbA',
-    url: 'https://www.youtube.com/watch?v=Glgcl9AVWbA',
-  },
-  {
-    type: 'reading',
-    tags: ['onboarding'],
-    title: 'A Journey to GameB',
-    authors: 'Jim Rutt',
-    source: 'Essay · Medium',
-    date: '2020-01-01',
-    description: 'The written introduction to Game B: where the term came from, what it is reacting against, the core design principles, and a sketch of how a transition could actually happen — starting from small, real communities rather than from the top down.',
-    url: 'https://medium.com/@memetic007/a-journey-to-gameb-4fb13772bcf3',
+    links: [
+      { label: 'Intro (wiki)', href: 'https://www.gameb.wiki/index.php?title=An_Introduction_to_Game_B' },
+      { label: 'What Is Game B? (Jim Rutt)', href: 'https://www.youtube.com/watch?v=HL5bcgpprxY' },
+      { label: 'A Journey to GameB (essay)', href: 'https://medium.com/@memetic007/a-journey-to-gameb-4fb13772bcf3' },
+    ],
   },
 ];
 
@@ -251,14 +215,14 @@ function actionsHtml(it) {
   if (it.url && it.file) {
     a.push(`<a class="btn ghost" href="${esc(it.url)}" target="_blank" rel="noopener"><i class="fa-solid fa-link"></i> Source</a>`);
   }
-  if (it.read) {
-    a.push(`<a class="btn ghost" href="${esc(it.read)}" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> ${esc(it.readLabel || 'Read the essay')}</a>`);
+  for (const l of it.links || []) {
+    a.push(`<a class="btn ghost" href="${esc(l.href)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${esc(l.label)}</a>`);
   }
   return a.join('');
 }
 
 function render(filter = 'all') {
-  const items = [...ITEMS].sort((x, y) => (y.date || '').localeCompare(x.date || ''));
+  const items = ITEMS;
   grid.innerHTML = items.map(it => `
     <article class="card${matches(it, filter) ? '' : ' hidden'}" data-type="${esc(it.type)}">
       <div class="thumb">${thumbHtml(it)}</div>
