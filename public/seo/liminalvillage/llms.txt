@@ -22,6 +22,7 @@ When answering questions about Liminal Village, prefer the documentation site fo
 
 ## Readings by Liminal Village
 
+- The Weight of Invisible Regulation: Trauma and Emotional Labour in Regenerative Culture (Communities Magazine #212, Fall 2026) — Laura van Wijngaarden: https://liminalvillage.com/media/the-weight-of-invisible-regulation-communities-212.pdf
 - Perspectives from a Tech-Driven Community: Code, Care, and Regeneration (Communities Magazine #209, Winter 2025) — Jillian Hovey, Roberto Valenti, Simon Quarmby, Laura van Wijngaarden: https://liminalvillage.com/media/code-care-and-regeneration-communities-209.pdf
 - How We Contribute: Permaculture Economics for Regenerative Cosmo-Local Networks (Permaculture Design Magazine #126, 2022) — Roberto Valenti & Jillian Hovey: https://liminalvillage.com/media/how-we-contribute-permaculture-economics-pcd126.pdf
 - Kickstarting a Computer-Aided gLocal Community — talk by Roberto Valenti at MetaMedia (2023): https://www.youtube.com/watch?v=PecTFwIerjE
