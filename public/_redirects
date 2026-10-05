@@ -1,2 +1,5 @@
 /rent      /rent.html      200
 /rent/*    /rent/:splat    200
+/zoom      https://us02web.zoom.us/j/8842713394?pwd=UUpKakVCekRoS3NpRVZaTHZLcndPZz09    302
+/media     /media.html     200
+/readings  /media          301
