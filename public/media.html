@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Readings &amp; Media · Liminal Village</title>
 <meta name="description" content="Articles, papers, talks and videos from Liminal Village — readings on permaculture economics, cosmo-local networks, holons and regenerative communities.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://liminalvillage.com/media">
+<link rel="help" href="https://docs.liminalvillage.com/">
+<link rel="alternate" type="text/plain" href="https://liminalvillage.com/llms.txt" title="llms.txt — overview for AI assistants">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Liminal Village">
+<meta property="og:title" content="Readings & Media · Liminal Village">
+<meta property="og:description" content="Articles, papers, talks and videos from Liminal Village — readings on permaculture economics, cosmo-local networks, holons and regenerative communities.">
+<meta property="og:url" content="https://liminalvillage.com/media">
+<meta property="og:image" content="https://liminalvillage.com/images/droneview.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="/vite.svg">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -265,6 +276,42 @@ document.getElementById('filters').addEventListener('click', e => {
 
 document.getElementById('year').textContent = new Date().getFullYear();
 render();
+
+// Structured data for search engines and AI crawlers that execute JS.
+// (Non-JS crawlers get the same list from /llms.txt.)
+const abs = u => new URL(u, 'https://liminalvillage.com/').href;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Readings & Media · Liminal Village',
+  url: 'https://liminalvillage.com/media',
+  isPartOf: { '@type': 'WebSite', name: 'Liminal Village', url: 'https://liminalvillage.com/' },
+  about: { '@type': 'Organization', name: 'Liminal Village', url: 'https://liminalvillage.com/', sameAs: ['https://docs.liminalvillage.com/'] },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: ITEMS.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: Object.assign(
+        {
+          '@type': it.type === 'video' ? 'VideoObject' : 'Article',
+          name: it.title,
+          description: it.description,
+          datePublished: it.date,
+          author: it.authors,
+          url: abs(it.url || it.file),
+        },
+        it.file ? { encoding: { '@type': 'MediaObject', contentUrl: abs(it.file), encodingFormat: 'application/pdf' } } : {},
+        it.embed ? { embedUrl: it.embed } : {},
+        it.source ? { publisher: { '@type': 'Organization', name: it.source } } : {},
+      ),
+    })),
+  },
+};
+const ldTag = document.createElement('script');
+ldTag.type = 'application/ld+json';
+ldTag.textContent = JSON.stringify(ld);
+document.head.appendChild(ldTag);
 </script>
 </body>
 </html>

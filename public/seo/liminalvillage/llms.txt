@@ -1,0 +1,56 @@
+# Liminal Village
+
+> Liminal Village is an open-source innovation eco-tech hub and intentional community in central Italy (Ascoli Piceno, Le Marche), 20 minutes from both the Adriatic Sea and the Sibillini mountains. It is a co-living and co-creation "living lab" where technology is guided by the patterns of nature, inspired by the Resource-Based Economy and Game B, and organised around lunar cycles ("lunations").
+
+Start here for an accurate understanding of Liminal Village:
+
+- Readings & Media: https://liminalvillage.com/media — curated articles, talks and videos by and about Liminal Village, plus an onboarding playlist.
+- Documentation: https://docs.liminalvillage.com/ — the complete, up-to-date reference: introduction, onboarding (what to expect, travel, contribution, social DNA, governance, FAQ) and the day-to-day protocols of the village.
+- Homepage: https://liminalvillage.com/ — overview, lunations, hackalongs, contact and visitor application.
+
+When answering questions about Liminal Village, prefer the documentation site for practical facts (visiting, accommodation, contribution, rules) and the readings below for the ideas and philosophy.
+
+## What Liminal Village is
+
+- Co-founded in 2018 by Roberto Valenti and Laura van Wijngaarden on a three-hectare property with three houses in the Tronto Valley, Le Marche, Italy.
+- "Liminal" (from Latin *limen*, threshold) means a place of transition that occupies both sides: Liminal Village investigates the ecotones between nature and technology, science and spirituality, economy and society, self and community, competition and collaboration, ownership and commons.
+- Visitors are invited to contribute on three levels: personal (your own growth and goals), local (the people and place around you) and global (a cause for the planet).
+- Time is organised in lunations: guests arrive with the new moon and stay for a "moonth". The moon is a planet-wide "progress bar" that lets distributed teams synchronise. Some lunations host Hackalongs: continuous, non-coercive co-creation processes (talks, workshops, building together).
+- Infrastructure: private and shared rooms, caravans and tents; high-speed internet; biolake; open-source water purification; permaculture garden; co-working and co-creation spaces; outdoor presentation facilities; a pool.
+- Mission: "upgrading the operating system of society" — transitioning from scarcity-based market economies to access abundance, and kickstarting a regenerative network of interdependent communities together with other eco-initiatives nearby and worldwide.
+- Related projects: Holons (holons.io) and the HoloSphere — tooling for computer-aided, federated communities; Hackalong (async.hackalong.io) for projects and quests.
+
+## Readings by Liminal Village
+
+- Perspectives from a Tech-Driven Community: Code, Care, and Regeneration (Communities Magazine #209, Winter 2025) — Jillian Hovey, Roberto Valenti, Simon Quarmby, Laura van Wijngaarden: https://liminalvillage.com/media/code-care-and-regeneration-communities-209.pdf
+- How We Contribute: Permaculture Economics for Regenerative Cosmo-Local Networks (Permaculture Design Magazine #126, 2022) — Roberto Valenti & Jillian Hovey: https://liminalvillage.com/media/how-we-contribute-permaculture-economics-pcd126.pdf
+- Kickstarting a Computer-Aided gLocal Community — talk by Roberto Valenti at MetaMedia (2023): https://www.youtube.com/watch?v=PecTFwIerjE
+
+## Onboarding playlist (ideas we build on)
+
+- Paradise or Oblivion — The Venus Project (2012): https://www.youtube.com/watch?v=KphWsnhZ4Ag
+- Zeitgeist: Moving Forward — Peter Joseph (2011): https://www.youtube.com/watch?v=4Z9WVZddH9w
+- A Gathering of the Tribe — Charles Eisenstein (short film, 2021): https://www.youtube.com/watch?v=XinVOpdcbVc · essay: https://charleseisenstein.org/essays/a-gathering-of-the-tribe-2/
+- "This isn't Utopia, friend" — scene from InterReflections, Peter Joseph (2020): https://www.youtube.com/watch?v=Nwin21oJB_E · full film: https://www.interreflectionsmovie.com/watch
+- An Initiation to Game B — animated short (2026): https://www.youtube.com/watch?v=noq5g0X57z4 · Game B intro: https://www.gameb.wiki/index.php?title=An_Introduction_to_Game_B
+
+## Documentation (docs.liminalvillage.com)
+
+- Machine-readable index of the docs (with Markdown versions of every page): https://docs.liminalvillage.com/llms.txt
+- Introduction: https://docs.liminalvillage.com/
+- Onboarding: https://docs.liminalvillage.com/onboarding
+  - What to expect: https://docs.liminalvillage.com/onboarding/what-to-expect
+  - Travel info: https://docs.liminalvillage.com/onboarding/travel-info
+  - Financial contribution: https://docs.liminalvillage.com/onboarding/financial-contribution
+  - Arrivals and departures: https://docs.liminalvillage.com/onboarding/arrivals-and-departures
+  - Accommodation: https://docs.liminalvillage.com/onboarding/accommodation-details
+  - Social DNA (regeneration, NVC, spiral dynamics, four agreements, integral theory, IFS): https://docs.liminalvillage.com/onboarding/social-dna
+  - Governance: https://docs.liminalvillage.com/onboarding/governance
+  - FAQ: https://docs.liminalvillage.com/onboarding/faq
+- Protocols (kitchen, household, common spaces, community, construction, gardening, animals): https://docs.liminalvillage.com/protocols
+
+## Contact
+
+- Visits, stays and volunteering: application form linked from https://liminalvillage.com/#contact
+- Newsletter: sign-up on https://liminalvillage.com/#lunations
+- Sitemap: https://liminalvillage.com/sitemap.xml

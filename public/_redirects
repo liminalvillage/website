@@ -3,3 +3,12 @@
 /zoom      https://us02web.zoom.us/j/8842713394?pwd=UUpKakVCekRoS3NpRVZaTHZLcndPZz09    302
 /media     /media.html     200
 /readings  /media          301
+
+# Crawler / AI discovery files, scoped to liminalvillage.com only
+# (this deploy also serves casaselva.earth, refactory.earth, regenerativa.earth)
+https://liminalvillage.com/robots.txt       /seo/liminalvillage/robots.txt   200
+https://liminalvillage.com/llms.txt         /seo/liminalvillage/llms.txt     200
+https://liminalvillage.com/sitemap.xml      /seo/liminalvillage/sitemap.xml  200
+https://www.liminalvillage.com/robots.txt   /seo/liminalvillage/robots.txt   200
+https://www.liminalvillage.com/llms.txt     /seo/liminalvillage/llms.txt     200
+https://www.liminalvillage.com/sitemap.xml  /seo/liminalvillage/sitemap.xml  200
