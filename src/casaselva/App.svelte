@@ -6,6 +6,7 @@
   import Place from './Place.svelte';
   import Living from './Living.svelte';
   import Network from './Network.svelte';
+  import Readings from './Readings.svelte';
   import Visit from './Visit.svelte';
   import Footer from './Footer.svelte';
 </script>
@@ -18,6 +19,7 @@
   <Place />
   <Living />
   <Network />
+  <Readings />
   <Visit />
   <Footer />
 </main>

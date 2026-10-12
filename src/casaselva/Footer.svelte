@@ -19,6 +19,7 @@
         <a href="#cs-essence">Essence</a>
         <a href="#cs-place">The Place</a>
         <a href="#cs-living">Daily Life</a>
+        <a href="#cs-readings">Readings</a>
         <a href="/quests.html">Quests</a>
         <a href="#cs-visit">Visit</a>
       </div>

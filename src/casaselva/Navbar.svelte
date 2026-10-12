@@ -17,6 +17,7 @@
     { label: 'The Place', href: '#cs-place' },
     { label: 'Daily Life', href: '#cs-living' },
     { label: 'Network', href: '#cs-network' },
+    { label: 'Readings', href: '#cs-readings' },
     { label: 'Quests', href: '/quests.html', external: true },
     { label: 'Visit', href: '#cs-visit' },
   ];
