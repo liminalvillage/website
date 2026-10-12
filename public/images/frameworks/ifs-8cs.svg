@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="t d">
+  <title id="t">The eight Cs of Self</title>
+  <desc id="d">Self at the centre, surrounded by its eight qualities: calm, curiosity, compassion, clarity, confidence, courage, creativity and connectedness.</desc>
+  <rect width="600" height="600" fill="#ffffff"/>
+  <circle cx="300" cy="300" r="200" fill="none" stroke="#e4e4e4" stroke-width="2"/>
+  <g fill="#f6ecdc" stroke="#d6a15b" stroke-width="2">
+    <circle cx="300" cy="100" r="60"/>
+    <circle cx="441.4" cy="158.6" r="60"/>
+    <circle cx="500" cy="300" r="60"/>
+    <circle cx="441.4" cy="441.4" r="60"/>
+    <circle cx="300" cy="500" r="60"/>
+    <circle cx="158.6" cy="441.4" r="60"/>
+    <circle cx="100" cy="300" r="60"/>
+    <circle cx="158.6" cy="158.6" r="60"/>
+  </g>
+  <circle cx="300" cy="300" r="82" fill="#d6a15b"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle">
+    <text x="300" y="311" font-size="34" fill="#ffffff">Self</text>
+    <g font-size="17" fill="#222222">
+      <text x="300" y="106">Calm</text>
+      <text x="441.4" y="164.6">Curiosity</text>
+      <text x="500" y="306">Compassion</text>
+      <text x="441.4" y="447.4">Clarity</text>
+      <text x="300" y="506">Confidence</text>
+      <text x="158.6" y="447.4">Courage</text>
+      <text x="100" y="306">Creativity</text>
+      <text x="158.6" y="164.6" font-size="15">Connectedness</text>
+    </g>
+  </g>
+</svg>

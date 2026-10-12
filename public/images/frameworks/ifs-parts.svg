@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">Internal Family Systems: the Self and its parts</title>
+  <desc id="d">The Self at the centre, surrounded by three kinds of parts: managers, firefighters and exiles.</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <g stroke="#d9d2c4" stroke-width="2" stroke-dasharray="4 6">
+    <line x1="300" y1="310" x2="300" y2="125"/>
+    <line x1="300" y1="310" x2="464" y2="405"/>
+    <line x1="300" y1="310" x2="136" y2="405"/>
+  </g>
+  <circle cx="300" cy="125" r="102" fill="#dfe9f2" stroke="#8fa9c2" stroke-width="2"/>
+  <circle cx="464" cy="405" r="102" fill="#f6dcd2" stroke="#c98b74" stroke-width="2"/>
+  <circle cx="136" cy="405" r="102" fill="#e4e0ee" stroke="#9a8fb8" stroke-width="2"/>
+  <circle cx="300" cy="310" r="78" fill="#d6a15b" stroke="#ffffff" stroke-width="5"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222" text-anchor="middle">
+    <text x="300" y="306" font-size="30" fill="#ffffff">Self</text>
+    <text x="300" y="100" font-size="25">Managers</text>
+    <text x="464" y="382" font-size="25">Firefighters</text>
+    <text x="136" y="382" font-size="25">Exiles</text>
+  </g>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#333333" text-anchor="middle">
+    <text x="300" y="330" fill="#ffffff">calm · curious</text>
+    <text x="300" y="346" fill="#ffffff">compassionate</text>
+    <text x="300" y="124">protect in advance:</text>
+    <text x="300" y="141">plan, control, please,</text>
+    <text x="300" y="158">criticise, perfect</text>
+    <text x="464" y="406">protect in a crisis:</text>
+    <text x="464" y="423">numb, distract,</text>
+    <text x="464" y="440">rage, escape</text>
+    <text x="136" y="406">carry old pain:</text>
+    <text x="136" y="423">shame, fear, grief,</text>
+    <text x="136" y="440">loneliness</text>
+  </g>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#717171" text-anchor="middle" letter-spacing="2">
+    <text x="455" y="262" transform="rotate(60 455 262)">PROTECTORS</text>
+  </g>
+</svg>

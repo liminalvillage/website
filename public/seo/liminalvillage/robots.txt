@@ -2,6 +2,7 @@
 # Content and context for crawlers and AI assistants:
 #   https://liminalvillage.com/llms.txt   — overview and curated reading list
 #   https://liminalvillage.com/media      — readings & media (articles, talks, videos)
+#   https://liminalvillage.com/frameworks — the frameworks we use (integral theory, spiral dynamics, permaculture, IFS…)
 #   https://docs.liminalvillage.com/      — full documentation (onboarding, protocols)
 
 User-agent: *

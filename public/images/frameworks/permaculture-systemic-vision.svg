@@ -1,0 +1,1529 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="648.10791"
+   height="645.48816"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="visao_permacultural_cores_en.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="EmptyTriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutM"
+       style="overflow:visible">
+      <path
+         id="path4816"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.4,0,0,0.4,-1.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM"
+       style="overflow:visible">
+      <path
+         id="path4798"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.4,0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path4813"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutS"
+       style="overflow:visible">
+      <path
+         id="path4801"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.2,0.2)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Mend"
+       style="overflow:visible">
+      <path
+         id="path4679"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="scale(-0.6,-0.6)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend"
+       style="overflow:visible">
+      <path
+         id="path4673"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path4652"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2828"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2850"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3648"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3691"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3713"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3735"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3760"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3782"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3804"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3826"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3871"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:none;display:inline"
+       id="path2816-6-2-6"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="m 570.5686,551.99445 a 203.13437,201.64073 0 1 1 -406.26873,0 203.13437,201.64073 0 1 1 406.26873,0 z"
+       transform="matrix(0.43158786,0,0,0.43478482,170.11981,285.1102)" />
+    <inkscape:perspective
+       id="perspective3907"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3907-5"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3907-1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3971"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3996"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3996-0"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3996-8"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4056"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4086"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4114"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4148"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4191"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4253"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4281"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4324"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4365"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4365-1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4365-3"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4365-4"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4538"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4591"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1254"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1256" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1262"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1264" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1266"
+       x="-0.039160896"
+       width="1.0783218"
+       y="-0.039450981"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1268" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1270"
+       x="-0.039160896"
+       width="1.0783218"
+       y="-0.039450981"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1272" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1274"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1276" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1278"
+       x="-0.039160896"
+       width="1.0783218"
+       y="-0.039450981"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1280" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1282"
+       x="-0.039160896"
+       width="1.0783218"
+       y="-0.039450981"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1284" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1286"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1288" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1290"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1292" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1294"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1296" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1298"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1300" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1302"
+       x="-0.039160898"
+       width="1.0783218"
+       y="-0.039450979"
+       height="1.078902">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.6291035"
+         id="feGaussianBlur1304" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1338"
+       x="-0.014915957"
+       width="1.0298319"
+       y="-0.015026446"
+       height="1.0300529">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.5249529"
+         id="feGaussianBlur1340" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1342"
+       x="-0.0060006465"
+       width="1.0120013"
+       y="-0.0059993537"
+       height="1.0119987">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.1498934"
+         id="feGaussianBlur1344" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1346"
+       x="-0.014915957"
+       width="1.0298319"
+       y="-0.015026446"
+       height="1.0300529">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.5249529"
+         id="feGaussianBlur1348" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1350"
+       x="-0.020641795"
+       width="1.0412836"
+       y="-0.020794697"
+       height="1.0415894">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4942149"
+         id="feGaussianBlur1352" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1354"
+       x="-0.014915957"
+       width="1.0298319"
+       y="-0.015026446"
+       height="1.0300529">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.5249529"
+         id="feGaussianBlur1356" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1358"
+       x="-0.020641795"
+       width="1.0412836"
+       y="-0.020794697"
+       height="1.0415894">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4942149"
+         id="feGaussianBlur1360" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1362"
+       x="-0.014915957"
+       width="1.0298319"
+       y="-0.015026446"
+       height="1.0300529">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.5249529"
+         id="feGaussianBlur1364" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1366"
+       x="-0.020641795"
+       width="1.0412836"
+       y="-0.020794697"
+       height="1.0415894">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4942149"
+         id="feGaussianBlur1368" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1390"
+       x="-0.020324862"
+       width="1.0406497"
+       y="-0.020475416"
+       height="1.0409508">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4405649"
+         id="feGaussianBlur1392" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1394"
+       x="-0.0060367671"
+       width="1.0120735"
+       y="-0.005963678"
+       height="1.0119274">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.2225418"
+         id="feGaussianBlur1396" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994845"
+     inkscape:cx="324.05396"
+     inkscape:cy="322.74408"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     objecttolerance="20"
+     guidetolerance="20"
+     inkscape:window-width="1560"
+     inkscape:window-height="830"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
+     gridtolerance="10">
+    <sodipodi:guide
+       orientation="0,1"
+       position="267.42277,322.83078"
+       id="guide2818"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="322.17253,142.69941"
+       id="guide4138"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="circulos"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline"
+     transform="translate(-1.4315427,-202.45162)">
+    <path
+       sodipodi:type="arc"
+       style="font-size:71.65958405px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1390);opacity:0.7"
+       id="path2816-6-2-8-7-3"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.3278728,0,0,0.33030149,320.29684,230.91084)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       transform="matrix(0.3278728,0,0,0.33030149,94.987492,230.91084)"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       sodipodi:ry="201.64073"
+       sodipodi:rx="203.13437"
+       sodipodi:cy="551.99445"
+       sodipodi:cx="367.43423"
+       id="path3840"
+       style="font-size:71.65958405px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:#000000;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1366);opacity:0.7"
+       sodipodi:type="arc"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:71.65958405px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1358);opacity:0.7"
+       id="path3842"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.3278728,0,0,0.33030149,94.987492,456.07035)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       transform="matrix(0.3278728,0,0,0.33030149,320.29684,456.07035)"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       sodipodi:ry="201.64073"
+       sodipodi:rx="203.13437"
+       sodipodi:cy="551.99445"
+       sodipodi:cx="367.43423"
+       id="path3844"
+       style="font-size:71.65958405px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1350);opacity:0.7"
+       sodipodi:type="arc"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#afdde9;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1362);opacity:0.7"
+       id="path2816-6-2-8"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.45373441,0,0,0.45709542,70.067355,272.79487)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#c8ab37;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1346);opacity:0.7"
+       id="path2816-6-2-8-7"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.45373441,0,0,0.45709542,255.83763,272.79487)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#5f8dd3;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1354);opacity:0.7"
+       id="path2816-6-2-8-5"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(-0.45373441,0,0,-0.45709542,494.46252,869.59219)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffcc00;stroke:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1338);opacity:0.7"
+       id="path2816-6-2-8-7-7"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(-0.45373441,0,0,-0.45709542,494.46252,685.25408)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <g
+       id="g3816"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <path
+         transform="matrix(0,0.2430252,-0.2448254,0,655.70565,245.78626)"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423"
+         id="path2816-6-2-8-1-2-3-6"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4565"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,-0.2448254,0,725.29253,368.44645)" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4567"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,-0.2448254,0,724.63074,505.17999)" />
+      <path
+         transform="matrix(0,0.2430252,-0.2448254,0,655.04386,625.61882)"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423"
+         id="path4569"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4571"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,-0.2448254,0,534.1131,701.22033)" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4573"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,-0.2448254,0,529.26682,172.18475)" />
+      <path
+         transform="matrix(0,0.2430252,0.2448254,0,-9.43082,245.78626)"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423"
+         id="path2816-6-2-8-1-2-3-6-7"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4565-0"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,0.2448254,0,-79.0177,368.44645)" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4567-8"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,0.2448254,0,-78.35591,505.17999)" />
+      <path
+         transform="matrix(0,0.2430252,0.2448254,0,-8.76903,625.61882)"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423"
+         id="path4569-9"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4571-4"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,0.2448254,0,112.16173,701.22033)" />
+      <path
+         sodipodi:type="arc"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:14.52629662;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:29.05259265, 14.52629635;stroke-dashoffset:0;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+         id="path4573-6"
+         sodipodi:cx="367.43423"
+         sodipodi:cy="551.99445"
+         sodipodi:rx="203.13437"
+         sodipodi:ry="201.64073"
+         d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+         transform="matrix(0,0.2430252,0.2448254,0,117.00801,172.18475)" />
+    </g>
+    <g
+       id="g3777"
+       style="fill:#8dd35f"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,0.2448254,-38.497465,389.96674)"
+         id="path2816-6-2-8-1-1"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1298)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,0.2448254,510.87688,391.36331)"
+         id="path2816-6-2-8-1-1-8"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1274)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,-0.2448254,-2.2801592,794.96061)"
+         id="path2816-6-2-8-1-5"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1302)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,-0.2448254,96.023993,896.08688)"
+         id="path2816-6-2-8-1-2-6"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1254)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0,-0.2430252,-0.2448254,0,700.03829,749.11413)"
+         id="path2816-6-2-8-1-6-7"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1270)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0,-0.2430252,-0.2448254,0,599.85275,850.2404)"
+         id="path2816-6-2-8-1-2-3-1"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1266)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,0.2448254,-2.2801591,255.43079)"
+         id="path2816-6-2-8-1"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1294)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,-0.2448254,234.30828,933.71527)"
+         id="path2816-6-2-8-1-1-8-0-1-9"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1262)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,0.2448254,234.30829,116.67613)"
+         id="path2816-6-2-8-1-1-8-0-1"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1286)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0.2430252,0,0,0.2448254,96.023993,154.30452)"
+         id="path2816-6-2-8-1-2"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1290)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0,0.2430252,-0.2448254,0,700.0383,301.27727)"
+         id="path2816-6-2-8-1-6"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1278)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+      <ellipse
+         inkscape:export-ydpi="300.05197"
+         inkscape:export-xdpi="300.05197"
+         inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+         transform="matrix(0,0.2430252,-0.2448254,0,599.85276,200.151)"
+         id="path2816-6-2-8-1-2-3"
+         style="font-size:51.78189468px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8dd35f;fill-opacity:1;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1282)"
+         sodipodi:type="arc"
+         sodipodi:ry="201.64073"
+         sodipodi:rx="203.13437"
+         sodipodi:cy="551.99445"
+         sodipodi:cx="367.43423" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="orbitas"
+     style="display:inline"
+     transform="translate(-1.4315427,-202.45162)">
+    <path
+       id="path2816-6-8"
+       d="m 325.75923,295.11174 c -126.91659,0 -229.971184,103.02326 -229.971184,230.00345 0,126.98019 103.054594,230.00346 229.971184,230.00346 126.91658,0 229.93662,-103.02327 229.93662,-230.00346 0,-126.98019 -103.02004,-230.00345 -229.93662,-230.00345 z m 0,10.68892 c 121.235,0 219.36085,98.14312 219.36085,219.31453 0,121.17141 -98.12585,219.31453 -219.36085,219.31453 -121.235,0 -219.36085,-98.14312 -219.36085,-219.31453 0,-121.17141 98.12585,-219.31453 219.36085,-219.31453 z"
+       style="font-size:21.2441349px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#8dd35f;fill-opacity:1;stroke:#8dd35f;stroke-width:9.5760603;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;filter:url(#filter1342)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <g
+       id="g3796"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="translate(-0.66545171,-0.6654517)"
+       style="filter:url(#filter1394)">
+      <path
+         style="fill:#8dd35f;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:none"
+         d="m 301.31212,749.76811 36.64406,-21.33844 v 42.67688 z"
+         id="path6645"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:#8dd35f;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:none"
+         d="m 101.09652,500.48444 21.18154,36.9155 H 79.914983 Z"
+         id="path6647"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:#8dd35f;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:none"
+         d="m 350.19911,300.44989 -36.64406,21.33844 v -42.67688 z"
+         id="path6649"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:#8dd35f;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:none"
+         d="m 550.8126,542.52119 -17.54609,-30.63251 32.68683,-0.87447 z"
+         id="path6651"
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0" />
+    </g>
+    <path
+       sodipodi:type="arc"
+       style="font-size:44.44066238px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:28.26763916;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;"
+       id="path2816-6"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.52868761,0,0,0.53260383,131.49769,231.11465)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:79.0898819px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:#8dd35f;stroke-width:35.65075684;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff;"
+       id="path2816"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.29706996,0,0,0.29927049,216.60194,359.91335)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:54.43903732px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:none;display:inline;font-family:Mail Ray Stuff;-inkscape-font-specification:Mail Ray Stuff"
+       id="path2816-6-2"
+       sodipodi:cx="367.43423"
+       sodipodi:cy="551.99445"
+       sodipodi:rx="203.13437"
+       sodipodi:ry="201.64073"
+       d="M 570.5686,551.99445 A 203.13437,201.64073 0 0 1 367.43423,753.63518 203.13437,201.64073 0 0 1 164.29987,551.99445 203.13437,201.64073 0 0 1 367.43423,350.35371 203.13437,201.64073 0 0 1 570.5686,551.99445 Z"
+       transform="matrix(0.43158786,0,0,0.43478482,170.11981,285.1102)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="300.05197"
+       inkscape:export-ydpi="300.05197" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="textos"
+     style="display:inline"
+     transform="translate(-1.4315427,-202.45162)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="296.3085"
+       y="532.58185"
+       id="text3636"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3638"
+         x="296.3085"
+         y="532.58185"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke:#000000;">ETHICS</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.75777817px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000"
+       id="text3855"
+       transform="matrix(1.1846002,0,0,1.1846002,-62.711014,-96.032961)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><textPath
+         xlink:href="#path2816-6-2"
+         id="textPath3860"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.50666618px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke:#000000">human                                perception                          orbit</textPath></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22.0874424px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       id="text3855-0"
+       transform="matrix(0.8443568,-0.03604448,0.03604448,0.8443568,30.886531,91.975701)"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><textPath
+         xlink:href="#path2816-6-2-6"
+         id="textPath3860-3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22.0874424px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke:#000000;">DESIGN                     PRINCIPLES</textPath></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="40.677078"
+       y="396.31067"
+       id="text4070"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan4072"
+         x="40.677078"
+         y="396.31067"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Socialization</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="322.40927"
+       y="784.5307"
+       id="text4070-3-1-8"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="322.40927"
+         y="784.5307"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan4181">Soil</tspan><tspan
+         sodipodi:role="line"
+         x="322.40927"
+         y="807.86401"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan192">management</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="323.66788"
+       y="244.92291"
+       id="text4070-3-1-8-3"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="323.66788"
+         y="244.92291"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan219">cooper</tspan><tspan
+         sodipodi:role="line"
+         x="323.66788"
+         y="268.25626"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan223">ativism</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="152.78983"
+       y="752.53186"
+       id="text4070-1"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan4072-8"
+         x="152.78983"
+         y="752.53186"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">following</tspan><tspan
+         sodipodi:role="line"
+         x="152.78983"
+         y="775.86517"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="tspan1454">patterns</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="521.69293"
+       y="392.05872"
+       id="text4070-4"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan4072-2"
+         x="521.69293"
+         y="392.05872"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Composting</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="466.36707"
+       y="269.09348"
+       id="text4070-1-8"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="466.36707"
+         y="269.09348"
+         id="tspan4420"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Water</tspan><tspan
+         sodipodi:role="line"
+         x="466.36707"
+         y="292.42682"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan236">systema</tspan><tspan
+         sodipodi:role="line"
+         x="466.36707"
+         y="315.76013"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan240">tization</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="145.12447"
+       y="291.68896"
+       id="text4070-3"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan4072-1"
+         x="145.12447"
+         y="291.68896"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Ecobuilding</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="600.00861"
+       y="517.08112"
+       id="text4070-3-1"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="600.00861"
+         y="517.08112"
+         id="tspan4136"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Landscape</tspan><tspan
+         sodipodi:role="line"
+         x="600.00861"
+         y="540.41443"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan232">reading</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="56.417965"
+       y="649.40039"
+       id="text4070-3-9"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="56.417965"
+         y="649.40039"
+         id="tspan4430"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Element</tspan><tspan
+         sodipodi:role="line"
+         x="56.417965"
+         y="672.7337"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="tspan215">analysis</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="50.58868"
+       y="514.69104"
+       id="text4070-3-2"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="50.58868"
+         y="514.69104"
+         id="tspan4432"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Waste</tspan><tspan
+         sodipodi:role="line"
+         x="50.58868"
+         y="538.02435"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan185">managment</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="464.77429"
+       y="755.04749"
+       id="text4070-3-0"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="464.77429"
+         y="755.04749"
+         id="tspan3802"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Energetic</tspan><tspan
+         sodipodi:role="line"
+         x="464.77429"
+         y="778.3808"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan196">zones</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="565.02362"
+       y="654.8916"
+       id="text4070-3-00"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         x="565.02362"
+         y="654.8916"
+         id="tspan4422"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Food</tspan><tspan
+         sodipodi:role="line"
+         x="565.02362"
+         y="678.22491"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan200">forest</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="309.5441"
+       y="390.40179"
+       id="text3891"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893"
+         x="309.5441"
+         y="390.40179"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">FIRE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="149.03268"
+       y="531.89191"
+       id="text3891-6"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-6"
+         x="149.03268"
+         y="531.89191"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">AIR</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="466.40961"
+       y="532.18658"
+       id="text3891-1"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-5"
+         x="466.40961"
+         y="532.18658"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">LAND</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="298.07144"
+       y="681.12085"
+       id="text3891-15"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-66"
+         x="298.07144"
+         y="681.12085"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">WATER</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="423.90045"
+       y="407.59039"
+       id="text3891-7"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-8"
+         x="423.90045"
+         y="407.59039"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">energy</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="181.89972"
+       y="408.86966"
+       id="text3891-7-2"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-8-4"
+         x="181.89972"
+         y="408.86966"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">Wind</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="186.03989"
+       y="656.59802"
+       id="text3891-7-6"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-8-2"
+         x="186.03989"
+         y="656.59802"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">Flow</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:0%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:#000000;"
+       x="434.86124"
+       y="656.61871"
+       id="text3891-7-5"
+       inkscape:export-filename="/media/NANNI/permacultura/grafica/camiseta_5cores.png"
+       inkscape:export-xdpi="150.03799"
+       inkscape:export-ydpi="150.03799"><tspan
+         sodipodi:role="line"
+         id="tspan3893-8-8"
+         x="434.86124"
+         y="656.61871"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.66666603px;line-height:125%;font-family:'Indie Flower';-inkscape-font-specification:'Indie Flower, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;">soil</tspan></text>
+  </g>
+</svg>

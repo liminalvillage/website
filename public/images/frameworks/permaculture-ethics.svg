@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">The three permaculture ethics</title>
+  <desc id="d">Three overlapping circles labelled Earth Care, People Care and Fair Share, with permaculture where they meet.</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <g fill-opacity="0.55" stroke="#ffffff" stroke-width="3">
+    <circle cx="300" cy="190" r="155" fill="#7fa868"/>
+    <circle cx="212" cy="340" r="155" fill="#d6a15b"/>
+    <circle cx="388" cy="340" r="155" fill="#b9785a"/>
+  </g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222" text-anchor="middle">
+    <text x="300" y="112" font-size="28">Earth Care</text>
+    <text x="150" y="388" font-size="28">People Care</text>
+    <text x="450" y="388" font-size="28">Fair Share</text>
+    <text x="300" y="298" font-size="19" font-style="italic">permaculture</text>
+  </g>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#333333" text-anchor="middle">
+    <text x="300" y="136">look after soil, water,</text>
+    <text x="300" y="153">forests and all living things</text>
+    <text x="150" y="412">look after yourself,</text>
+    <text x="150" y="429">kin and community</text>
+    <text x="450" y="412">set limits and</text>
+    <text x="450" y="429">share the surplus</text>
+  </g>
+</svg>

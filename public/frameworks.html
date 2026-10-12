@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frameworks · Liminal Village</title>
+<meta name="description" content="Six maps we use to understand ourselves, each other and the land: Integral Theory, Spiral Dynamics, Ikigai, Permaculture ethics and principles, Internal Family Systems and the Enneagram — with diagrams, short introductions and links to go deeper.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://liminalvillage.com/frameworks">
+<link rel="help" href="https://docs.liminalvillage.com/">
+<link rel="alternate" type="text/plain" href="https://liminalvillage.com/llms.txt" title="llms.txt — overview for AI assistants">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Liminal Village">
+<meta property="og:title" content="Frameworks · Liminal Village">
+<meta property="og:description" content="Integral Theory, Spiral Dynamics, Ikigai, Permaculture, Internal Family Systems and the Enneagram — diagrams, short introductions and links to go deeper.">
+<meta property="og:url" content="https://liminalvillage.com/frameworks">
+<meta property="og:image" content="https://liminalvillage.com/images/droneview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/vite.svg">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --text:#333; --primary:#D6A15B; --light:#EFEFEF; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; }
+  /* Same page, ReGenerativa palette (see src/regenerativa/regenerativa.css) */
+  :root[data-site="regenerativa"]{ --text:#232b21; --primary:#c9a35b; --light:#f4efe4; --dark:#2c3527; --grey:#5e695a; --line:#e3dccc; --bg:#faf6ec; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"Open Sans",sans-serif;font-size:15px;color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;transition:color .3s;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+
+  header{border-bottom:1px solid var(--line);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;}
+  .brand{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:500;letter-spacing:2px;color:var(--dark);}
+  .back{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+  .back:hover{color:var(--primary);}
+
+  .intro{padding:64px 0 32px;text-align:center;}
+  .intro h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;letter-spacing:3px;color:var(--dark);line-height:1.1;}
+  .intro h1 span{color:var(--primary);}
+  .intro p{max-width:620px;margin:18px auto 0;color:var(--grey);letter-spacing:.5px;}
+
+  .filters{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 0 40px;}
+  .filters a{border:1px solid var(--line);background:var(--bg);border-radius:24px;padding:7px 18px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);transition:all .3s;}
+  .filters a:hover{border-color:var(--primary);color:var(--primary);}
+
+  .fw{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:start;padding:56px 0;border-top:1px solid var(--line);scroll-margin-top:12px;}
+  .fw:nth-of-type(even) .pics{order:2;}
+
+  .main{display:block;width:100%;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:zoom-in;transition:box-shadow .3s;}
+  .main:hover{box-shadow:0 10px 30px rgba(0,0,0,.08);}
+  .main img{width:100%;height:100%;object-fit:contain;display:block;}
+  .cap{font-size:13px;color:#555;margin-top:12px;}
+  .credit{font-size:11px;letter-spacing:.5px;color:var(--grey);margin-top:4px;}
+  .credit a{text-decoration:underline;}
+  .credit a:hover{color:var(--primary);}
+  .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .thumbs button{width:68px;height:68px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px;cursor:pointer;transition:border-color .3s;}
+  .thumbs button:hover,.thumbs button.active{border-color:var(--primary);}
+  .thumbs button.active{box-shadow:0 0 0 1px var(--primary);}
+  .thumbs img{width:100%;height:100%;object-fit:contain;display:block;}
+
+  .info{display:flex;flex-direction:column;gap:12px;}
+  .info .src{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--primary);}
+  .info h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:36px;letter-spacing:.5px;line-height:1.15;color:var(--dark);}
+  .info .tag{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;line-height:1.35;color:var(--grey);}
+  .info p{font-size:14.5px;color:#555;}
+  :root[data-site="regenerativa"] .info p,:root[data-site="regenerativa"] .cap{color:var(--text);}
+  .keys{display:flex;gap:6px;flex-wrap:wrap;list-style:none;}
+  .keys li{background:var(--light);border-radius:4px;padding:3px 10px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);}
+  .points{columns:2;column-gap:28px;padding-left:20px;font-size:13.5px;color:#555;}
+  .points li{break-inside:avoid;margin-bottom:4px;}
+  .points li::marker{color:var(--primary);font-weight:600;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--dark);border-radius:6px;padding:9px 16px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dark);transition:all .3s;}
+  .btn:hover{background:var(--dark);color:#fff;}
+  .btn.ghost{border-color:var(--line);color:var(--grey);}
+  .btn.ghost:hover{border-color:var(--primary);background:var(--bg);color:var(--primary);}
+
+  .outro{border-top:1px solid var(--line);padding:48px 0 80px;text-align:center;color:var(--grey);}
+  .outro p{max-width:620px;margin:0 auto 20px;}
+  .outro .actions{justify-content:center;}
+
+  footer{background:var(--dark);color:#fff;padding:32px 0;text-align:center;font-size:12px;letter-spacing:1.5px;}
+  footer a{color:var(--primary);}
+  footer .lic{margin-top:10px;opacity:.7;letter-spacing:.5px;}
+
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:56px 16px 20px;}
+  .lb.open{display:flex;}
+  .lb img{max-width:92vw;max-height:76vh;object-fit:contain;border-radius:6px;background:#fff;}
+  .lb .x{position:absolute;top:14px;left:20px;color:#fff;font-size:30px;background:none;border:none;cursor:pointer;}
+  .lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;}
+  .lb .prev{left:16px;} .lb .next{right:16px;}
+  .lb .count{position:absolute;top:22px;color:#fff;font-size:14px;}
+  .lb .lbcap{color:#fff;font-size:13px;text-align:center;max-width:720px;}
+  .lb .lbcap small{display:block;opacity:.7;font-size:11px;margin-top:2px;}
+  .lb.single .nav,.lb.single .count{display:none;}
+
+  @media(max-width:760px){
+    .intro{padding:44px 0 24px;}
+    .intro h1{font-size:34px;}
+    .fw{grid-template-columns:minmax(0,1fr);gap:24px;padding:40px 0;}
+    .fw:nth-of-type(even) .pics{order:0;}
+    .info h2{font-size:30px;}
+    .points{columns:1;}
+  }
+</style>
+<script>
+  // This page is served on every domain of the deploy; pick the look by host, like src/main.js.
+  // (?site=regenerativa previews the ReGenerativa look on localhost.)
+  var SITE = (location.hostname.includes('regenerativa') || new URLSearchParams(location.search).get('site') === 'regenerativa') ? 'regenerativa' : 'liminal';
+  if (SITE === 'regenerativa') document.documentElement.dataset.site = 'regenerativa';
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="/" class="brand" data-site-name>Liminal Village</a>
+    <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to site</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Frame<span>works</span></h1>
+    <p>Six maps we lean on to understand ourselves, each other and the land. None of them is the territory — each is a lens that makes some things easier to see. Here is a short introduction to each, with pictures and places to go deeper.</p>
+  </section>
+
+  <nav class="filters" id="jump" aria-label="Frameworks on this page"></nav>
+
+  <div id="list"></div>
+
+  <section class="outro">
+    <p>Want to see how these frameworks show up in daily community life? The social DNA page of our documentation describes how we actually use them.</p>
+    <div class="actions">
+      <a class="btn" href="https://docs.liminalvillage.com/onboarding/social-dna" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> Social DNA</a>
+      <a class="btn ghost" href="/media"><i class="fa-solid fa-photo-film"></i> Readings &amp; Media</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year"></span> <span data-site-name>Liminal Village</span> &nbsp;·&nbsp; <a href="/" id="homeLink">liminalvillage.com</a></div>
+    <div class="lic">Diagrams are credited individually; most come from Wikimedia Commons under Creative Commons licences.</div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Picture viewer">
+  <button class="x" id="lbClose" aria-label="Close">✕</button>
+  <div class="count" id="lbCount"></div>
+  <button class="nav prev" id="lbPrev" aria-label="Previous picture">‹</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lbcap" id="lbCap"></div>
+  <button class="nav next" id="lbNext" aria-label="Next picture">›</button>
+</div>
+
+<script>
+/*
+ * Add or edit frameworks here. Pictures live in /public/images/frameworks/ (served at /images/frameworks/...).
+ *
+ *  id:          anchor on the page, e.g. /frameworks#ikigai
+ *  title:       name of the framework
+ *  origin:      who / when, shown above the title
+ *  tagline:     one-sentence summary, shown in italics
+ *  description: array of short paragraphs
+ *  keys:        optional key terms, shown as small chips
+ *  points:      optional numbered list (e.g. the 12 permaculture principles)
+ *  images:      [{ src, alt, caption, credit, license, source }] — the first one is shown large;
+ *               source is the page the picture comes from (omit for our own diagrams)
+ *  links:       [{ label, href }] deep-dive links — the first one is the main button
+ */
+const FRAMEWORKS = [
+  {
+    id: 'integral-theory',
+    title: 'Integral Theory',
+    origin: 'Ken Wilber · 1970s onwards',
+    tagline: 'A “theory of everything” that asks which perspectives are missing from the picture.',
+    description: [
+      'Integral Theory is Ken Wilber’s attempt to fit the partial truths of science, psychology, culture and spirituality into one map. Its core model, AQAL (“all quadrants, all levels”), says that anything can be looked at from four irreducible perspectives: the inner life of the individual (I), the individual’s observable behaviour (It), shared culture and meaning (We), and the systems and structures we live in (Its).',
+      'On top of the quadrants it adds levels of development, lines (different capacities grow at different speeds), states and types. In practice it works as a checklist: when a project or a conflict is stuck, which quadrant are we ignoring? A community that only fixes its systems, or only works on its feelings, is leaving half the map blank.',
+    ],
+    keys: ['AQAL', 'Quadrants', 'Levels', 'Lines', 'States', 'Types'],
+    images: [
+      { src: '/images/frameworks/integral-four-quadrants.jpg', alt: 'Four photographs arranged as the four quadrants: a meditating monk (subjective), a scientist in a lab (objective), a group dance (intersubjective) and a food web (interobjective).', caption: 'The four quadrants: subjective, objective, intersubjective and interobjective.', credit: 'Chris Wilmoth', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Integral_Theory.jpg' },
+      { src: '/images/frameworks/integral-aqal-fr.png', alt: 'AQAL diagram with French labels: interior and exterior, individual and collective, with widening levels across all four quadrants.', caption: 'AQAL with its levels widening across all four quadrants (French labels: I · It · We · Its).', credit: 'Vertsaxo', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:AQAL_UDN.png' },
+    ],
+    links: [
+      { label: 'Integral Life: the integral approach', href: 'https://integrallife.com/what-is-integral-approach/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Integral_theory' },
+      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
+    ],
+  },
+  {
+    id: 'spiral-dynamics',
+    title: 'Spiral Dynamics',
+    origin: 'Clare W. Graves · Don Beck & Chris Cowan · 1996',
+    tagline: 'A map of how value systems emerge, in people and in whole societies, as life conditions change.',
+    description: [
+      'Spiral Dynamics builds on the research of psychologist Clare W. Graves. It describes a sequence of value systems, each a response to the problems the previous one could not solve, and gives each a colour: beige (survival), purple (tribe and tradition), red (power), blue (order and rules), orange (achievement), green (community and equality), yellow (systems thinking) and turquoise (the whole).',
+      'The colours describe ways of thinking, not kinds of people: everyone carries several, and each later stage includes the earlier ones rather than replacing them. The model is most useful for translating between worldviews — noticing that a disagreement about rules, freedom or fairness is often a difference in what each side values, and that every stage has a healthy and an unhealthy expression.',
+    ],
+    keys: ['Beige', 'Purple', 'Red', 'Blue', 'Orange', 'Green', 'Yellow', 'Turquoise'],
+    images: [
+      { src: '/images/frameworks/spiral-dynamics-levels.jpg', alt: 'The eight Spiral Dynamics colours from beige to turquoise, each with three keywords, zig-zagging upwards.', caption: 'The eight value systems, alternating between a focus on “me” (left) and “we” (right).', credit: 'Synnervate', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Spiral-English-v5-Be-Tu-keywords.jpg' },
+      { src: '/images/frameworks/spiral-dynamics-sketchnote-fr.jpg', alt: 'Hand-drawn sketchnote in French walking through each level of the spiral with cartoons and keywords.', caption: 'A hand-drawn walk through the spiral, level by level (in French).', credit: 'Matthieu Van Niel', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Matthieu_Van_Niel_spirale_dynamique.jpg' },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Spiral_Dynamics' },
+      { label: 'spiraldynamics.org', href: 'https://spiraldynamics.org/' },
+      { label: 'Clare W. Graves', href: 'https://en.wikipedia.org/wiki/Clare_W._Graves' },
+      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
+    ],
+  },
+  {
+    id: 'ikigai',
+    title: 'Ikigai',
+    origin: 'Japan · 生き甲斐 · “a reason for being”',
+    tagline: 'What makes life worth living — and, in its popular form, where what you love meets what the world needs.',
+    description: [
+      'Ikigai is a Japanese word made of iki (life) and gai (worth): whatever gives you a reason to get up in the morning. In Japan it is an everyday idea, and it can be something small — a craft, a garden, the people you cook for.',
+      'The four-circle diagram is a later, Western addition that has become a popular tool for finding direction. It asks four questions: what do you love, what are you good at, what does the world need, and what can you be paid for? Where two circles overlap you find passion, mission, vocation and profession; where all four meet is the sweet spot the diagram calls ikigai. We use it as a conversation starter for the question every newcomer brings: what is mine to do here?',
+    ],
+    keys: ['Passion', 'Mission', 'Vocation', 'Profession'],
+    images: [
+      { src: '/images/frameworks/ikigai.svg', alt: 'Ikigai Venn diagram of four coloured circles: what you love, what you are good at, what the world needs, what you can be paid for.', caption: 'The four circles and what lives in their overlaps.', credit: 'Eugenio Hansen, OFS', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Diagramo_de_Ikigajo_-en.svg' },
+      { src: '/images/frameworks/ikigai-classic.svg', alt: 'The same Ikigai diagram in black and white.', caption: 'The same diagram in its classic black‑and‑white form.', credit: 'Nimbosa, after Dennis Bodor and Emmy van Deurzen', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Ikigai-EN.svg' },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Ikigai' },
+      { label: 'Ikigai Tribe: what ikigai really means', href: 'https://ikigaitribe.com/ikigai/what-is-ikigai-explained/' },
+    ],
+  },
+  {
+    id: 'permaculture',
+    title: 'Permaculture ethics & principles',
+    origin: 'Bill Mollison & David Holmgren · 1970s',
+    tagline: 'A design approach that copies the patterns of natural ecosystems, guided by three ethics.',
+    description: [
+      'Permaculture began in Australia in the 1970s as “permanent agriculture” and grew into a way of designing any human system — gardens, buildings, economies, communities — so that it behaves like an ecosystem: little waste, many connections, and more abundance over time.',
+      'Everything rests on three ethics: Earth Care, People Care and Fair Share (set limits and redistribute surplus). David Holmgren later distilled twelve design principles from them, listed below. Tools like zoning (placing things by how often you visit them) and the permaculture flower (the seven domains a sustainable culture has to redesign) turn the principles into practice.',
+    ],
+    points: [
+      'Observe and interact', 'Catch and store energy', 'Obtain a yield', 'Apply self‑regulation and accept feedback',
+      'Use and value renewable resources', 'Produce no waste', 'Design from patterns to details', 'Integrate rather than segregate',
+      'Use small and slow solutions', 'Use and value diversity', 'Use edges and value the marginal', 'Creatively use and respond to change',
+    ],
+    images: [
+      { src: '/images/frameworks/permaculture-ethics.svg', alt: 'Three overlapping circles labelled Earth Care, People Care and Fair Share.', caption: 'The three ethics at the heart of every permaculture design.', credit: 'Liminal Village', license: 'own diagram' },
+      { src: '/images/frameworks/permaculture-flower.png', alt: 'The permaculture flower: seven petals around ethics and design principles, crossed by a spiral.', caption: 'The permaculture flower: seven domains spiralling out from the ethics and design principles.', credit: 'The Permaculture Association, after David Holmgren', license: 'CC BY 3.0', source: 'https://commons.wikimedia.org/wiki/File:Holmgren_flower.png' },
+      { src: '/images/frameworks/permaculture-zones.svg', alt: 'Concentric rings showing permaculture zones 0 to 5, from the house out to wilderness.', caption: 'Zones 0–5: design outward from where people spend the most time.', credit: 'Felix Müller', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permaculture_Zones.svg' },
+      { src: '/images/frameworks/permaculture-systemic-vision.svg', alt: 'Diagram with ethics at the centre, surrounded by principles and design, the elements, and a ring of practices.', caption: 'A systemic view: ethics at the centre, then principles and design, then practices.', credit: 'Arthur Nanni', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permacultural_systemic_vision.svg' },
+    ],
+    links: [
+      { label: 'The 12 principles (permacultureprinciples.com)', href: 'https://permacultureprinciples.com/permaculture-principles/' },
+      { label: 'David Holmgren', href: 'https://holmgren.com.au/permaculture/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Permaculture' },
+    ],
+  },
+  {
+    id: 'internal-family-systems',
+    title: 'Internal Family Systems',
+    origin: 'Richard C. Schwartz · 1980s',
+    tagline: 'The mind as an inner family of parts, led — when things go well — by a calm, curious Self.',
+    description: [
+      'Internal Family Systems (IFS) is a model of the psyche developed by family therapist Richard Schwartz. It starts from an ordinary experience — “a part of me wants this, another part doesn’t” — and takes it seriously. Exiles are young parts that carry old pain. Managers try to keep that pain from being touched by planning, controlling and pleasing. Firefighters jump in when it is touched anyway, with anything that numbs or distracts.',
+      'Underneath the parts everyone has a Self that is not a part: calm, curious, compassionate. There are “no bad parts” — each one is trying to protect you — and the work is to listen to them from Self rather than fight them. In community it gives a shared language: “a part of me is angry” lands very differently from “I am angry with you”. IFS is also a form of psychotherapy; deep work with exiles belongs with a trained practitioner.',
+    ],
+    keys: ['Self', 'Managers', 'Firefighters', 'Exiles'],
+    images: [
+      { src: '/images/frameworks/ifs-parts.svg', alt: 'The Self at the centre, connected to three groups of parts: managers, firefighters and exiles.', caption: 'The Self and the three kinds of parts. Managers and firefighters are both protectors.', credit: 'Liminal Village', license: 'own diagram' },
+      { src: '/images/frameworks/ifs-8cs.svg', alt: 'Self surrounded by eight qualities: calm, curiosity, compassion, clarity, confidence, courage, creativity, connectedness.', caption: 'The “8 Cs”: the qualities that show up when the Self is leading.', credit: 'Liminal Village', license: 'own diagram' },
+    ],
+    links: [
+      { label: 'IFS Institute', href: 'https://ifs-institute.com/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Internal_Family_Systems_Model' },
+      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
+    ],
+  },
+  {
+    id: 'enneagram',
+    title: 'Enneagram',
+    origin: 'Oscar Ichazo & Claudio Naranjo · 1960s–70s',
+    tagline: 'Nine patterns of attention and motivation, drawn on a nine-pointed figure.',
+    description: [
+      'The Enneagram of Personality describes nine types, each organised around a core motivation and a characteristic blind spot: 1 the Reformer, 2 the Helper, 3 the Achiever, 4 the Individualist, 5 the Investigator, 6 the Loyalist, 7 the Enthusiast, 8 the Challenger and 9 the Peacemaker. The types sit in three centres — body (8, 9, 1), heart (2, 3, 4) and head (5, 6, 7).',
+      'The lines of the figure matter as much as the points: each type is coloured by its neighbours (“wings”) and moves along the inner lines towards other types in growth and under stress. Its scientific backing is thin, so we hold it lightly — as a mirror for noticing our own habits and for understanding why someone else reacts so differently, not as a box to put people in.',
+    ],
+    keys: ['Nine types', 'Three centres', 'Wings', 'Lines'],
+    images: [
+      { src: '/images/frameworks/enneagram.svg', alt: 'The enneagram figure: a circle with nine numbered points joined by a triangle and a six-pointed figure.', caption: 'The enneagram figure: nine points on a circle, joined by a triangle (3‑6‑9) and a hexad.', credit: 'Twisp', license: 'public domain', source: 'https://commons.wikimedia.org/wiki/File:Enneagram.svg' },
+      { src: '/images/frameworks/enneagram-centers.gif', alt: 'The enneagram divided into three sectors: 8-9-1, 2-3-4 and 5-6-7.', caption: 'The three centres: body (8‑9‑1), heart (2‑3‑4) and head (5‑6‑7).', credit: 'Vabanagu', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Enneagram_of_Personality_-_Centers_of_intelligence.gif' },
+      { src: '/images/frameworks/enneagram-integration.jpg', alt: 'The enneagram with arrows along the inner lines showing the direction of integration.', caption: 'The arrows of integration: where each type moves in growth.', credit: 'Twisp, Virtutepetens', license: 'public domain', source: 'https://commons.wikimedia.org/wiki/File:Enneagram_integration.JPG' },
+    ],
+    links: [
+      { label: 'Enneagram Institute: how it works', href: 'https://www.enneagraminstitute.com/how-the-enneagram-system-works/' },
+      { label: 'The nine types', href: 'https://www.enneagraminstitute.com/type-descriptions/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Enneagram_of_Personality' },
+    ],
+  },
+];
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function creditHtml(im) {
+  const text = esc([im.credit, im.license].filter(Boolean).join(' · '));
+  return im.source ? `<a href="${esc(im.source)}" target="_blank" rel="noopener">${text}</a>` : text;
+}
+
+function actionsHtml(fw) {
+  return (fw.links || []).map((l, i) =>
+    `<a class="btn${i ? ' ghost' : ''}" href="${esc(l.href)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${esc(l.label)}</a>`).join('');
+}
+
+function picsHtml(fw, f) {
+  const first = fw.images[0];
+  const thumbs = fw.images.length > 1 ? `<div class="thumbs">${fw.images.map((im, i) =>
+    `<button type="button" class="${i ? '' : 'active'}" data-f="${f}" data-i="${i}" aria-label="Show picture ${i + 1}: ${esc(im.caption)}"><img src="${esc(im.src)}" alt="" loading="lazy"></button>`).join('')}</div>` : '';
+  return `
+    <button type="button" class="main" data-f="${f}" data-i="0" aria-label="Enlarge picture"><img src="${esc(first.src)}" alt="${esc(first.alt)}" loading="lazy"></button>
+    <figcaption>
+      <div class="cap">${esc(first.caption)}</div>
+      <div class="credit">${creditHtml(first)}</div>
+    </figcaption>
+    ${thumbs}`;
+}
+
+document.getElementById('jump').innerHTML = FRAMEWORKS.map(fw => `<a href="#${esc(fw.id)}">${esc(fw.title.replace(' ethics & principles', ''))}</a>`).join('');
+
+const list = document.getElementById('list');
+list.innerHTML = FRAMEWORKS.map((fw, f) => `
+  <article class="fw" id="${esc(fw.id)}">
+    <figure class="pics">${picsHtml(fw, f)}</figure>
+    <div class="info">
+      <div class="src">${esc(fw.origin)}</div>
+      <h2>${esc(fw.title)}</h2>
+      <div class="tag">${esc(fw.tagline)}</div>
+      ${fw.description.map(p => `<p>${esc(p)}</p>`).join('')}
+      ${fw.points ? `<ol class="points">${fw.points.map(p => `<li>${esc(p)}</li>`).join('')}</ol>` : ''}
+      ${fw.keys ? `<ul class="keys">${fw.keys.map(k => `<li>${esc(k)}</li>`).join('')}</ul>` : ''}
+      <div class="actions">${actionsHtml(fw)}</div>
+    </div>
+  </article>`).join('');
+
+// ---- pictures: thumbnails swap the large one, the large one opens the lightbox ----
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCount = document.getElementById('lbCount'), lbCap = document.getElementById('lbCap');
+let cur = { f: 0, i: 0 }, opener = null;
+
+function show(f, i) {
+  const fig = list.children[f].querySelector('.pics'), im = FRAMEWORKS[f].images[i], main = fig.querySelector('.main');
+  main.dataset.i = i;
+  main.firstElementChild.src = im.src;
+  main.firstElementChild.alt = im.alt;
+  fig.querySelector('.cap').textContent = im.caption;
+  fig.querySelector('.credit').innerHTML = creditHtml(im);
+  fig.querySelectorAll('.thumbs button').forEach((b, n) => b.classList.toggle('active', n === i));
+}
+function renderLb() {
+  const imgs = FRAMEWORKS[cur.f].images, im = imgs[cur.i];
+  lbImg.src = im.src;
+  lbImg.alt = im.alt;
+  lbCount.textContent = `${cur.i + 1} / ${imgs.length}`;
+  lbCap.innerHTML = `${esc(im.caption)}<small>${esc([im.credit, im.license].filter(Boolean).join(' · '))}</small>`;
+  lb.classList.toggle('single', imgs.length < 2);
+}
+function openLb(f, i, from) { cur = { f, i }; opener = from; renderLb(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('lbClose').focus(); }
+function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; if (opener) opener.focus(); }
+function step(d) { const n = FRAMEWORKS[cur.f].images.length; cur.i = (cur.i + d + n) % n; renderLb(); show(cur.f, cur.i); }
+
+list.addEventListener('click', e => {
+  const b = e.target.closest('button[data-f]');
+  if (!b) return;
+  if (b.classList.contains('main')) openLb(+b.dataset.f, +b.dataset.i, b);
+  else show(+b.dataset.f, +b.dataset.i);
+});
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbPrev').addEventListener('click', () => step(-1));
+document.getElementById('lbNext').addEventListener('click', () => step(1));
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+
+// ---- site-specific labels ----
+document.getElementById('year').textContent = new Date().getFullYear();
+if (SITE === 'regenerativa') {
+  document.title = 'Frameworks · ReGenerativa';
+  document.querySelectorAll('[data-site-name]').forEach(el => { el.textContent = 'ReGenerativa'; });
+  document.getElementById('homeLink').textContent = 'regenerativa.earth';
+}
+
+// Structured data for search engines and AI crawlers that execute JS.
+// (Non-JS crawlers get the same list from /llms.txt.)
+const abs = u => new URL(u, 'https://liminalvillage.com/').href;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Frameworks · Liminal Village',
+  url: 'https://liminalvillage.com/frameworks',
+  isPartOf: { '@type': 'WebSite', name: 'Liminal Village', url: 'https://liminalvillage.com/' },
+  about: { '@type': 'Organization', name: 'Liminal Village', url: 'https://liminalvillage.com/', sameAs: ['https://docs.liminalvillage.com/'] },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: FRAMEWORKS.map((fw, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'DefinedTerm',
+        name: fw.title,
+        description: fw.tagline + ' ' + fw.description.join(' '),
+        url: abs('/frameworks#' + fw.id),
+        image: fw.images.map(im => abs(im.src)),
+        sameAs: fw.links.map(l => l.href),
+      },
+    })),
+  },
+};
+const ldTag = document.createElement('script');
+ldTag.type = 'application/ld+json';
+ldTag.textContent = JSON.stringify(ld);
+document.head.appendChild(ldTag);
+</script>
+</body>
+</html>

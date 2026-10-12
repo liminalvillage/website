@@ -22,6 +22,7 @@
     subjectOf: [
       { '@type': 'WebSite', name: 'Liminal Village Documentation', url: 'https://docs.liminalvillage.com/' },
       { '@type': 'CollectionPage', name: 'Readings & Media', url: 'https://liminalvillage.com/media' },
+      { '@type': 'CollectionPage', name: 'Frameworks', url: 'https://liminalvillage.com/frameworks' },
     ],
   });
 </script>

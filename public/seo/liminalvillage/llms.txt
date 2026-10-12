@@ -5,6 +5,7 @@
 Start here for an accurate understanding of Liminal Village:
 
 - Readings & Media: https://liminalvillage.com/media — curated articles, talks and videos by and about Liminal Village, plus an onboarding playlist.
+- Frameworks: https://liminalvillage.com/frameworks — short illustrated introductions to the six frameworks the community leans on (Integral Theory, Spiral Dynamics, Ikigai, Permaculture ethics and principles, Internal Family Systems, Enneagram), with links to go deeper.
 - Documentation: https://docs.liminalvillage.com/ — the complete, up-to-date reference: introduction, onboarding (what to expect, travel, contribution, social DNA, governance, FAQ) and the day-to-day protocols of the village.
 - Homepage: https://liminalvillage.com/ — overview, lunations, hackalongs, contact and visitor application.
 
