@@ -40,6 +40,20 @@
       accentLight: '#e8c490',
       openCollectiveSlug: 'liminal',
     },
+    regenerativa: {
+      // holonId left empty until the operator wires up the regenerativa Telegram
+      // holon. Quests will not load on this portal until set.
+      holonId: '',
+      brandName: 'ReGenerativa',
+      homeHref: '/',
+      tagline: 'ReGenerativa — quests building the foundations for an ecological civilization',
+      contactEmail: 'hello@regenerativa.earth',
+      heroImage: '/images/regenerativa/hero.jpg',
+      primary: '#3f6a45',
+      primaryDark: '#2c4a31',
+      accentLight: '#c9a35b',
+      openCollectiveSlug: '',
+    },
   };
 
   function detectSite() {
@@ -47,6 +61,7 @@
     const host = window.location.hostname.toLowerCase();
     if (host.includes('casaselva')) return SITES.casaselva;
     if (host.includes('refactory') || host.includes('brickfactory')) return SITES.refactory;
+    if (host.includes('regenerativa')) return SITES.regenerativa;
     return SITES.liminal;
   }
 

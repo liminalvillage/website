@@ -8,7 +8,9 @@ const site = host.includes('casaselva')
   ? 'casaselva'
   : (host.includes('refactory') || host.includes('brickfactory'))
     ? 'refactory'
-    : 'liminal'
+    : host.includes('regenerativa')
+      ? 'regenerativa'
+      : 'liminal'
 
 async function boot() {
   if (site === 'casaselva') {
@@ -31,6 +33,18 @@ async function boot() {
     const [{ default: App }] = await Promise.all([
       import('./refactory/App.svelte'),
       import('./refactory/refactory.css'),
+    ])
+    return mount(App, { target: document.getElementById('app') })
+  }
+
+  if (site === 'regenerativa') {
+    document.documentElement.setAttribute('data-site', 'regenerativa')
+    document.title = 'ReGenerativa — EcoCivilization 2030'
+    setMeta('description',
+      'ReGenerativa — a network of communities, technologies, and frameworks building the foundations for an ecological civilization. Join the movement for integral regeneration and bioregional networks.')
+    const [{ default: App }] = await Promise.all([
+      import('./regenerativa/App.svelte'),
+      import('./regenerativa/regenerativa.css'),
     ])
     return mount(App, { target: document.getElementById('app') })
   }
