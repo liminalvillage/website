@@ -1,5 +1,5 @@
 <script>
-  // Which lunation we are in and where in it — a live card on the hero that
+  // Which lunation we are in and where in it — a live card, centred on the hero, that
   // links to the year in moons (/lunations). Cycle numbers follow
   // @holons/core's `lunationAt`, the bot's /newmoon count.
   import { onMount } from 'svelte';
@@ -75,10 +75,8 @@
 
 <style>
   .lt {
-    position: absolute;
-    right: 3%;
-    bottom: 90px;
-    width: 300px;
+    width: min(320px, calc(100% - 32px));
+    margin-top: 32px;
     display: grid;
     gap: 12px;
     padding: 18px 20px;
@@ -119,8 +117,6 @@
 
   @media (max-width: 768px) {
     .lt {
-      position: static;
-      width: min(340px, calc(100% - 32px));
       margin-top: 28px;
       padding: 14px 16px;
       gap: 10px;

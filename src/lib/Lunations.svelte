@@ -1,11 +1,12 @@
 <script>
+  import LunationArc from './LunationArc.svelte';
+
   const lunationsImages = [
     '/images/UNADJUSTEDNONRAW_thumb_e385-500x99999.jpg',
     '/images/UNADJUSTEDNONRAW_thumb_e685-500x99999.jpg',
     '/images/UNADJUSTEDNONRAW_thumb_e92d-500x99999.jpg',
     '/images/UNADJUSTEDNONRAW_thumb_eddc-500x99999.jpg',
     '/images/UNADJUSTEDNONRAW_thumb_f439-500x99999.jpg',
-    '/images/Phasesmoon-1024x439-1024x439.jpg',
   ];
 </script>
 
@@ -22,6 +23,8 @@
         other participants anywhere on planet Earth. This is a way for globally distributed teams
         and projects to synchronize and harmonize their activities.
       </p>
+
+      <LunationArc />
 
       <p>
         During some lunations, Liminal Village is home to Hackalongs. A Hackalong is best described

@@ -1,8 +1,15 @@
 <script>
   import LunationTimer from './LunationTimer.svelte';
+
+  // Muted, looping YouTube video behind the hero; the drone photo shows until it loads.
+  const VIDEO_ID = 'xIC_wGnDEkE';
+  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&controls=0&playsinline=1&disablekb=1&modestbranding=1&rel=0&iv_load_policy=3`;
 </script>
 
 <section id="main-top" class="hero">
+  <div class="hero-video" aria-hidden="true">
+    <iframe src={videoSrc} title="" tabindex="-1" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
+  </div>
   <div class="hero-content">
     <div class="hero-text">
       <h1>Liminal Village</h1>
@@ -29,9 +36,28 @@
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
+    overflow: hidden;
+  }
+
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Cover the hero with a 16:9 frame, like background-size: cover */
+  .hero-video iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 177.78vh);
+    height: max(100%, 56.25vw);
+    transform: translate(-50%, -50%);
+    border: 0;
   }
 
   .hero-content {
+    position: relative;
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, rgba(34,34,34,0.55), rgba(214,161,91,0.2));
@@ -107,6 +133,12 @@
     }
     60% {
       transform: translateY(-5px) rotate(-45deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video {
+      display: none;
     }
   }
 
