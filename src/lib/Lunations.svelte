@@ -47,7 +47,7 @@
             by contributing to the village on Open Collective.
           </p>
           <div class="access-actions">
-            <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link" target="_blank" rel="noopener">Apply to visit</a>
+            <a class="btn" href="/apply">Apply to visit</a>
             <a class="btn ghost" href="https://opencollective.com/liminal" target="_blank" rel="noopener">Become a supporter</a>
           </div>
         </div>

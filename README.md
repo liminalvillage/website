@@ -99,13 +99,27 @@ Environment variables (Netlify → Project configuration):
 
 | Variable | Needed for |
 | --- | --- |
-| `SERVICES_ADMIN_PASSWORD`, `SERVICES_SESSION_SECRET` | steward area |
+| `SERVICES_ADMIN_PASSWORD`, `SERVICES_SESSION_SECRET` | steward areas (`/services/admin`, `/apply/admin`) |
 | `TELEGRAM_BOT_TOKEN` | DM the practitioner on each booking/cancellation (HolonsBot's token) |
-| `TELEGRAM_CHAT_ID` | optional copy to a steward chat |
+| `TELEGRAM_CHAT_ID` | steward chat: copies of bookings, and every new application |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | confirmation e-mail with cancel link to the client |
 | `SERVICES_HOLON_ID`, `HOLOSPHERE_RELAYS` | optional overrides (default: Liminal Village, production relays) |
 
 Run locally with functions + Blobs: `npx netlify dev`.
+
+## ✍️ Application form (`/apply`)
+
+- `/apply` is the community application: an intro with the 2030 Vision video,
+  then four steps (You · Your story · Lunation · Contribution). Remote-only
+  applicants skip the travel questions; drafts are kept in the browser.
+- Questions and required-field rules live in `src/apply/questions.js`, shared
+  by the page and `netlify/functions/apply.mjs` (`/api/apply`), which stores
+  each application in Netlify Blobs (store `applications`), posts it to
+  `TELEGRAM_CHAT_ID` and e-mails the applicant a copy (SMTP, as above).
+  Set `APPLY_NOTIFY_EMAIL` to also receive applications by e-mail.
+- Stewards read them at `/apply/admin`: filter, mark New / Reviewing /
+  Accepted / Declined, reply, delete, export CSV. Same password and session as
+  the services admin (`netlify/lib/admin.mjs`).
 
 ## 🌙 Lunations page (`/lunations`) and homepage timer
 

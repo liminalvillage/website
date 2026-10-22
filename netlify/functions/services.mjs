@@ -10,13 +10,12 @@
 //   POST /api/services/request             ask for a session when no slot fits
 //   GET  /api/services/cancel?t=           booking behind a cancel link
 //   POST /api/services/cancel              cancel it
-//   POST /api/services/admin/login|logout  steward session (cookie)
+//   POST /api/services/admin/login|logout  steward session (cookie, ../lib/admin.mjs)
 //   GET  /api/services/admin?p=&month=     one practitioner's calendar
 //   POST /api/services/admin/offer|open|delete-slot|cancel-booking|delete-request
 //
 // Env: SERVICES_ADMIN_PASSWORD, SERVICES_SESSION_SECRET (admin);
 //      SERVICES_HOLON_ID (default: Liminal Village); see ../lib/notify.mjs.
-import { createHmac, timingSafeEqual } from 'node:crypto';
 import { membersWithIkigai } from '../lib/holosphere.mjs';
 import {
   PID_RE,
@@ -38,13 +37,12 @@ import {
   slotsInMonth,
   upcomingBookings,
 } from '../lib/bookings.mjs';
+import { isAdmin, login, logout } from '../lib/admin.mjs';
 import { notifyCancelled, notifyNewBooking, notifyRequest } from '../lib/notify.mjs';
 import { dateRange, monthKey, nowIn, parseMonth, weekdayOf } from '../../src/services/dates.js';
 
 const env = process.env;
 const HOLON_ID = env.SERVICES_HOLON_ID || '-1003864542239';
-const COOKIE = 'lv_services_admin';
-const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 14;
 
 const json = (body, status = 200, headers = {}) =>
   new Response(JSON.stringify(body), {
@@ -171,26 +169,6 @@ const publicBooking = (b, person) => ({
 
 // ── Steward session (maxage auth, as a signed cookie) ─────────────────
 
-const sign = (payload) => createHmac('sha256', env.SERVICES_SESSION_SECRET).update(payload).digest('base64url');
-
-function safeEqual(a, b) {
-  const x = Buffer.from(a);
-  const y = Buffer.from(b);
-  return x.length === y.length && timingSafeEqual(x, y);
-}
-
-function isAdmin(req) {
-  if (!env.SERVICES_SESSION_SECRET) return false;
-  const raw = (req.headers.get('cookie') ?? '').split(/;\s*/).find((c) => c.startsWith(`${COOKIE}=`))?.slice(COOKIE.length + 1);
-  const [expires, sig] = (raw ?? '').split('.');
-  return !!expires && !!sig && Number(expires) > Date.now() && safeEqual(sign(expires), sig);
-}
-
-function sessionCookie(url, value, maxAge) {
-  const secure = url.protocol === 'https:' ? '; Secure' : '';
-  return `${COOKIE}=${value}; Path=/api/services; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`;
-}
-
 function parseTimes(raw) {
   return String(raw ?? '')
     .split(/[,\s;]+/)
@@ -206,15 +184,8 @@ function parseTimes(raw) {
 }
 
 async function admin(req, url, action) {
-  if (action === 'login') {
-    if (!env.SERVICES_ADMIN_PASSWORD || !env.SERVICES_SESSION_SECRET)
-      return fail('Set SERVICES_ADMIN_PASSWORD and SERVICES_SESSION_SECRET first.', 503);
-    const { password } = await req.json().catch(() => ({}));
-    if (!safeEqual(String(password ?? ''), env.SERVICES_ADMIN_PASSWORD)) return fail('Wrong password.', 401);
-    const expires = String(Date.now() + SESSION_TTL_MS);
-    return json({ ok: true }, 200, { 'set-cookie': sessionCookie(url, `${expires}.${sign(expires)}`, SESSION_TTL_MS / 1000) });
-  }
-  if (action === 'logout') return json({ ok: true }, 200, { 'set-cookie': sessionCookie(url, '', 0) });
+  if (action === 'login') return login(req, url);
+  if (action === 'logout') return logout(url);
   if (!isAdmin(req)) return fail('Please sign in.', 401);
 
   if (req.method === 'GET' && !action) {
