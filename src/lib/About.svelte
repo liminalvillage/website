@@ -15,26 +15,12 @@
         <a href="https://www.gameb.wiki/index.php?title=Game_B" target="_blank" rel="noopener">Game B</a>).
         Using natural cycles to guide progress, we focus on reinventing how we can live in
         harmony with each other and the planet, by "upgrading the operating system of society"
-        and transitioning from scarcity based market economies to "access abundance". Together
-        with other eco initiatives around the village and around the globe, we are kickstarting
-        a <a href="https://regenerativa.earth" target="_blank" rel="noopener">regenerative network</a>
-        of interdependent communities.
+        and transitioning from scarcity based market economies to "access abundance".
       </p>
       <p>
         Why we exist, what we value and how we live together is all in
         <a href="/dna">our DNA →</a>
       </p>
-      <div class="video-container">
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/XdhPXocPf9g"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
       <p class="lead"><strong>Visitors of the Liminal Village are invited to focus on these three aspects:</strong></p>
     </div>
   </div>
@@ -96,17 +82,6 @@
     color: #b8873d;
   }
 
-  .video-container {
-    text-align: center;
-    margin: 2.5rem 0;
-  }
-
-  iframe {
-    max-width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-
   @media (max-width: 768px) {
     .about {
       padding: 4rem 0 2rem;
@@ -114,10 +89,6 @@
 
     .section-heading h2 {
       font-size: 1.3rem;
-    }
-
-    iframe {
-      height: 250px;
     }
   }
 </style>

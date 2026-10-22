@@ -45,6 +45,17 @@
         communities where cooperation replaces competition, and to share open tools that others can adopt
         and adapt locally.
       </p>
+      <div class="video-container">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/XdhPXocPf9g"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
 
     <h3 class="how">How it works</h3>
@@ -138,6 +149,17 @@
 
   a:hover {
     color: #b8873d;
+  }
+
+  .video-container {
+    text-align: center;
+    margin: 2.5rem 0 0;
+  }
+
+  iframe {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
 
   .how {
@@ -270,6 +292,10 @@
     .steps,
     .sites {
       grid-template-columns: 1fr;
+    }
+
+    iframe {
+      height: 250px;
     }
   }
 </style>

@@ -41,9 +41,9 @@
   <Hero />
   <About />
   <ThreePillars />
-  <Network />
   <Village />
   <Lunations />
+  <Network />
   <Contact />
   <Footer />
 </main>
