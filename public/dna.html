@@ -22,15 +22,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --text:#333; --primary:#D6A15B; --green:#4a9d5f; --sage:#7B9E6B; --light:#EFEFEF; --warm:#faf8f5; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; }
+  :root{ --text:#333; --primary:#D6A15B; --green:#4a9d5f; --sage:#7B9E6B; --light:#EFEFEF; --warm:#faf8f5; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; --tint:rgba(214,161,91,.12); }
   /* Same page, ReGenerativa palette (see src/regenerativa/regenerativa.css) */
-  :root[data-site="regenerativa"]{ --text:#232b21; --primary:#c9a35b; --light:#f4efe4; --warm:#f4efe4; --dark:#2c3527; --grey:#5e695a; --line:#e3dccc; --bg:#faf6ec; }
+  :root[data-site="regenerativa"]{ --text:#232b21; --primary:#c9a35b; --light:#f4efe4; --warm:#f4efe4; --dark:#2c3527; --grey:#5e695a; --line:#e3dccc; --bg:#faf6ec; --tint:rgba(201,163,91,.16); }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{font-family:"Open Sans",sans-serif;font-size:15px;color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none;transition:color .3s;}
   .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
   .serif{font-family:"Cormorant Garamond",serif;}
+  .link{color:var(--primary);}
 
   header{border-bottom:1px solid var(--line);}
   header .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;}
@@ -42,111 +43,107 @@
   .intro .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--primary);}
   .intro h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;letter-spacing:3px;color:var(--dark);line-height:1.1;margin-top:8px;}
   .intro h1 span{color:var(--primary);}
-  .intro p{max-width:640px;margin:18px auto 0;color:var(--grey);letter-spacing:.5px;}
+  .intro p{max-width:560px;margin:18px auto 0;color:var(--grey);letter-spacing:.5px;}
 
   .filters{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:16px 0 40px;}
-  .filters a{border:1px solid var(--line);background:var(--bg);border-radius:24px;padding:7px 18px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);transition:all .3s;}
+  .filters a{border:1px solid var(--line);background:var(--bg);border-radius:24px;padding:7px 16px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+  .filters a i{color:var(--primary);font-size:11px;}
   .filters a:hover{border-color:var(--primary);color:var(--primary);}
 
   section.block{padding:64px 0;border-top:1px solid var(--line);scroll-margin-top:12px;}
   .head{margin-bottom:32px;}
   .head .num{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--primary);}
   .head h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:38px;letter-spacing:.5px;line-height:1.15;color:var(--dark);margin-top:4px;}
-  .head p{max-width:680px;color:#555;margin-top:10px;font-size:14.5px;}
+  .head p{max-width:620px;color:#555;margin-top:10px;font-size:14.5px;}
   :root[data-site="regenerativa"] .head p{color:var(--text);}
+  .head .quote{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:19px;line-height:1.5;color:#555;border-left:3px solid var(--primary);padding-left:16px;margin-top:14px;}
+  .head .quote span{font-family:"Open Sans",sans-serif;font-style:normal;font-size:12.5px;color:#888;}
+  .subhead{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:26px;color:var(--dark);margin:44px 0 16px;display:flex;align-items:center;gap:12px;}
+  .subhead small{font-family:"Open Sans",sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+
+  /* Icon circle, used everywhere */
+  .ico{width:52px;height:52px;flex:none;border-radius:50%;background:var(--tint);color:var(--primary);display:inline-flex;align-items:center;justify-content:center;font-size:20px;}
+  .ico[data-n]{position:relative;}
+  .ico[data-n]::after{content:attr(data-n);position:absolute;top:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:var(--dark);color:#fff;font:600 11px "Open Sans",sans-serif;display:flex;align-items:center;justify-content:center;}
+  .ico.lg{width:68px;height:68px;font-size:26px;}
+  .ico.sm{width:36px;height:36px;font-size:14px;}
+  .ico.green{background:rgba(74,157,95,.12);color:var(--green);}
+  .ico.sage{background:rgba(123,158,107,.14);color:var(--sage);}
+  .ico.dark{background:var(--dark);color:#fff;}
+  .ico.muted{background:var(--light);color:var(--grey);}
 
   /* Purpose */
   .purpose{background:var(--warm);border-radius:14px;padding:44px 40px;text-align:center;}
   .purpose blockquote{font-family:"Cormorant Garamond",serif;font-size:30px;line-height:1.3;color:var(--dark);max-width:760px;margin:0 auto;}
   .purpose blockquote em{color:var(--primary);font-style:italic;}
-  .purpose .sub{max-width:640px;margin:18px auto 0;color:var(--grey);font-size:14px;}
-  .shift{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px;}
-  .shift div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 10px;font-size:13px;color:var(--grey);}
-  .shift b{display:block;font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:500;color:var(--dark);}
-  .shift i{color:var(--primary);margin:0 6px;font-size:11px;}
+  .shift{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:32px;}
+  .shift > div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 12px 16px;}
+  .shift .pics{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
+  .shift .pics > i{color:var(--primary);font-size:13px;}
+  .shift b{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:500;color:var(--dark);}
+  .shift b span{color:var(--grey);font-weight:400;}
 
-  .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:28px;}
-  .card{border:1px solid var(--line);border-radius:12px;padding:26px 26px 22px;background:var(--bg);}
-  .card .label{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);display:flex;align-items:center;gap:8px;}
-  .card h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:24px;color:var(--dark);margin:6px 0 8px;line-height:1.2;}
-  .card p{font-size:14px;color:#555;}
-  .card p + p{margin-top:8px;}
-  :root[data-site="regenerativa"] .card p{color:var(--text);}
+  /* Generic icon tiles */
+  .tiles{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:14px;}
+  .tile{border:1px solid var(--line);border-radius:12px;padding:22px 14px 18px;text-align:center;background:var(--bg);display:flex;flex-direction:column;align-items:center;}
+  .tile h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:20px;color:var(--dark);line-height:1.2;margin-top:12px;}
+  .tile .tag{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-top:12px;}
+  .tile .tag + h3{margin-top:2px;}
+  .tile p{font-size:12.5px;color:var(--grey);margin-top:6px;line-height:1.5;}
+  .tile .stat{font-family:"Cormorant Garamond",serif;font-size:30px;color:var(--primary);line-height:1;margin-top:10px;}
+  .tile .stat small{font-size:16px;color:var(--grey);}
+  a.tile{transition:border-color .3s,box-shadow .3s;}
+  a.tile:hover{border-color:var(--primary);box-shadow:0 8px 24px rgba(0,0,0,.06);}
+  a.tile .go{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);margin-top:auto;padding-top:8px;}
+  a.tile:hover .go{color:var(--primary);}
 
-  /* Thresholds */
-  .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
-  .th{border:1px solid var(--line);border-radius:12px;padding:18px 16px;background:var(--bg);}
-  .th .pair{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:500;line-height:1.2;color:var(--dark);}
+  /* Thresholds: two icons with the threshold line between */
+  .th{border:1px solid var(--line);border-radius:12px;padding:20px 12px 16px;text-align:center;background:var(--bg);}
+  .th .pics{display:flex;align-items:center;justify-content:center;gap:14px;}
+  .th .limen{width:0;height:40px;border-left:2px dashed var(--primary);opacity:.6;}
+  .th .pair{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:500;line-height:1.2;color:var(--dark);margin-top:12px;}
   .th .pair span{color:var(--primary);font-style:italic;}
-  .th p{font-size:12.5px;color:var(--grey);margin-top:8px;line-height:1.6;}
+  .th p{font-size:12px;color:var(--grey);margin-top:4px;line-height:1.5;}
 
-  /* Values */
-  .values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-  .value{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--bg);}
-  .ico{width:44px;height:44px;border-radius:50%;background:rgba(214,161,91,.12);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:17px;}
-  .value h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;color:var(--dark);line-height:1.2;}
-  .value p{font-size:13.5px;color:#555;margin-top:4px;}
-  .value .doing{font-size:12.5px;color:var(--grey);margin-top:8px;padding-left:12px;border-left:2px solid var(--primary);}
-  :root[data-site="regenerativa"] .value p{color:var(--text);}
+  /* Flows: icon → icon → icon */
+  .flow{display:flex;align-items:flex-start;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:26px 16px 20px;}
+  .flow .step{flex:1;text-align:center;min-width:0;}
+  .flow .step b{display:block;font-size:13px;color:var(--dark);font-weight:600;margin-top:10px;}
+  .flow .step > span:not(.ico){display:block;font-size:12px;color:var(--grey);line-height:1.4;margin-top:2px;}
+  .flow .arrow{color:var(--primary);font-size:14px;margin-top:22px;flex:none;}
+  .flow + .flow{margin-top:14px;}
+  .flowlabel{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);margin:28px 0 10px;display:flex;align-items:center;gap:8px;}
 
-  /* Agreements */
-  .agree{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
-  .steps{list-style:none;counter-reset:s;margin-top:10px;}
-  .steps li{counter-increment:s;position:relative;padding:8px 0 8px 40px;border-bottom:1px dashed var(--line);font-size:13.5px;color:#555;}
-  .steps li:last-child{border-bottom:none;}
-  .steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:26px;height:26px;border-radius:50%;background:var(--dark);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;}
-  .steps b{color:var(--dark);font-weight:600;}
-  .wide{grid-column:1 / -1;}
+  .note{margin-top:20px;background:var(--warm);border-radius:10px;padding:14px 20px;font-size:13.5px;color:#555;display:flex;gap:12px;align-items:center;}
+  .note > i{color:var(--primary);}
+  :root[data-site="regenerativa"] .note{color:var(--text);}
 
-  /* Practices */
-  .levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:36px;}
-  .level{border-radius:12px;padding:22px;text-align:center;background:var(--warm);}
-  .level i{font-size:22px;}
-  .level h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;color:var(--dark);margin:6px 0 4px;}
-  .level p{font-size:13px;color:var(--grey);}
-  .phases{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
-  .phase{border:1px solid var(--line);border-radius:12px;padding:24px;}
-  .phase h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:24px;color:var(--dark);display:flex;align-items:center;gap:10px;}
-  .phase h3 i{font-size:15px;color:var(--primary);}
-  .phase .when{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px;}
-  .checks{list-style:none;}
-  .checks li{position:relative;padding:5px 0 5px 26px;font-size:13.5px;color:#555;}
-  .checks li::before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:0;top:6px;color:var(--green);font-size:12px;}
-  .checks li b{color:var(--dark);font-weight:600;}
-  :root[data-site="regenerativa"] .checks li,:root[data-site="regenerativa"] .steps li{color:var(--text);}
+  /* Practices: journey of four phases */
+  .journey{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;position:relative;}
+  .journey::before{content:"";position:absolute;top:34px;left:12.5%;right:12.5%;border-top:2px dashed var(--line);z-index:0;}
+  .phase{text-align:center;position:relative;z-index:1;}
+  .phase .ico{border:4px solid var(--bg);box-sizing:content-box;}
+  .phase .when{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:8px;}
+  .phase h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;color:var(--dark);line-height:1.2;}
+  .mini{list-style:none;margin-top:14px;text-align:left;border:1px solid var(--line);border-radius:12px;padding:8px 14px;background:var(--bg);}
+  .mini li{display:flex;gap:10px;align-items:center;padding:7px 0;font-size:13px;color:#555;line-height:1.4;border-bottom:1px dashed var(--line);}
+  .mini li:last-child{border-bottom:none;}
+  .mini li i{color:var(--primary);width:16px;text-align:center;flex:none;}
+  :root[data-site="regenerativa"] .mini li{color:var(--text);}
 
-  .head .quote{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:19px;line-height:1.5;color:#555;border-left:3px solid var(--primary);padding-left:16px;margin-top:14px;}
-  .head .quote span{font-family:"Open Sans",sans-serif;font-style:normal;font-size:12.5px;color:#888;}
-  .note{margin-top:20px;background:var(--warm);border-radius:10px;padding:16px 20px;font-size:13.5px;color:#555;display:flex;gap:12px;align-items:flex-start;}
-  .note i{color:var(--primary);margin-top:4px;}
+  .counts{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:14px;margin-top:24px;}
+  .counts > div{border-radius:12px;padding:16px 18px;background:var(--warm);}
+  .counts h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:flex;gap:8px;align-items:center;}
+  .counts .yes h4{color:var(--green);}
+  .counts .no h4{color:var(--grey);}
+  .counts .foot{font-size:12.5px;color:var(--grey);margin-top:10px;}
 
-  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px;}
-  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
-  th{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);font-weight:600;}
-  td b{color:var(--dark);}
-  .tablewrap{border:1px solid var(--line);border-radius:12px;overflow-x:auto;}
-
-  /* Roles & tools */
-  .roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
-  .role{border:1px solid var(--line);border-radius:12px;padding:18px;}
-  .role h4{font-size:13px;letter-spacing:1px;color:var(--dark);font-weight:600;display:flex;gap:10px;align-items:center;}
-  .role h4 i{color:var(--primary);width:16px;text-align:center;}
-  .role p{font-size:12.5px;color:var(--grey);margin-top:6px;line-height:1.6;}
-  .subhead{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:26px;color:var(--dark);margin:40px 0 14px;}
-  .subhead:first-of-type{margin-top:0;}
-
-  .tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-  .tool{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;padding:18px 20px;border:1px solid var(--line);border-radius:12px;transition:border-color .3s,box-shadow .3s;}
-  a.tool:hover{border-color:var(--primary);box-shadow:0 8px 24px rgba(0,0,0,.06);}
-  .tool h4{font-size:14px;font-weight:600;color:var(--dark);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;}
-  .tool h4 small{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);font-weight:600;}
-  .tool p{font-size:13px;color:#555;margin-top:3px;}
-  .tool code{font-size:12px;background:var(--light);border-radius:3px;padding:1px 5px;}
-  .tool .go{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);margin-top:6px;}
-  a.tool:hover .go{color:var(--primary);}
   .chips{display:flex;gap:6px;flex-wrap:wrap;list-style:none;}
   .chips li{background:var(--light);border-radius:4px;padding:5px 12px;font-size:12px;letter-spacing:.5px;color:#555;}
   .chips li i{color:var(--primary);margin-right:6px;}
+  .counts .chips li{background:var(--bg);}
+  .counts .no .chips li{text-decoration:line-through;text-decoration-color:rgba(0,0,0,.25);}
+  .counts .no .chips li i{color:var(--grey);}
 
   .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
   .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--dark);border-radius:6px;padding:9px 16px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dark);transition:all .3s;}
@@ -164,8 +161,9 @@
   footer .lic{margin-top:10px;opacity:.7;letter-spacing:.5px;}
 
   @media(max-width:860px){
-    .grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-    .roles{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .tiles{--cols:3 !important;}
+    .journey{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px;}
+    .journey::before{display:none;}
   }
   @media(max-width:760px){
     .wrap{padding:0 16px;}
@@ -173,10 +171,14 @@
     .intro h1{font-size:34px;}
     section.block{padding:44px 0;}
     .head h2{font-size:30px;}
-    .purpose{padding:30px 20px;}
+    .purpose{padding:30px 16px;}
     .purpose blockquote{font-size:23px;}
-    .shift,.two,.values,.agree,.levels,.phases,.tools,.roles{grid-template-columns:minmax(0,1fr);}
-    .grid{grid-template-columns:minmax(0,1fr);}
+    .shift,.counts{grid-template-columns:minmax(0,1fr);}
+    .tiles{--cols:2 !important;}
+    .journey{grid-template-columns:minmax(0,1fr);}
+    .flow{flex-wrap:wrap;row-gap:16px;}
+    .flow .step{flex:1 1 40%;}
+    .flow .arrow{display:none;}
   }
 </style>
 <script>
@@ -198,17 +200,17 @@
   <section class="intro">
     <div class="eyebrow">Founded 2018 · Tronto Valley, Le Marche, Italy</div>
     <h1>Our <span>DNA</span></h1>
-    <p>Just as biological DNA encodes how an organism grows, a community's social DNA is the code that shapes how it lives: why it exists, what it values, how its people relate, and what each person does every day. This page is that code, written down. If you come to Liminal Village, this is what you are joining and what we expect of you.</p>
+    <p>Like biological DNA, a community's social DNA is the code it grows from. This page sets out ours: what you are joining, and what we expect of you.</p>
   </section>
 
   <nav class="filters" aria-label="Sections on this page">
-    <a href="#purpose">Purpose</a>
-    <a href="#thresholds">Thresholds</a>
-    <a href="#values">Values</a>
-    <a href="#agreements">Agreements</a>
-    <a href="#practices">Practices</a>
-    <a href="#roles">Roles &amp; membership</a>
-    <a href="#tools">Tools</a>
+    <a href="#purpose"><i class="fa-solid fa-seedling"></i>Purpose</a>
+    <a href="#thresholds"><i class="fa-solid fa-door-open"></i>Thresholds</a>
+    <a href="#values"><i class="fa-solid fa-heart"></i>Values</a>
+    <a href="#agreements"><i class="fa-solid fa-handshake"></i>Agreements</a>
+    <a href="#practices"><i class="fa-solid fa-person-digging"></i>Practices</a>
+    <a href="#roles"><i class="fa-solid fa-sitemap"></i>Roles</a>
+    <a href="#tools"><i class="fa-solid fa-toolbox"></i>Tools</a>
   </nav>
 
   <!-- 1 · PURPOSE -->
@@ -219,38 +221,19 @@
     </div>
 
     <div class="purpose">
-      <blockquote>Liminal Village exists to <em>prototype a regenerative civilization</em>, by weaving together community living, healing practices and open-source technologies, and sharing everything we learn.</blockquote>
-      <p class="sub">We are a living laboratory: a co-living, co-creation and eco-tech hub where temporary yet intentional communities practise, here and now, the future they want to see.</p>
+      <blockquote>Liminal Village exists to <em>prototype a regenerative civilization</em>, weaving together community living, healing practices and open-source technologies, and sharing everything we learn.</blockquote>
       <div class="shift">
-        <div><b>Extraction <i class="fa-solid fa-arrow-right"></i> Regeneration</b>in how we use land, energy and resources</div>
-        <div><b>Isolation <i class="fa-solid fa-arrow-right"></i> Belonging</b>in how we live, heal and care</div>
-        <div><b>Scarcity <i class="fa-solid fa-arrow-right"></i> Shared abundance</b>in how we own, exchange and decide</div>
+        <div><div class="pics"><span class="ico muted"><i class="fa-solid fa-industry"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico green"><i class="fa-solid fa-leaf"></i></span></div><b>Extraction <span>→</span> Regeneration</b></div>
+        <div><div class="pics"><span class="ico muted"><i class="fa-solid fa-user"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico green"><i class="fa-solid fa-people-group"></i></span></div><b>Isolation <span>→</span> Belonging</b></div>
+        <div><div class="pics"><span class="ico muted"><i class="fa-solid fa-lock"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico green"><i class="fa-solid fa-gift"></i></span></div><b>Scarcity <span>→</span> Shared abundance</b></div>
       </div>
     </div>
 
-    <div class="two">
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-triangle-exclamation"></i> The problem</div>
-        <h3>Extractive systems leave us disconnected</h3>
-        <p>Modern society runs on economies that deplete resources, institutions that alienate people and technologies that speed up disconnection instead of deepening belonging. The result is a set of overlapping crises: ecological collapse, social fragmentation, spiritual disorientation and a loss of purpose.</p>
-        <p>Most responses are siloed, technocratic or transactional. They don't engage the whole human being or the interconnectedness of life. What is missing is a <b>living example</b> of how we might live differently.</p>
-      </div>
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-seedling"></i> Our answer</div>
-        <h3>A real-world lab you can live in</h3>
-        <p>We host temporary yet intentional communities where people from diverse backgrounds co-create new forms of economy, governance, education and wellness rooted in care, trust and interdependence.</p>
-        <p>Through holistic design, web3 infrastructure and ecological systems thinking, we make individual healing and collective transformation possible, and we document our tools and practices so other communities can do the same.</p>
-      </div>
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-eye"></i> Vision</div>
-        <h3>A network of regenerative communities</h3>
-        <p>A thriving, interconnected network of regenerative communities, each contributing in its own way to a new global eco-civilization. Liminal Village is one beacon in that movement, and the community hub of the <a href="https://regenerativa.earth" target="_blank" rel="noopener" style="color:var(--primary)">ReGenerativa</a> network alongside ReFactory and Casa Selva.</p>
-      </div>
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-compass"></i> Mission</div>
-        <h3>Heal and transform, personally and collectively</h3>
-        <p>Align personal, local and planetary needs. Invite people to co-design how we live, work, learn and care together. Shift society's foundation from scarcity to shared abundance, and from separation to conscious interdependence, or in our shorthand: <i>upgrade the operating system of society</i>.</p>
-      </div>
+    <div class="tiles" style="--cols:4;margin-top:24px">
+      <div class="tile"><span class="ico"><i class="fa-solid fa-triangle-exclamation"></i></span><div class="tag">The problem</div><h3>Extractive systems leave us disconnected</h3></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-flask"></i></span><div class="tag">Our answer</div><h3>A real-world lab you can live in</h3></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-circle-nodes"></i></span><div class="tag">Vision</div><h3>A network of regenerative communities</h3><p>with <a class="link" href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a>, ReFactory &amp; Casa Selva</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-compass"></i></span><div class="tag">Mission</div><h3>Upgrade the operating system of society</h3></div>
     </div>
   </section>
 
@@ -259,18 +242,18 @@
     <div class="head">
       <div class="num">02 · What we explore</div>
       <h2>The thresholds we live on</h2>
-      <p><i>Liminal</i>, from the Latin <i>limen</i>, means threshold: a place of transition that occupies both sides. We don't pick one side of these old divides. We work in the space between them, where new things can grow, much as life is richest at the edge between two ecosystems.</p>
+      <p><i>Liminal</i>, from the Latin <i>limen</i>: threshold. We don't pick a side of old divides; we work in the space between, where new things grow.</p>
       <p class="quote">“The space where we are betwixt and between the familiar and the completely unknown. There alone is our old world left behind, while we are not yet sure of the new existence. That's a good space where genuine newness can begin.” <span>— Richard Rohr</span></p>
     </div>
-    <div class="grid">
-      <div class="th"><div class="pair">Nature <span>&amp;</span> Technology</div><p>Regenerative systems inspired by biomimicry, permaculture and open-source design.</p></div>
-      <div class="th"><div class="pair">Science <span>&amp;</span> Spirituality</div><p>Weaving ancient wisdom with contemporary understanding to restore the sacred in how we know.</p></div>
-      <div class="th"><div class="pair">Economy <span>&amp;</span> Society</div><p>Post-capitalist economies rooted in care, trust and mutual credit.</p></div>
-      <div class="th"><div class="pair">Medicine <span>&amp;</span> Healing</div><p>Bridging modern medicine with psycho-spiritual approaches and community-based wellness.</p></div>
-      <div class="th"><div class="pair">Self <span>&amp;</span> Community</div><p>Places where inner development and collective intelligence evolve together.</p></div>
-      <div class="th"><div class="pair">Competition <span>&amp;</span> Collaboration</div><p>Hackathons and creative challenges that reward cooperation and the flourishing of the commons.</p></div>
-      <div class="th"><div class="pair">Ownership <span>&amp;</span> Commons</div><p>Rethinking property through trust structures, stewardship and collective resource management.</p></div>
-      <div class="th"><div class="pair">Intrinsic <span>&amp;</span> Extrinsic</div><p>Task ecosystems that awaken inner purpose and reward contribution to the whole.</p></div>
+    <div class="tiles" style="--cols:4">
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-leaf"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-microchip"></i></span></div><div class="pair">Nature <span>&amp;</span> Technology</div><p>Biomimicry, permaculture, open source</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-atom"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-om"></i></span></div><div class="pair">Science <span>&amp;</span> Spirituality</div><p>Ancient wisdom, current knowledge</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-coins"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-people-group"></i></span></div><div class="pair">Economy <span>&amp;</span> Society</div><p>Care, trust, mutual credit</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-pills"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-spa"></i></span></div><div class="pair">Medicine <span>&amp;</span> Healing</div><p>Clinic meets community wellness</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-user"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-users"></i></span></div><div class="pair">Self <span>&amp;</span> Community</div><p>Inner growth, collective intelligence</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-trophy"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-handshake"></i></span></div><div class="pair">Competition <span>&amp;</span> Collaboration</div><p>Hackathons that reward the commons</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-key"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-people-roof"></i></span></div><div class="pair">Ownership <span>&amp;</span> Commons</div><p>Stewardship over property</p></div>
+      <div class="th"><div class="pics"><span class="ico sm"><i class="fa-solid fa-heart"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-award"></i></span></div><div class="pair">Intrinsic <span>&amp;</span> Extrinsic</div><p>Inner purpose, rewarded contribution</p></div>
     </div>
   </section>
 
@@ -279,59 +262,19 @@
     <div class="head">
       <div class="num">03 · What we hold</div>
       <h2>Core values</h2>
-      <p>Values are the compass for every decision, from what we build to who does the dishes. Each one below comes with what it looks like in practice, so you can tell whether we, and you, are living it.</p>
+      <p>Our compass for every decision, each one paired with what it looks like in practice.</p>
     </div>
-    <div class="values">
-      <div class="value"><div class="ico"><i class="fa-solid fa-leaf"></i></div><div>
-        <h3>Regeneration</h3>
-        <p>Leave every system, whether soil, person, space or relationship, healthier than we found it. Nature is our primary teacher and we are part of it, not apart from it.</p>
-        <div class="doing">In practice: leave rooms and common spaces cleaner than you found them; compost, recycle, mind the water.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-circle-nodes"></i></div><div>
-        <h3>Interdependence</h3>
-        <p>Everything is connected. Personal, local and global wellbeing are one system, and no one thrives alone.</p>
-        <div class="doing">In practice: contribute on all three levels: yourself, the village and the planet.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-hand-holding-heart"></i></div><div>
-        <h3>Care</h3>
-        <p>Care for people, care for the earth, fair share. Care is work, and it counts: cooking, cleaning, childcare and emotional support hold the village together.</p>
-        <div class="doing">In practice: if you see a job that needs doing, it's yours. If others are busy, you probably should be too.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-handshake"></i></div><div>
-        <h3>Trust &amp; accountability</h3>
-        <p>Trust is what lets us replace rules and money with agreements. It is built by keeping our word and kept alive by honest feedback.</p>
-        <div class="doing">In practice: make clear micro-agreements, keep them, and say so early when you can't.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-people-roof"></i></div><div>
-        <h3>Commons over ownership</h3>
-        <p>Spaces, tools and knowledge are stewarded together, not hoarded. We work against the tragedy of the commons by making shared responsibility visible.</p>
-        <div class="doing">In practice: return what you borrow, follow the protocols, label only what is truly personal.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-gift"></i></div><div>
-        <h3>Gift &amp; shared abundance</h3>
-        <p>We move from scarcity to access abundance. A gift is given without expecting anything back, and that is how abundance spreads.</p>
-        <div class="doing">In practice: share food, skills and time freely; gift the community an experience during your stay.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-code-branch"></i></div><div>
-        <h3>Openness &amp; transparency</h3>
-        <p>Open-source technology, open finances, open learning. What we discover belongs to the network of communities that come after us.</p>
-        <div class="doing">In practice: all money flows are public on Open Collective; document what you build so others can reuse it.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-flask"></i></div><div>
-        <h3>Experimentation</h3>
-        <p>We are a lab, not a utopia. We try things, measure, fail, learn and adapt. Tensions are information, not threats.</p>
-        <div class="doing">In practice: bring proposals rather than complaints; treat each lunation as an experiment to improve on.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-yin-yang"></i></div><div>
-        <h3>Wholeness</h3>
-        <p>We engage the whole human being: body, mind, emotions and spirit. Inner work and outer work are the same work.</p>
-        <div class="doing">In practice: take part in circles and feedback sessions, and own your parts, triggers and needs.</div>
-      </div></div>
-      <div class="value"><div class="ico"><i class="fa-solid fa-moon"></i></div><div>
-        <h3>Living with natural cycles</h3>
-        <p>We let the moon and the seasons, not the factory clock, set our rhythm. The lunar cycle is a planet-wide progress bar any community can sync to.</p>
-        <div class="doing">In practice: arrive with the new moon, review and celebrate at the full moon, close the cycle together.</div>
-      </div></div>
+    <div class="tiles" style="--cols:5">
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-leaf"></i></span><h3>Regeneration</h3><p>Leave it better than you found it</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-circle-nodes"></i></span><h3>Interdependence</h3><p>No one thrives alone</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-hand-holding-heart"></i></span><h3>Care</h3><p>See a job that needs doing? It's yours</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-handshake"></i></span><h3>Trust &amp; accountability</h3><p>Make agreements, keep them</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-people-roof"></i></span><h3>Commons</h3><p>Return what you borrow</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-gift"></i></span><h3>Gift &amp; abundance</h3><p>Share food, skills and time</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-code-branch"></i></span><h3>Openness</h3><p>Open source, open books</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-flask"></i></span><h3>Experimentation</h3><p>Proposals, not complaints</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-yin-yang"></i></span><h3>Wholeness</h3><p>Body, mind, heart and spirit</p></div>
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-moon"></i></span><h3>Natural cycles</h3><p>Live by the moon, not the clock</p></div>
     </div>
   </section>
 
@@ -340,36 +283,40 @@
     <div class="head">
       <div class="num">04 · How we relate</div>
       <h2>Agreements</h2>
-      <p>These are the shared grammar of community life. Everyone who joins agrees to practise them, imperfectly but sincerely.</p>
+      <p>The shared grammar of community life. Everyone practises them, imperfectly but sincerely.</p>
     </div>
-    <div class="agree">
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-scroll"></i> Don Miguel Ruiz</div>
-        <h3>The Four Agreements</h3>
-        <ol class="steps">
-          <li><b>Be impeccable with your word.</b> Speak with integrity and kindness, and only commit to what you will do.</li>
-          <li><b>Don't take anything personally.</b> Others' words and actions mostly reflect their own story.</li>
-          <li><b>Don't make assumptions.</b> Ask instead of guessing; clarify instead of concluding.</li>
-          <li><b>Always do your best.</b> Your best changes day to day; give it without self-judgment.</li>
-        </ol>
-      </div>
-      <div class="card">
-        <div class="label"><i class="fa-solid fa-comments"></i> Marshall Rosenberg</div>
-        <h3>Non-Violent Communication</h3>
-        <ol class="steps">
-          <li><b>Observation.</b> What happened, without judgment or interpretation.</li>
-          <li><b>Feeling.</b> What you feel in response to it.</li>
-          <li><b>Need.</b> The universal human need behind that feeling.</li>
-          <li><b>Request.</b> A clear, doable request, not a demand.</li>
-        </ol>
-      </div>
-      <div class="card wide">
-        <div class="label"><i class="fa-solid fa-bolt"></i> Holacracy, soft version</div>
-        <h3>Tensions are opportunities</h3>
-        <p>A tension is a gap between how things are and how they could be. Instead of letting it turn into gossip or resentment, bring it to the right place: to the person concerned (using NVC), to the role that owns the issue, or to the next circle or feedback session. Every tension you voice with a proposal makes the village better. Silent ones make it worse.</p>
-      </div>
+
+    <div class="flowlabel" style="margin-top:0"><i class="fa-solid fa-scroll"></i> The Four Agreements · Don Miguel Ruiz</div>
+    <div class="tiles" style="--cols:4">
+      <div class="tile"><span class="ico lg" data-n="1"><i class="fa-solid fa-comment-dots"></i></span><h3>Be impeccable with your word</h3></div>
+      <div class="tile"><span class="ico lg" data-n="2"><i class="fa-solid fa-shield-halved"></i></span><h3>Don't take anything personally</h3></div>
+      <div class="tile"><span class="ico lg" data-n="3"><i class="fa-solid fa-circle-question"></i></span><h3>Don't make assumptions</h3></div>
+      <div class="tile"><span class="ico lg" data-n="4"><i class="fa-solid fa-star"></i></span><h3>Always do your best</h3></div>
     </div>
-    <div class="note"><i class="fa-solid fa-map"></i><div>To understand ourselves and each other we also use a set of shared maps: Integral Theory, Spiral Dynamics, Ikigai, Permaculture, Internal Family Systems and the Enneagram. <a href="/frameworks" style="color:var(--primary)">Explore the frameworks →</a></div></div>
+
+    <div class="flowlabel"><i class="fa-solid fa-comments"></i> Non-Violent Communication · Marshall Rosenberg</div>
+    <div class="flow">
+      <div class="step"><span class="ico"><i class="fa-solid fa-eye"></i></span><b>Observation</b><span>what happened, no judgment</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico"><i class="fa-solid fa-heart"></i></span><b>Feeling</b><span>what you feel</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico"><i class="fa-solid fa-seedling"></i></span><b>Need</b><span>the need beneath it</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico"><i class="fa-solid fa-hand"></i></span><b>Request</b><span>clear and doable</span></div>
+    </div>
+
+    <div class="flowlabel"><i class="fa-solid fa-bolt"></i> Tensions are opportunities · Holacracy, soft version</div>
+    <div class="flow">
+      <div class="step"><span class="ico"><i class="fa-solid fa-bolt"></i></span><b>Notice a tension</b><span>a gap between is and could be</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico"><i class="fa-solid fa-lightbulb"></i></span><b>Add a proposal</b><span>not a complaint</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico"><i class="fa-solid fa-people-arrows"></i></span><b>Bring it to the right place</b><span>the person · the role · the circle</span></div>
+      <i class="fa-solid fa-arrow-right arrow"></i>
+      <div class="step"><span class="ico green"><i class="fa-solid fa-arrow-trend-up"></i></span><b>The village improves</b><span>silent tensions make it worse</span></div>
+    </div>
+
+    <div class="note"><i class="fa-solid fa-map"></i><div>Shared maps: Integral Theory, Spiral Dynamics, Ikigai, Permaculture, IFS, Enneagram. <a class="link" href="/frameworks">Explore the frameworks →</a></div></div>
   </section>
 
   <!-- 5 · PRACTICES -->
@@ -377,63 +324,91 @@
     <div class="head">
       <div class="num">05 · What we do</div>
       <h2>Practices: what is expected of you</h2>
-      <p>You are not a guest at a retreat. You become an active member of a temporary community, a co-creator responsible for its success. These are the practices everyone is expected to take on.</p>
+      <p>You are not a guest at a retreat. You are a co-creator of a temporary community, and you share responsibility for how it goes.</p>
     </div>
 
-    <div class="levels">
-      <div class="level"><i class="fa-solid fa-user-gear" style="color:var(--primary)"></i><h3>Personal</h3><p>Set your own goals for the lunation. Find your ikigai, learn something new, write the book, give the talk.</p></div>
-      <div class="level"><i class="fa-solid fa-street-view" style="color:var(--green)"></i><h3>Local</h3><p>Do something for the people and land around you: teach, build, create art, regenerate the place.</p></div>
-      <div class="level"><i class="fa-solid fa-earth-americas" style="color:var(--sage)"></i><h3>Global</h3><p>Pick a cause that matters for the planet, learn about it, and find a way to help.</p></div>
+    <div class="tiles" style="--cols:3;margin-bottom:40px">
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-user-gear"></i></span><h3>Personal</h3><p>Your own goal for the lunation</p></div>
+      <div class="tile"><span class="ico lg green"><i class="fa-solid fa-street-view"></i></span><h3>Local</h3><p>Something for the people &amp; land here</p></div>
+      <div class="tile"><span class="ico lg sage"><i class="fa-solid fa-earth-americas"></i></span><h3>Global</h3><p>A cause that matters for the planet</p></div>
     </div>
 
-    <div class="phases">
+    <div class="journey">
       <div class="phase">
+        <span class="ico lg dark"><i class="fa-solid fa-envelope-open-text"></i></span>
         <div class="when">Before you arrive</div>
-        <h3><i class="fa-solid fa-envelope-open-text"></i> Align</h3>
-        <ul class="checks">
-          <li><b>Apply</b> and read this page, the <a href="https://docs.liminalvillage.com/onboarding" target="_blank" rel="noopener" style="color:var(--primary)">onboarding docs</a> and the protocols.</li>
-          <li><b>Become a member</b> of ReGenerativa APS (or join as a short-term visitor by donation).</li>
-          <li><b>Agree your micro-agreements</b>: how you will contribute, drawing on any of the <a href="https://perfectspiralcapital.com/blog/the-eight-forms-of-capital/" target="_blank" rel="noopener" style="color:var(--primary)">8 forms of capital</a>.</li>
-          <li><b>Check dates with the stewards</b> before booking travel, then send exact arrival and departure times in writing.</li>
-          <li><b>Plan to arrive with the new moon</b> and stay for a lunation (or a phase, about one week).</li>
+        <h3>Align</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-book-open"></i><span>Read this page &amp; the <a class="link" href="https://docs.liminalvillage.com/onboarding" target="_blank" rel="noopener">onboarding docs</a></span></li>
+          <li><i class="fa-solid fa-id-card"></i><span>Join ReGenerativa APS</span></li>
+          <li><i class="fa-solid fa-handshake-simple"></i><span>Agree how you'll contribute (<a class="link" href="https://perfectspiralcapital.com/blog/the-eight-forms-of-capital/" target="_blank" rel="noopener">8 capitals</a>)</span></li>
+          <li><i class="fa-solid fa-calendar-check"></i><span>Confirm dates before booking travel</span></li>
+          <li><i class="fa-solid fa-moon"></i><span>Arrive with the new moon</span></li>
         </ul>
       </div>
       <div class="phase">
+        <span class="ico lg dark"><i class="fa-solid fa-sun"></i></span>
         <div class="when">Every day</div>
-        <h3><i class="fa-solid fa-sun"></i> Contribute</h3>
-        <ul class="checks">
-          <li><b>Give your hours</b>: at least 2 hours a day as a member, 4 as a volunteer.</li>
-          <li><b>Take on tasks and roles</b> through the village bot, and follow through on what you claim.</li>
-          <li><b>Care for the commons</b>: if you see a job that needs doing, it's yours.</li>
-          <li><b>Follow the protocols</b> for kitchen, household, garden, tools and animals.</li>
-          <li><b>Small courtesies</b>: no shoes in common spaces, label personal food, share meals as gifts.</li>
+        <h3>Contribute</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-clock"></i><span>2 h/day member · 4 h/day volunteer</span></li>
+          <li><i class="fa-brands fa-telegram"></i><span>Claim tasks via the bot, follow through</span></li>
+          <li><i class="fa-solid fa-broom"></i><span>See a job? It's yours</span></li>
+          <li><i class="fa-solid fa-clipboard-list"></i><span>Follow the protocols</span></li>
+          <li><i class="fa-solid fa-shoe-prints"></i><span>No shoes inside · label your food</span></li>
         </ul>
       </div>
       <div class="phase">
+        <span class="ico lg dark"><i class="fa-solid fa-moon"></i></span>
         <div class="when">Every lunation</div>
-        <h3><i class="fa-solid fa-moon"></i> Co-create</h3>
-        <ul class="checks">
-          <li><b>Gift an experience</b>: a talk, workshop or practice for the community, in rotation.</li>
-          <li><b>Join circles and feedback sessions</b>: we review how well we keep our agreements.</li>
-          <li><b>Voice tensions with proposals</b>, using NVC and the right role or circle.</li>
-          <li><b>Propose projects</b> that serve the village or the network, validated by the stewards or the community.</li>
-          <li><b>Take part in collective cleaning</b> and shared moments like meals, fire and celebration.</li>
+        <h3>Co-create</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-gift"></i><span>Gift a talk, workshop or practice</span></li>
+          <li><i class="fa-solid fa-circle-notch"></i><span>Join circles &amp; feedback</span></li>
+          <li><i class="fa-solid fa-bolt"></i><span>Voice tensions with proposals</span></li>
+          <li><i class="fa-solid fa-diagram-project"></i><span>Propose projects</span></li>
+          <li><i class="fa-solid fa-fire"></i><span>Share meals, fire &amp; collective cleaning</span></li>
         </ul>
       </div>
       <div class="phase">
+        <span class="ico lg dark"><i class="fa-solid fa-door-open"></i></span>
         <div class="when">Before you leave</div>
-        <h3><i class="fa-solid fa-door-open"></i> Close the cycle</h3>
-        <ul class="checks">
-          <li><b>Give three days' notice</b> of your departure so someone can help you leave.</li>
-          <li><b>Clean your room</b>, wash or hand in your sheets, and wipe your yoga mat.</li>
-          <li><b>Return everything borrowed</b> and take your garbage with you.</li>
-          <li><b>Leave it better</b>: a regenerative deep clean earns you bonus points (and your deposit back).</li>
-          <li><b>Harvest the experience</b>: send the stewards a 2–5 minute video about your stay.</li>
+        <h3>Close the cycle</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-bell"></i><span>3 days' notice</span></li>
+          <li><i class="fa-solid fa-bed"></i><span>Clean room, sheets &amp; mat</span></li>
+          <li><i class="fa-solid fa-rotate-left"></i><span>Return what you borrowed</span></li>
+          <li><i class="fa-solid fa-star"></i><span>Deep clean = bonus + deposit back</span></li>
+          <li><i class="fa-solid fa-video"></i><span>Send a 2–5 min video</span></li>
         </ul>
       </div>
     </div>
 
-    <div class="note"><i class="fa-solid fa-circle-info"></i><div><b>What counts as contribution:</b> maintenance, cleaning, cooking, gardening, childcare, supporting events and facilitation, emotional and relational support, offering workshops, and approved regenerative projects. <b>What doesn't:</b> attending social activities, circles or workshops on their own. A commitment you don't keep has a cost, because fairness is how the commons stays alive.</div></div>
+    <div class="counts">
+      <div class="yes">
+        <h4><i class="fa-solid fa-circle-check"></i> Counts as contribution</h4>
+        <ul class="chips">
+          <li><i class="fa-solid fa-screwdriver-wrench"></i>Maintenance</li>
+          <li><i class="fa-solid fa-broom"></i>Cleaning</li>
+          <li><i class="fa-solid fa-utensils"></i>Cooking</li>
+          <li><i class="fa-solid fa-seedling"></i>Gardening</li>
+          <li><i class="fa-solid fa-baby"></i>Childcare</li>
+          <li><i class="fa-solid fa-calendar-day"></i>Events &amp; facilitation</li>
+          <li><i class="fa-solid fa-hand-holding-heart"></i>Emotional support</li>
+          <li><i class="fa-solid fa-chalkboard-user"></i>Offering workshops</li>
+          <li><i class="fa-solid fa-diagram-project"></i>Approved projects</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h4><i class="fa-solid fa-circle-xmark"></i> Doesn't count</h4>
+        <ul class="chips">
+          <li><i class="fa-solid fa-champagne-glasses"></i>Social activities</li>
+          <li><i class="fa-solid fa-circle-notch"></i>Attending circles</li>
+          <li><i class="fa-solid fa-chalkboard"></i>Attending workshops</li>
+        </ul>
+        <div class="foot">Unkept commitments have a cost: fairness keeps the commons alive.</div>
+      </div>
+    </div>
   </section>
 
   <!-- 6 · ROLES & MEMBERSHIP -->
@@ -441,32 +416,27 @@
     <div class="head">
       <div class="num">06 · How we organise</div>
       <h2>Roles &amp; membership</h2>
-      <p>We use a soft version of Holacracy. Authority sits in roles, not people. Roles have clear accountabilities, anyone can hold several, and roles change as the village's needs change. Circles coordinate the work, and stewards hold the long-term care of the place.</p>
+      <p>Soft Holacracy: authority sits in roles, not people. Anyone can hold several roles, and roles change as the village does.</p>
     </div>
 
-    <h3 class="subhead">Village roles</h3>
-    <div class="roles">
-      <div class="role"><h4><i class="fa-solid fa-utensils"></i> Culinary Coordinator</h4><p>Plans and prepares meals, manages the pantry, keeps the kitchen clean and food waste low.</p></div>
-      <div class="role"><h4><i class="fa-solid fa-seedling"></i> Sustainability Coordinator</h4><p>Tends the garden, supplies fresh produce, keeps resource use efficient.</p></div>
-      <div class="role"><h4><i class="fa-solid fa-broom"></i> Space &amp; Logistics</h4><p>Keeps communal spaces tidy and organised, manages supplies and logistics.</p></div>
-      <div class="role"><h4><i class="fa-solid fa-people-group"></i> Community Facilitator</h4><p>Leads meetings, mediates conflicts, upholds agreements, organises learning.</p></div>
-      <div class="role"><h4><i class="fa-solid fa-spa"></i> Wellness Coordinator</h4><p>Offers wellness and healing practices, cultural activities and emotional support.</p></div>
-      <div class="role"><h4><i class="fa-solid fa-microchip"></i> Technology &amp; Finance</h4><p>Runs the digital platforms, keeps the finances transparent, supports tech in daily life.</p></div>
+    <h3 class="subhead" style="margin-top:0">Village roles</h3>
+    <div class="tiles" style="--cols:3">
+      <div class="tile"><span class="ico"><i class="fa-solid fa-utensils"></i></span><h3>Culinary</h3><p>Meals, pantry, low food waste</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-seedling"></i></span><h3>Sustainability</h3><p>Garden, produce, resources</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-broom"></i></span><h3>Space &amp; Logistics</h3><p>Common spaces, supplies</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-people-group"></i></span><h3>Community Facilitator</h3><p>Meetings, mediation, learning</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-spa"></i></span><h3>Wellness</h3><p>Healing, culture, support</p></div>
+      <div class="tile"><span class="ico"><i class="fa-solid fa-microchip"></i></span><h3>Technology &amp; Finance</h3><p>Platforms, open finances</p></div>
     </div>
 
     <h3 class="subhead">Ways to take part</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>As a…</th><th>You contribute</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td><b>Member</b></td><td>A lunation or phase ticket, plus at least <b>2 hours a day</b></td><td>Membership in ReGenerativa APS includes the insurance required by Italian law.</td></tr>
-          <tr><td><b>Volunteer</b></td><td>At least <b>4 hours a day</b></td><td>Lower financial contribution, agreed with the stewards.</td></tr>
-          <tr><td><b>Sponsor</b></td><td>Mainly financial support</td><td>Not required to give time, but warmly encouraged to.</td></tr>
-          <tr><td><b>Visitor</b></td><td>A donation</td><td>Short stays only, in line with APS rules.</td></tr>
-        </tbody>
-      </table>
+    <div class="tiles" style="--cols:4">
+      <div class="tile"><span class="ico lg"><i class="fa-solid fa-user-check"></i></span><h3>Member</h3><div class="stat">2h <small>/ day</small></div><p>+ lunation or phase ticket, insurance included</p></div>
+      <div class="tile"><span class="ico lg green"><i class="fa-solid fa-handshake-angle"></i></span><h3>Volunteer</h3><div class="stat">4h <small>/ day</small></div><p>lower financial contribution</p></div>
+      <div class="tile"><span class="ico lg sage"><i class="fa-solid fa-hand-holding-dollar"></i></span><h3>Sponsor</h3><div class="stat">€</div><p>financial support; time welcome</p></div>
+      <div class="tile"><span class="ico lg muted"><i class="fa-solid fa-person-walking-luggage"></i></span><h3>Visitor</h3><div class="stat"><i class="fa-solid fa-heart" style="font-size:22px"></i></div><p>donation · short stays only</p></div>
     </div>
-    <div class="note"><i class="fa-solid fa-scale-balanced"></i><div>There is no fixed room price. Contributions cover the real costs of the place, and stewards allocate spaces based on community needs, length of stay and the kind of contribution. Any surplus is reinvested. Exceptions are handled through transparent micro-agreements, and the whole system evolves through the association's circles and assemblies.</div></div>
+    <div class="note"><i class="fa-solid fa-scale-balanced"></i><div>No fixed room price: contributions cover real costs, stewards allocate spaces by need, and any surplus is reinvested.</div></div>
   </section>
 
   <!-- 7 · TOOLS -->
@@ -474,51 +444,19 @@
     <div class="head">
       <div class="num">07 · What we use</div>
       <h2>Tools</h2>
-      <p>The village runs on a cybernetic operating system: a set of open tools that make tasks, roles, time and money visible, so that a group of people who just met can coordinate like an organism.</p>
+      <p>A cybernetic operating system: open tools that make tasks, roles, time and money visible.</p>
     </div>
 
-    <h3 class="subhead">Coordination</h3>
-    <div class="tools">
-      <a class="tool" href="https://t.me/HolonsBot" target="_blank" rel="noopener"><div class="ico"><i class="fa-brands fa-telegram"></i></div><div>
-        <h4>HolonsBot <small>Tasks · roles · onboarding</small></h4>
-        <p>The village bot on Telegram. Claim and create tasks (e.g. <code>/task pick up a guest at Porto d'Ascoli station at 18:00</code>), hold roles, join quests and keep your profile.</p>
-        <div class="go">Open in Telegram →</div>
-      </div></a>
-      <a class="tool" href="https://holons.io" target="_blank" rel="noopener"><div class="ico"><i class="fa-solid fa-circle-nodes"></i></div><div>
-        <h4>Holons &amp; HoloSphere <small>Community OS</small></h4>
-        <p>Open-source tooling for computer-aided, federated communities. It is the shared memory behind the bot, quests and services.</p>
-        <div class="go">holons.io →</div>
-      </div></a>
-      <a class="tool" href="/lunations"><div class="ico"><i class="fa-solid fa-moon"></i></div><div>
-        <h4>Lunations calendar <small>Shared rhythm</small></h4>
-        <p>Our year in moons: every new and full moon, solstice and equinox, and what is planned in each cycle.</p>
-        <div class="go">See the calendar →</div>
-      </div></a>
-      <a class="tool" href="/quests.html"><div class="ico"><i class="fa-solid fa-flag"></i></div><div>
-        <h4>Quests <small>Projects to join</small></h4>
-        <p>Concrete missions across the network's sites. Pick one up, team up, and make it real.</p>
-        <div class="go">Browse quests →</div>
-      </div></a>
-      <a class="tool" href="/services"><div class="ico"><i class="fa-solid fa-hands-holding-circle"></i></div><div>
-        <h4>Services <small>Skills &amp; offerings</small></h4>
-        <p>What each villager offers, based on their ikigai, with open times and booking.</p>
-        <div class="go">See services →</div>
-      </div></a>
-      <a class="tool" href="https://opencollective.com/liminal" target="_blank" rel="noopener"><div class="ico"><i class="fa-solid fa-coins"></i></div><div>
-        <h4>Open Collective <small>Transparent finances</small></h4>
-        <p>Lunation and phase tickets, donations and every expense, all public.</p>
-        <div class="go">Open the books →</div>
-      </div></a>
-      <a class="tool" href="https://docs.liminalvillage.com/" target="_blank" rel="noopener"><div class="ico"><i class="fa-solid fa-book-open"></i></div><div>
-        <h4>Docs &amp; protocols <small>Shared knowledge</small></h4>
-        <p>Onboarding, governance and the living protocols for kitchen, household, garden, construction and animals, plus the Liminal Surfboard AI to ask them questions.</p>
-        <div class="go">Read the docs →</div>
-      </div></a>
-      <a class="tool" href="https://async.hackalong.io/" target="_blank" rel="noopener"><div class="ico"><i class="fa-solid fa-laptop-code"></i></div><div>
-        <h4>Hackalong <small>Co-creation</small></h4>
-        <p>Continuous, non-coercive co-creation: talks, workshops and building together, on site and online.</p>
-        <div class="go">See projects →</div>
-      </div></a>
+    <h3 class="subhead" style="margin-top:0">Coordination</h3>
+    <div class="tiles" style="--cols:4">
+      <a class="tile" href="https://t.me/HolonsBot" target="_blank" rel="noopener"><span class="ico lg"><i class="fa-brands fa-telegram"></i></span><h3>HolonsBot</h3><p>Tasks · roles · quests · profile</p><div class="go">Telegram →</div></a>
+      <a class="tile" href="https://holons.io" target="_blank" rel="noopener"><span class="ico lg"><i class="fa-solid fa-circle-nodes"></i></span><h3>Holons &amp; HoloSphere</h3><p>Community OS · shared memory</p><div class="go">holons.io →</div></a>
+      <a class="tile" href="/lunations"><span class="ico lg"><i class="fa-solid fa-moon"></i></span><h3>Lunations</h3><p>Our year in moons</p><div class="go">Calendar →</div></a>
+      <a class="tile" href="/quests.html"><span class="ico lg"><i class="fa-solid fa-flag"></i></span><h3>Quests</h3><p>Missions to join</p><div class="go">Browse →</div></a>
+      <a class="tile" href="/services"><span class="ico lg"><i class="fa-solid fa-hands-holding-circle"></i></span><h3>Services</h3><p>Skills &amp; booking</p><div class="go">See services →</div></a>
+      <a class="tile" href="https://opencollective.com/liminal" target="_blank" rel="noopener"><span class="ico lg"><i class="fa-solid fa-coins"></i></span><h3>Open Collective</h3><p>Every euro, public</p><div class="go">Open books →</div></a>
+      <a class="tile" href="https://docs.liminalvillage.com/" target="_blank" rel="noopener"><span class="ico lg"><i class="fa-solid fa-book-open"></i></span><h3>Docs &amp; protocols</h3><p>+ Liminal Surfboard AI</p><div class="go">Read →</div></a>
+      <a class="tile" href="https://async.hackalong.io/" target="_blank" rel="noopener"><span class="ico lg"><i class="fa-solid fa-laptop-code"></i></span><h3>Hackalong</h3><p>Build together</p><div class="go">Projects →</div></a>
     </div>
 
     <h3 class="subhead">Inner &amp; relational tools</h3>
@@ -550,7 +488,7 @@
 
   <section class="outro">
     <h2>Does this DNA resonate?</h2>
-    <p>If these values feel like yours and these practices feel like a life you want to try, come and co-create the next lunation with us.</p>
+    <p>If these values feel like yours, come and co-create the next lunation with us.</p>
     <div class="actions">
       <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> Apply to visit</a>
       <a class="btn ghost" href="https://docs.liminalvillage.com/onboarding/what-to-expect" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> What to expect</a>
