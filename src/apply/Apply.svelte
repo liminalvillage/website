@@ -191,16 +191,6 @@
     </header>
 
     <main class="wrap intro">
-      <div class="video">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/{VIDEO_ID}?rel=0&modestbranding=1"
-          title="Liminal Village — 2030 Vision"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
-
       <section class="welcome">
         <h2 class="display">Welcome</h2>
         <p>
@@ -215,6 +205,16 @@
         </p>
         <p>We review every application personally and will get back to you shortly.</p>
       </section>
+
+      <div class="video">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/{VIDEO_ID}?rel=0&modestbranding=1"
+          title="Liminal Village — 2030 Vision"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
 
       <ol class="journey" aria-label="The application, step by step">
         {#each STEPS as s, i}
@@ -563,7 +563,8 @@
   .cta.center { justify-content: center; }
 
   .intro { max-width: 860px; }
-  .video { position: relative; aspect-ratio: 16 / 9; margin-top: -40px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lift); background: #1d1a15; }
+  .intro > .video { margin-top: 40px; }
+  .video { position: relative; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lift); background: #1d1a15; }
   .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .welcome { margin: 48px auto 0; max-width: 62ch; display: grid; gap: 14px; font-size: 16px; }
   .welcome h2 { font-size: 38px; }
