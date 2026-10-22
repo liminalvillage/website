@@ -2,13 +2,39 @@
   import LunationTimer from './LunationTimer.svelte';
 
   // Muted, looping YouTube video behind the hero; the drone photo shows until it loads.
+  // It starts at START, after the video's title frames and group shot, and the
+  // player is sent back there whenever its loop restarts from 0.
   const VIDEO_ID = 'xIC_wGnDEkE';
-  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&controls=0&playsinline=1&disablekb=1&modestbranding=1&rel=0&iv_load_policy=3`;
+  const START = 22;
+  const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&start=${START}&controls=0&playsinline=1&disablekb=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`;
+
+  let player;
+
+  const send = (msg) => player?.contentWindow?.postMessage(JSON.stringify(msg), '*');
+
+  // YouTube's iframe API over postMessage, without loading its script.
+  function listen() {
+    send({ event: 'listening', id: 'hero' });
+  }
+
+  function onMessage(e) {
+    if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname)) return;
+    let data;
+    try { data = JSON.parse(e.data); } catch { return; }
+    const t = data?.info?.currentTime;
+    const ended = data?.event === 'onStateChange' && data.info === 0;
+    if (ended || (typeof t === 'number' && t < START - 1)) {
+      send({ event: 'command', func: 'seekTo', args: [START, true] });
+      send({ event: 'command', func: 'playVideo', args: [] });
+    }
+  }
 </script>
+
+<svelte:window onmessage={onMessage} />
 
 <section id="main-top" class="hero">
   <div class="hero-video" aria-hidden="true">
-    <iframe src={videoSrc} title="" tabindex="-1" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
+    <iframe bind:this={player} onload={listen} src={videoSrc} title="" tabindex="-1" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
   </div>
   <div class="hero-content">
     <div class="hero-text">
@@ -45,14 +71,15 @@
     pointer-events: none;
   }
 
-  /* Cover the hero with a 16:9 frame, like background-size: cover */
+  /* Cover the hero with a 16:9 frame, like background-size: cover, zoomed a
+     little so YouTube's title and logo overlays fall outside the hero */
   .hero-video iframe {
     position: absolute;
     top: 50%;
     left: 50%;
     width: max(100%, 177.78vh);
     height: max(100%, 56.25vw);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1.2);
     border: 0;
   }
 
