@@ -20,6 +20,10 @@
         a <a href="https://regenerativa.earth" target="_blank" rel="noopener">regenerative network</a>
         of interdependent communities.
       </p>
+      <p>
+        Why we exist, what we value and how we live together is all in
+        <a href="/dna">our DNA →</a>
+      </p>
       <div class="video-container">
         <iframe
           width="560"

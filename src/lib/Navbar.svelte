@@ -5,35 +5,46 @@
     mobileMenuOpen = !mobileMenuOpen;
   };
 
+  const closeMenu = () => {
+    mobileMenuOpen = false;
+  };
+
   const menuItems = [
-    { label: 'HOME', href: '#main-top' },
     { label: 'ABOUT', href: '#about' },
-    { label: 'IN BETWEEN …', href: '#aplaceinbetween' },
     { label: 'THE VILLAGE', href: '#thevillage' },
-    { label: 'LUNATIONS', href: '#lunations' },
+    { label: 'LUNATIONS', href: '/lunations' },
+    { label: 'DNA', href: '/dna' },
+    { label: 'SERVICES', href: '/services' },
+    { label: 'QUESTS', href: '/quests.html' },
     { label: 'MEDIA', href: '/media' },
-    { label: 'FRAMEWORKS', href: '/frameworks' },
-    { label: 'PROJECTS', href: 'https://async.hackalong.io/', external: true },
-    { label: 'ALL INFO', href: 'https://docs.liminalvillage.com/', external: true },
     { label: 'CONTACT', href: '#contact' },
   ];
 </script>
 
+<svelte:window on:keydown={(e) => e.key === 'Escape' && closeMenu()} />
+
 <nav class="navbar" class:mobile-open={mobileMenuOpen}>
   <div class="navbar-container">
-    <a href="#main-top" class="navbar-title">Liminal Village</a>
-    <button class="navbar-toggler" on:click={toggleMenu} aria-label="Toggle Navigation">
+    <a href="#main-top" class="navbar-title" on:click={closeMenu}>Liminal Village</a>
+    <button
+      class="navbar-toggler"
+      class:open={mobileMenuOpen}
+      on:click={toggleMenu}
+      aria-label="Toggle Navigation"
+      aria-expanded={mobileMenuOpen}
+      aria-controls="main-menu"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="navbar-content" class:show={mobileMenuOpen}>
-      <ul class="menu">
+      <ul class="menu" id="main-menu">
         {#each menuItems as item}
           <li>
             <a
               href={item.href}
               target={item.external ? '_blank' : '_self'}
-              rel={item.external ? 'noopener noreferrer' : ''}
-              on:click={() => !item.external && (mobileMenuOpen = false)}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              on:click={closeMenu}
             >
               {item.label}
             </a>
@@ -53,7 +64,6 @@
     background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    transition: height 0.5s cubic-bezier(0, 0, 0.7, 1);
     font-family: "Open Sans", sans-serif;
     height: 100px;
     padding: 0 3%;
@@ -61,39 +71,39 @@
 
   .navbar-container {
     width: 100%;
-    display: table;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
   }
 
   .navbar-title {
-    transition: all 0.5s cubic-bezier(0, 0, 0.7, 1);
-    height: 100px;
-    font-size: 25px;
+    transition: color 0.5s cubic-bezier(0, 0, 0.7, 1);
+    font-size: 22px;
     font-weight: 300;
-    letter-spacing: 5px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: var(--dark-color);
-    display: table-cell;
-    vertical-align: middle;
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .navbar-title:hover {
     color: var(--primary-color);
   }
 
-  .navbar-content {
-    float: right;
-    display: table;
-    height: 100%;
-  }
-
   .navbar-toggler {
     display: none;
     background: none;
     border: none;
-    padding: 0.5rem;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .navbar-toggler-icon {
@@ -102,17 +112,18 @@
     height: 3px;
     background: var(--dark-color);
     position: relative;
-    transition: all 0.3s;
+    transition: background 0.3s;
   }
 
   .navbar-toggler-icon::before,
   .navbar-toggler-icon::after {
     content: '';
     position: absolute;
+    left: 0;
     width: 100%;
     height: 3px;
     background: var(--dark-color);
-    transition: all 0.3s;
+    transition: transform 0.3s, top 0.3s;
   }
 
   .navbar-toggler-icon::before {
@@ -123,70 +134,60 @@
     top: 8px;
   }
 
+  .navbar-toggler.open .navbar-toggler-icon {
+    background: transparent;
+  }
+
+  .navbar-toggler.open .navbar-toggler-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .navbar-toggler.open .navbar-toggler-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
   .menu {
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
   .menu li {
-    display: inline-block;
-    padding: 0 15px;
+    padding: 0 8px;
   }
 
   .menu li a {
     color: var(--dark-color);
     text-decoration: none;
     font-weight: 400;
-    font-size: 14px;
-    letter-spacing: 3px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    transition: all 0.5s ease-in-out 0.1s;
+    white-space: nowrap;
+    transition: color 0.5s ease-in-out 0.1s;
   }
 
   .menu li a:hover {
     color: var(--primary-color);
   }
 
-  @media (max-width: 968px) {
+  /* 14 items don't fit inline below this width: collapse to the hamburger */
+  @media (max-width: 1500px) {
     .navbar {
       height: 80px;
     }
 
     .navbar-title {
       font-size: 20px;
-      height: 80px;
       letter-spacing: 3px;
     }
 
-    .menu li a {
-      font-size: 12px;
-      letter-spacing: 2px;
-    }
-
-    .menu li {
-      padding: 0 10px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      height: 70px;
-    }
-
-    .navbar-title {
-      height: 70px;
-      font-size: 18px;
-    }
-
     .navbar-toggler {
-      display: block;
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
+      display: flex;
     }
 
     .navbar-content {
@@ -196,15 +197,15 @@
       right: 0;
       background: rgba(255, 255, 255, 0.98);
       max-height: 0;
-      overflow: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
       transition: max-height 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      float: none;
-      display: block;
     }
 
     .navbar-content.show {
-      max-height: 500px;
+      max-height: calc(100vh - 80px);
+      max-height: calc(100dvh - 80px);
     }
 
     .menu {
@@ -212,13 +213,39 @@
     }
 
     .menu li {
-      display: block;
-      padding: 0.75rem 2rem;
+      padding: 0;
       border-bottom: 1px solid #eee;
     }
 
     .menu li:last-child {
       border-bottom: none;
+    }
+
+    .menu li a {
+      display: block;
+      padding: 0.9rem 2rem;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      height: 70px;
+    }
+
+    .navbar-title {
+      font-size: 17px;
+      letter-spacing: 2px;
+    }
+
+    .navbar-content.show {
+      max-height: calc(100vh - 70px);
+      max-height: calc(100dvh - 70px);
+    }
+
+    .menu li a {
+      padding: 0.85rem 1.5rem;
     }
   }
 </style>

@@ -6,6 +6,12 @@
 
 <footer class="footer">
   <div class="container">
+    <nav class="links" aria-label="More">
+      <a href="/frameworks">Frameworks</a>
+      <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a>
+      <a href="https://async.hackalong.io/" target="_blank" rel="noopener">Projects</a>
+      <a href="https://docs.liminalvillage.com/" target="_blank" rel="noopener">Docs</a>
+    </nav>
     <p>&copy; {new Date().getFullYear()} Liminal Village. All Rights Reserved.</p>
     <button class="back-to-top" on:click={scrollToTop} aria-label="Back to top">
       <i class="fas fa-arrow-up"></i>
@@ -37,6 +43,25 @@
     font-size: 0.85rem;
     color: #8a8274;
     letter-spacing: 1px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .links a {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #D6A15B;
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: #fff;
   }
 
   .back-to-top {

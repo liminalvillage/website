@@ -4,6 +4,11 @@
 /media     /media.html     200
 /readings  /media          301
 /frameworks  /frameworks.html  200
+/dna         /dna.html         200
+/services        /services.html  200
+/services/admin  /services.html  200
+/lunations       /lunations.html  200
+/calendar        /lunations       301
 
 # Crawler / AI discovery files, scoped to liminalvillage.com only
 # (this deploy also serves casaselva.earth, refactory.earth, regenerativa.earth)

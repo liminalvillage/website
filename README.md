@@ -19,7 +19,6 @@ A modern, responsive website for Liminal Village - an open source innovation eco
 │   │   ├── Hero.svelte
 │   │   ├── About.svelte
 │   │   ├── ThreePillars.svelte
-│   │   ├── InBetween.svelte
 │   │   ├── Village.svelte
 │   │   ├── Lunations.svelte
 │   │   ├── Contact.svelte
@@ -74,6 +73,54 @@ npm run preview
 - **Fast Loading** - Optimized images and code splitting
 - **Accessible** - Built with accessibility in mind
 - **SEO Friendly** - Proper meta tags and semantic HTML
+
+## 🌿 Services page (`/services`)
+
+Villagers and what they offer, with online booking (booking system ported
+from `maxage`).
+
+- **Who is listed**: members (`users` lens) of the Liminal Village holon,
+  read live from the Holosphere Nostr relays by `netlify/lib/holosphere.mjs`.
+- **Ikigai & LinkedIn**: collected by @HolonsBot's `/onboarding` journey
+  (steps *ikigai* and *linkedin*, editable later via *Change Profile*; the
+  page links straight in with `t.me/HolonsBot?start=onboarding`) and
+  stored in the member's public DNA — holon = their Telegram id, lens `dna`.
+  Category and values come from there too. Fallbacks: the same fields on
+  their `users`/`profile` records, then their `/apply` answers.
+- **Booking**: every villager can be booked. Stewards at `/services?admin`
+  set a session name and price and open times → visitors pick a slot. Without
+  open times (or when none fits) visitors send a **session request** (preferred
+  day + time of day) that the practitioner gets on Telegram and answers by
+  e-mail; requests also show in the admin. Data lives in Netlify Blobs
+  (store `services`).
+- **API**: `netlify/functions/services.mjs` (`/api/services/*`).
+
+Environment variables (Netlify → Project configuration):
+
+| Variable | Needed for |
+| --- | --- |
+| `SERVICES_ADMIN_PASSWORD`, `SERVICES_SESSION_SECRET` | steward area |
+| `TELEGRAM_BOT_TOKEN` | DM the practitioner on each booking/cancellation (HolonsBot's token) |
+| `TELEGRAM_CHAT_ID` | optional copy to a steward chat |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | confirmation e-mail with cancel link to the client |
+| `SERVICES_HOLON_ID`, `HOLOSPHERE_RELAYS` | optional overrides (default: Liminal Village, production relays) |
+
+Run locally with functions + Blobs: `npx netlify dev`.
+
+## 🌙 Lunations page (`/lunations`) and homepage timer
+
+- `/lunations` is a read-only copy of the kiosk's year calendar
+  (holons `apps/kiosk/src/lib/views/YearTimeline.svelte` → `src/calendar/`):
+  new/full moons, solstices, equinoxes and the village holon's dated quests
+  (`netlify/functions/calendar.mjs`, `/api/calendar`), plus the year's
+  numbered lunations.
+- The hero shows a live lunation timer (`src/lib/LunationTimer.svelte`):
+  which lunation we are in, its phase, and the countdown to the next full or
+  new moon, linking to `/lunations`.
+- Lunation numbers come from a port of `@holons/core/flows/lunation.ts`
+  (`src/calendar/lunation.js`) — the same count the bot's `/newmoon` uses.
+  `src/calendar/schedule.js` ports the reading side of `@holons/core/tasks`.
+  Keep both in step with holons.
 
 ## 📄 License
 

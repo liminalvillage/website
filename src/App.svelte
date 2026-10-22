@@ -3,7 +3,7 @@
   import Hero from './lib/Hero.svelte';
   import About from './lib/About.svelte';
   import ThreePillars from './lib/ThreePillars.svelte';
-  import InBetween from './lib/InBetween.svelte';
+  import Network from './lib/Network.svelte';
   import Village from './lib/Village.svelte';
   import Lunations from './lib/Lunations.svelte';
   import Contact from './lib/Contact.svelte';
@@ -18,10 +18,12 @@
     url: 'https://liminalvillage.com/',
     description: 'A co-living and co-creation eco-tech hub and intentional community in central Italy, inspired by the Resource-Based Economy and Game B, organised around lunar cycles.',
     address: { '@type': 'PostalAddress', addressRegion: 'Ascoli Piceno, Marche', addressCountry: 'IT' },
+    memberOf: { '@type': 'Organization', name: 'ReGenerativa', url: 'https://regenerativa.earth/' },
     sameAs: ['https://docs.liminalvillage.com/'],
     subjectOf: [
       { '@type': 'WebSite', name: 'Liminal Village Documentation', url: 'https://docs.liminalvillage.com/' },
       { '@type': 'CollectionPage', name: 'Readings & Media', url: 'https://liminalvillage.com/media' },
+      { '@type': 'AboutPage', name: 'Our DNA', url: 'https://liminalvillage.com/dna' },
       { '@type': 'CollectionPage', name: 'Frameworks', url: 'https://liminalvillage.com/frameworks' },
     ],
   });
@@ -39,7 +41,7 @@
   <Hero />
   <About />
   <ThreePillars />
-  <InBetween />
+  <Network />
   <Village />
   <Lunations />
   <Contact />

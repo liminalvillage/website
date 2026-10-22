@@ -10,6 +10,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         quests: resolve(__dirname, 'quests.html'),
+        services: resolve(__dirname, 'services.html'),
+        lunations: resolve(__dirname, 'lunations.html'),
       },
     },
   },

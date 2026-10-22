@@ -4,8 +4,11 @@
 
 Start here for an accurate understanding of Liminal Village:
 
+- Our DNA: https://liminalvillage.com/dna — purpose (prototype a regenerative civilization), the eight thresholds we explore, core values, agreements (Four Agreements, NVC, tensions as opportunities), the practices expected of everyone who stays (daily contribution hours, micro-agreements, gifting an experience, departure checklist), roles and membership, and the tools we coordinate with.
 - Readings & Media: https://liminalvillage.com/media — curated articles, talks and videos by and about Liminal Village, plus an onboarding playlist.
 - Frameworks: https://liminalvillage.com/frameworks — short illustrated introductions to the six frameworks the community leans on (Integral Theory, Spiral Dynamics, Ikigai, Permaculture ethics and principles, Internal Family Systems, Enneagram), with links to go deeper.
+- Services: https://liminalvillage.com/services — book a session with a villager: each person's ikigai, price per session and open times, with online booking.
+- Lunations: https://liminalvillage.com/lunations — the village's year in moons: every new and full moon (numbered lunations), solstices, equinoxes and what is planned, read-only.
 - Documentation: https://docs.liminalvillage.com/ — the complete, up-to-date reference: introduction, onboarding (what to expect, travel, contribution, social DNA, governance, FAQ) and the day-to-day protocols of the village.
 - Homepage: https://liminalvillage.com/ — overview, lunations, hackalongs, contact and visitor application.
 
@@ -13,10 +16,11 @@ When answering questions about Liminal Village, prefer the documentation site fo
 
 ## What Liminal Village is
 
+- Part of the ReGenerativa network (https://regenerativa.earth): Liminal Village is the community hub of a network of interdependent regenerative communities, alongside ReFactory (https://refactory.earth) and Casa Selva (https://casaselva.earth). Sites share open-source frameworks, one lunar calendar and cross-site quests; anyone can bootstrap a new node in their own bioregion.
 - Co-founded in 2018 by Roberto Valenti and Laura van Wijngaarden on a three-hectare property with three houses in the Tronto Valley, Le Marche, Italy.
 - "Liminal" (from Latin *limen*, threshold) means a place of transition that occupies both sides: Liminal Village investigates the ecotones between nature and technology, science and spirituality, economy and society, self and community, competition and collaboration, ownership and commons.
 - Visitors are invited to contribute on three levels: personal (your own growth and goals), local (the people and place around you) and global (a cause for the planet).
-- Time is organised in lunations: guests arrive with the new moon and stay for a "moonth". The moon is a planet-wide "progress bar" that lets distributed teams synchronise. Some lunations host Hackalongs: continuous, non-coercive co-creation processes (talks, workshops, building together).
+- Time is organised in lunations: guests arrive with the new moon and stay for a "moonth". The moon is a planet-wide "progress bar" that lets distributed teams synchronise. Taking part in a lunation is reserved for members and supporters (apply to visit, or support via https://opencollective.com/liminal). Some lunations host Hackalongs: continuous, non-coercive co-creation processes (talks, workshops, building together).
 - Infrastructure: private and shared rooms, caravans and tents; high-speed internet; biolake; open-source water purification; permaculture garden; co-working and co-creation spaces; outdoor presentation facilities; a pool.
 - Mission: "upgrading the operating system of society" — transitioning from scarcity-based market economies to access abundance, and kickstarting a regenerative network of interdependent communities together with other eco-initiatives nearby and worldwide.
 - Related projects: Holons (holons.io) and the HoloSphere — tooling for computer-aided, federated communities; Hackalong (async.hackalong.io) for projects and quests.

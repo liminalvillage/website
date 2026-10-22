@@ -33,6 +33,27 @@
         as a collective without any need for coercion, reward, punishment or manipulation.
       </p>
 
+      <div class="access">
+        <i class="fas fa-lock" aria-hidden="true"></i>
+        <div>
+          <h3>Reserved for members and supporters</h3>
+          <p>
+            Taking part in a lunation at the village is open to members and supporters of Liminal Village
+            and the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa network</a>.
+            Become a member by applying to visit and onboarding with the community, or become a supporter
+            by contributing to the village on Open Collective.
+          </p>
+          <div class="access-actions">
+            <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link" target="_blank" rel="noopener">Apply to visit</a>
+            <a class="btn ghost" href="https://opencollective.com/liminal" target="_blank" rel="noopener">Become a supporter</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="calendar-link">
+        <a href="/lunations">See this year's lunations — every new and full moon, and what is planned →</a>
+      </p>
+
       <div class="gallery">
         {#each lunationsImages as image}
           <div class="gallery-item">
@@ -65,6 +86,81 @@
 </section>
 
 <style>
+  .calendar-link a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .access {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid rgba(214, 161, 91, 0.35);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .access > i {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-top: 0.2rem;
+  }
+
+  .access h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #222;
+    margin-bottom: 0.5rem;
+  }
+
+  .access p {
+    text-align: left;
+    margin-bottom: 1.25rem;
+  }
+
+  .access p a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .access-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .access-actions .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    background: var(--primary-color);
+    color: #222;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .access-actions .btn.ghost {
+    background: transparent;
+    color: var(--primary-color);
+  }
+
+  .access-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(214, 161, 91, 0.25);
+  }
+
   .lunations {
     padding: 6rem 0;
     background: #faf8f5;
