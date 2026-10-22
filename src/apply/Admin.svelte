@@ -16,6 +16,16 @@
   let query = $state('');
   let msg = $state(null); // { kind, text }
   let busy = $state(false);
+  let note = $state('');
+  let author = $state(stored('lv-apply-author'));
+
+  function stored(key) {
+    try {
+      return localStorage.getItem(key) ?? '';
+    } catch {
+      return '';
+    }
+  }
 
   const byStatus = (s) => apps.filter((a) => s === 'all' || (a.status ?? 'new') === s);
   const shown = $derived(
@@ -80,6 +90,7 @@
 
   function select(id) {
     selectedId = id;
+    note = '';
     history.replaceState(null, '', id ? `/apply/admin?id=${encodeURIComponent(id)}` : '/apply/admin');
     if (id && window.innerWidth < 900) document.getElementById('detail')?.scrollIntoView({ behavior: 'smooth' });
   }
@@ -92,6 +103,49 @@
     } catch (e) {
       app.status = prev;
       flash('error', e.message);
+    }
+  }
+
+  async function addComment(e, app) {
+    e.preventDefault();
+    if (!note.trim()) return;
+    busy = true;
+    try {
+      const { comment } = await call('/comment', { id: app.id, text: note, author });
+      app.comments = [...(app.comments ?? []), comment];
+      note = '';
+      try {
+        localStorage.setItem('lv-apply-author', author);
+      } catch {}
+    } catch (err) {
+      flash('error', err.message);
+    } finally {
+      busy = false;
+    }
+  }
+
+  async function removeComment(app, c) {
+    if (!confirm('Delete this comment?')) return;
+    try {
+      await call('/delete-comment', { id: app.id, commentId: c.id });
+      app.comments = app.comments.filter((x) => x.id !== c.id);
+    } catch (err) {
+      flash('error', err.message);
+    }
+  }
+
+  const when = (at) => new Date(at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+  async function sync(app) {
+    busy = true;
+    try {
+      app.holons = (await call('/sync', { id: app.id })).holons;
+      flash('success', 'Saved to Holons.');
+    } catch (e) {
+      flash('error', e.message);
+      await load();
+    } finally {
+      busy = false;
     }
   }
 
@@ -204,6 +258,7 @@
               <span class="meta">
                 <span class="badge s-{a.status ?? 'new'}">{STATUS_LABELS[a.status ?? 'new']}</span>
                 <span class="muted">{stay(a)}</span>
+                {#if a.comments?.length}<span class="muted" title="Steward comments">💬 {a.comments.length}</span>{/if}
                 <span class="muted small">{applied(a.at)}</span>
               </span>
             </button>
@@ -225,6 +280,15 @@
             <button class="close" onclick={() => select('')} aria-label="Close">×</button>
           </header>
 
+          <p class="holons" class:ok={selected.holons?.syncedAt}>
+            {#if selected.holons?.syncedAt}
+              ✓ Sealed in the village holon’s <code>applications</code> lens
+            {:else}
+              Not in Holons yet{#if selected.holons?.error} — {selected.holons.error}{/if}
+              <button class="btn ghost small" onclick={() => sync(selected)} disabled={busy}>Retry</button>
+            {/if}
+          </p>
+
           <div class="statuses" role="radiogroup" aria-label="Status">
             {#each Object.entries(STATUS_LABELS) as [value, label]}
               <button role="radio" aria-checked={(selected.status ?? 'new') === value} class="badge s-{value}" class:on={(selected.status ?? 'new') === value} onclick={() => setStatus(selected, value)}>{label}</button>
@@ -245,6 +309,27 @@
               </section>
             {/if}
           {/each}
+
+          <section class="comments">
+            <h3 class="eyebrow">Steward comments</h3>
+            {#each selected.comments ?? [] as c (c.id)}
+              <div class="comment">
+                <p class="cmeta"><strong>{c.author || 'Steward'}</strong> · {when(c.at)}
+                  <button class="cdel" onclick={() => removeComment(selected, c)} aria-label="Delete comment">Delete</button>
+                </p>
+                <p class="ctext">{c.text}</p>
+              </div>
+            {:else}
+              <p class="muted small">No comments yet. Only stewards can see these.</p>
+            {/each}
+            <form class="cform" onsubmit={(e) => addComment(e, selected)}>
+              <textarea rows="3" placeholder="Add a note for the other stewards…" bind:value={note} aria-label="Comment"></textarea>
+              <div class="crow">
+                <input placeholder="Your name" bind:value={author} aria-label="Your name" />
+                <button class="btn small" disabled={busy || !note.trim()}>Add comment</button>
+              </div>
+            </form>
+          </section>
 
           <footer class="dfoot">
             <a class="btn small" href="mailto:{selected.email}?subject={encodeURIComponent('Your application to Liminal Village')}">Reply by e-mail</a>
@@ -314,6 +399,21 @@
   dl { display: grid; grid-template-columns: 170px 1fr; gap: 8px 16px; font-size: 14px; }
   dt { color: var(--muted); }
   dd { color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .holons { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--danger); margin-top: -8px; }
+  .holons.ok { color: var(--green); }
+  .holons code { font-size: 12px; background: var(--green-soft); padding: 1px 6px; border-radius: 6px; }
+  .comment { padding: 12px 14px; border-radius: 12px; background: #fffaf2; border: 1px solid var(--gold-soft); }
+  .cmeta { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
+  .cmeta strong { color: var(--ink); }
+  .cdel { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .cdel:hover { color: var(--danger); }
+  .ctext { font-size: 14px; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 4px; }
+  .cform { display: grid; gap: 8px; }
+  .cform textarea, .cform input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 14px; }
+  .cform textarea { resize: vertical; }
+  .cform textarea:focus, .cform input:focus { outline: none; border-color: var(--gold); }
+  .crow { display: flex; gap: 8px; }
+  .crow input { flex: 1; }
   .dfoot { display: flex; justify-content: space-between; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
 
   @media (max-width: 900px) {

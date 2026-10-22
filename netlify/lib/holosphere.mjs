@@ -172,7 +172,7 @@ export async function membersWithIkigai(holonId) {
       name: displayName(own.first_name ? own : u),
       username: /^[A-Za-z]\w{3,}$/.test(clean(u.username)) ? clean(u.username) : '',
       ikigai: pickText(profiles, 'ikigai', 'bio', 'about') || clean(answers.ikigai),
-      linkedin: linkedinUrl(...profiles.map((r) => r.linkedin ?? r.linkedIn ?? r.links ?? r.social_links), answers.social_links),
+      linkedin: linkedinUrl(...profiles.map((r) => r.linkedin ?? r.linkedIn ?? r.links ?? r.social_links), answers.linkedin, answers.social_links),
       role: clean(typeof role === 'object' ? role?.label ?? role?.value : role).replace(/_/g, ' '),
       category: pickText(profiles, 'category'),
       values: values.filter((v) => typeof v === 'string').slice(0, 5),

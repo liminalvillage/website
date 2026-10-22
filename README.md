@@ -102,6 +102,7 @@ Environment variables (Netlify → Project configuration):
 | `SERVICES_ADMIN_PASSWORD`, `SERVICES_SESSION_SECRET` | steward areas (`/services/admin`, `/apply/admin`) |
 | `TELEGRAM_BOT_TOKEN` | DM the practitioner on each booking/cancellation (HolonsBot's token) |
 | `TELEGRAM_CHAT_ID` | steward chat: copies of bookings, and every new application |
+| `HOLONS_BOT_URL`, `APPLICATIONS_TOKEN`, `HOLONS_BOT_USERNAME`, `APPLY_NOTIFY_EMAIL` | `/apply`: hand-off to HolonsBot (sealed `applications` lens); optional inbox copy |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | confirmation e-mail with cancel link to the client |
 | `SERVICES_HOLON_ID`, `HOLOSPHERE_RELAYS` | optional overrides (default: Liminal Village, production relays) |
 
@@ -117,9 +118,18 @@ Run locally with functions + Blobs: `npx netlify dev`.
   each application in Netlify Blobs (store `applications`), posts it to
   `TELEGRAM_CHAT_ID` and e-mails the applicant a copy (SMTP, as above).
   Set `APPLY_NOTIFY_EMAIL` to also receive applications by e-mail.
+- Each application is also handed to HolonsBot (`POST $HOLONS_BOT_URL/applications`,
+  bearer `APPLICATIONS_TOKEN`), which keeps it **sealed** in the Liminal Village
+  holon's `applications` lens, keyed like holons' `telegram-ui/data/booking.json`
+  (`toHolonsRecord` in `questions.js`). The website never writes to Nostr itself.
+- Applicants who tick "Show my ikigai and LinkedIn on my public profile" get a
+  one-time `t.me/HolonsBot?start=profile_<secret>` link (thank-you screen and
+  e-mail). Opening it copies those two answers into their DNA profile, which
+  `/services` reads. Set `HOLONS_BOT_USERNAME` if the bot is not @HolonsBot.
 - Stewards read them at `/apply/admin`: filter, mark New / Reviewing /
-  Accepted / Declined, reply, delete, export CSV. Same password and session as
-  the services admin (`netlify/lib/admin.mjs`).
+  Accepted / Declined, leave comments for each other, reply, delete, export CSV,
+  and retry the hand-off to Holons. Same password and session as the services
+  admin (`netlify/lib/admin.mjs`).
 
 ## 🌙 Lunations page (`/lunations`) and homepage timer
 

@@ -5,17 +5,26 @@
 //   GET  /api/apply/admin                 every application, newest first
 //   POST /api/apply/admin/status          { id, status }  new · reviewing · accepted · declined
 //   POST /api/apply/admin/delete          { id }
+//   POST /api/apply/admin/comment         { id, text, author }  steward note on an application
+//   POST /api/apply/admin/delete-comment  { id, commentId }
+//   POST /api/apply/admin/sync            { id }  retry handing it to HolonsBot
 //
 // Stored in Netlify Blobs (store "applications", key <ISO time>-<rand>), so
 // nothing is lost if a notification fails. Notifications reuse ../lib/notify.mjs:
 //   TELEGRAM_CHAT_ID           steward / group chat gets the full application
 //   APPLY_NOTIFY_EMAIL         optional inbox that also gets it by e-mail
 //   SMTP_* + MAIL_FROM         confirmation e-mail to the applicant
-import { randomBytes } from 'node:crypto';
+// and each application is handed to HolonsBot, which keeps it sealed in the
+// Liminal Village holon's `applications` lens (Holosphere writes stay in holons):
+//   HOLONS_BOT_URL             the bot's HTTP server, e.g. https://bot.example
+//   APPLICATIONS_TOKEN         shared secret for its POST /applications
+//   HOLONS_BOT_USERNAME        the bot applicants open to put their ikigai and
+//                              LinkedIn on their profile (default HolonsBot)
+import { randomBytes, randomUUID } from 'node:crypto';
 import { getStore } from '@netlify/blobs';
 import { sendMail, sendTelegram } from '../lib/notify.mjs';
 import { isAdmin, login, logout } from '../lib/admin.mjs';
-import { LABELS, SECTIONS, answer, missingFields } from '../../src/apply/questions.js';
+import { LABELS, SECTIONS, answer, missingFields, toHolonsRecord, wantsPublicProfile } from '../../src/apply/questions.js';
 
 const env = process.env;
 
@@ -48,6 +57,25 @@ function describe(a) {
   ).join('\n\n');
 }
 
+// Hand an application to HolonsBot. Never throws: the outcome is kept on the
+// stored copy ({ syncedAt } or { error, at }) and stewards can retry it.
+async function toHolons(app) {
+  if (!env.HOLONS_BOT_URL || !env.APPLICATIONS_TOKEN) return { error: 'HOLONS_BOT_URL / APPLICATIONS_TOKEN not set', at: new Date().toISOString() };
+  try {
+    const res = await fetch(`${env.HOLONS_BOT_URL.replace(/\/+$/, '')}/applications`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${env.APPLICATIONS_TOKEN}` },
+      body: JSON.stringify(toHolonsRecord(app, { id: app.id, at: app.at, profileClaim: app.profileClaim })),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 200)}`);
+    return { syncedAt: new Date().toISOString() };
+  } catch (e) {
+    console.error('[apply] holons sync failed:', e);
+    return { error: e.message, at: new Date().toISOString() };
+  }
+}
+
 async function safely(label, fn) {
   try {
     await fn();
@@ -75,6 +103,22 @@ async function admin(req, url, action) {
   if (action === 'status' && STATUSES.includes(body.status)) {
     await store().setJSON(id, { ...app, status: body.status });
     return json({ ok: true });
+  }
+  if (action === 'comment') {
+    const text = String(body.text ?? '').trim().slice(0, 4000);
+    if (!text) return fail('Write something first.');
+    const comment = { id: randomUUID(), at: new Date().toISOString(), author: String(body.author ?? '').trim().slice(0, 80), text };
+    await store().setJSON(id, { ...app, comments: [...(app.comments ?? []), comment] });
+    return json({ ok: true, comment });
+  }
+  if (action === 'delete-comment') {
+    await store().setJSON(id, { ...app, comments: (app.comments ?? []).filter((c) => c.id !== body.commentId) });
+    return json({ ok: true });
+  }
+  if (action === 'sync') {
+    const holons = await toHolons(app);
+    await store().setJSON(id, { ...app, holons });
+    return holons.error ? fail(`Holons didn't take it: ${holons.error}`, 502) : json({ ok: true, holons });
   }
   if (action === 'delete') {
     await store().delete(id);
@@ -106,11 +150,16 @@ export default async (req) => {
 
     const at = new Date().toISOString();
     const id = `${at}-${randomBytes(3).toString('hex')}`;
-    await store().setJSON(id, { id, at, status: 'new', ...a });
+    // Asked for a public profile: a one-time secret for their HolonsBot link
+    const profileClaim = wantsPublicProfile(a) ? randomBytes(12).toString('base64url') : undefined;
+    const profileLink = profileClaim && `https://t.me/${env.HOLONS_BOT_USERNAME || 'HolonsBot'}?start=profile_${profileClaim}`;
+    const record = { id, at, status: 'new', ...a, ...(profileClaim && { profileClaim }) };
+    await store().setJSON(id, record);
 
     const summary = describe(a);
     console.log(`[apply] New application ${id}\n${summary}`);
     await Promise.all([
+      safely('holons', async () => store().setJSON(id, { ...record, holons: await toHolons(record) })),
       safely('steward telegram', () => sendTelegram(env.TELEGRAM_CHAT_ID, `🌙 New community application\n\n${summary}`.slice(0, 4000))),
       safely('steward e-mail', () => sendMail(env.APPLY_NOTIFY_EMAIL, `New application — ${a.name}`, summary)),
       safely('applicant e-mail', () =>
@@ -127,12 +176,13 @@ export default async (req) => {
             '',
             summary,
             '',
+            ...(profileLink ? ['To put your ikigai and LinkedIn on your public profile, open this link in Telegram:', profileLink, ''] : []),
             'See you in the village 🌙',
           ].join('\n')
         )
       ),
     ]);
-    return json({ ok: true });
+    return json({ ok: true, ...(profileLink && { profileLink }) });
   } catch (e) {
     console.error('[apply]', e);
     return fail('Something went wrong on our side. Please try again in a moment.', 500);

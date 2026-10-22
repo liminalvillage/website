@@ -13,15 +13,16 @@
     missingFields,
     comesInPerson,
     hasSocials,
+    hasProfile,
   } from './questions.js';
 
   const VIDEO_ID = 'XdhPXocPf9g';
   const DRAFT_KEY = 'lv-apply-draft';
   const BLANK = {
     email: '', name: '', location: '', x: '', linkedin: '', website: '', age: '',
-    role: [], roleOther: '', intention: '', ikigai: '', background: '', community: '', wellbeing: '', referral: '',
+    role: [], roleOther: '', intention: '', ikigai: '', publicProfile: '', background: '', community: '', wellbeing: '', referral: '',
     visit: '', arrival: '', departure: '', transport: [], transportOther: '', licence: '', accommodation: '',
-    tasks: [], tasksOther: '', contribution: '', contributionOther: '', capacity: '', socials: '',
+    watched: '', tasks: [], tasksOther: '', contribution: '', contributionOther: '', capacity: '', socials: '',
   };
 
   // Four steps, four phases: the moon fills as the application does.
@@ -49,6 +50,8 @@
   let sending = $state(false);
   let sendError = $state('');
   let company = $state(''); // honeypot
+  let playing = $state(false); // the vision video in the Contribution step
+  let profileLink = $state(''); // HolonsBot link that puts ikigai + LinkedIn on their profile
   const hasDraft = Object.values(a).some((v) => (Array.isArray(v) ? v.length : v));
 
   const missing = $derived(missingFields(a));
@@ -118,6 +121,7 @@
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+      profileLink = data.profileLink ?? '';
       try {
         localStorage.removeItem(DRAFT_KEY);
       } catch {}
@@ -313,6 +317,14 @@
             {@render long('ikigai', 'Tell us something about yourself. What is your Ikigai?', {
               hint: 'What you love, what you’re good at, what the world needs — e.g. healer, leader, facilitator, coach, community organizer, performer, artist…',
             })}
+            {#if hasProfile(a)}
+              <div class="q" transition:slide={{ duration: 220 }}>
+                <button type="button" role="checkbox" aria-checked={a.publicProfile === 'Yes'} class="tile" class:sel={a.publicProfile === 'Yes'} onclick={() => (a.publicProfile = a.publicProfile === 'Yes' ? '' : 'Yes')}>
+                  <strong>Show my ikigai and LinkedIn on my public profile</strong>
+                  <span>So people can find and book you on <a href="/services" target="_blank" rel="noopener">liminalvillage.com/services</a>. Only these two — the rest of your application stays with the stewards. You’ll link it to your Telegram in one tap at the end.</span>
+                </button>
+              </div>
+            {/if}
             {@render long('background', 'Any background you would like to share with us?')}
           </div>
 
@@ -433,6 +445,28 @@
               nourish yourself, the community, the commons and the village projects, keeping needs and yields in balance
               across personal, local and global scales.
             </p>
+            <figure class="rewatch">
+              <div class="video inline">
+                {#if playing}
+                  <iframe
+                    src="https://www.youtube-nocookie.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
+                    title="Liminal Village — 2030 Vision"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                {:else}
+                  <button class="poster" onclick={() => ((playing = true), (a.watched = 'Yes, during the application'))} aria-label="Play the 2030 Vision video">
+                    <img src="https://i.ytimg.com/vi/{VIDEO_ID}/hqdefault.jpg" alt="" loading="lazy" />
+                    <span class="play" aria-hidden="true">▶</span>
+                  </button>
+                {/if}
+              </div>
+              <figcaption>
+                <strong>Watch the 2030 Vision again before you answer.</strong>
+                It shows the network you’d be contributing to — the roles and tasks below are how it comes to life.
+                {#if a.watched}<span class="chip">✓ Watched</span>{/if}
+              </figcaption>
+            </figure>
             <ul class="facts">
               <li><Moon lit={1} size={22} /><span><strong>Volunteers</strong> stay at least one lunation (1 month), offering 20 hours a week.</span></li>
               <li><span class="fico" aria-hidden="true">🤝</span><span><strong>Shorter stays</strong> are asked for a financial contribution.</span></li>
@@ -524,8 +558,15 @@
       Your application has been received. We review every application personally and will get back to you shortly
       at <strong>{a.email}</strong>.
     </p>
+    {#if profileLink}
+      <p class="lead">
+        One more tap puts your ikigai and LinkedIn on your public profile: open HolonsBot on Telegram and it’s done.
+        The link is in your e-mail too.
+      </p>
+    {/if}
     <div class="cta center">
-      <a class="btn gold" href="/">Back to liminalvillage.com</a>
+      {#if profileLink}<a class="btn gold" href={profileLink} target="_blank" rel="noopener noreferrer">Add to my profile on Telegram</a>{/if}
+      <a class="btn {profileLink ? 'ghost' : 'gold'}" href="/">Back to liminalvillage.com</a>
       <a class="btn ghost" href="/lunations">See the lunations</a>
     </div>
   </main>
@@ -651,6 +692,20 @@
 
   .stay { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; font-weight: 600; color: var(--ink); }
 
+  .video.inline { margin-top: 0; border-radius: 14px; box-shadow: var(--shadow); }
+  .rewatch { display: grid; gap: 12px; }
+  .rewatch figcaption { font-size: 14px; color: var(--muted); }
+  .rewatch figcaption strong { display: block; color: var(--ink); font-size: 15px; }
+  .rewatch .chip { margin-top: 8px; }
+  .poster { position: absolute; inset: 0; display: grid; place-items: center; }
+  .poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9) brightness(0.85); transition: filter 0.3s, transform 0.6s var(--ease); }
+  .poster:hover img { filter: none; transform: scale(1.02); }
+  .play {
+    position: relative; width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; padding-left: 5px;
+    background: rgba(255, 255, 255, 0.92); color: var(--gold-dark); font-size: 24px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s var(--ease);
+  }
+  .poster:hover .play { transform: scale(1.08); }
   .vision { background: linear-gradient(160deg, #fffaf2, #fff 60%); font-size: 15px; }
   .facts { list-style: none; display: grid; gap: 12px; }
   .facts li { display: flex; gap: 12px; align-items: flex-start; }
