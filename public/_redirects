@@ -11,6 +11,7 @@
 /calendar        /lunations       301
 /apply           /apply.html      200
 /apply/admin     /apply.html      200
+/costs           /costs.html      200
 
 # Crawler / AI discovery files, scoped to liminalvillage.com only
 # (this deploy also serves casaselva.earth, refactory.earth, regenerativa.earth)

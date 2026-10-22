@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Running Costs · Liminal Village</title>
+<!-- Hidden page: not linked from the site, not in the sitemap, kept out of search. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="description" content="Working estimate of the monthly and yearly running costs, reserves and reinvestment needs of Liminal Village (Upper House).">
+<link rel="icon" type="image/svg+xml" href="/vite.svg">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --text:#333; --primary:#D6A15B; --green:#4a9d5f; --sage:#7B9E6B; --slate:#6b7f99; --plum:#9a6b8c; --light:#EFEFEF; --warm:#faf8f5; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; --tint:rgba(214,161,91,.12); }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Open Sans",sans-serif;font-size:15px;color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;transition:color .3s;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+
+  header{border-bottom:1px solid var(--line);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;}
+  .brand{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:500;letter-spacing:2px;color:var(--dark);}
+  .back{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+  .back:hover{color:var(--primary);}
+
+  .intro{padding:64px 0 32px;text-align:center;}
+  .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--primary);}
+  .intro h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;letter-spacing:3px;color:var(--dark);line-height:1.1;margin-top:8px;}
+  .intro h1 span{color:var(--primary);}
+  .intro p{max-width:600px;margin:18px auto 0;color:var(--grey);letter-spacing:.3px;}
+
+  /* Headline figures */
+  .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:8px;}
+  .kpi{background:var(--warm);border-radius:14px;padding:24px 20px;text-align:center;}
+  .kpi .lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+  .kpi .val{font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:500;color:var(--dark);line-height:1.15;margin-top:4px;font-variant-numeric:lining-nums tabular-nums;}
+  .kpi .val small{font-family:"Open Sans",sans-serif;font-size:13px;color:var(--grey);font-weight:400;}
+  .kpi .note{font-size:12.5px;color:var(--grey);margin-top:6px;line-height:1.5;}
+
+  /* Composition bar */
+  .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:36px 0 12px;background:var(--light);}
+  .bar span{display:block;height:100%;}
+  .bar span + span{border-left:2px solid var(--bg);}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--grey);}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:0;}
+  .legend b{color:var(--dark);font-weight:600;margin-left:4px;font-variant-numeric:tabular-nums;}
+
+  section.block{padding:56px 0;border-top:1px solid var(--line);margin-top:56px;}
+  section.block + section.block{margin-top:0;}
+  .head{margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+  .head .num{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--primary);}
+  .head h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:34px;line-height:1.15;color:var(--dark);margin-top:4px;}
+  .head p{max-width:620px;color:#555;margin-top:8px;font-size:14px;}
+  .head .sum{text-align:right;font-variant-numeric:tabular-nums;}
+  .head .sum b{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:500;color:var(--dark);}
+  .head .sum div{font-size:12.5px;color:var(--grey);}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);font-weight:600;text-align:left;padding:0 12px 10px 0;border-bottom:1px solid var(--line);}
+  td{padding:14px 12px 14px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+  th.n, td.n{text-align:right;padding-right:0;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  td.item b{font-weight:600;color:var(--dark);display:block;}
+  td.item span{color:var(--grey);font-size:13px;display:block;margin-top:2px;line-height:1.55;}
+  td.cat{white-space:nowrap;color:var(--grey);font-size:12px;letter-spacing:1px;text-transform:uppercase;padding-top:17px;}
+  td.n.tbd{color:var(--grey);font-style:italic;}
+  tr.total td{border-bottom:none;font-weight:600;color:var(--dark);padding-top:16px;}
+  tr.total td.n{font-family:"Cormorant Garamond",serif;font-size:20px;}
+
+  .callout{background:var(--warm);border-left:3px solid var(--primary);border-radius:0 10px 10px 0;padding:16px 20px;font-size:14px;color:#555;margin-bottom:24px;}
+  .callout b{color:var(--dark);}
+
+  .todo{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+  .todo li{border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;gap:14px;font-size:14px;line-height:1.55;}
+  .todo .ic{width:36px;height:36px;flex:none;border-radius:50%;background:var(--tint);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;}
+
+  .source{font-size:13px;color:var(--grey);line-height:1.6;padding:40px 0 64px;border-top:1px solid var(--line);}
+
+  footer{background:var(--dark);color:#fff;padding:32px 0;text-align:center;font-size:12px;letter-spacing:1.5px;}
+  footer a{color:var(--primary);}
+
+  @media (max-width:720px){
+    .wrap{padding:0 16px;}
+    .intro{padding:44px 0 24px;}
+    .intro h1{font-size:36px;}
+    .kpis{grid-template-columns:1fr;}
+    .todo{grid-template-columns:1fr;}
+    td.cat, th.cat{display:none;}
+    .head .sum{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/" class="brand">Liminal Village</a>
+    <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to site</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <div class="eyebrow">Upper House · 2025–2026 working estimate</div>
+    <h1>Running <span>Costs</span></h1>
+    <p>What it takes each month to keep Liminal Village running: utilities, taxes, insurance, the electric van, and the reserves that maintain and renew the house and grounds.</p>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="lbl">Monthly baseline</div>
+      <div class="val" id="kpi-month"></div>
+      <div class="note">Including Regenerativa admin costs</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Annual baseline</div>
+      <div class="val" id="kpi-year"></div>
+      <div class="note">Monthly baseline × 12</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Tax treatment assumed</div>
+      <div class="note" style="margin-top:10px;font-size:13.5px;color:var(--text)">Privately owned second home, owned by Laura and used by the association Regenerativa.</div>
+    </div>
+  </div>
+
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div class="legend" id="legend"></div>
+
+  <div id="blocks"></div>
+
+  <section class="block">
+    <div class="head">
+      <div>
+        <div class="num">Totals</div>
+        <h2>Baseline planning figure</h2>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Block</th><th class="n">Monthly</th><th class="n">Annual</th></tr></thead>
+      <tbody id="totals"></tbody>
+    </table>
+  </section>
+
+  <section class="block">
+    <div class="head">
+      <div>
+        <div class="num">Not yet included</div>
+        <h2>Still to add or track separately</h2>
+        <p>Costs that aren't in the figures above yet. Some could become their own reserve lines.</p>
+      </div>
+    </div>
+    <ul class="todo">
+      <li><span class="ic"><i class="fa-solid fa-shirt"></i></span>Hospitality-related laundry, guest linen turnover, and extra wear from short stays or events.</li>
+      <li><span class="ic"><i class="fa-solid fa-fire-extinguisher"></i></span>Fire safety equipment, extinguishers, alarms, first-aid supplies, and periodic checks.</li>
+      <li><span class="ic"><i class="fa-solid fa-cloud-showers-heavy"></i></span>Drains, pumps, gutters, and stormwater maintenance beyond the septic reserve.</li>
+      <li><span class="ic"><i class="fa-solid fa-tree"></i></span>Tree pruning, hedge cutting, pest control, and seasonal gardening peaks beyond the monthly reserve.</li>
+      <li><span class="ic"><i class="fa-solid fa-scale-balanced"></i></span>Legal and compliance costs for contracts, safety, hospitality rules, and occasional professional advice.</li>
+      <li><span class="ic"><i class="fa-solid fa-house-crack"></i></span>Contingency reserve for storm damage, water leaks, fallen trees, urgent appliance failure, or unexpected structural repairs.</li>
+    </ul>
+  </section>
+
+  <div class="source">
+    Prepared by Laura on 12 March 2026, with help from ChatGPT, to give more clarity on the yearly and monthly running costs of Liminal Village. The work started when the NAO collective, gathering at Liminal Village, asked about running costs to help shape agreements between Liminal Village and the NAO. The maintenance and reinvestment reserves are AI-generated estimates and are meant to be refined over time.
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year"></span> Liminal Village &nbsp;·&nbsp; <a href="/">liminalvillage.com</a></div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// One entry per block; totals are summed from the items. `eur: null` = not yet estimated.
+const BLOCKS = [
+  {
+    key: 'running', color: 'var(--primary)', num: '01', title: 'Monthly running costs', short: 'Running costs, taxes & insurance',
+    items: [
+      { cat: 'Utilities', item: 'Electricity & gas canisters', eur: 330, note: 'General household use. Charging the electric van is assumed to be included here.' },
+      { cat: 'Utilities', item: 'Water', eur: 135, note: 'Water used by the Upper House, plus half of the pool’s water (shared with the Lower House).' },
+      { cat: 'Utilities', item: 'Internet', eur: 25, note: '€50/month, shared with the Lower House.' },
+      { cat: 'Cleaning', item: 'Cleaning', eur: null, note: 'Depends on how much cleaning is needed and whether guests clean up after themselves.' },
+      { cat: 'Taxes', item: 'TARI', eur: 42, note: 'Municipal waste tax.' },
+      { cat: 'Taxes', item: 'IMU', eur: 223, note: 'Municipal property tax.' },
+      { cat: 'Insurance', item: 'House insurance', eur: 30 },
+    ],
+  },
+  {
+    key: 'van', color: 'var(--slate)', num: '02', title: 'Nissan electric van', short: 'Electric van', sub: 'Excluding electricity, which sits in the running costs.',
+    items: [
+      { cat: 'Mobility', item: 'Replacement reserve', eur: 125, note: 'Assumes a vehicle value of about €12,000 over an 8-year replacement cycle.' },
+      { cat: 'Mobility', item: 'Maintenance and tyres', eur: 60, note: 'Basic servicing, tyres, consumables, and minor repairs.' },
+      { cat: 'Insurance', item: 'Insurance and road assistance', eur: 42, note: 'Including vehicle registration.' },
+    ],
+  },
+  {
+    key: 'reserves', color: 'var(--green)', num: '03', title: 'Maintenance, wear & reinvestment reserves', short: 'Maintenance & reinvestment reserves', sub: 'AI-generated estimates.',
+    items: [
+      { cat: 'Building & grounds', item: 'Routine property maintenance', eur: 633, note: 'Main house, Pagoda, outside kitchen, tiny house, stone walls, caravans, etc.' },
+      { cat: 'Inside the house', item: 'Household wear-and-tear reserve', eur: 220, note: 'For 2 kitchens, 2 bathrooms and 6 bedrooms: towels, linen, pillows, blankets, mattresses, kitchenware, toilet paper, bedroom and bathroom supplies, printer and paper, household consumables, cleaning products.' },
+      { cat: 'Inside the house', item: 'Interior repairs and small replacements', eur: 130, note: 'Mosquito nets, windows, lamps, light bulbs, sockets, small fixtures, shelves; appliances (oven, fridge, washing machine…), furniture touch-ups and breakages.' },
+      { cat: 'Technical systems', item: 'Plumber, electrician, and small urgent repairs', eur: 150, note: 'Reserve for occasional technical work.' },
+      { cat: 'Energy', item: 'Energy infrastructure', eur: 210, note: 'Hemp insulation, solar panels, battery, car charging station, controls. A weighted reinvestment reserve across long-life systems.' },
+      { cat: 'Outside', item: 'Garden and outside infrastructure', eur: 370, note: 'Pool, ponds, paths, fencing, garden walls, water tanks, greenhouse, outdoor taps, irrigation, tools, drainage, and general grounds upkeep.' },
+      { cat: 'Outside', item: 'Chicken coop', eur: 50, note: 'About €20/month of feed, plus a reserve for fencing, repairs, feeders, small replacements, and replacing chickens if needed.' },
+      { cat: 'Outside', item: 'Septic tank maintenance', eur: 6, note: '€80/year set aside monthly for emptying and maintenance.' },
+    ],
+  },
+  {
+    key: 'regenerativa', color: 'var(--plum)', num: '04', title: 'Association costs (Regenerativa)', short: 'Regenerativa admin',
+    callout: '<b>For now these fall on Liminal Village.</b> Ideally they are paid by Regenerativa from the 5% admin fee that members pay to Liminal Village. Insurance for members will be covered by Regenerativa and paid from the membership fee.',
+    items: [
+      { cat: 'Admin', item: 'Accountant / bookkeeping', eur: 150, note: 'For the association.' },
+      { cat: 'Admin', item: 'Bank, software, admin misc.', eur: 30, note: 'Bank fees, PEC, cloud tools, and small admin costs.' },
+      { cat: 'Insurance', item: 'Association insurance', eur: 35 },
+    ],
+  },
+];
+
+const fmt = n => '€' + n.toLocaleString('en-GB');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const sum = items => items.reduce((t, i) => t + (i.eur || 0), 0);
+
+for (const b of BLOCKS) b.total = sum(b.items);
+const grand = BLOCKS.reduce((t, b) => t + b.total, 0);
+const upper = BLOCKS.filter(b => b.key !== 'regenerativa').reduce((t, b) => t + b.total, 0);
+
+document.getElementById('kpi-month').innerHTML = fmt(grand) + ' <small>/ month</small>';
+document.getElementById('kpi-year').innerHTML = fmt(grand * 12) + ' <small>/ year</small>';
+
+document.getElementById('bar').innerHTML = BLOCKS.map(b =>
+  `<span style="width:${(b.total / grand * 100).toFixed(2)}%;background:${b.color}" title="${esc(b.short)}: ${fmt(b.total)}"></span>`).join('');
+document.getElementById('legend').innerHTML = BLOCKS.map(b =>
+  `<span><i style="background:${b.color}"></i>${esc(b.short)}<b>${fmt(b.total)}</b></span>`).join('');
+
+document.getElementById('blocks').innerHTML = BLOCKS.map(b => `
+  <section class="block">
+    <div class="head">
+      <div>
+        <div class="num">${b.num}</div>
+        <h2>${esc(b.title)}</h2>
+        ${b.sub ? `<p>${esc(b.sub)}</p>` : ''}
+      </div>
+      <div class="sum"><b>${fmt(b.total)}</b><div>per month · ${fmt(b.total * 12)} per year</div></div>
+    </div>
+    ${b.callout ? `<div class="callout">${b.callout}</div>` : ''}
+    <table>
+      <thead><tr><th class="cat">Category</th><th>Item</th><th class="n">Monthly</th></tr></thead>
+      <tbody>
+        ${b.items.map(i => `<tr>
+          <td class="cat">${esc(i.cat)}</td>
+          <td class="item"><b>${esc(i.item)}</b>${i.note ? `<span>${esc(i.note)}</span>` : ''}</td>
+          ${i.eur == null ? '<td class="n tbd">to be defined</td>' : `<td class="n">${fmt(i.eur)}</td>`}
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </section>`).join('');
+
+const row = (label, m, cls = '') => `<tr class="${cls}"><td>${label}</td><td class="n">${fmt(m)}</td><td class="n">${fmt(m * 12)}</td></tr>`;
+document.getElementById('totals').innerHTML =
+  BLOCKS.filter(b => b.key !== 'regenerativa').map(b => row(esc(b.short), b.total)).join('') +
+  row('<b>Upper House subtotal</b>', upper) +
+  row(esc(BLOCKS.find(b => b.key === 'regenerativa').short), BLOCKS.find(b => b.key === 'regenerativa').total) +
+  row('Total baseline', grand, 'total');
+</script>
+</body>
+</html>
