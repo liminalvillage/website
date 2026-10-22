@@ -23,7 +23,7 @@ function describe(b, practitioner) {
     .join('\n');
 }
 
-async function sendMail(to, subject, text) {
+export async function sendMail(to, subject, text) {
   if (!env.SMTP_HOST || !to) return;
   const port = Number(env.SMTP_PORT ?? 587);
   const transport = nodemailer.createTransport({
@@ -35,7 +35,7 @@ async function sendMail(to, subject, text) {
   await transport.sendMail({ from: env.MAIL_FROM || 'Liminal Village <no-reply@liminalvillage.com>', to, subject, text });
 }
 
-async function sendTelegram(chatId, text) {
+export async function sendTelegram(chatId, text) {
   const token = env.TELEGRAM_BOT_TOKEN;
   if (!token || !chatId) return;
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

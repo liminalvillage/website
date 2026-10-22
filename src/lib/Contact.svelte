@@ -23,9 +23,7 @@
           <h4>Info / Visits / Stays / Volunteers</h4>
           <p>
             <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener"
+              href="/apply"
             >
               Fill in this form
             </a>

@@ -38,10 +38,8 @@
   <div class="cta-content">
     <h2>Would you like to visit us?</h2>
     <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link"
+      href="/apply"
       class="btn"
-      target="_blank"
-      rel="noopener"
     >
       Apply Here
     </a>

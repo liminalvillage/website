@@ -113,7 +113,7 @@
     <p class="access">
       <strong>Reserved for members and supporters.</strong> Taking part in a lunation is open to members and
       supporters of Liminal Village, a node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa network</a>.
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpjW-YzSfUMNdsRZ9DlC70JqSYXCu4JZsPs6mHIjktxJ6tYA/viewform?usp=sf_link" target="_blank" rel="noopener">Apply to visit</a>
+      <a href="/apply">Apply to visit</a>
       or <a href="https://opencollective.com/liminal" target="_blank" rel="noopener">become a supporter</a>.
     </p>
   </div>

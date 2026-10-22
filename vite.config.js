@@ -12,6 +12,7 @@ export default defineConfig({
         quests: resolve(__dirname, 'quests.html'),
         services: resolve(__dirname, 'services.html'),
         lunations: resolve(__dirname, 'lunations.html'),
+        apply: resolve(__dirname, 'apply.html'),
       },
     },
   },
