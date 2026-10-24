@@ -7,9 +7,7 @@
 // descriptions. Which quests count (tasks and events, not marketplace items;
 // not cancelled or deleted; dated) mirrors @holons/core/tasks; the page
 // expands schedules and recurrences in the visitor's local time.
-import { readLenses } from '../lib/holosphere.mjs';
-
-const HOLON_ID = process.env.SERVICES_HOLON_ID || '-1003864542239';
+import { VILLAGE_HOLON as HOLON_ID, readLenses } from '../lib/holosphere.mjs';
 const TASK_TYPES = ['', 'task', 'quest', 'todo', 'recurring'];
 const EVENT_TYPES = ['event', 'meeting', 'appointment'];
 const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location'];

@@ -238,17 +238,18 @@
           </div>
 
           <div class="card">
-            <h3 class="display">Session requests</h3>
+            <h3 class="display">Requests</h3>
             {#if !data.requests?.length}
               <p class="muted small">No requests. Visitors can ask for a time when nothing open fits.</p>
             {:else}
               <ul class="requests">
                 {#each data.requests as r (r.id)}
                   <li>
-                    <span class="t">{r.preferred ? formatShortDate(r.preferred) : 'Any day'}{r.timeOfDay ? ` · ${r.timeOfDay}` : ''}</span>
+                    <span class="t">{#if r.kind === 'offer'}🎁 {r.offer}{:else}{r.preferred ? formatShortDate(r.preferred) : 'Any day'}{r.timeOfDay ? ` · ${r.timeOfDay}` : ''}{/if}</span>
                     <span class="who">
                       <strong>{r.name}</strong>
                       <a class="muted" href="mailto:{r.email}">{r.email}{r.phone ? ` · ${r.phone}` : ''}</a>
+                      {#if r.telegram}<a class="muted" href="https://t.me/{r.telegram}" target="_blank" rel="noopener noreferrer">@{r.telegram}</a>{/if}
                       {#if r.note}<em class="muted">{r.note}</em>{/if}
                     </span>
                     <button class="btn ghost small" disabled={busy} onclick={() => act(() => api.admin.deleteRequest(p, r.id), 'Request cleared.')}>Done</button>

@@ -114,3 +114,38 @@ export async function notifyRequest(r, practitioner) {
     ),
   ]);
 }
+
+/**
+ * Someone asked for one of a villager's /offers. The villager gets it as a
+ * Telegram DM from HolonsBot (with a t.me link when the asker gave their
+ * handle, so they can reply directly); the asker gets a copy by e-mail.
+ * Answers whether the DM went through — it fails when the villager never
+ * started the bot.
+ */
+export async function notifyOfferRequest(r, practitioner) {
+  const summary = [
+    `“${r.offer}”`,
+    `From: ${r.name}`,
+    `E-mail: ${r.email}`,
+    r.telegram ? `Telegram: @${r.telegram} — https://t.me/${r.telegram}` : null,
+    r.note ? `Message: ${r.note}` : null,
+  ]
+    .filter(Boolean)
+    .join('\n');
+  console.log(`[services] Offer request for ${practitioner}\n${summary}`);
+  let delivered = false;
+  await Promise.all([
+    safely('practitioner telegram', async () => {
+      await sendTelegram(r.p, `🎁 Someone would like your offer\n\n${summary}\n\nReply to them ${r.telegram ? 'on Telegram or ' : ''}by e-mail.`);
+      delivered = !!env.TELEGRAM_BOT_TOKEN;
+    }),
+    safely('client e-mail', () =>
+      sendMail(
+        r.email,
+        `Your request to ${practitioner}`,
+        [`Hi ${r.name},`, '', `we passed your request on to ${practitioner}:`, '', summary, '', `They'll get back to you directly.`, '', 'See you in the village 🌙'].join('\n')
+      )
+    ),
+  ]);
+  return delivered;
+}

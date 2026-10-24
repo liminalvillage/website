@@ -1,11 +1,12 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
+  import { onDestroy } from 'svelte';
+  import { BOT_USERNAME, PORTAL_HOLONS, portalFor } from '../config/holons.js';
 
   // Preset configs, selected at runtime from window.location.hostname
   // so a single built Quests page adapts to whichever domain serves it.
   const SITES = {
     casaselva: {
-      holonId: '-1002964866719',
+      holonId: PORTAL_HOLONS.casaselva,
       brandName: 'Casa Selva',
       homeHref: '/',
       tagline: 'Casa Selva — living quests for inner work, stewardship, and regeneration',
@@ -17,7 +18,7 @@
       openCollectiveSlug: 'casaselva',
     },
     refactory: {
-      holonId: '-1003943146280',
+      holonId: PORTAL_HOLONS.refactory,
       brandName: 'ReFactory',
       homeHref: '/',
       tagline: 'ReFactory — co-creation quests for symbiotic innovation and collaborative making',
@@ -29,7 +30,7 @@
       openCollectiveSlug: 'refactory',
     },
     liminal: {
-      holonId: '-1003864542239',
+      holonId: PORTAL_HOLONS.liminal,
       brandName: 'Liminal Village',
       homeHref: '/',
       tagline: 'Liminal Village — ongoing actions funded through collaborative effort',
@@ -41,9 +42,9 @@
       openCollectiveSlug: 'liminal',
     },
     regenerativa: {
-      // holonId left empty until the operator wires up the regenerativa Telegram
-      // holon. Quests will not load on this portal until set.
-      holonId: '',
+      // Empty in PORTAL_HOLONS until the regenerativa Telegram holon is wired
+      // up; quests will not load on this portal until set.
+      holonId: PORTAL_HOLONS.regenerativa,
       brandName: 'ReGenerativa',
       homeHref: '/',
       tagline: 'ReGenerativa — quests building the foundations for an ecological civilization',
@@ -58,11 +59,7 @@
 
   function detectSite() {
     if (typeof window === 'undefined') return SITES.liminal;
-    const host = window.location.hostname.toLowerCase();
-    if (host.includes('casaselva')) return SITES.casaselva;
-    if (host.includes('refactory') || host.includes('brickfactory')) return SITES.refactory;
-    if (host.includes('regenerativa')) return SITES.regenerativa;
-    return SITES.liminal;
+    return SITES[portalFor(window.location.hostname)];
   }
 
   const detected = detectSite();
@@ -83,7 +80,11 @@
 
   const HOLON_ID = holonId;
   const OC_PARENT_SLUG = openCollectiveSlug;
-  const APP_NAME = 'Holons';
+  // Quests come from netlify/functions/quests.mjs, which reads Holosphere v2
+  // straight from the relays and serves the pictures. No live subscription:
+  // the board refreshes on this interval while it is open.
+  const QUESTS_API = '/api/quests';
+  const REFRESH_MS = 30_000;
 
   if (typeof document !== 'undefined') {
     document.title = `Quests – ${brandName}`;
@@ -103,37 +104,23 @@
     scheduled: 'Scheduled', active: 'Active',
   };
 
-  const TELEGRAM_BOT = 'HolonsBot';
-
-  function imageServerBase() {
-    if (typeof window === 'undefined') return 'https://telegram.holons.io';
-    const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:8080';
-    return 'https://telegram.holons.io';
-  }
-  const IMAGE_SERVER = imageServerBase();
-
-  function resolveImage(src) {
-    if (!src) return '';
-    if (/^(https?:|data:|\/)/i.test(src)) return src;
-    return `${IMAGE_SERVER}/getimage?file_id=${encodeURIComponent(src)}`;
-  }
+  const TELEGRAM_BOT = BOT_USERNAME;
 
   let showBoard = $state(false);
   let quests = $state([]);
   let selectedQuestId = $state(null);
   let loading = $state(false);
   let openedInTelegram = $state(new Set());
-  let holosphere = null;
-  let subscription = null;
+  let refreshTimer = null;
 
   // Sponsor (Open Collective) state, keyed by quest id.
   let sponsoringId = $state(null);
   let sponsorError = $state('');
   let sponsorStats = $state({}); // { [ocSlug]: { total, currency, backers: [...], backersCount } }
+  let sponsoredSlugs = {}; // { [questId]: ocSlug } created this visit, kept across refreshes
 
-  // Federation toggle: when on, also pull quests from inbound-federated holons
-  // via holosphere.getFederated(). Persisted per-holon in localStorage so the
+  // Federation toggle: when on, also list quests federated in from partner
+  // holons (the API's `federated=1`). Persisted per-holon in localStorage so the
   // choice sticks across reloads.
   const FEDERATION_LS_KEY = `quests:federated:${HOLON_ID}`;
   let showFederated = $state(
@@ -203,11 +190,11 @@
       title: raw.title || 'Untitled Quest',
       icon: raw.icon || typeStyle.icon,
       color: raw.color || typeStyle.color,
-      image: resolveImage(raw.image || raw.picture || ''),
+      image: raw.image || '',
       shortDesc: raw.shortDesc || raw.description || '',
       fullDesc: raw.fullDesc || raw.description || '',
       skills: parseArray(raw.skills),
-      duration: raw.duration || raw.when || '',
+      duration: raw.duration || formatWhen(raw.when),
       tools: raw.tools || '',
       exchange: raw.exchange || '',
       type: raw.type || 'any',
@@ -224,17 +211,23 @@
       until: raw.until || '',
       initiator: raw.initiator,
       where: raw.where,
-      openCollectiveSlug: raw.openCollectiveSlug || '',
-      // _federation is stamped by holosphere.getFederated on items pulled from
-      // partner spaces; local items have it absent.
+      openCollectiveSlug: raw.openCollectiveSlug || sponsoredSlugs[raw.id] || '',
+      // _federation is stamped on items federated in from partner holons;
+      // local items have it absent.
       federation: raw._federation
         ? {
             origin: raw._federation.origin,
             originName: raw._federation.originName || raw._federation.origin,
           }
         : null,
-      _raw: raw,
     };
+  }
+
+  function formatWhen(when) {
+    if (!when) return '';
+    const d = new Date(when);
+    if (Number.isNaN(d.getTime())) return String(when);
+    return d.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   }
 
   function getInfoItems(q) {
@@ -259,78 +252,33 @@
       .map(p => typeof p === 'string' ? p : (p.name || [p.first_name, p.last_name].filter(Boolean).join(' ')));
   }
 
-  // Pulls the full quest set, either from this holon only or merged across the
-  // federation. Returns an array of normalized quests filtered to active ones.
+  // Pulls the holon's active quests, with or without the federated ones.
   async function fetchQuests({ federated }) {
-    if (federated) {
-      const items = await holosphere.getFederated(HOLON_ID, 'quests', { idField: 'id' });
-      return (items || [])
-        .filter(q => q && q.title && q.status !== 'cancelled' && q.status !== 'completed')
-        .map(normalizeQuest);
-    }
+    const params = new URLSearchParams({ holon: HOLON_ID });
+    if (federated) params.set('federated', '1');
+    const res = await fetch(`${QUESTS_API}?${params}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+    return (data.quests || []).map(normalizeQuest);
+  }
 
-    const lensPath = APP_NAME + '/' + HOLON_ID + '/quests';
-    const allKeys = await new Promise(resolve => {
-      holosphere.gun.get(lensPath).once(data => {
-        if (data) resolve(Object.keys(data).filter(k => k !== '_' && k !== '#'));
-        else resolve([]);
-      });
-      setTimeout(() => resolve([]), 5000);
-    });
-    const results = await Promise.all(
-      allKeys.map(key => holosphere.get(HOLON_ID, 'quests', key).catch(() => null))
-    );
-    return results
-      .filter(q => q && q.title && q.status !== 'cancelled' && q.status !== 'completed')
-      .map(normalizeQuest);
+  async function refresh() {
+    try {
+      quests = await fetchQuests({ federated: showFederated });
+    } catch (err) {
+      console.error('Failed to load quests:', err);
+    }
   }
 
   async function enterBoard() {
     showBoard = true;
+    if (!HOLON_ID) return;
     loading = true;
-
-    try {
-      holosphere = new HoloSphere(APP_NAME);
-      await new Promise(r => setTimeout(r, 2500));
-
-      quests = await fetchQuests({ federated: showFederated });
-
-      // Subscribe for live updates on the local holon. Federated items refresh
-      // on toggle / reload — we don't open a federation-wide subscription here.
-      let updateTimer = null;
-      const pendingUpdates = new Map();
-
-      subscription = await holosphere.subscribe(HOLON_ID, 'quests', (data, key) => {
-        if (!data || !key || key === '_' || key === '#') return;
-        pendingUpdates.set(key, true);
-        clearTimeout(updateTimer);
-        updateTimer = setTimeout(async () => {
-          for (const k of pendingUpdates.keys()) {
-            try {
-              const fullQuest = await holosphere.get(HOLON_ID, 'quests', k);
-              if (!fullQuest || !fullQuest.title) continue;
-              if (fullQuest.status === 'cancelled' || fullQuest.status === 'completed') {
-                quests = quests.filter(q => String(q.id) !== String(k));
-                continue;
-              }
-              const normalized = normalizeQuest(fullQuest);
-              const idx = quests.findIndex(q => String(q.id) === String(normalized.id));
-              if (idx !== -1) {
-                quests[idx] = normalized;
-                quests = quests; // trigger reactivity
-              } else {
-                quests = [...quests, normalized];
-              }
-            } catch {}
-          }
-          pendingUpdates.clear();
-        }, 2000); // debounce 2s
-      });
-    } catch (err) {
-      console.error('Failed to load from Holosphere:', err);
-    }
-
+    await refresh();
     loading = false;
+    refreshTimer = setInterval(() => {
+      if (!document.hidden && !reloadingFederation) refresh();
+    }, REFRESH_MS);
   }
 
   async function toggleFederation() {
@@ -339,15 +287,10 @@
     try {
       localStorage.setItem(FEDERATION_LS_KEY, showFederated ? '1' : '0');
     } catch {}
-    if (!holosphere) return;
+    if (!showBoard) return;
     reloadingFederation = true;
-    try {
-      quests = await fetchQuests({ federated: showFederated });
-    } catch (err) {
-      console.error('Failed to reload quests:', err);
-    } finally {
-      reloadingFederation = false;
-    }
+    await refresh();
+    reloadingFederation = false;
   }
 
   function askQuestion(id) {
@@ -368,8 +311,9 @@
   }
 
   // ── Open Collective sponsorship ──
-  // Lazy-create an OC Project on first sponsor click, then write the slug back
-  // into Holosphere so subsequent loads skip the function and link directly.
+  // Lazy-create an OC Project on first sponsor click. The function is
+  // idempotent (the slug derives from the quest id), so later clicks simply
+  // get the same project back.
   async function sponsorQuest(q) {
     if (!OC_PARENT_SLUG || sponsoringId) return;
     sponsorError = '';
@@ -398,15 +342,8 @@
         return;
       }
 
-      // Persist slug to the live quest record so other clients pick it up.
-      try {
-        const merged = { ...(q._raw || {}), id: q.id, openCollectiveSlug: data.slug };
-        await holosphere.put(HOLON_ID, 'quests', merged);
-      } catch (err) {
-        console.warn('Failed to persist openCollectiveSlug to Holosphere', err);
-      }
-
-      // Optimistically reflect locally too.
+      // Reflect it locally until the record carries the slug itself.
+      sponsoredSlugs[q.id] = data.slug;
       const idx = quests.findIndex(x => String(x.id) === String(q.id));
       if (idx !== -1) {
         quests[idx] = { ...quests[idx], openCollectiveSlug: data.slug };
@@ -471,10 +408,7 @@
     if (q?.openCollectiveSlug) loadSponsorStats(q.openCollectiveSlug);
   });
 
-  onDestroy(() => {
-    if (subscription?.unsubscribe) subscription.unsubscribe();
-    if (holosphere?.close) holosphere.close();
-  });
+  onDestroy(() => clearInterval(refreshTimer));
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -544,6 +478,8 @@
 
   {#if loading}
     <p class="loading-msg">Loading quests from Holosphere...</p>
+  {:else if !HOLON_ID}
+    <p class="loading-msg">Quests for {brandName} aren't connected yet.</p>
   {:else if quests.length === 0}
     <p class="loading-msg">No active quests found.</p>
   {:else}

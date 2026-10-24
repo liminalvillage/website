@@ -1,4 +1,5 @@
 // Thin client for netlify/functions/services.mjs.
+import { DASHBOARD } from '../config/holons.js';
 
 async function call(path, { method = 'GET', body } = {}) {
   const res = await fetch(`/api/services${path}`, {
@@ -21,6 +22,7 @@ export const api = {
   slots: (p, month) => call(`/slots?p=${encodeURIComponent(p)}${month ? `&month=${month}` : ''}`),
   book: (body) => call('/book', { method: 'POST', body }),
   request: (body) => call('/request', { method: 'POST', body }),
+  requestOffer: (body) => call('/request-offer', { method: 'POST', body }),
   cancelInfo: (t) => call(`/cancel?t=${encodeURIComponent(t)}`),
   cancel: (t) => call('/cancel', { method: 'POST', body: { t } }),
   admin: {
@@ -35,4 +37,4 @@ export const api = {
   },
 };
 
-export const avatarUrl = (id) => `https://dashboard.holons.io/api/avatar?user_id=${encodeURIComponent(id)}`;
+export const avatarUrl = (id) => `${DASHBOARD}/api/avatar?user_id=${encodeURIComponent(id)}`;

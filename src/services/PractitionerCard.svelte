@@ -1,7 +1,8 @@
 <script>
   import Avatar from './Avatar.svelte';
   import LinkedIn from './LinkedIn.svelte';
-  import { formatShortDate, formatPrice } from './dates.js';
+  import Telegram from './Telegram.svelte';
+  import { formatShortDate, formatPrice, describeOffer } from './dates.js';
 
   let { person, onopen, index = 0 } = $props();
 
@@ -19,7 +20,10 @@
       <h3>{person.name}</h3>
       {#if tag}<span class="chip">{tag}</span>{/if}
     </div>
-    {#if person.linkedin}<LinkedIn href={person.linkedin} name={person.name} />{/if}
+    <div class="links">
+      {#if person.username}<Telegram username={person.username} name={person.name} />{/if}
+      {#if person.linkedin}<LinkedIn href={person.linkedin} name={person.name} />{/if}
+    </div>
   </header>
 
   {#if person.offer?.title}
@@ -30,6 +34,16 @@
     <blockquote class:quote={!!person.ikigai}>{blurb}</blockquote>
   {:else}
     <p class="empty">Hasn’t shared their ikigai yet.</p>
+  {/if}
+
+  {#if person.offers?.length}
+    <ul class="offers" aria-label="Offers">
+      {#each person.offers.slice(0, 3) as o (o.id)}
+        {@const d = describeOffer(o)}
+        <li><span class="ico" aria-hidden="true">{d.icon}</span><span class="t"><span class="sr">{d.verb}: </span>{d.text}</span>{#if d.price}<span class="p">{d.price}</span>{/if}</li>
+      {/each}
+      {#if person.offers.length > 3}<li class="more">+{person.offers.length - 3} more</li>{/if}
+    </ul>
   {/if}
 
   {#if person.values?.length}
@@ -83,7 +97,8 @@
   .card :global(.btn) { pointer-events: auto; }
 
   header { display: flex; align-items: center; gap: 14px; }
-  header :global(.li) { margin-left: auto; align-self: flex-start; pointer-events: auto; }
+  .links { margin-left: auto; align-self: flex-start; display: flex; gap: 2px; pointer-events: auto; }
+  .links :global(a) { pointer-events: auto; }
   .who { min-width: 0; display: grid; gap: 4px; justify-items: start; }
   h3 {
     font-family: var(--display);
@@ -113,6 +128,12 @@
     border-left: 2px solid var(--gold);
   }
   .empty { font-size: 14px; color: var(--muted); font-style: italic; }
+  .offers { list-style: none; display: grid; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--gold-soft); }
+  .offers li { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; color: var(--ink); min-width: 0; }
+  .offers .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .offers .p { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .offers .more { font-size: 12.5px; color: var(--muted); padding-left: 26px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .values { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
   .values li {
     font-size: 12px;

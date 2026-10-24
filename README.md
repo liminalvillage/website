@@ -79,7 +79,7 @@ npm run preview
 Villagers and what they offer, with online booking (booking system ported
 from `maxage`).
 
-- **Who is listed**: members (`users` lens) of the Liminal Village holon,
+- **Who is listed**: members (`users` lens) of the current lunation’s holon (lunation84, `-1004438000774`),
   read live from the Holosphere Nostr relays by `netlify/lib/holosphere.mjs`.
 - **Ikigai & LinkedIn**: collected by @HolonsBot's `/onboarding` journey
   (steps *ikigai* and *linkedin*, editable later via *Change Profile*; the
@@ -104,9 +104,38 @@ Environment variables (Netlify → Project configuration):
 | `TELEGRAM_CHAT_ID` | steward chat: copies of bookings, and every new application |
 | `HOLONS_BOT_URL`, `APPLICATIONS_TOKEN`, `HOLONS_BOT_USERNAME`, `APPLY_NOTIFY_EMAIL` | `/apply`: hand-off to HolonsBot (sealed `applications` lens); optional inbox copy |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | confirmation e-mail with cancel link to the client |
-| `SERVICES_HOLON_ID`, `HOLOSPHERE_RELAYS` | optional overrides (default: Liminal Village, production relays) |
+| `HOLOSPHERE_RELAYS` | optional override of the relays in `src/config/holons.js` (e.g. for local testing) |
 
 Run locally with functions + Blobs: `npx netlify dev`.
+
+## 🌐 Holons & Holosphere config
+
+`src/config/holons.js` is the one place for which holons the site reads and
+where Holosphere lives. The pages import it and the functions get it through
+`netlify/lib/holosphere.mjs`:
+
+- `VILLAGE_HOLON`: the current lunation's holon (lunation84, `-1004438000774`).
+  `/quests` on liminalvillage.com, `/lunations` (`/api/calendar`) and `/services` all read it.
+  **At a new lunation, change it here only.**
+- `PORTAL_HOLONS`: each portal's holon (Casa Selva, ReFactory, ReGenerativa), chosen by hostname via `portalFor`.
+- `RELAYS`, `APP`, `BOT_USERNAME`, `BOT_SERVER`, `DASHBOARD`.
+
+## 🧭 Quests page (`/quests`)
+
+- One bundle serves every portal; the holon is picked from the hostname
+  (`SITES` in `src/lib/Quests.svelte`).
+- Quests are read from the Holosphere v2 relays by
+  `netlify/functions/quests.mjs` (`/api/quests?holon=`), the same reader as
+  `/services`. The board refreshes every 30 s. *Federated* adds items
+  federated in from partner holons (`_federation` copies and holograms).
+- Pictures go through `/api/quests/image`. Blossom URLs are used as they are,
+  inline base64 is served from the record, and Telegram file_ids are resolved
+  with `TELEGRAM_BOT_TOKEN` + `BOT_TOKENS`, then the bot server's `/getfile`
+  (`BOT_API_URL`, default `BOT_SERVER` in `src/config/holons.js`) and the dashboard's `/api/image`.
+  A file_id opens only with the bot that received it, so a picture that stays
+  blank needs that bot's token in `BOT_TOKENS` (or a rehost to Blossom with
+  holons' `scripts/rehost-pictures.mjs`).
+- The API reads only the portals' holons (`PORTAL_HOLONS` in `src/config/holons.js`).
 
 ## ✍️ Application form (`/apply`)
 

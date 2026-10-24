@@ -32,7 +32,7 @@
       if (filter !== 'all' && filter !== 'available' && tagOf(x) !== filter) return false;
       const q = query.trim().toLowerCase();
       if (!q) return true;
-      return [x.name, x.ikigai, x.role, x.category, x.offer?.title, x.offer?.description, ...(x.values ?? [])]
+      return [x.name, x.ikigai, x.role, x.category, x.offer?.title, x.offer?.description, ...(x.values ?? []), ...(x.offers ?? []).map((o) => o.title)]
         .filter(Boolean)
         .some((s) => s.toLowerCase().includes(q));
     })

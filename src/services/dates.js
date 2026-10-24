@@ -126,3 +126,13 @@ export function formatPrice(price, currency = 'EUR', locale = 'en-GB') {
     return `${price} ${currency}`;
   }
 }
+
+const OFFER_MODES = { give: { icon: '🎁', verb: 'Gives' }, lend: { icon: '🤝', verb: 'Lends' }, sell: { icon: '🏷️', verb: 'Sells' } };
+
+/** An /offer as one line: "2 hours plumbing", with its mode and any price per unit. */
+export function describeOffer(o) {
+  const mode = OFFER_MODES[o.mode] ?? OFFER_MODES.give;
+  const amount = o.unit && o.unit !== 'one' ? `${o.quantity} ${o.unit} ` : o.quantity > 1 ? `${o.quantity} × ` : '';
+  const price = o.mode === 'sell' && o.price != null ? `${formatPrice(o.price, o.currency)}${o.quantity > 1 || o.unit !== 'one' ? ' each' : ''}` : '';
+  return { icon: mode.icon, verb: mode.verb, text: `${amount}${o.title}`, price };
+}

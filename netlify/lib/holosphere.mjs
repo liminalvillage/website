@@ -9,17 +9,20 @@
 //   - sealed content ({ enc: 'nip44' }) is private and skipped
 //   - once a holon has a `_members` roster, only its genesis key and active
 //     members count as authors (anyone can publish to a relay)
+//
+// Which holons and relays: src/config/holons.js, the website's one source.
 import { SimplePool } from 'nostr-tools/pool';
+import { APP, RELAYS as DEFAULT_RELAYS } from '../../src/config/holons.js';
+
+export { BOT_SERVER, BOT_USERNAME, DASHBOARD, PORTAL_HOLONS, VILLAGE_HOLON } from '../../src/config/holons.js';
 
 const KIND = 30078;
 const RETRACTION = 5;
-const APP = 'Holons';
 const MAX_WAIT_MS = 5000;
 
-export const RELAYS = (process.env.HOLOSPHERE_RELAYS || 'wss://relay.holons.io,wss://relay.commonshub.dev')
-  .split(',')
-  .map((r) => r.trim())
-  .filter(Boolean);
+export const RELAYS = process.env.HOLOSPHERE_RELAYS
+  ? process.env.HOLOSPHERE_RELAYS.split(',').map((r) => r.trim()).filter(Boolean)
+  : DEFAULT_RELAYS;
 
 let pool;
 const getPool = () => (pool ??= new SimplePool());
@@ -135,6 +138,42 @@ const pickText = (records, ...keys) => {
   return '';
 };
 
+// An offer is gone once it is given out, taken back, or past its expiry.
+const CLOSED = new Set(['fulfilled', 'withdrawn', 'expired', 'completed', 'cancelled', 'stopped']);
+
+/**
+ * Open offers a person declared with `/offer` on the bot, from the `quests`
+ * lens of every holon given (records with `type: 'offer'`, keyed to them by
+ * `initiator.id`), newest first, each once.
+ */
+export function openOffersBy(id, ...lists) {
+  const now = Date.now();
+  const seen = new Set();
+  return lists
+    .flat()
+    .filter((q) => q?.type === 'offer' && String(q.initiator?.id ?? '') === id)
+    .filter((q) => !CLOSED.has(q.status) && !(q.expires_at && q.expires_at < now) && clean(q.title))
+    .sort((a, b) => (Date.parse(b.created) || 0) - (Date.parse(a.created) || 0))
+    .filter((q) => {
+      const key = `${q.holon ?? ''}/${q.id}`;
+      const title = clean(q.title).toLowerCase();
+      if (seen.has(key) || seen.has(title)) return false;
+      seen.add(key).add(title);
+      return true;
+    })
+    .slice(0, 8)
+    .map((q) => ({
+      id: String(q.id),
+      title: clean(q.title),
+      mode: ['give', 'lend', 'sell'].includes(q.mode) ? q.mode : 'give',
+      quantity: Number(q.supply?.quantity) || 1,
+      unit: clean(q.supply?.unit) || 'one',
+      ...(typeof q.price === 'number' && { price: q.price, currency: clean(q.currency) || 'EUR' }),
+      category: clean(q.category),
+      service: q.item_type === 'service',
+    }));
+}
+
 /**
  * Members of a holon with their ikigai and LinkedIn, from their profile.
  *
@@ -143,13 +182,15 @@ const pickText = (records, ...keys) => {
  * when they choose to make their answers public: `ikigai`, `linkedin`,
  * `category`, `values`. Their `users` records and `profile` lens can carry
  * the same fields; the `/apply` form's answers (`applications` lens:
- * `data.ikigai`, `data.social_links`) are the last fallback.
+ * `data.ikigai`, `data.social_links`) are the last fallback. Their open
+ * `/offer`s come from the village's and their own `quests` lens.
  */
 export async function membersWithIkigai(holonId) {
-  const village = await readLenses([holonId], ['users']);
+  const village = await readLenses([holonId], ['users', 'quests']);
   const users = village.get(String(holonId))?.get('users') ?? [];
+  const villageQuests = village.get(String(holonId))?.get('quests') ?? [];
   const ids = users.map((u) => String(u.id)).filter((id) => /^-?\d+$/.test(id));
-  const personal = ids.length ? await readLenses(ids, ['dna', 'users', 'profile', 'applications']) : new Map();
+  const personal = ids.length ? await readLenses(ids, ['dna', 'users', 'profile', 'applications', 'quests']) : new Map();
 
   return users.map((u) => {
     const id = String(u.id);
@@ -176,6 +217,7 @@ export async function membersWithIkigai(holonId) {
       role: clean(typeof role === 'object' ? role?.label ?? role?.value : role).replace(/_/g, ' '),
       category: pickText(profiles, 'category'),
       values: values.filter((v) => typeof v === 'string').slice(0, 5),
+      offers: openOffersBy(id, villageQuests, lenses?.get('quests') ?? []),
     };
   });
 }

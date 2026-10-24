@@ -3,8 +3,9 @@
   import Avatar from './Avatar.svelte';
   import Calendar from './Calendar.svelte';
   import LinkedIn from './LinkedIn.svelte';
+  import Telegram from './Telegram.svelte';
   import { api } from './api.js';
-  import { addMinutes, formatLongDate, formatShortDate, formatPrice, nowIn } from './dates.js';
+  import { addMinutes, formatLongDate, formatShortDate, formatPrice, nowIn, describeOffer } from './dates.js';
 
   let { person, onclose, onbooked } = $props();
 
@@ -113,6 +114,36 @@
     document.getElementById(toRequest ? 'rq-date' : 'bf-picker')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  // Asking for one of their /offers: HolonsBot passes it on as a Telegram DM.
+  let asking = $state(null); // the offer being asked for
+  let ask = $state({ telegram: '', note: '' });
+  let askSent = $state(null); // { offer, delivered }
+  let askError = $state('');
+
+  function startAsk(o) {
+    asking = o;
+    askSent = null;
+    askError = '';
+    ask.note = '';
+  }
+
+  async function sendAsk(e) {
+    e.preventDefault();
+    if (submitting) return;
+    submitting = true;
+    askError = '';
+    try {
+      const res = await api.requestOffer({ p: person.id, offerId: asking.id, ...ask, name: form.name, email: form.email, website: form.website });
+      remember();
+      askSent = { offer: asking, delivered: res.delivered };
+      asking = null;
+    } catch (err) {
+      askError = err.message;
+    } finally {
+      submitting = false;
+    }
+  }
+
   async function sendRequest(e) {
     e?.preventDefault();
     if (submitting) return;
@@ -186,7 +217,12 @@
       <h2 id="bf-title" class="display">{person.name}</h2>
       {#if offer?.title}<p class="service">{offer.title}</p>{:else if person.role || person.category}<p class="service tag">{person.role || person.category}</p>{/if}
     </div>
-    {#if person.linkedin && !sent && step === 0}<LinkedIn href={person.linkedin} name={person.name} label />{/if}
+    {#if !sent && step === 0 && (person.username || person.linkedin)}
+      <div class="links">
+        {#if person.username}<Telegram username={person.username} name={person.name} label />{/if}
+        {#if person.linkedin}<LinkedIn href={person.linkedin} name={person.name} label />{/if}
+      </div>
+    {/if}
   </section>
 
   {#if sent}
@@ -214,6 +250,57 @@
         <div class="block">
           <p class="eyebrow">The session</p>
           <p class="desc">{offer.description}</p>
+        </div>
+      {/if}
+      {#if person.offers?.length}
+        <div class="block">
+          <p class="eyebrow">Offers</p>
+          <ul class="offers">
+            {#each person.offers as o (o.id)}
+              {@const d = describeOffer(o)}
+              <li>
+                <span class="ico" aria-hidden="true">{d.icon}</span><span><strong>{d.verb}</strong> {d.text}</span>{#if d.price}<span class="p">{d.price}</span>{/if}
+                {#if asking?.id !== o.id}<button type="button" class="btn small ghost" onclick={() => startAsk(o)}>Request</button>{/if}
+              </li>
+              {#if asking?.id === o.id}
+                <li class="askrow">
+                  <form class="request ask" onsubmit={sendAsk}>
+                    <p class="muted small">{first} gets your request on Telegram and replies to you directly.</p>
+                    {#if askError}<p class="notice error" role="alert">{askError}</p>{/if}
+                    <input type="text" name="website" bind:value={form.website} tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+                    <div class="field">
+                      <label for="ask-name">Your name</label>
+                      <input id="ask-name" bind:value={form.name} required autocomplete="name" />
+                    </div>
+                    <div class="field">
+                      <label for="ask-email">E-mail</label>
+                      <input id="ask-email" type="email" bind:value={form.email} required autocomplete="email" />
+                    </div>
+                    <div class="field">
+                      <label for="ask-tg">Your Telegram <span class="muted hint">optional — so {first} can message you back</span></label>
+                      <input id="ask-tg" bind:value={ask.telegram} placeholder="@your_name" autocomplete="off" />
+                    </div>
+                    <div class="field">
+                      <label for="ask-note">Message <span class="muted hint">optional</span></label>
+                      <textarea id="ask-note" bind:value={ask.note} rows="2" placeholder="When, how much, anything {first} should know…"></textarea>
+                    </div>
+                    <div class="askbar">
+                      <button type="button" class="link small" onclick={() => (asking = null)}>Cancel</button>
+                      <button class="btn small gold" disabled={submitting}>{submitting ? 'Sending…' : `Request “${o.title}”`}</button>
+                    </div>
+                  </form>
+                </li>
+              {/if}
+            {/each}
+          </ul>
+          {#if askSent}
+            <p class="notice {askSent.delivered ? 'success' : ''}" role="status">
+              {#if askSent.delivered}✓ Sent to {first} on Telegram — they’ll reply to you directly. A copy is in your inbox.{:else}✓ Request saved and copied to your inbox, but {first} couldn’t be reached on Telegram right now{person.username ? ' — message them directly below' : ''}.{/if}
+            </p>
+          {/if}
+          {#if person.username}
+            <p class="note">Or <a class="link" href="https://t.me/{person.username}" target="_blank" rel="noopener noreferrer">message {first} on Telegram</a> directly.</p>
+          {/if}
         </div>
       {/if}
       {#if !person.ikigai && !offer?.description}
@@ -475,7 +562,7 @@
 
   .profile { display: flex; align-items: center; gap: 16px; padding: 24px 24px 4px; }
   .profile h2 { font-size: 32px; }
-  .profile :global(.li) { margin-left: auto; }
+  .profile .links { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
   .service { font-weight: 600; color: var(--gold-dark); font-size: 14px; margin-top: 2px; }
   .service.tag { text-transform: capitalize; }
 
@@ -492,6 +579,15 @@
     white-space: pre-line;
   }
   .desc { white-space: pre-line; }
+  .offers { list-style: none; display: grid; gap: 8px; margin-bottom: 6px; }
+  .offers li { display: flex; align-items: baseline; gap: 10px; font-size: 15px; color: var(--ink); }
+  .offers li > span:nth-child(2) { flex: 1; }
+  .offers strong { font-weight: 600; }
+  .offers .p { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .offers .btn { margin-left: 4px; }
+  .offers .askrow { display: block; }
+  .ask { display: grid; margin: 2px 0 8px; }
+  .askbar { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
   .values { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
   .values li { font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
 

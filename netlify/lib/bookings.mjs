@@ -201,7 +201,8 @@ export async function createRequest(p, input, offer) {
   const request = {
     id: `${at.replace(/[:.]/g, '')}-${randomBytes(3).toString('hex')}`,
     p,
-    service: offer?.active ? offer.title : '',
+    service: input.offer ? '' : offer?.active ? offer.title : '',
+    ...(input.offer && { kind: 'offer', offerId: input.offerId, offer: input.offer, telegram: input.telegram || null }),
     preferred: input.preferred || null,
     timeOfDay: input.timeOfDay || null,
     name: input.name,

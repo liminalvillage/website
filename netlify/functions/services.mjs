@@ -8,6 +8,7 @@
 //   GET  /api/services/slots?p=&month=     open slots of one practitioner
 //   POST /api/services/book                book a slot
 //   POST /api/services/request             ask for a session when no slot fits
+//   POST /api/services/request-offer       ask for one of their /offers (Telegram DM)
 //   GET  /api/services/cancel?t=           booking behind a cancel link
 //   POST /api/services/cancel              cancel it
 //   POST /api/services/admin/login|logout  steward session (cookie, ../lib/admin.mjs)
@@ -15,8 +16,8 @@
 //   POST /api/services/admin/offer|open|delete-slot|cancel-booking|delete-request
 //
 // Env: SERVICES_ADMIN_PASSWORD, SERVICES_SESSION_SECRET (admin);
-//      SERVICES_HOLON_ID (default: Liminal Village); see ../lib/notify.mjs.
-import { membersWithIkigai } from '../lib/holosphere.mjs';
+//      see ../lib/notify.mjs. The holon is VILLAGE_HOLON in src/config/holons.js.
+import { VILLAGE_HOLON as HOLON_ID, membersWithIkigai } from '../lib/holosphere.mjs';
 import {
   PID_RE,
   addSlots,
@@ -38,11 +39,10 @@ import {
   upcomingBookings,
 } from '../lib/bookings.mjs';
 import { isAdmin, login, logout } from '../lib/admin.mjs';
-import { notifyCancelled, notifyNewBooking, notifyRequest } from '../lib/notify.mjs';
+import { notifyCancelled, notifyNewBooking, notifyOfferRequest, notifyRequest } from '../lib/notify.mjs';
 import { dateRange, monthKey, nowIn, parseMonth, weekdayOf } from '../../src/services/dates.js';
 
 const env = process.env;
-const HOLON_ID = env.SERVICES_HOLON_ID || '-1003864542239';
 
 const json = (body, status = 200, headers = {}) =>
   new Response(JSON.stringify(body), {
@@ -156,6 +156,28 @@ async function request(req) {
   return json({ ok: true });
 }
 
+async function requestOffer(req) {
+  const body = await req.json().catch(() => ({}));
+  const p = String(body.p ?? '');
+  const name = String(body.name ?? '').trim().slice(0, 120);
+  const email = String(body.email ?? '').trim().slice(0, 200);
+  const telegram = String(body.telegram ?? '').trim().replace(/^@|^https?:\/\/t\.me\//i, '');
+  const note = String(body.note ?? '').trim().slice(0, 1000);
+  if (body.website) return json({ ok: true });
+
+  if (!PID_RE.test(p)) return fail('Unknown practitioner.', 404);
+  if (!name) return fail('Please tell us your name.');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('That e-mail address doesn’t look right.');
+  if (telegram && !/^[A-Za-z]\w{4,31}$/.test(telegram)) return fail('That Telegram username doesn’t look right (e.g. @your_name).');
+  const person = await practitioner(p);
+  const offer = person?.offers?.find((o) => o.id === String(body.offerId ?? ''));
+  if (!offer) return fail('That offer isn’t available any more.', 404);
+
+  const r = await createRequest(p, { name, email, telegram, note, offer: offer.title, offerId: offer.id });
+  const delivered = await notifyOfferRequest(r, person.name);
+  return json({ ok: true, delivered });
+}
+
 const publicBooking = (b, person) => ({
   date: b.date,
   time: b.time,
@@ -261,6 +283,7 @@ export default async (req) => {
 
     if (route === 'book' && req.method === 'POST') return await book(req, url);
     if (route === 'request' && req.method === 'POST') return await request(req);
+    if (route === 'request-offer' && req.method === 'POST') return await requestOffer(req);
 
     if (route === 'cancel') {
       if (req.method === 'GET') {
