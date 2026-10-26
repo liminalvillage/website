@@ -526,7 +526,7 @@
     justify-content: space-between;
     gap: 12px;
     padding: 14px 20px;
-    background: rgba(250, 248, 245, 0.92);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
@@ -557,8 +557,8 @@
   .steps em { font-style: normal; }
   .steps svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .steps li.active { color: var(--ink); font-weight: 600; }
-  .steps li.active span { background: var(--ink); color: #fff; }
-  .steps li.done span { background: var(--gold); color: #fff; }
+  .steps li.active span { background: var(--ink); color: var(--on-dark); }
+  .steps li.done span { background: var(--gold); color: var(--on-accent); }
 
   .profile { display: flex; align-items: center; gap: 16px; padding: 24px 24px 4px; }
   .profile h2 { font-size: 32px; }
@@ -598,14 +598,14 @@
     gap: 12px;
     padding: 16px 18px;
     border-radius: var(--radius);
-    background: #fff;
+    background: var(--surface);
     box-shadow: var(--shadow);
   }
   .price { font-family: var(--display); font-size: 26px; font-weight: 600; color: var(--ink); }
   .note { font-size: 13px; color: var(--muted); }
   .pill { font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-soft); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
 
-  .picker { display: grid; gap: 18px; padding: 18px; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+  .picker { display: grid; gap: 18px; padding: 18px; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
   .dayname { font-weight: 600; color: var(--ink); margin-bottom: 10px; }
   .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
   .slot {
@@ -613,7 +613,7 @@
     padding: 10px 8px;
     border-radius: 12px;
     border: 1px solid var(--line);
-    background: #fff;
+    background: var(--surface);
     font-weight: 600;
     font-size: 16px;
     color: var(--ink);
@@ -621,7 +621,7 @@
   }
   .slot small { font-weight: 400; font-size: 11.5px; color: var(--muted); }
   .slot:hover { border-color: var(--gold); transform: translateY(-1px); }
-  .slot.selected { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .slot.selected { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
   .slot.selected small { color: #d8d2c8; }
   .small { font-size: 13px; }
   .link { color: var(--gold-dark); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
@@ -630,11 +630,11 @@
   .pill.soft { color: var(--gold-dark); background: var(--gold-soft); }
   .cap { text-transform: capitalize; }
   .other { justify-self: start; }
-  .request { padding: 18px; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); gap: 14px; }
+  .request { padding: 18px; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); gap: 14px; }
   .tod { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tod button { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 600; text-transform: capitalize; transition: all 0.15s; }
+  .tod button { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; text-transform: capitalize; transition: all 0.15s; }
   .tod button:hover { border-color: var(--gold); }
-  .tod button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .tod button.on { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
 
   .summary {
     display: grid;
@@ -644,7 +644,7 @@
     text-align: left;
     padding: 16px 18px;
     border-radius: var(--radius);
-    background: #fff;
+    background: var(--surface);
     box-shadow: var(--shadow);
     border: 1px solid var(--gold-soft);
   }
@@ -662,7 +662,7 @@
     justify-content: space-between;
     gap: 12px;
     padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--surface) 95%, transparent);
     backdrop-filter: blur(8px);
     border-top: 1px solid var(--line);
   }
@@ -687,7 +687,7 @@
     box-shadow: var(--shadow);
     text-align: left;
   }
-  .ticket > div { display: grid; gap: 2px; padding: 14px 16px; background: #fff; font-size: 13.5px; }
+  .ticket > div { display: grid; gap: 2px; padding: 14px 16px; background: var(--surface); font-size: 13.5px; }
   .ticket strong { color: var(--ink); font-size: 15px; }
   .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 

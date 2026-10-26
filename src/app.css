@@ -1,15 +1,6 @@
-/* Global Styles */
+@import './theme/tokens.css';
 
-:root {
-  --text-color: #333;
-  --primary-color: #D6A15B;
-  --light-color: #EFEFEF;
-  --dark-color: #222;
-  --header-background: #FFFFFF;
-  --header-color: #333;
-  --footer-background: #222;
-  --footer-color: #FFF;
-}
+/* Global Styles */
 
 * {
   margin: 0;
@@ -24,11 +15,11 @@ html {
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 400;
   color: var(--text-color);
-  background-color: #FFF;
+  background: var(--page-bg);
   line-height: 1.5;
   overflow-x: hidden;
   margin: 0;
@@ -43,7 +34,7 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-heading);
   font-weight: 500;
   letter-spacing: 3px;
   color: var(--dark-color);
@@ -52,12 +43,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  letter-spacing: 1px;
-  line-height: 1.8;
+  letter-spacing: 0;
+  line-height: 1.7;
 }
 
 b, strong {
-  color: #222;
+  color: var(--ink);
   font-size: 100%;
 }
 
@@ -79,12 +70,12 @@ i:hover {
 /* Selection */
 ::-moz-selection {
   background-color: var(--primary-color);
-  color: #FFF;
+  color: var(--on-dark);
 }
 
 ::selection {
   background-color: var(--primary-color);
-  color: #FFF;
+  color: var(--on-dark);
 }
 
 /* Animations */
@@ -128,4 +119,11 @@ i:hover {
 
 .color {
   color: var(--primary-color);
+}
+
+/* Circles drift gently, each a little out of step with the next */
+@keyframes orb-drift {
+  50% {
+    transform: translateY(-7px);
+  }
 }

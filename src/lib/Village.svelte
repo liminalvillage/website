@@ -1,4 +1,5 @@
 <script>
+  import Ribbon from './Ribbon.svelte';
   const villageImages = [
     '/images/P1120415-500x99999.jpeg',
     '/images/P1120438-500x99999.jpeg',
@@ -31,13 +32,7 @@
         outdoor presentation facilities.
       </p>
 
-      <div class="gallery">
-        {#each villageImages as image}
-          <div class="gallery-item">
-            <img src={image} alt="Village" loading="lazy" />
-          </div>
-        {/each}
-      </div>
+      <Ribbon images={villageImages} alt="Village" />
     </div>
   </div>
 </section>
@@ -55,13 +50,7 @@
         would want to do some sightseeing.
       </p>
 
-      <div class="gallery">
-        {#each surroundingsImages as image}
-          <div class="gallery-item">
-            <img src={image} alt="Surroundings" loading="lazy" />
-          </div>
-        {/each}
-      </div>
+      <Ribbon images={surroundingsImages} alt="Surroundings" />
     </div>
   </div>
 </section>
@@ -72,11 +61,11 @@
   }
 
   .village {
-    background: #faf8f5;
+    background: var(--paper);
   }
 
   .surroundings {
-    background: #fff;
+    background: var(--surface);
   }
 
   .container {
@@ -94,7 +83,7 @@
     font-size: 1.6rem;
     font-weight: 300;
     letter-spacing: 4px;
-    color: #222;
+    color: var(--ink);
     text-transform: uppercase;
   }
 
@@ -104,37 +93,12 @@
   }
 
   p {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: #8a8274;
-    margin-bottom: 2.5rem;
-    text-align: center;
-    letter-spacing: 0.5px;
-  }
-
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .gallery-item {
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-    transition: all 0.35s ease;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 auto 2.5rem;
+    text-align: left;
   }
 
   @media (max-width: 768px) {
@@ -144,10 +108,6 @@
 
     .section-heading h2 {
       font-size: 1.3rem;
-    }
-
-    .gallery {
-      grid-template-columns: 1fr;
     }
   }
 </style>

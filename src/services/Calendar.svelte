@@ -115,12 +115,12 @@
   }
   .day:disabled { cursor: default; }
   .day.open { color: var(--ink); font-weight: 600; background: var(--gold-soft); }
-  .day.open:hover:not(:disabled) { background: #f0dcbd; transform: scale(1.05); }
+  .day.open:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 30%, transparent); transform: scale(1.05); }
   .day:not(.open):not(:disabled) { color: var(--text); }
   .day:not(.open):not(:disabled):hover { background: #f2ede6; }
   .day.today { box-shadow: inset 0 0 0 1px var(--gold); }
   .day.past { opacity: 0.5; }
-  .day.selected, .day.selected:hover:not(:disabled) { background: var(--ink); color: #fff; }
+  .day.selected, .day.selected:hover:not(:disabled) { background: var(--ink); color: var(--on-dark); }
   .dot {
     position: absolute;
     left: 50%;

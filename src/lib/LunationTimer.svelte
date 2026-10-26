@@ -4,7 +4,6 @@
   // @holons/core's `lunationAt`, the bot's /newmoon count.
   import { onMount } from 'svelte';
   import { phase, phase_hunt } from 'lune';
-  import MoonIcon from '../calendar/MoonIcon.svelte';
   import { lunationAt } from '../calendar/lunation.js';
 
   const PHASES = [
@@ -40,6 +39,20 @@
     const m = mins % 60;
     return d ? `${d}d ${h}h` : h ? `${h}h ${m}m` : `${m}m`;
   }
+  // The lit part of the moon for a phase from 0 (new) through 0.5 (full) to 1,
+  // drawn on a disc of radius 30 centred in a 64×64 box
+  function litPath(p) {
+    const r = 30;
+    const top = '32 2';
+    const bottom = '32 62';
+    if (p < 0.01 || p > 0.99) return '';
+    if (Math.abs(p - 0.5) < 0.01) return `M${top}A${r} ${r} 0 1 1 ${bottom}A${r} ${r} 0 1 1 ${top}Z`;
+    const rx = (Math.abs(Math.cos(2 * Math.PI * p)) * r).toFixed(2);
+    if (p < 0.5) return `M${top}A${r} ${r} 0 0 1 ${bottom}A${rx} ${r} 0 0 ${p < 0.25 ? 0 : 1} ${top}Z`;
+    return `M${top}A${r} ${r} 0 0 0 ${bottom}A${rx} ${r} 0 0 ${p < 0.75 ? 0 : 1} ${top}Z`;
+  }
+  const lit = $derived(litPath(moon.phase));
+
   const when = (ms) => new Date(ms).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
 
   onMount(() => {
@@ -49,14 +62,20 @@
 </script>
 
 <a class="lt" href="/lunations" aria-label="Lunation {cycle.index}, {PHASES[k]}. See the year in moons.">
-  <div class="top">
-    <span class="moon"><MoonIcon {k} /></span>
-    <div>
-      <p class="eyebrow">Lunation {cycle.index}</p>
-      <p class="phase">{PHASES[k]}</p>
-      <p class="meta">{Math.round(moon.illuminated * 100)}% lit · day {day} of {days}</p>
-    </div>
-  </div>
+  <svg class="moon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="lt-surface" cx="0.38" cy="0.35" r="0.75">
+        <stop offset="0" stop-color="#fffdf6" />
+        <stop offset="1" stop-color="#e9e4d6" />
+      </radialGradient>
+    </defs>
+    <circle cx="32" cy="32" r="30" class="dark" />
+    {#if lit}<path d={lit} fill="url(#lt-surface)" />{/if}
+  </svg>
+
+  <p class="eyebrow">Lunation {cycle.index}</p>
+  <p class="phase">{PHASES[k]}</p>
+  <p class="meta">{Math.round(moon.illuminated * 100)}% lit · day {day} of {days}</p>
 
   <div class="bar" aria-hidden="true">
     <span class="fill" style="width: {progress * 100}%"></span>
@@ -74,57 +93,74 @@
 </a>
 
 <style>
+  /* A translucent disc on the video, with a faint dotted orbit turning around it */
   .lt {
-    width: min(320px, calc(100% - 32px));
-    margin-top: 32px;
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin-top: 36px;
+    padding: 0 52px;
+    border-radius: 50%;
     display: grid;
-    gap: 12px;
-    padding: 18px 20px;
-    border-radius: 18px;
-    color: #f4efe6;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+    background: rgba(20, 18, 15, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    transition: background 0.5s ease, border-color 0.5s ease;
+    color: #f7f4ec;
     text-decoration: none;
-    background: rgba(20, 18, 15, 0.42);
-    border: 1px solid rgba(232, 196, 144, 0.28);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
-    animation: rise 1.4s ease both 0.3s;
-    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+    animation: rise 1.6s ease both 0.3s;
   }
-  .lt:hover {
-    transform: translateY(-3px);
-    border-color: rgba(232, 196, 144, 0.6);
-    background: rgba(20, 18, 15, 0.55);
+  .lt::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 1px dotted rgba(255, 255, 255, 0.3);
+    animation: orbit 90s linear infinite;
+    pointer-events: none;
   }
-  .lt:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+  .lt:hover { background: rgba(20, 18, 15, 0.4); border-color: rgba(255, 255, 255, 0.4); }
+  .lt:focus-visible { outline: 1px solid currentColor; outline-offset: 20px; }
+  @keyframes orbit { to { transform: rotate(360deg); } }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
 
-  .top { display: flex; align-items: center; gap: 14px; }
-  .moon { font-size: 44px; line-height: 1; color: #f6e7c8; filter: drop-shadow(0 0 10px rgba(246, 231, 200, 0.45)); }
-  .eyebrow { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(232, 196, 144, 0.95); line-height: 1.4; }
-  .phase { margin: 2px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 500; letter-spacing: 0.5px; line-height: 1.1; color: #fff; }
-  .meta { margin: 2px 0 0; font-size: 12px; letter-spacing: 0.5px; line-height: 1.4; color: rgba(244, 239, 230, 0.75); }
+  .moon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+    overflow: visible;
+    filter: drop-shadow(0 0 18px rgba(255, 250, 235, 0.35));
+    animation: glow 7s ease-in-out infinite;
+  }
+  .dark { fill: rgba(255, 255, 255, 0.07); stroke: rgba(255, 255, 255, 0.18); stroke-width: 0.6; }
+  @keyframes glow { 50% { filter: drop-shadow(0 0 28px rgba(255, 250, 235, 0.55)); } }
+  .lt:hover .moon { animation-duration: 3s; }
 
-  .bar { position: relative; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); }
-  .fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: linear-gradient(90deg, rgba(214, 161, 91, 0.5), #e8c490); }
-  .mark.full { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #f4f0e4; border: 1px solid rgba(0, 0, 0, 0.25); }
-  .now { position: absolute; top: 50%; width: 4px; height: 16px; margin: -8px 0 0 -2px; border-radius: 2px; background: #fff; box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
-  .ends { display: flex; justify-content: space-between; margin-top: -6px; font-size: 11px; letter-spacing: 0.3px; color: rgba(244, 239, 230, 0.65); }
+  .eyebrow { margin: 0; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.7; line-height: 1.4; }
+  .phase { margin: 2px 0 0; font-family: var(--font-heading); font-size: 24px; font-weight: 200; letter-spacing: 0.5px; line-height: 1.1; }
+  .meta { margin: 4px 0 0; font-size: 12px; letter-spacing: 0.5px; line-height: 1.4; opacity: 0.7; }
 
-  .next { margin: 0; font-size: 14px; letter-spacing: 0.5px; line-height: 1.4; color: rgba(244, 239, 230, 0.9); }
-  .next strong { color: #fff; font-weight: 600; }
-  .cta { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #e8c490; }
+  .bar { position: relative; width: 100%; height: 1px; margin-top: 14px; background: rgba(255, 255, 255, 0.28); }
+  .fill { position: absolute; inset: 0 auto 0 0; background: rgba(255, 255, 255, 0.85); }
+  .mark.full { position: absolute; top: 50%; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: transparent; border: 1px solid rgba(255, 255, 255, 0.85); }
+  .now { position: absolute; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.9); }
+  .ends { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 10px; letter-spacing: 0.3px; opacity: 0.6; }
+
+  .next { margin: 12px 0 0; font-size: 13px; letter-spacing: 0.5px; line-height: 1.4; opacity: 0.85; }
+  .next strong { color: inherit; font-weight: 600; }
+  .cta { margin-top: 8px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding-bottom: 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.35); transition: border-color 0.4s ease; }
+  .lt:hover .cta { border-color: rgba(255, 255, 255, 0.9); }
 
   @media (max-width: 768px) {
-    .lt {
-      margin-top: 28px;
-      padding: 14px 16px;
-      gap: 10px;
-    }
-    .moon { font-size: 36px; }
-    .phase { font-size: 22px; }
+    .lt { width: 284px; height: 284px; margin-top: 28px; padding: 0 42px; }
+    .moon { width: 40px; height: 40px; }
+    .phase { font-size: 21px; }
+    .ends { font-size: 9px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .lt { animation: none; transition: none; }
+    .lt, .lt::before, .moon { animation: none; }
   }
 </style>

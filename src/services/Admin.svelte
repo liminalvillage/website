@@ -284,7 +284,7 @@
   .head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
   .head h1 { font-size: 40px; }
   .headlinks { display: flex; gap: 8px; }
-  .card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; align-content: start; }
+  .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; align-content: start; }
   .card h2 { font-size: 28px; }
   .card h3 { font-size: 22px; }
   .login { max-width: 380px; }
@@ -316,7 +316,7 @@
   .wds { display: flex; flex-wrap: wrap; gap: 6px; }
   .wd { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); font-size: 13px; cursor: pointer; user-select: none; }
   .wd input { position: absolute; opacity: 0; pointer-events: none; }
-  .wd.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .wd.on { background: var(--ink); color: var(--on-dark); border-color: var(--ink); }
   code { background: var(--paper); padding: 1px 5px; border-radius: 5px; }
   @media (max-width: 900px) {
     .layout, .two { grid-template-columns: 1fr; }

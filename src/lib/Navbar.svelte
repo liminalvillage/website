@@ -1,15 +1,21 @@
 <script>
-  let mobileMenuOpen = false;
+  import { onMount } from 'svelte';
 
-  const toggleMenu = () => {
-    mobileMenuOpen = !mobileMenuOpen;
+  // The title floats at the top over the hero video. "fade": a dark gradient
+  // behind light text that settles into a frosted bar past the hero.
+  // "invert": the title inverts against whatever is behind it. Try
+  // ?nav=invert to compare. The menu itself is a dock at the bottom.
+  // On pages without the hero video the bar starts settled (light).
+  export let overHero = true;
+
+  const variant = new URLSearchParams(location.search).get('nav') === 'invert' ? 'invert' : 'fade';
+  let pastHero = !overHero;
+  const onScroll = () => {
+    pastHero = !overHero || window.scrollY > window.innerHeight - 100;
   };
 
-  const closeMenu = () => {
-    mobileMenuOpen = false;
-  };
-
-  const menuItems = [
+  const home = location.pathname === '/' || location.pathname === '/index.html';
+  const links = [
     { label: 'ABOUT', href: '#about' },
     { label: 'THE VILLAGE', href: '#thevillage' },
     { label: 'LUNATIONS', href: '/lunations' },
@@ -19,40 +25,59 @@
     { label: 'MEDIA', href: '/media' },
     { label: 'CONTACT', href: '#contact' },
   ];
+  // Section links point back to the home page from other pages
+  const menuItems = links.map((item) =>
+    item.href.startsWith('#') && !home ? { ...item, href: `/${item.href}` } : item
+  );
+  const here = location.pathname.replace(/\.html$/, '').replace(/\/+$/, '');
+
+  // Highlight the in-page section that is on screen
+  let active = menuItems.find((item) => !item.href.includes('#') && item.href.replace(/\.html$/, '') === here)?.href ?? '';
+  onMount(() => {
+    // Pages opened at an anchor start below the hero
+    onScroll();
+    if (!home) return;
+    const sections = menuItems
+      .filter((item) => item.href.startsWith('#'))
+      .map((item) => document.querySelector(item.href))
+      .filter(Boolean);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) active = `#${e.target.id}`;
+          else if (active === `#${e.target.id}`) active = '';
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' }
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  });
 </script>
 
-<svelte:window on:keydown={(e) => e.key === 'Escape' && closeMenu()} />
+<svelte:window on:scroll={onScroll} />
 
-<nav class="navbar" class:mobile-open={mobileMenuOpen}>
-  <div class="navbar-container">
-    <a href="#main-top" class="navbar-title" on:click={closeMenu}>Liminal Village</a>
-    <button
-      class="navbar-toggler"
-      class:open={mobileMenuOpen}
-      on:click={toggleMenu}
-      aria-label="Toggle Navigation"
-      aria-expanded={mobileMenuOpen}
-      aria-controls="main-menu"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-content" class:show={mobileMenuOpen}>
-      <ul class="menu" id="main-menu">
-        {#each menuItems as item}
-          <li>
-            <a
-              href={item.href}
-              target={item.external ? '_blank' : '_self'}
-              rel={item.external ? 'noopener noreferrer' : undefined}
-              on:click={closeMenu}
-            >
-              {item.label}
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </div>
-  </div>
+<header class="navbar {variant}" class:past-hero={pastHero}>
+  <a href={home ? '#main-top' : '/'} class="navbar-title">Liminal Village</a>
+</header>
+
+<nav class="dock" aria-label="Main">
+  <ul>
+    {#each menuItems as item}
+      <li>
+        <a
+          href={item.href}
+          class:active={active === item.href}
+          class:acronym={item.label.length <= 3}
+          aria-current={active === item.href ? 'location' : undefined}
+          target={item.external ? '_blank' : '_self'}
+          rel={item.external ? 'noopener noreferrer' : undefined}
+        >
+          {item.label}
+        </a>
+      </li>
+    {/each}
+  </ul>
 </nav>
 
 <style>
@@ -61,21 +86,35 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    font-family: "Open Sans", sans-serif;
-    height: 100px;
-    padding: 0 3%;
-  }
-
-  .navbar-container {
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
+    font-family: var(--font-body);
+    height: 100px;
+    padding: 0 3%;
+    --nav-ink: var(--on-dark);
+    --nav-hover: var(--primary-color);
+    transition: background 0.6s ease, backdrop-filter 0.6s ease;
+  }
+
+  /* Fade: a soft shade from the top keeps light text readable on the video */
+  .navbar.fade {
+    background: linear-gradient(to bottom, rgba(20, 18, 15, 0.55), rgba(20, 18, 15, 0));
+  }
+
+  .navbar.fade.past-hero {
+    --nav-ink: var(--dark-color);
+    background: var(--bar-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Invert: a white title blended with difference reads light on the video
+     and dark on the cream sections, with no bar at all */
+  .navbar.invert {
+    background: transparent;
+    mix-blend-mode: difference;
+    --nav-hover: var(--on-dark);
   }
 
   .navbar-title {
@@ -84,148 +123,98 @@
     font-weight: 300;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--dark-color);
+    color: var(--nav-ink);
     text-decoration: none;
     white-space: nowrap;
   }
 
   .navbar-title:hover {
-    color: var(--primary-color);
+    color: var(--nav-hover);
   }
 
-  .navbar-toggler {
+  /* The dock: a floating pill of links at the bottom of the screen */
+  .dock {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    z-index: 1000;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 32px);
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(20, 20, 20, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.22);
+    overflow-x: auto;
+    scrollbar-width: none;
+    animation: dock-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.6s;
+  }
+
+  .dock::-webkit-scrollbar {
     display: none;
-    background: none;
-    border: none;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
   }
 
-  .navbar-toggler-icon {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: var(--dark-color);
-    position: relative;
-    transition: background 0.3s;
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 24px);
+    }
   }
 
-  .navbar-toggler-icon::before,
-  .navbar-toggler-icon::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--dark-color);
-    transition: transform 0.3s, top 0.3s;
-  }
-
-  .navbar-toggler-icon::before {
-    top: -8px;
-  }
-
-  .navbar-toggler-icon::after {
-    top: 8px;
-  }
-
-  .navbar-toggler.open .navbar-toggler-icon {
-    background: transparent;
-  }
-
-  .navbar-toggler.open .navbar-toggler-icon::before {
-    top: 0;
-    transform: rotate(45deg);
-  }
-
-  .navbar-toggler.open .navbar-toggler-icon::after {
-    top: 0;
-    transform: rotate(-45deg);
-  }
-
-  .menu {
+  .dock ul {
     display: flex;
-    align-items: center;
+    gap: 2px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .menu li {
-    padding: 0 8px;
-  }
-
-  .menu li a {
-    color: var(--dark-color);
+  /* Labels are written in capitals; set them in sentence case */
+  .dock a {
+    display: block;
+    padding: 9px 15px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 0.2px;
+    text-transform: lowercase;
     text-decoration: none;
-    font-weight: 400;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
     white-space: nowrap;
-    transition: color 0.5s ease-in-out 0.1s;
+    transition: background 0.35s ease, color 0.35s ease;
   }
 
-  .menu li a:hover {
-    color: var(--primary-color);
+  .dock a::first-letter {
+    text-transform: uppercase;
   }
 
-  /* 14 items don't fit inline below this width: collapse to the hamburger */
-  @media (max-width: 1500px) {
-    .navbar {
-      height: 80px;
-    }
+  .dock a.acronym {
+    text-transform: none;
+  }
 
-    .navbar-title {
-      font-size: 20px;
-      letter-spacing: 3px;
-    }
+  .dock a:hover {
+    color: #fff;
+  }
 
-    .navbar-toggler {
-      display: flex;
-    }
+  .dock a.active {
+    background: #fff;
+    color: #111;
+  }
 
-    .navbar-content {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.98);
-      max-height: 0;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      transition: max-height 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+  /* Room for the dock below the last content */
+  :global(footer) {
+    padding-bottom: 96px !important;
+  }
 
-    .navbar-content.show {
-      max-height: calc(100vh - 80px);
-      max-height: calc(100dvh - 80px);
-    }
+  /* Pages without the hero keep their content clear of the fixed bar */
+  :global(html.has-site-nav body) {
+    padding-top: 100px;
+  }
 
-    .menu {
-      display: block;
-    }
-
-    .menu li {
-      padding: 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .menu li:last-child {
-      border-bottom: none;
-    }
-
-    .menu li a {
-      display: block;
-      padding: 0.9rem 2rem;
-      font-size: 13px;
-      letter-spacing: 2px;
+  @media (max-width: 768px) {
+    :global(html.has-site-nav body) {
+      padding-top: 70px;
     }
   }
 
@@ -239,13 +228,19 @@
       letter-spacing: 2px;
     }
 
-    .navbar-content.show {
-      max-height: calc(100vh - 70px);
-      max-height: calc(100dvh - 70px);
+    .dock {
+      bottom: 14px;
     }
 
-    .menu li a {
-      padding: 0.85rem 1.5rem;
+    .dock a {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock {
+      animation: none;
     }
   }
 </style>

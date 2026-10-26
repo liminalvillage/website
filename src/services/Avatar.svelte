@@ -30,7 +30,7 @@
     background: var(--tint);
     display: grid;
     place-items: center;
-    box-shadow: 0 0 0 3px #fff, 0 0 0 4px var(--line);
+    box-shadow: 0 0 0 3px var(--on-dark), 0 0 0 4px var(--line);
   }
   .initials {
     font-family: var(--display);

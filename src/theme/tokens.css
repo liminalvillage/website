@@ -1,0 +1,60 @@
+/* Shared design variables for every page of the main site. Vibes in
+   src/vibes/ override these; these values are the site as it has looked. */
+
+:root {
+  /* Palette */
+  --ink: #222;
+  --ink-soft: #333;
+  --muted: #8a8274;
+  --accent: #D6A15B;
+  --accent-deep: #b8873d;
+  --accent-soft: #e8c490;
+  --leaf: #7b9e6b;
+  --leaf-deep: #4a9d5f;
+  --paper: #faf8f5;
+  --surface: #fff;
+  --night: #222;
+  --on-dark: #fff;
+  --line: #eee;
+  --on-accent: #222;
+  --page-bg: var(--surface);
+
+  /* Header bar once past the hero, and behind the open menu */
+  --bar-bg: rgba(250, 248, 245, 0.82);
+  --bar-solid: rgba(250, 248, 245, 0.98);
+
+  /* Moons in the lunation diagram */
+  --moon-lit: #fbfaf3;
+  --moon-shadow: #d8d5cb;
+
+  /* Cards */
+  --card-bg: var(--surface);
+  --card-border: transparent;
+  --card-blur: none;
+  --card-radius: 12px;
+  --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.1);
+
+  /* Circles ("orbs"), the site's card shape: tints that blend where they overlap */
+  --tint-1: color-mix(in srgb, var(--accent-soft) 70%, transparent);
+  --tint-2: color-mix(in srgb, var(--leaf) 28%, transparent);
+  --tint-3: color-mix(in srgb, var(--leaf-deep) 16%, transparent);
+  --tint-4: color-mix(in srgb, var(--ink) 6%, transparent);
+  --orb-line: color-mix(in srgb, var(--ink) 10%, transparent);
+  --orb-blend: multiply;
+
+  /* Type */
+  --font-body: "Open Sans", sans-serif;
+  --font-heading: "Open Sans", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+
+  /* Older names, kept so other pages keep working */
+  --text-color: var(--ink-soft);
+  --primary-color: var(--accent);
+  --light-color: #EFEFEF;
+  --dark-color: var(--ink);
+  --header-background: #FFFFFF;
+  --header-color: #333;
+  --footer-background: #222;
+  --footer-color: #FFF;
+}

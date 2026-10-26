@@ -90,18 +90,6 @@
 
 <svelte:window {onkeydown} />
 
-<nav class="nav">
-  <div class="wrap navin">
-    <a href="/" class="brand">Liminal Village</a>
-    <div class="links">
-      <a href="/quests">Quests</a>
-      <a href="/services">Services</a>
-      <a href="/frameworks">Frameworks</a>
-      <a href="/lunations" class="active" aria-current="page">Lunations</a>
-    </div>
-  </div>
-</nav>
-
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">Lunations</p>
@@ -202,17 +190,11 @@
 {/if}
 
 <style>
-  .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
-  .links { display: flex; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .links a { color: var(--muted); transition: color 0.2s; }
-  .links a:hover, .links a.active { color: var(--gold-dark); }
 
   .hero { padding: 48px 0 20px; background: radial-gradient(1000px 360px at 85% -20%, #e9e6f3 0%, transparent 60%); }
   .hero h1 { font-size: clamp(36px, 4.6vw, 56px); margin: 10px 0 14px; }
   .lead { font-size: 17px; max-width: 62ch; }
-  .access { max-width: 62ch; margin-top: 14px; padding: 12px 16px; border-left: 3px solid var(--gold); background: #fffaf2; border-radius: 0 var(--radius) var(--radius) 0; font-size: 14.5px; }
+  .access { max-width: 62ch; margin-top: 14px; padding: 12px 16px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--accent) 8%, transparent); border-radius: 0 var(--radius) var(--radius) 0; font-size: 14.5px; }
   .access strong { color: var(--ink); }
   .access a { color: var(--gold-dark); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
@@ -241,7 +223,7 @@
   .lunations { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
   .lunations li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow); border: 1px solid transparent; }
   .lunations li.past { opacity: 0.55; }
-  .lunations li.current { border-color: var(--gold); background: #fffaf2; opacity: 1; }
+  .lunations li.current { border-color: var(--gold); background: color-mix(in srgb, var(--accent) 8%, transparent); opacity: 1; }
   .num { min-width: 34px; height: 28px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold-dark); font-weight: 700; font-size: 13px; }
   .phases { display: grid; gap: 2px; font-size: 14px; color: var(--ink); }
   .phases span { display: inline-flex; align-items: center; gap: 7px; }
@@ -267,12 +249,10 @@
   .foot a { color: var(--gold-dark); }
 
   @media (max-width: 820px) {
-    .links a:not(.active) { display: none; }
   }
   @media (max-width: 640px) {
     .hero { padding: 32px 0 12px; }
     .lead { font-size: 15.5px; }
     .panel { padding: 12px 8px 10px; border-radius: 14px; }
-    .brand { font-size: 15px; letter-spacing: 3px; }
   }
 </style>

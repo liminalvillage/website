@@ -1,22 +1,18 @@
 <script>
   const steps = [
     {
-      icon: 'fa-book-open',
       title: 'Shared frameworks',
       text: 'Every site in the network builds on the same open-source frameworks, technology stack and coordination protocols, so what one community learns, all of them can use.',
     },
     {
-      icon: 'fa-moon',
       title: 'One lunar rhythm',
       text: 'All sites keep the same calendar of lunations. The moon is our shared progress bar: each new moon starts a cycle of planning, building and celebrating together.',
     },
     {
-      icon: 'fa-compass',
       title: 'Quests across sites',
       text: 'Work is offered as quests that anyone in the network can join. People, skills and resources move freely between communities wherever they are needed most.',
     },
     {
-      icon: 'fa-seedling',
       title: 'New nodes',
       text: 'Each community is an independent node that runs itself. Anyone can start a new node in their own bioregion with the same open tools, and the network grows that way.',
     },
@@ -62,7 +58,6 @@
     <div class="steps">
       {#each steps as step}
         <div class="step">
-          <div class="step-icon"><i class="fas {step.icon}" aria-hidden="true"></i></div>
           <h4>{step.title}</h4>
           <p>{step.text}</p>
         </div>
@@ -96,7 +91,7 @@
 <style>
   .network {
     padding: 6rem 0;
-    background: #faf8f5;
+    background: var(--paper);
   }
 
   .container {
@@ -123,7 +118,7 @@
     font-size: 1.6rem;
     font-weight: 300;
     letter-spacing: 4px;
-    color: #222;
+    color: var(--ink);
     text-transform: uppercase;
   }
 
@@ -134,21 +129,22 @@
   }
 
   p {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    letter-spacing: 0.5px;
-    color: #8a8274;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 auto 1.5rem;
+    text-align: left;
   }
 
   a {
-    color: #D6A15B;
+    color: var(--accent);
     text-decoration: none;
     transition: color 0.3s;
   }
 
   a:hover {
-    color: #b8873d;
+    color: var(--accent-deep);
   }
 
   .video-container {
@@ -168,100 +164,142 @@
     font-weight: 400;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #222;
+    color: var(--ink);
     margin: 3rem 0 2rem;
   }
 
+  /* Overlapping circles that wrap: negative margins let neighbours overlap */
   .steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem 0;
   }
 
   .step {
-    background: #fff;
-    border-radius: 12px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
-  }
-
-  .step-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 1rem;
+    --size: min(270px, 86vw);
+    position: relative;
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
     border-radius: 50%;
-    background: rgba(214, 161, 91, 0.1);
-    color: #D6A15B;
+    padding: 0 calc(var(--size) * 0.16);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    text-align: center;
+    border: 1px solid var(--orb-line);
+    mix-blend-mode: var(--orb-blend);
+    animation: orb-drift 9s ease-in-out infinite;
+    margin: -8px -14px;
   }
 
+  .step:nth-child(4n + 1) {
+    background: var(--tint-1);
+    animation-delay: -0s;
+  }
+
+  .step:nth-child(4n + 2) {
+    background: var(--tint-2);
+    animation-delay: -2.25s;
+  }
+
+  .step:nth-child(4n + 3) {
+    background: var(--tint-3);
+    animation-delay: -4.5s;
+  }
+
+  .step:nth-child(4n + 4) {
+    background: var(--tint-4);
+    animation-delay: -6.75s;
+  }
+
+
   .step h4 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #222;
-    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
   }
 
   .step p {
-    font-size: 0.88rem;
-    line-height: 1.75;
+    font-size: 0.82rem;
+    line-height: 1.55;
     margin: 0;
+    text-align: center;
+    color: var(--ink-soft);
   }
 
   .sites {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin: 3rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 3.5rem 0 2rem;
   }
 
   .site {
+    --size: 170px;
+    position: relative;
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 0 calc(var(--size) * 0.1);
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 1.25rem 1.5rem;
-    border: 1px solid rgba(214, 161, 91, 0.3);
-    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    background: #fff;
-    transition: border-color 0.3s, transform 0.3s;
+    border: 1px solid var(--orb-line);
+    mix-blend-mode: var(--orb-blend);
+    animation: orb-drift 9s ease-in-out infinite;
+    gap: 0.2rem;
+    margin: -6px -10px;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .site:nth-child(3n + 1) {
+    background: var(--tint-1);
+    animation-delay: -0s;
+  }
+
+  .site:nth-child(3n + 2) {
+    background: var(--tint-2);
+    animation-delay: -2.25s;
+  }
+
+  .site:nth-child(3n + 3) {
+    background: var(--tint-3);
+    animation-delay: -4.5s;
   }
 
   a.site:hover {
-    border-color: #D6A15B;
-    transform: translateY(-3px);
+    animation-play-state: paused;
+    border-color: var(--ink);
   }
 
   .site.current {
-    background: rgba(214, 161, 91, 0.08);
-    border-color: #D6A15B;
+    border-color: color-mix(in srgb, var(--ink) 45%, transparent);
   }
 
   .site-role {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #8a8274;
+    color: var(--muted);
   }
 
   .site-name {
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: #222;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    color: var(--ink);
   }
 
   .site-here {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.65rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #D6A15B;
+    color: var(--ink);
   }
 
   .more {
@@ -274,11 +312,6 @@
     border-bottom: 1px solid currentColor;
   }
 
-  @media (max-width: 968px) {
-    .steps {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
 
   @media (max-width: 768px) {
     .network {
@@ -289,13 +322,18 @@
       font-size: 1.3rem;
     }
 
-    .steps,
-    .sites {
-      grid-template-columns: 1fr;
+    .step + .step {
+      margin-top: -24px;
     }
 
     iframe {
       height: 250px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step,
+    .site {
+      animation: none;
     }
   }
 </style>

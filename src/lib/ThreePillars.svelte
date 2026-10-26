@@ -1,9 +1,6 @@
 <section class="pillars">
   <div class="pillars-grid">
     <div class="pillar-card">
-      <div class="pillar-icon" style="background: rgba(214,161,91,0.1)">
-        <i class="fas fa-user-cog" style="color: #D6A15B"></i>
-      </div>
       <h2>Personal</h2>
       <p>
         Contribute something to yourself. During your stay at the village, you can set
@@ -12,9 +9,6 @@
       </p>
     </div>
     <div class="pillar-card">
-      <div class="pillar-icon" style="background: rgba(74,157,95,0.1)">
-        <i class="fas fa-street-view" style="color: #4a9d5f"></i>
-      </div>
       <h2>Local</h2>
       <p>
         Do something for the people around you and for your surrounding: Teach something
@@ -22,9 +16,6 @@
       </p>
     </div>
     <div class="pillar-card">
-      <div class="pillar-icon" style="background: rgba(123,158,107,0.1)">
-        <i class="fas fa-globe-americas" style="color: #7B9E6B"></i>
-      </div>
       <h2>Global</h2>
       <p>
         Do something for the planet and the people living on it: Find a cause that you
@@ -49,67 +40,77 @@
 <style>
   .pillars {
     width: 100%;
-    padding: 4rem 2rem;
-    background: #faf8f5;
+    padding: 1rem 2rem 4rem;
+    background: var(--paper);
   }
 
+  /* Personal, Local and Global as three overlapping circles: the overlaps
+     blend like a Venn diagram, and each circle drifts gently on its own. */
   .pillars-grid {
-    max-width: 1100px;
+    max-width: 1140px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0 2rem;
   }
 
   .pillar-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 2.5rem 2rem;
+    --size: min(380px, 34vw);
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 0 calc(var(--size) * 0.17);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-    transition: all 0.35s ease;
+    border: 1px solid var(--orb-line);
+    mix-blend-mode: var(--orb-blend);
+    animation: orb-drift 9s ease-in-out infinite;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .pillar-card + .pillar-card {
+    margin-left: calc(var(--size) * -0.12);
+  }
+
+  .pillar-card:nth-child(1) {
+    background: var(--tint-1);
+  }
+
+  .pillar-card:nth-child(2) {
+    background: var(--tint-2);
+    animation-delay: -3s;
+  }
+
+  .pillar-card:nth-child(3) {
+    background: var(--tint-3);
+    animation-delay: -6s;
   }
 
   .pillar-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  }
-
-  .pillar-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-  }
-
-  .pillar-icon i {
-    font-size: 2rem;
+    animation-play-state: paused;
   }
 
   .pillar-card h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #222;
-    margin-bottom: 1rem;
+    font-size: 1.35rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
   }
 
   .pillar-card p {
     font-size: 0.9rem;
-    color: #8a8274;
-    line-height: 1.8;
-    letter-spacing: 0.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
   }
 
   /* CTA Section */
   .cta-dark {
     width: 100%;
-    background: #222;
-    padding: 4rem 2rem;
+    background: var(--paper);
+    padding: 2rem 2rem 6rem;
     text-align: center;
   }
 
@@ -119,7 +120,7 @@
   }
 
   .cta-dark h2 {
-    color: #fff;
+    color: var(--ink);
     font-size: 2rem;
     font-weight: 300;
     letter-spacing: 6px;
@@ -130,7 +131,8 @@
     display: inline-block;
     padding: 16px 48px;
     border: 2px solid var(--primary-color);
-    color: #fff;
+    border-radius: 999px;
+    color: var(--ink);
     text-decoration: none;
     font-weight: 400;
     font-size: 0.9rem;
@@ -142,16 +144,36 @@
 
   .btn:hover {
     background: var(--primary-color);
-    color: #222;
+    color: var(--on-accent);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(214,161,91,0.3);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  /* Stacked, the circles overlap top to bottom instead */
+  @media (max-width: 860px) {
+    .pillars-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pillar-card {
+      --size: min(340px, 88vw);
+      padding: 0 calc(var(--size) * 0.15);
+    }
+
+    .pillar-card + .pillar-card {
+      margin-left: 0;
+      margin-top: calc(var(--size) * -0.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-card {
+      animation: none;
+    }
   }
 
   @media (max-width: 768px) {
-    .pillars-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
 
     .pillars {
       padding: 3rem 1.5rem;

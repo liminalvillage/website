@@ -342,7 +342,7 @@
 </main>
 
 <style>
-  .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
   .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
   .links { display: flex; align-items: center; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
@@ -362,8 +362,8 @@
   .tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); }
   .tabs button { padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); }
   .tabs button span { font-weight: 500; opacity: 0.7; margin-left: 2px; }
-  .tabs button.on { background: var(--ink); color: #fff; }
-  .filters select, .filters input { padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14px; }
+  .tabs button.on { background: var(--ink); color: var(--on-dark); }
+  .filters select, .filters input { padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 14px; }
   .filters input { flex: 1; min-width: 200px; }
 
   .split { display: grid; gap: 18px; align-items: start; }
@@ -371,7 +371,7 @@
   .list { list-style: none; display: grid; gap: 8px; }
   .item { width: 100%; display: grid; gap: 8px; text-align: left; padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow); border: 1px solid transparent; transition: border-color 0.15s; }
   .item:hover { border-color: var(--gold-soft); }
-  .item.sel { border-color: var(--gold); background: #fffaf2; }
+  .item.sel { border-color: var(--gold); background: color-mix(in srgb, var(--accent) 8%, transparent); }
   .who { display: grid; }
   .who strong { color: var(--ink); font-size: 15px; }
   .who .muted { font-size: 13px; }
@@ -402,14 +402,14 @@
   .holons { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--danger); margin-top: -8px; }
   .holons.ok { color: var(--green); }
   .holons code { font-size: 12px; background: var(--green-soft); padding: 1px 6px; border-radius: 6px; }
-  .comment { padding: 12px 14px; border-radius: 12px; background: #fffaf2; border: 1px solid var(--gold-soft); }
+  .comment { padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 8%, transparent); border: 1px solid var(--gold-soft); }
   .cmeta { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
   .cmeta strong { color: var(--ink); }
   .cdel { margin-left: auto; font-size: 12px; color: var(--muted); }
   .cdel:hover { color: var(--danger); }
   .ctext { font-size: 14px; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 4px; }
   .cform { display: grid; gap: 8px; }
-  .cform textarea, .cform input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 14px; }
+  .cform textarea, .cform input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 14px; }
   .cform textarea { resize: vertical; }
   .cform textarea:focus, .cform input:focus { outline: none; border-color: var(--gold); }
   .crow { display: flex; gap: 8px; }

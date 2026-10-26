@@ -54,6 +54,8 @@ async function boot() {
     import('./App.svelte'),
     import('./app.css'),
   ])
+  // Vibe explorations stay out of production builds
+  if (import.meta.env.DEV) import('./vibes/switcher.js')
   return mount(App, { target: document.getElementById('app') })
 }
 

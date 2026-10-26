@@ -17,10 +17,10 @@
         harmony with each other and the planet, by "upgrading the operating system of society"
         and transitioning from scarcity based market economies to "access abundance".
       </p>
-      <p>
-        Why we exist, what we value and how we live together is all in
-        <a href="/dna">our DNA →</a>
-      </p>
+      <div class="dna">
+        <p class="dna-text">Why we exist, what we value and how we live together is all in</p>
+        <a class="dna-btn" href="/dna">our DNA →</a>
+      </div>
       <p class="lead"><strong>Visitors of the Liminal Village are invited to focus on these three aspects:</strong></p>
     </div>
   </div>
@@ -30,7 +30,7 @@
   .about {
     width: 100%;
     padding: 6rem 0 3rem;
-    background: #faf8f5;
+    background: var(--paper);
   }
 
   .container {
@@ -48,7 +48,7 @@
     font-size: 1.6rem;
     font-weight: 300;
     letter-spacing: 4px;
-    color: #222;
+    color: var(--ink);
     text-transform: uppercase;
   }
 
@@ -59,27 +59,95 @@
   }
 
   p {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    letter-spacing: 0.5px;
-    color: #8a8274;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 auto 1.5rem;
+    text-align: left;
   }
 
+  /* The DNA invitation: its own block, set on faint concentric rings */
+  .dna {
+    --size: min(440px, 90vw);
+    width: var(--size);
+    aspect-ratio: 1;
+    margin: 3.5rem auto 0;
+    padding: 0 calc(var(--size) * 0.16);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--orb-line);
+    background:
+      repeating-radial-gradient(circle at 50% 50%, transparent 0 22px, color-mix(in srgb, var(--ink) 6%, transparent) 22px 23px),
+      var(--tint-1);
+    text-align: center;
+    animation: orb-drift 9s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dna {
+      animation: none;
+    }
+  }
+
+  .dna-text {
+    max-width: 26ch;
+    margin: 0 auto 1.75rem;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    font-weight: var(--heading-weight, 300);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .dna-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+
+  .dna-btn:hover {
+    background: var(--ink);
+    color: var(--bar-solid); /* the page colour, solid, in every vibe */
+  }
+
+  /* Reads as the title of the Personal / Local / Global cards below */
   .lead {
-    color: #222;
-    font-size: 1rem;
-    margin-top: 2rem;
+    max-width: 24ch;
+    margin: 4.5rem auto 0;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: clamp(1.45rem, 2.6vw, 2rem);
+    font-weight: var(--heading-weight, 300);
+    letter-spacing: var(--heading-tracking, 0);
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .lead strong {
+    font-weight: inherit;
+    color: inherit;
   }
 
   a {
-    color: #D6A15B;
+    color: var(--accent);
     text-decoration: none;
     transition: color 0.3s;
   }
 
   a:hover {
-    color: #b8873d;
+    color: var(--accent-deep);
   }
 
   @media (max-width: 768px) {

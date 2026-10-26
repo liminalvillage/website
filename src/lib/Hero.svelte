@@ -87,7 +87,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(34,34,34,0.55), rgba(214,161,91,0.2));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--night) 55%, transparent), color-mix(in srgb, var(--accent) 20%, transparent));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,7 +100,7 @@
   }
 
   .hero-text h1 {
-    color: #fff;
+    color: var(--on-dark);
     font-size: 3.5rem;
     font-weight: 300;
     letter-spacing: 8px;
@@ -109,7 +109,7 @@
   }
 
   .subtitle {
-    color: rgba(232, 196, 144, 0.9);
+    color: color-mix(in srgb, var(--accent-soft) 90%, transparent);
     font-size: 1rem;
     font-weight: 300;
     letter-spacing: 5px;
@@ -118,7 +118,7 @@
   }
 
   .network-line {
-    color: rgba(255, 255, 255, 0.85);
+    color: color-mix(in srgb, var(--on-dark) 85%, transparent);
     font-size: 0.85rem;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -126,8 +126,8 @@
   }
 
   .network-line a {
-    color: #fff;
-    border-bottom: 1px solid rgba(232, 196, 144, 0.9);
+    color: var(--on-dark);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent-soft) 90%, transparent);
     text-decoration: none;
   }
 

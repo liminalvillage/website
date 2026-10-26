@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { GENES, FRAMEWORKS } from './content.js';
 import './dna.css';
+import '../site.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 

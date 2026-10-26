@@ -1,22 +1,20 @@
 /* Services page — Liminal Village palette: warm paper, gold, deep ink. */
 :root {
-  --paper: #faf8f5;
-  --card: #ffffff;
-  --ink: #222;
-  --text: #444;
-  --muted: #7a746c;
-  --line: #ebe5dc;
-  --gold: #d6a15b;
-  --gold-dark: #b8873d;
-  --gold-soft: #f6ead8;
-  --green: #4f8a5b;
-  --green-soft: #e6f0e6;
+  /* Shared variables from src/theme/tokens.css supply --paper, --ink,
+     --muted and --line; the names this page paints with point at them. */
+  --card: var(--card-bg);
+  --text: var(--ink-soft);
+  --gold: var(--accent);
+  --gold-dark: var(--accent-deep);
+  --gold-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --green: var(--leaf-deep);
+  --green-soft: color-mix(in srgb, var(--leaf) 18%, transparent);
   --danger: #b4493b;
-  --radius: 16px;
-  --shadow: 0 1px 2px rgba(60, 40, 10, 0.04), 0 8px 24px rgba(60, 40, 10, 0.06);
-  --shadow-lift: 0 2px 4px rgba(60, 40, 10, 0.06), 0 18px 40px rgba(60, 40, 10, 0.12);
-  --display: 'Cormorant Garamond', Georgia, serif;
-  --body: 'Open Sans', system-ui, sans-serif;
+  --radius: var(--card-radius);
+  --shadow: var(--card-shadow);
+  --shadow-lift: var(--card-shadow-hover);
+  --display: var(--font-display);
+  --body: var(--font-body);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -27,7 +25,8 @@ body {
   font-size: 15px;
   line-height: 1.6;
   color: var(--text);
-  background: var(--paper);
+  background: var(--page-bg);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -88,7 +87,7 @@ input, textarea, select { font: inherit; color: var(--ink); }
 .field input:focus, .field textarea:focus, .field select:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 0 0 4px rgba(214, 161, 91, 0.18);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 .field textarea { resize: vertical; min-height: 84px; }
 

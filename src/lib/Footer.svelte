@@ -21,8 +21,8 @@
 
 <style>
   .footer {
-    background: #222;
-    color: #8a8274;
+    background: var(--night);
+    color: var(--muted);
     padding: 2rem 0;
     text-align: center;
     position: relative;
@@ -41,7 +41,7 @@
   p {
     margin: 0;
     font-size: 0.85rem;
-    color: #8a8274;
+    color: var(--muted);
     letter-spacing: 1px;
   }
 
@@ -56,17 +56,17 @@
     font-size: 0.8rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #D6A15B;
+    color: var(--accent);
     text-decoration: none;
   }
 
   .links a:hover {
-    color: #fff;
+    color: var(--on-dark);
   }
 
   .back-to-top {
-    background: rgba(214,161,91,0.15);
-    color: #D6A15B;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
     border: none;
     width: 40px;
     height: 40px;
@@ -80,10 +80,10 @@
   }
 
   .back-to-top:hover {
-    background: #D6A15B;
-    color: #222;
+    background: var(--accent);
+    color: var(--on-accent);
     transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(214,161,91,0.3);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--accent) 30%, transparent);
   }
 
   @media (max-width: 576px) {

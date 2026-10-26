@@ -1,5 +1,6 @@
 <script>
   import LunationArc from './LunationArc.svelte';
+  import Ribbon from './Ribbon.svelte';
 
   const lunationsImages = [
     '/images/UNADJUSTEDNONRAW_thumb_e385-500x99999.jpg',
@@ -37,7 +38,6 @@
       </p>
 
       <div class="access">
-        <i class="fas fa-lock" aria-hidden="true"></i>
         <div>
           <h3>Reserved for members and supporters</h3>
           <p>
@@ -57,13 +57,7 @@
         <a href="/lunations">See this year's lunations — every new and full moon, and what is planned →</a>
       </p>
 
-      <div class="gallery">
-        {#each lunationsImages as image}
-          <div class="gallery-item">
-            <img src={image} alt="Lunations" loading="lazy" />
-          </div>
-        {/each}
-      </div>
+      <Ribbon images={lunationsImages} alt="Lunations" />
     </div>
   </div>
 </section>
@@ -97,35 +91,39 @@
   }
 
   .access {
+    --size: min(500px, 92vw);
+    position: relative;
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 0 calc(var(--size) * 0.13);
     display: flex;
-    gap: 1.25rem;
-    align-items: flex-start;
-    background: #fff;
-    border: 1px solid rgba(214, 161, 91, 0.35);
-    border-radius: 12px;
-    padding: 1.75rem 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid var(--orb-line);
+    mix-blend-mode: var(--orb-blend);
+    animation: orb-drift 9s ease-in-out infinite;
+    margin: 0 auto 2.5rem;
+    background: var(--tint-1);
   }
 
-  .access > i {
-    color: var(--primary-color);
-    font-size: 1.3rem;
-    margin-top: 0.2rem;
-  }
 
   .access h3 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #222;
-    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
   }
 
   .access p {
-    text-align: left;
-    margin-bottom: 1.25rem;
+    max-width: none;
+    margin: 0 0 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--ink-soft);
   }
 
   .access p a {
@@ -136,16 +134,17 @@
   .access-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
   }
 
   .access-actions .btn {
     display: inline-block;
     padding: 10px 22px;
-    border: 2px solid var(--primary-color);
-    border-radius: 6px;
+    border: 1px solid var(--primary-color);
+    border-radius: 999px;
     background: var(--primary-color);
-    color: #222;
+    color: var(--on-accent);
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 2px;
@@ -161,12 +160,12 @@
 
   .access-actions .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(214, 161, 91, 0.25);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--accent) 25%, transparent);
   }
 
   .lunations {
     padding: 6rem 0;
-    background: #faf8f5;
+    background: var(--paper);
   }
 
   .container {
@@ -184,7 +183,7 @@
     font-size: 1.6rem;
     font-weight: 300;
     letter-spacing: 4px;
-    color: #222;
+    color: var(--ink);
     text-transform: uppercase;
   }
 
@@ -194,49 +193,23 @@
   }
 
   p {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: #8a8274;
-    margin-bottom: 2rem;
-    text-align: center;
-    letter-spacing: 0.5px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 auto 2rem;
+    text-align: left;
   }
 
   strong {
-    color: #222;
+    color: var(--ink);
     font-size: 100%;
-  }
-
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-  }
-
-  .gallery-item {
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-    transition: all 0.35s ease;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
   }
 
   /* Newsletter */
   .newsletter {
-    padding: 4rem 2rem;
-    background: #222;
+    padding: 0 2rem 6rem;
+    background: var(--paper);
     text-align: center;
   }
 
@@ -246,7 +219,7 @@
   }
 
   .newsletter h2 {
-    color: #fff;
+    color: var(--ink);
     font-size: 1.4rem;
     font-weight: 300;
     letter-spacing: 4px;
@@ -262,33 +235,33 @@
   .newsletter-form input {
     flex: 1;
     padding: 14px 20px;
-    border: 2px solid rgba(214,161,91,0.3);
+    border: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
     border-radius: 6px;
     font-size: 0.9rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: var(--font-body);
     background: transparent;
-    color: #fff;
+    color: var(--ink);
     transition: border-color 0.3s;
   }
 
   .newsletter-form input::placeholder {
-    color: rgba(255,255,255,0.4);
+    color: color-mix(in srgb, var(--ink) 40%, transparent);
   }
 
   .newsletter-form input:focus {
     outline: none;
-    border-color: #D6A15B;
+    border-color: var(--accent);
   }
 
   .newsletter-form button {
     padding: 14px 32px;
     background: transparent;
-    color: #D6A15B;
-    border: 2px solid #D6A15B;
+    color: var(--accent);
+    border: 2px solid var(--accent);
     border-radius: 6px;
     font-weight: 500;
     font-size: 0.85rem;
-    font-family: "Open Sans", sans-serif;
+    font-family: var(--font-body);
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
@@ -296,10 +269,10 @@
   }
 
   .newsletter-form button:hover {
-    background: #D6A15B;
-    color: #222;
+    background: var(--accent);
+    color: var(--on-accent);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(214,161,91,0.25);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--accent) 25%, transparent);
   }
 
   @media (max-width: 768px) {
@@ -307,12 +280,18 @@
       padding: 4rem 0;
     }
 
-    .section-heading h2 {
-      font-size: 1.3rem;
+    .access p {
+      font-size: 0.8rem;
+      margin-bottom: 0.9rem;
     }
 
-    .gallery {
-      grid-template-columns: 1fr;
+    .access-actions .btn {
+      padding: 8px 16px;
+      font-size: 0.7rem;
+    }
+
+    .section-heading h2 {
+      font-size: 1.3rem;
     }
 
     .newsletter-form {
@@ -321,6 +300,11 @@
 
     .newsletter-form button {
       width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .access {
+      animation: none;
     }
   }
 </style>

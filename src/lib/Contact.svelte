@@ -6,9 +6,6 @@
     <div class="contact-grid">
       <div class="contact-info">
         <div class="info-card">
-          <div class="card-icon" style="background: rgba(214,161,91,0.1)">
-            <i class="fas fa-home" style="color: #D6A15B"></i>
-          </div>
           <h4>Location</h4>
           <p>
             In between Europe and Africa, between northern and southern Italy, between the
@@ -17,9 +14,6 @@
         </div>
 
         <div class="info-card">
-          <div class="card-icon" style="background: rgba(123,158,107,0.1)">
-            <i class="fas fa-calendar" style="color: #7B9E6B"></i>
-          </div>
           <h4>Info / Visits / Stays / Volunteers</h4>
           <p>
             <a
@@ -67,7 +61,7 @@
 <style>
   .contact {
     padding: 6rem 0;
-    background: #fff;
+    background: var(--surface);
   }
 
   .container {
@@ -85,7 +79,7 @@
     font-size: 1.6rem;
     font-weight: 300;
     letter-spacing: 4px;
-    color: #222;
+    color: var(--ink);
     text-transform: uppercase;
   }
 
@@ -97,60 +91,73 @@
 
   .contact-info {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
   }
 
   .info-card {
-    background: #faf8f5;
-    border-radius: 12px;
-    padding: 1.5rem 1.75rem;
-    transition: all 0.35s ease;
+    --size: 250px;
+    position: relative;
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 0 calc(var(--size) * 0.14);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid var(--orb-line);
+    mix-blend-mode: var(--orb-blend);
+    animation: orb-drift 9s ease-in-out infinite;
+    margin: -8px -12px;
+  }
+
+  .info-card:nth-child(3n + 1) {
+    background: var(--tint-1);
+    animation-delay: -0s;
+  }
+
+  .info-card:nth-child(3n + 2) {
+    background: var(--tint-2);
+    animation-delay: -2.25s;
+  }
+
+  .info-card:nth-child(3n + 3) {
+    background: var(--tint-3);
+    animation-delay: -4.5s;
   }
 
   .info-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    animation-play-state: paused;
   }
 
-  .card-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
 
-  .card-icon i {
-    font-size: 1.2rem;
-  }
 
   .info-card h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: #222;
+    font-size: 1.05rem;
+    color: var(--ink);
     margin-bottom: 0.5rem;
   }
 
   .info-card p {
-    font-size: 0.85rem;
-    line-height: 1.8;
-    color: #8a8274;
-    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--ink-soft);
   }
 
   .info-card a {
-    color: #D6A15B;
+    color: var(--accent);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
   }
 
   .info-card a:hover {
-    color: #b8873d;
+    color: var(--accent-deep);
   }
 
   .social-icons {
@@ -165,8 +172,8 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    background: rgba(214,161,91,0.1);
-    color: #D6A15B;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--accent);
     border-radius: 50%;
     font-size: 1.1rem;
     transition: all 0.3s ease;
@@ -174,10 +181,10 @@
   }
 
   .social-icons a:hover {
-    background: #D6A15B;
-    color: #fff;
+    background: var(--accent);
+    color: var(--on-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(214,161,91,0.3);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--accent) 30%, transparent);
   }
 
   .contact-map {
@@ -204,6 +211,11 @@
 
     .section-heading h2 {
       font-size: 1.3rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .info-card {
+      animation: none;
     }
   }
 </style>

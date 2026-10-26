@@ -80,7 +80,7 @@
   }
   @keyframes pop { from { opacity: 0; transform: translate(-50%, -46%); } }
   h2 { font-size: 30px; }
-  .what { display: grid; padding: 14px 16px; border-radius: 14px; background: #fff; box-shadow: var(--shadow); }
+  .what { display: grid; padding: 14px 16px; border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
   .what strong { color: var(--ink); }
   .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
 </style>
