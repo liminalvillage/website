@@ -13,6 +13,7 @@ export default defineConfig({
         services: resolve(__dirname, 'services.html'),
         lunations: resolve(__dirname, 'lunations.html'),
         apply: resolve(__dirname, 'apply.html'),
+        dna: resolve(__dirname, 'dna.html'),
       },
     },
   },

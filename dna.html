@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our DNA · Liminal Village</title>
+<meta name="description" content="The DNA of Liminal Village: why we exist, the values we hold, the agreements and practices everyone who joins is expected to live by, and the tools we use to coordinate a regenerative living laboratory in central Italy.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://liminalvillage.com/dna">
+<link rel="help" href="https://docs.liminalvillage.com/">
+<link rel="alternate" type="text/plain" href="https://liminalvillage.com/llms.txt" title="llms.txt — overview for AI assistants">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Liminal Village">
+<meta property="og:title" content="Our DNA · Liminal Village">
+<meta property="og:description" content="Purpose, values, agreements, practices and tools of Liminal Village — a living laboratory for a regenerative civilization.">
+<meta property="og:url" content="https://liminalvillage.com/dna">
+<meta property="og:image" content="https://liminalvillage.com/images/droneview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/vite.svg">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // This page is served on every domain of the deploy; pick the look by host, like src/main.js.
+  // (?site=regenerativa previews the ReGenerativa look on localhost.)
+  var SITE = (location.hostname.includes('regenerativa') || new URLSearchParams(location.search).get('site') === 'regenerativa') ? 'regenerativa' : 'liminal';
+  if (SITE === 'regenerativa') document.documentElement.dataset.site = 'regenerativa';
+  document.documentElement.classList.add('js');
+</script>
+</head>
+<body>
+<!-- The strand: a three.js helix fixed behind the page, scrolled 1:1 with it (src/dna/helix.js).
+     Each .gene is a segment of it; each .allele is wired to a base pair by a line in svg.wires. -->
+<canvas id="helix" aria-hidden="true"></canvas>
+<svg class="wires" aria-hidden="true"></svg>
+
+<header class="top">
+  <div class="wrap">
+    <a href="/" class="brand">Liminal Village</a>
+    <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to site</a>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Sections on this page"><ol></ol></nav>
+<div class="tip" aria-hidden="true"></div>
+
+<!-- Detail panel for a gene or a framework, filled by main.js from src/dna/content.js -->
+<aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+  <div class="drawer-scrim" data-close></div>
+  <div class="drawer-panel" data-lenis-prevent>
+    <button type="button" class="drawer-close" data-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="drawer-body"></div>
+  </div>
+</aside>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Founded 2018 · Tronto Valley, Le Marche, Italy</div>
+    <h1>Our <span>DNA</span></h1>
+    <p>Like biological DNA, a community's social DNA is the code it grows from. Follow the strand: each gene is one part of what you are joining, and what we expect of you.</p>
+    <ol class="genome" aria-label="Genes on this strand">
+      <li style="--g:#D6A15B"><a href="#purpose"><b>01</b>Purpose</a></li>
+      <li style="--g:#C9774F"><a href="#thresholds"><b>02</b>Thresholds</a></li>
+      <li style="--g:#4a9d5f"><a href="#values"><b>03</b>Values</a></li>
+      <li style="--g:#3f8a8c"><a href="#agreements"><b>04</b>Agreements</a></li>
+      <li style="--g:#7B9E6B"><a href="#practices"><b>05</b>Practices</a></li>
+      <li style="--g:#8E6C8A"><a href="#roles"><b>06</b>Roles</a></li>
+      <li style="--g:#5f7590"><a href="#tools"><b>07</b>Tools</a></li>
+    </ol>
+  </section>
+
+  <div class="terminus" id="five-prime"><span>5′</span></div>
+
+  <!-- 1 · PURPOSE -->
+  <section class="gene" id="purpose" data-gene="Purpose" style="--g:#D6A15B">
+    <div class="track"><span>Gene 01 · Purpose</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 01</b> Why we exist <small class="range"></small></div>
+        <h2>Purpose</h2>
+        <blockquote>Liminal Village exists to <em>prototype a regenerative civilization</em>, weaving together community living, healing practices and open-source technologies, and sharing everything we learn.</blockquote>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele"><span class="pics"><span class="ico sm muted"><i class="fa-solid fa-industry"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico sm"><i class="fa-solid fa-leaf"></i></span></span><div><div class="kicker">The shift</div><h3>Extraction <em>→</em> Regeneration</h3></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm muted"><i class="fa-solid fa-user"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico sm"><i class="fa-solid fa-people-group"></i></span></span><div><div class="kicker">The shift</div><h3>Isolation <em>→</em> Belonging</h3></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm muted"><i class="fa-solid fa-lock"></i></span><i class="fa-solid fa-arrow-right"></i><span class="ico sm"><i class="fa-solid fa-gift"></i></span></span><div><div class="kicker">The shift</div><h3>Scarcity <em>→</em> Shared abundance</h3></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-triangle-exclamation"></i></span><div><div class="kicker">The problem</div><h3>Extractive systems leave us disconnected</h3></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-flask"></i></span><div><div class="kicker">Our answer</div><h3>A real-world lab you can live in</h3></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-circle-nodes"></i></span><div><div class="kicker">Vision</div><h3>A network of regenerative communities</h3><p>with <a class="link" href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a>, ReFactory &amp; Casa Selva</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-compass"></i></span><div><div class="kicker">Mission</div><h3>Upgrade the operating system of society</h3></div></article>
+    </div>
+  </section>
+
+  <!-- 2 · THRESHOLDS -->
+  <section class="gene" id="thresholds" data-gene="Thresholds" style="--g:#C9774F">
+    <div class="track"><span>Gene 02 · Thresholds</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 02</b> What we explore <small class="range"></small></div>
+        <h2>The thresholds we live on</h2>
+        <p><i>Liminal</i>, from the Latin <i>limen</i>: threshold. We don't pick a side of old divides; we work in the space between, where new things grow.</p>
+        <p class="quote">“The space where we are betwixt and between the familiar and the completely unknown. There alone is our old world left behind, while we are not yet sure of the new existence. That's a good space where genuine newness can begin.” <span>— Richard Rohr</span></p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-leaf"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-microchip"></i></span></span><div><h3>Nature <em>&amp;</em> Technology</h3><p>Biomimicry, permaculture, open source</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-atom"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-om"></i></span></span><div><h3>Science <em>&amp;</em> Spirituality</h3><p>Ancient wisdom, current knowledge</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-coins"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-people-group"></i></span></span><div><h3>Economy <em>&amp;</em> Society</h3><p>Care, trust, mutual credit</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-pills"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-spa"></i></span></span><div><h3>Medicine <em>&amp;</em> Healing</h3><p>Clinic meets community wellness</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-user"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-users"></i></span></span><div><h3>Self <em>&amp;</em> Community</h3><p>Inner growth, collective intelligence</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-trophy"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-handshake"></i></span></span><div><h3>Competition <em>&amp;</em> Collaboration</h3><p>Hackathons that reward the commons</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-key"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-people-roof"></i></span></span><div><h3>Ownership <em>&amp;</em> Commons</h3><p>Stewardship over property</p></div></article>
+      <article class="allele"><span class="pics"><span class="ico sm"><i class="fa-solid fa-heart"></i></span><span class="limen"></span><span class="ico sm"><i class="fa-solid fa-award"></i></span></span><div><h3>Intrinsic <em>&amp;</em> Extrinsic</h3><p>Inner purpose, rewarded contribution</p></div></article>
+    </div>
+  </section>
+
+  <!-- 3 · VALUES -->
+  <section class="gene" id="values" data-gene="Values" style="--g:#4a9d5f">
+    <div class="track"><span>Gene 03 · Values</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 03</b> What we hold <small class="range"></small></div>
+        <h2>Core values</h2>
+        <p>Our compass for every decision, each one paired with what it looks like in practice.</p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-leaf"></i></span><div><h3>Regeneration</h3><p>Leave it better than you found it</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-circle-nodes"></i></span><div><h3>Interdependence</h3><p>No one thrives alone</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-hand-holding-heart"></i></span><div><h3>Care</h3><p>See a job that needs doing? It's yours</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-handshake"></i></span><div><h3>Trust &amp; accountability</h3><p>Make agreements, keep them</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-people-roof"></i></span><div><h3>Commons</h3><p>Return what you borrow</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-gift"></i></span><div><h3>Gift &amp; abundance</h3><p>Share food, skills and time</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-code-branch"></i></span><div><h3>Openness</h3><p>Open source, open books</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-flask"></i></span><div><h3>Experimentation</h3><p>Proposals, not complaints</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-yin-yang"></i></span><div><h3>Wholeness</h3><p>Body, mind, heart and spirit</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-moon"></i></span><div><h3>Natural cycles</h3><p>Live by the moon, not the clock</p></div></article>
+    </div>
+  </section>
+
+  <!-- 4 · AGREEMENTS -->
+  <section class="gene" id="agreements" data-gene="Agreements" style="--g:#3f8a8c">
+    <div class="track"><span>Gene 04 · Agreements</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 04</b> How we relate <small class="range"></small></div>
+        <h2>Agreements</h2>
+        <p>The shared grammar of community life. Everyone practises them, imperfectly but sincerely.</p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele" data-fw="four-agreements"><span class="ico" data-n="1"><i class="fa-solid fa-comment-dots"></i></span><div><div class="kicker">The Four Agreements · Don Miguel Ruiz</div><h3>Be impeccable with your word</h3></div></article>
+      <article class="allele" data-fw="four-agreements"><span class="ico" data-n="2"><i class="fa-solid fa-shield-halved"></i></span><div><div class="kicker">The Four Agreements</div><h3>Don't take anything personally</h3></div></article>
+      <article class="allele" data-fw="four-agreements"><span class="ico" data-n="3"><i class="fa-solid fa-circle-question"></i></span><div><div class="kicker">The Four Agreements</div><h3>Don't make assumptions</h3></div></article>
+      <article class="allele" data-fw="four-agreements"><span class="ico" data-n="4"><i class="fa-solid fa-star"></i></span><div><div class="kicker">The Four Agreements</div><h3>Always do your best</h3></div></article>
+      <article class="allele" data-fw="nvc"><span class="ico"><i class="fa-solid fa-comments"></i></span><div>
+        <div class="kicker">Marshall Rosenberg</div><h3>Non-Violent Communication</h3>
+        <ol class="steps">
+          <li><i class="fa-solid fa-eye"></i><b>Observation</b><span>what happened, no judgment</span></li>
+          <li><i class="fa-solid fa-heart"></i><b>Feeling</b><span>what you feel</span></li>
+          <li><i class="fa-solid fa-seedling"></i><b>Need</b><span>the need beneath it</span></li>
+          <li><i class="fa-solid fa-hand"></i><b>Request</b><span>clear and doable</span></li>
+        </ol>
+      </div></article>
+      <article class="allele" data-fw="holacracy"><span class="ico"><i class="fa-solid fa-bolt"></i></span><div>
+        <div class="kicker">Holacracy, soft version</div><h3>Tensions are opportunities</h3>
+        <ol class="steps">
+          <li><i class="fa-solid fa-bolt"></i><b>Notice a tension</b><span>a gap between is and could be</span></li>
+          <li><i class="fa-solid fa-lightbulb"></i><b>Add a proposal</b><span>not a complaint</span></li>
+          <li><i class="fa-solid fa-people-arrows"></i><b>Bring it to the right place</b><span>the person · the role · the circle</span></li>
+          <li><i class="fa-solid fa-arrow-trend-up"></i><b>The village improves</b><span>silent tensions make it worse</span></li>
+        </ol>
+      </div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-map"></i></span><div><div class="kicker">Shared maps</div><h3>Frameworks we think with</h3><p><button type="button" class="fw" data-fw="integral-theory">Integral Theory</button>, <button type="button" class="fw" data-fw="spiral-dynamics">Spiral Dynamics</button>, <button type="button" class="fw" data-fw="ikigai">Ikigai</button>, <button type="button" class="fw" data-fw="permaculture">Permaculture</button>, <button type="button" class="fw" data-fw="internal-family-systems">IFS</button>, <button type="button" class="fw" data-fw="enneagram">Enneagram</button>. <a class="link" href="/frameworks">All frameworks →</a></p></div></article>
+    </div>
+  </section>
+
+  <!-- 5 · PRACTICES -->
+  <section class="gene" id="practices" data-gene="Practices" style="--g:#7B9E6B">
+    <div class="track"><span>Gene 05 · Practices</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 05</b> What we do <small class="range"></small></div>
+        <h2>Practices: what is expected of you</h2>
+        <p>You are not a guest at a retreat. You are a co-creator of a temporary community, and you share responsibility for how it goes.</p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-user-gear"></i></span><div><div class="kicker">Your goals · 1 of 3</div><h3>Personal</h3><p>Your own goal for the lunation</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-street-view"></i></span><div><div class="kicker">Your goals · 2 of 3</div><h3>Local</h3><p>Something for the people &amp; land here</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-earth-americas"></i></span><div><div class="kicker">Your goals · 3 of 3</div><h3>Global</h3><p>A cause that matters for the planet</p></div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-envelope-open-text"></i></span><div>
+        <div class="kicker">Before you arrive</div><h3>Align</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-book-open"></i><span>Read this page &amp; the <a class="link" href="https://docs.liminalvillage.com/onboarding" target="_blank" rel="noopener">onboarding docs</a></span></li>
+          <li><i class="fa-solid fa-id-card"></i><span>Join ReGenerativa APS</span></li>
+          <li><i class="fa-solid fa-handshake-simple"></i><span>Agree how you'll contribute (<a class="link" href="https://perfectspiralcapital.com/blog/the-eight-forms-of-capital/" target="_blank" rel="noopener">8 capitals</a>)</span></li>
+          <li><i class="fa-solid fa-calendar-check"></i><span>Confirm dates before booking travel</span></li>
+          <li><i class="fa-solid fa-moon"></i><span>Arrive with the new moon</span></li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-sun"></i></span><div>
+        <div class="kicker">Every day</div><h3>Contribute</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-clock"></i><span>2 h/day member · 4 h/day volunteer</span></li>
+          <li><i class="fa-brands fa-telegram"></i><span>Claim tasks via the bot, follow through</span></li>
+          <li><i class="fa-solid fa-broom"></i><span>See a job? It's yours</span></li>
+          <li><i class="fa-solid fa-clipboard-list"></i><span>Follow the protocols</span></li>
+          <li><i class="fa-solid fa-shoe-prints"></i><span>No shoes inside · label your food</span></li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-moon"></i></span><div>
+        <div class="kicker">Every lunation</div><h3>Co-create</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-gift"></i><span>Gift a talk, workshop or practice</span></li>
+          <li><i class="fa-solid fa-circle-notch"></i><span>Join circles &amp; feedback</span></li>
+          <li><i class="fa-solid fa-bolt"></i><span>Voice tensions with proposals</span></li>
+          <li><i class="fa-solid fa-diagram-project"></i><span>Propose projects</span></li>
+          <li><i class="fa-solid fa-fire"></i><span>Share meals, fire &amp; collective cleaning</span></li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-door-open"></i></span><div>
+        <div class="kicker">Before you leave</div><h3>Close the cycle</h3>
+        <ul class="mini">
+          <li><i class="fa-solid fa-bell"></i><span>3 days' notice</span></li>
+          <li><i class="fa-solid fa-bed"></i><span>Clean room, sheets &amp; mat</span></li>
+          <li><i class="fa-solid fa-rotate-left"></i><span>Return what you borrowed</span></li>
+          <li><i class="fa-solid fa-star"></i><span>Deep clean = bonus + deposit back</span></li>
+          <li><i class="fa-solid fa-video"></i><span>Send a 2–5 min video</span></li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-circle-check"></i></span><div>
+        <div class="kicker">Counts as contribution</div><h3>What counts</h3>
+        <ul class="chips">
+          <li><i class="fa-solid fa-screwdriver-wrench"></i>Maintenance</li>
+          <li><i class="fa-solid fa-broom"></i>Cleaning</li>
+          <li><i class="fa-solid fa-utensils"></i>Cooking</li>
+          <li><i class="fa-solid fa-seedling"></i>Gardening</li>
+          <li><i class="fa-solid fa-baby"></i>Childcare</li>
+          <li><i class="fa-solid fa-calendar-day"></i>Events &amp; facilitation</li>
+          <li><i class="fa-solid fa-hand-holding-heart"></i>Emotional support</li>
+          <li><i class="fa-solid fa-chalkboard-user"></i>Offering workshops</li>
+          <li><i class="fa-solid fa-diagram-project"></i>Approved projects</li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico muted"><i class="fa-solid fa-circle-xmark"></i></span><div>
+        <div class="kicker">Doesn't count</div><h3>What doesn't</h3>
+        <ul class="chips no">
+          <li><i class="fa-solid fa-champagne-glasses"></i>Social activities</li>
+          <li><i class="fa-solid fa-circle-notch"></i>Attending circles</li>
+          <li><i class="fa-solid fa-chalkboard"></i>Attending workshops</li>
+        </ul>
+        <p>Unkept commitments have a cost: fairness keeps the commons alive.</p>
+      </div></article>
+    </div>
+  </section>
+
+  <!-- 6 · ROLES & MEMBERSHIP -->
+  <section class="gene" id="roles" data-gene="Roles" style="--g:#8E6C8A">
+    <div class="track"><span>Gene 06 · Roles</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 06</b> How we organise <small class="range"></small></div>
+        <h2>Roles &amp; membership</h2>
+        <p><button type="button" class="fw" data-fw="holacracy">Soft Holacracy</button>: authority sits in roles, not people. Anyone can hold several roles, and roles change as the village does.</p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-utensils"></i></span><div><div class="kicker">Village role</div><h3>Culinary</h3><p>Meals, pantry, low food waste</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-seedling"></i></span><div><div class="kicker">Village role</div><h3>Sustainability</h3><p>Garden, produce, resources</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-broom"></i></span><div><div class="kicker">Village role</div><h3>Space &amp; Logistics</h3><p>Common spaces, supplies</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-people-group"></i></span><div><div class="kicker">Village role</div><h3>Community Facilitator</h3><p>Meetings, mediation, learning</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-spa"></i></span><div><div class="kicker">Village role</div><h3>Wellness</h3><p>Healing, culture, support</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-microchip"></i></span><div><div class="kicker">Village role</div><h3>Technology &amp; Finance</h3><p>Platforms, open finances</p></div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-user-check"></i></span><div><div class="kicker">Way to take part</div><h3>Member <span class="stat">2h <small>/ day</small></span></h3><p>+ lunation or phase ticket, insurance included</p></div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-handshake-angle"></i></span><div><div class="kicker">Way to take part</div><h3>Volunteer <span class="stat">4h <small>/ day</small></span></h3><p>lower financial contribution</p></div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-hand-holding-dollar"></i></span><div><div class="kicker">Way to take part</div><h3>Sponsor <span class="stat">€</span></h3><p>financial support; time welcome</p></div></article>
+      <article class="allele"><span class="ico solid"><i class="fa-solid fa-person-walking-luggage"></i></span><div><div class="kicker">Way to take part</div><h3>Visitor <span class="stat"><i class="fa-solid fa-heart"></i></span></h3><p>donation · short stays only</p></div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-scale-balanced"></i></span><div><div class="kicker">How money works</div><h3>No fixed room price</h3><p>Contributions cover real costs, stewards allocate spaces by need, and any surplus is reinvested.</p></div></article>
+    </div>
+  </section>
+
+  <!-- 7 · TOOLS -->
+  <section class="gene" id="tools" data-gene="Tools" style="--g:#5f7590">
+    <div class="track"><span>Gene 07 · Tools</span></div>
+    <div class="alleles">
+      <header class="tag">
+        <div class="num"><b>Gene 07</b> What we use <small class="range"></small></div>
+        <h2>Tools</h2>
+        <p>A cybernetic operating system: open tools that make tasks, roles, time and money visible.</p>
+        <button type="button" class="explore" data-open-gene>Explore this gene <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <a class="allele" href="https://t.me/HolonsBot" target="_blank" rel="noopener"><span class="ico"><i class="fa-brands fa-telegram"></i></span><div><div class="kicker">Coordination</div><h3>HolonsBot</h3><p>Tasks · roles · quests · profile</p><div class="go">Telegram →</div></div></a>
+      <a class="allele" href="https://holons.io" target="_blank" rel="noopener"><span class="ico"><i class="fa-solid fa-circle-nodes"></i></span><div><div class="kicker">Coordination</div><h3>Holons &amp; HoloSphere</h3><p>Community OS · shared memory</p><div class="go">holons.io →</div></div></a>
+      <a class="allele" href="/lunations"><span class="ico"><i class="fa-solid fa-moon"></i></span><div><div class="kicker">Coordination</div><h3>Lunations</h3><p>Our year in moons</p><div class="go">Calendar →</div></div></a>
+      <a class="allele" href="/quests.html"><span class="ico"><i class="fa-solid fa-flag"></i></span><div><div class="kicker">Coordination</div><h3>Quests</h3><p>Missions to join</p><div class="go">Browse →</div></div></a>
+      <a class="allele" href="/services"><span class="ico"><i class="fa-solid fa-hands-holding-circle"></i></span><div><div class="kicker">Coordination</div><h3>Services</h3><p>Skills &amp; booking</p><div class="go">See services →</div></div></a>
+      <a class="allele" href="https://opencollective.com/liminal" target="_blank" rel="noopener"><span class="ico"><i class="fa-solid fa-coins"></i></span><div><div class="kicker">Coordination</div><h3>Open Collective</h3><p>Every euro, public</p><div class="go">Open books →</div></div></a>
+      <a class="allele" href="https://docs.liminalvillage.com/" target="_blank" rel="noopener"><span class="ico"><i class="fa-solid fa-book-open"></i></span><div><div class="kicker">Coordination</div><h3>Docs &amp; protocols</h3><p>+ Liminal Surfboard AI</p><div class="go">Read →</div></div></a>
+      <a class="allele" href="https://async.hackalong.io/" target="_blank" rel="noopener"><span class="ico"><i class="fa-solid fa-laptop-code"></i></span><div><div class="kicker">Coordination</div><h3>Hackalong</h3><p>Build together</p><div class="go">Projects →</div></div></a>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-yin-yang"></i></span><div>
+        <div class="kicker">Inner &amp; relational</div><h3>Tools for the inside</h3>
+        <ul class="chips">
+          <li><button type="button" data-fw="nvc"><i class="fa-solid fa-comments"></i>Non-Violent Communication</button></li>
+          <li><button type="button" data-fw="four-agreements"><i class="fa-solid fa-scroll"></i>The Four Agreements</button></li>
+          <li><i class="fa-solid fa-people-group"></i>Circles &amp; feedback sessions</li>
+          <li><button type="button" data-fw="holacracy"><i class="fa-solid fa-sitemap"></i>Soft Holacracy</button></li>
+          <li><button type="button" data-fw="ikigai"><i class="fa-solid fa-compass"></i>Ikigai</button></li>
+          <li><button type="button" data-fw="internal-family-systems"><i class="fa-solid fa-users-viewfinder"></i>Internal Family Systems</button></li>
+          <li><button type="button" data-fw="integral-theory"><i class="fa-solid fa-border-all"></i>Integral Theory</button></li>
+          <li><button type="button" data-fw="spiral-dynamics"><i class="fa-solid fa-hurricane"></i>Spiral Dynamics</button></li>
+          <li><button type="button" data-fw="enneagram"><i class="fa-solid fa-star"></i>Enneagram</button></li>
+          <li><i class="fa-solid fa-person-hiking"></i>Wondering Journey</li>
+        </ul>
+      </div></article>
+      <article class="allele"><span class="ico"><i class="fa-solid fa-solar-panel"></i></span><div>
+        <div class="kicker">The living lab</div><h3>Tools on the land</h3>
+        <ul class="chips">
+          <li><i class="fa-solid fa-solar-panel"></i>100% renewable energy</li>
+          <li><i class="fa-solid fa-robot"></i>Open-source FarmBot</li>
+          <li><i class="fa-solid fa-droplet"></i>Open-source water purification</li>
+          <li><i class="fa-solid fa-water"></i>Biopool (in transformation)</li>
+          <li><button type="button" data-fw="permaculture"><i class="fa-solid fa-seedling"></i>Permaculture garden &amp; composting</button></li>
+          <li><i class="fa-solid fa-chalkboard-user"></i>Indoor &amp; outdoor co-creation spaces</li>
+          <li><i class="fa-solid fa-wifi"></i>Fast internet across the site</li>
+          <li><i class="fa-solid fa-bed"></i>Rooms, caravans &amp; tents</li>
+        </ul>
+      </div></article>
+    </div>
+  </section>
+
+  <div class="terminus" id="three-prime"><span>3′</span></div>
+
+  <section class="outro">
+    <h2>Does this DNA resonate?</h2>
+    <p>If these values feel like yours, come and co-create the next lunation with us.</p>
+    <div class="actions">
+      <a class="btn" href="/apply"><i class="fa-solid fa-pen-to-square"></i> Apply to visit</a>
+      <a class="btn ghost" href="https://docs.liminalvillage.com/onboarding/what-to-expect" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> What to expect</a>
+      <a class="btn ghost" href="/frameworks"><i class="fa-solid fa-map"></i> Frameworks</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year"></span> Liminal Village &nbsp;·&nbsp; <a href="/">liminalvillage.com</a></div>
+    <div class="lic">This DNA is a living document: it evolves through our circles and assemblies.</div>
+  </div>
+</footer>
+
+<script type="module" src="/src/dna/main.js"></script>
+</body>
+</html>
