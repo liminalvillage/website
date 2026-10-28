@@ -27,11 +27,12 @@ export const BOT_USERNAME = 'HolonsBot';
 export const BOT_SERVER = 'https://telegram.holons.io';
 export const DASHBOARD = 'https://dashboard.holons.io';
 
-/** Which portal a hostname belongs to (liminalvillage.com and anything unknown → liminal). */
+/** Which portal a hostname belongs to (liminalvillage.com and anything unknown → liminal).
+ *  rigenerativa.it (the company) shares the regenerativa network portal. */
 export function portalFor(hostname = '') {
   const host = hostname.toLowerCase();
   if (host.includes('casaselva')) return 'casaselva';
   if (host.includes('refactory') || host.includes('brickfactory')) return 'refactory';
-  if (host.includes('regenerativa')) return 'regenerativa';
+  if (host.includes('regenerativa') || host.includes('rigenerativa')) return 'regenerativa';
   return 'liminal';
 }

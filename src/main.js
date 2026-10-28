@@ -10,7 +10,9 @@ const site = host.includes('casaselva')
     ? 'refactory'
     : host.includes('regenerativa')
       ? 'regenerativa'
-      : 'liminal'
+      : host.includes('rigenerativa')
+        ? 'rigenerativa'
+        : 'liminal'
 
 async function boot() {
   if (site === 'casaselva') {
@@ -45,6 +47,19 @@ async function boot() {
     const [{ default: App }] = await Promise.all([
       import('./regenerativa/App.svelte'),
       import('./regenerativa/regenerativa.css'),
+    ])
+    return mount(App, { target: document.getElementById('app') })
+  }
+
+  if (site === 'rigenerativa') {
+    document.documentElement.setAttribute('data-site', 'rigenerativa')
+    document.documentElement.setAttribute('lang', 'it')
+    document.title = 'Rigenerativa S.r.l. — Rigenerazione di luoghi, comunità e territori'
+    setMeta('description',
+      'Rigenerativa S.r.l. trasforma spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali: bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni. Castorano (AP), Marche.')
+    const [{ default: App }] = await Promise.all([
+      import('./rigenerativa/App.svelte'),
+      import('./rigenerativa/rigenerativa.css'),
     ])
     return mount(App, { target: document.getElementById('app') })
   }

@@ -1,0 +1,86 @@
+/* Rigenerativa S.r.l. — global styles (rigenerativa.it)
+   Earthy palette: deep forest greens, warm gold, cream, soil brown.
+*/
+
+:root {
+  --rg-text: #232b21;
+  --rg-muted: #5e695a;
+  --rg-cream: #f4efe4;
+  --rg-cream-soft: #faf6ec;
+  --rg-bark: #2c3527;
+  --rg-forest: #3f6a45;
+  --rg-forest-dark: #2c4a31;
+  --rg-moss: #6f8c5a;
+  --rg-gold: #c9a35b;
+  --rg-gold-soft: #ddb979;
+  --rg-soil: #8a6a4a;
+  --rg-line: #e3dccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--rg-text);
+  background-color: var(--rg-cream-soft);
+  line-height: 1.75;
+  overflow-x: hidden;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  width: 100%;
+  min-height: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Cormorant Garamond", "Open Sans", serif;
+  font-weight: 400;
+  color: var(--rg-bark);
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+p {
+  line-height: 1.85;
+  color: var(--rg-text);
+}
+
+a {
+  color: var(--rg-forest);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--rg-gold);
+}
+
+::selection {
+  background-color: var(--rg-forest);
+  color: #fff;
+}
+
+@keyframes rg-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rg-fade-in-slow {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
