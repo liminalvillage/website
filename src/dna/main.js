@@ -285,13 +285,25 @@ function openGene(gene, from) {
   showDrawer(geneColor(gene), from);
 }
 
+// Concept illustrations (public/images/concepts, drawn by
+// scripts/concept-art.py) that open a framework's panel
+const CONCEPT_ART = {
+  'spiral-dynamics': 'spiral',
+  holacracy: 'holonic-architecture',
+  ikigai: 'ikigai',
+  permaculture: 'forest-pattern-language',
+  'internal-family-systems': 'internal-family-systems',
+};
+
 function openFramework(id, from) {
   const fw = FRAMEWORKS[id];
+  const art = CONCEPT_ART[id];
   if (!fw) return;
   const homes = genes.filter((g) => g.querySelector(`[data-fw="${id}"]`));
   const color = from?.closest('.gene') ? geneColor(from.closest('.gene')) : getComputedStyle(drawerPanel).getPropertyValue('--g') || '#D6A15B';
   const links = [...(fw.page ? [{ label: 'On our Frameworks page', href: fw.page, icon: 'fa-map' }] : []), ...fw.links];
   drawerBody.innerHTML = `
+    ${art ? `<div class="concept-art"><img src="/images/concepts/${art}.svg" alt="" loading="lazy"></div>` : ''}
     <div class="origin">Framework · ${esc(fw.origin)}</div>
     <h2 id="drawer-title">${esc(fw.title)}</h2>
     <p class="lede">${esc(fw.tagline)}</p>

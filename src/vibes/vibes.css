@@ -145,3 +145,198 @@ html[data-vibe] .navbar-title {
   text-transform: none;
   font-size: 24px;
 }
+
+/* Psychedelic: a light page alive with happy spectrum colour. A slowly
+   turning rainbow glow sits behind everything, and the circles take
+   spectrum tints that mix where they overlap (never purple). */
+html[data-vibe="psy"] {
+  --bar-bg: rgba(255, 253, 248, 0.8);
+  --bar-solid: rgba(255, 253, 248, 0.97);
+  --ink: #1f1d24;
+  --ink-soft: #2f2c35;
+  --muted: #625e6b;
+  --accent: #e8456b;
+  --accent-deep: #c22f55;
+  --accent-soft: #ffd84d;
+  --leaf: #3ccf91;
+  --leaf-deep: #18a5c4;
+  --paper: rgba(255, 253, 248, 0.45);
+  --surface: rgba(255, 255, 255, 0.35);
+  --night: #1f1d24;
+  --on-dark: #fffdf8;
+  --on-accent: #fffdf8;
+  --line: rgba(31, 29, 36, 0.08);
+  --page-bg: #fffdf8;
+
+  --tint-1: rgba(255, 120, 140, 0.55);
+  --tint-2: rgba(255, 200, 60, 0.6);
+  --tint-3: rgba(70, 215, 170, 0.5);
+  --tint-4: rgba(80, 190, 255, 0.5);
+  --orb-line: transparent;
+  --moon-lit: #fffbe8;
+  --moon-shadow: #ffd9c7;
+
+  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-border: rgba(31, 29, 36, 0.08);
+  --card-blur: none;
+  --card-shadow: 0 12px 36px rgba(232, 69, 107, 0.08);
+  --card-shadow-hover: 0 20px 48px rgba(232, 69, 107, 0.16);
+
+  --font-heading: "Outfit", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Quicksand", system-ui, sans-serif;
+  --heading-weight: 300;
+  --heading-tracking: 0.02em;
+}
+
+html[data-vibe="psy"] body::before,
+html[data-vibe="psy"] .curtain::before {
+  content: '';
+  position: fixed;
+  inset: -30vmax;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(255, 255, 255, 0.85), transparent 75%),
+    conic-gradient(from 0deg,
+      #ff8fa3, #ffb36b, #ffe066, #b6f07a, #6ee7c8, #7cc8ff, #ffa8c5, #ff8fa3);
+  filter: blur(70px) saturate(1.15);
+  opacity: 0.55;
+  animation: psy-turn 90s linear infinite;
+}
+
+html[data-vibe="psy"] body {
+  isolation: isolate;
+}
+
+@keyframes psy-turn {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-vibe="psy"] body::before,
+  html[data-vibe="psy"] .curtain::before {
+    animation: none;
+  }
+}
+
+/* Autumn: the brand palette proposal (see /palette for when to use which
+   colour). Oat paper, bark ink, rust for action, olive in support, and one
+   colour per lunation phase: Seed sprout, Build ember, Celebrate rosehip,
+   Harvest chestnut. */
+html[data-vibe="autumn"] {
+  --bar-bg: rgba(255, 250, 242, 0.82);
+  --bar-solid: rgba(255, 250, 242, 0.97);
+  --ink: var(--bark-900);
+  --ink-soft: var(--bark-800);
+  --muted: var(--bark-600);
+  --accent: var(--rust-600);
+  --accent-deep: var(--rust-700);
+  --accent-soft: var(--ember-200);
+  --leaf: var(--sprout-500);
+  --leaf-deep: var(--olive-700);
+  --paper: color-mix(in srgb, var(--oat-100) 55%, transparent);
+  --surface: color-mix(in srgb, #fff 35%, transparent);
+  --night: var(--bark-900);
+  --on-dark: var(--oat-100);
+  --on-accent: var(--oat-100);
+  --line: color-mix(in srgb, var(--bark-900) 10%, transparent);
+  --page-bg:
+    radial-gradient(55vw 45vw at 10% 8%, var(--ember-200), transparent 70%),
+    radial-gradient(50vw 40vw at 95% 40%, var(--rosehip-200), transparent 70%),
+    radial-gradient(60vw 45vw at 40% 95%, var(--sprout-200), transparent 70%),
+    var(--oat-100);
+
+  /* Circles: pale tints from one warm family, so they sit calmly together */
+  --tint-1: color-mix(in srgb, var(--ember-200) 80%, transparent);
+  --tint-2: color-mix(in srgb, var(--rosehip-200) 70%, transparent);
+  --tint-3: color-mix(in srgb, var(--oat-300) 85%, transparent);
+  --tint-4: color-mix(in srgb, var(--chestnut-200) 75%, transparent);
+  --orb-line: transparent;
+  --moon-lit: #fff8ec;
+  --moon-shadow: var(--oat-300);
+
+  --card-bg: color-mix(in srgb, #fff 50%, transparent);
+  --card-border: color-mix(in srgb, var(--bark-900) 8%, transparent);
+  --card-blur: none;
+  --card-shadow: 0 12px 36px rgba(117, 54, 20, 0.06);
+  --card-shadow-hover: 0 20px 48px rgba(117, 54, 20, 0.12);
+
+  --font-heading: "Outfit", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Quicksand", system-ui, sans-serif;
+  --heading-weight: 300;
+  --heading-tracking: 0.02em;
+}
+
+/* Lunarpunk: solarpunk's night-time sibling. Midnight blue-black, moonlight
+   silver and a bioluminescent aqua glow (bluish, never mint), with a soft
+   night-rose; a faint star field on the light pages. No purple. */
+html[data-vibe="lunar"] {
+  --bar-bg: rgba(6, 9, 20, 0.8);
+  --bar-solid: rgba(6, 9, 20, 0.96);
+  --ink: #e6ecf5;
+  --ink-soft: #cdd6e4;
+  --muted: #94a3ba;
+  --accent: #6fd3e0;
+  --accent-deep: #a6ecf2;
+  --accent-soft: #1f4a5c;
+  --leaf: #8fb4ff;
+  --leaf-deep: #b9cfff;
+  --paper: rgba(8, 12, 26, 0.55);
+  --surface: rgba(12, 18, 36, 0.4);
+  --night: #04060e;
+  --on-dark: #e6ecf5;
+  --on-accent: #04121a;
+  --line: rgba(166, 236, 242, 0.12);
+  --page-bg:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 68% 9%, rgba(255, 255, 255, 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 84% 32%, rgba(255, 255, 255, 0.75), transparent 60%),
+    radial-gradient(1px 1px at 31% 54%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1px 1px at 52% 76%, rgba(255, 255, 255, 0.65), transparent 60%),
+    radial-gradient(1.5px 1.5px at 9% 88%, rgba(255, 255, 255, 0.7), transparent 60%),
+    radial-gradient(1px 1px at 92% 71%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(55vw 45vw at 85% 10%, rgba(111, 211, 224, 0.14), transparent 70%),
+    radial-gradient(50vw 50vw at 0% 70%, rgba(80, 120, 220, 0.16), transparent 70%),
+    radial-gradient(40vw 30vw at 60% 100%, rgba(255, 160, 190, 0.07), transparent 70%),
+    #05070f;
+
+  --tint-1: rgba(111, 211, 224, 0.16);
+  --tint-2: rgba(140, 175, 255, 0.15);
+  --tint-3: rgba(230, 236, 255, 0.1);
+  --tint-4: rgba(255, 170, 200, 0.1);
+  --orb-line: transparent;
+  --orb-blend: screen;
+  --moon-lit: #eef3ff;
+  --moon-shadow: #18203a;
+
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(166, 236, 242, 0.14);
+  --card-blur: none;
+  --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  --card-shadow-hover: 0 0 0 1px rgba(111, 211, 224, 0.3), 0 0 36px rgba(111, 211, 224, 0.16);
+
+  /* Over the hero video: a deep blue veil and cool glows */
+  --veil: rgba(4, 8, 22, 0.7);
+  --veil-tone: linear-gradient(135deg, rgba(4, 8, 22, 0.6), rgba(10, 40, 60, 0.3));
+  --glow-1: rgba(111, 211, 224, 0.2);
+  --glow-2: rgba(140, 175, 255, 0.18);
+  --glow-3: rgba(230, 236, 255, 0.12);
+  --glow-4: rgba(255, 170, 200, 0.12);
+  --glow-accent: #8fe3ec;
+  --glow-accent-deep: #c6f3f6;
+  --glow-accent-soft: #2a5f70;
+
+  --font-heading: "Outfit", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Quicksand", system-ui, sans-serif;
+  --heading-weight: 200;
+  --heading-tracking: 0.03em;
+  color-scheme: dark;
+}
+
+/* Headings carry a faint bioluminescent glow */
+html[data-vibe="lunar"] :is(h1, h2, .lead, .phase) {
+  text-shadow: 0 0 28px rgba(111, 211, 224, 0.35), 0 1px 14px rgba(0, 0, 0, 0.4);
+}

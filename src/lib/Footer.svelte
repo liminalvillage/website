@@ -20,20 +20,22 @@
 </footer>
 
 <style>
+  /* A light footer in the page flow, not a dark band */
   .footer {
-    background: var(--night);
+    background: transparent;
     color: var(--muted);
     padding: 2rem 0;
-    text-align: center;
+    text-align: left;
     position: relative;
   }
 
   .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 2rem 2rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 2rem;
   }
@@ -61,7 +63,7 @@
   }
 
   .links a:hover {
-    color: var(--on-dark);
+    color: var(--ink);
   }
 
   .back-to-top {

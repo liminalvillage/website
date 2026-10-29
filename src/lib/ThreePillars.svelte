@@ -41,7 +41,7 @@
   .pillars {
     width: 100%;
     padding: 1rem 2rem 4rem;
-    background: var(--paper);
+    background: transparent;
   }
 
   /* Personal, Local and Global as three overlapping circles: the overlaps
@@ -67,6 +67,8 @@
     justify-content: center;
     text-align: center;
     border: 1px solid var(--orb-line);
+    -webkit-mask-image: var(--orb-mask);
+    mask-image: var(--orb-mask);
     mix-blend-mode: var(--orb-blend);
     animation: orb-drift 9s ease-in-out infinite;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -109,7 +111,7 @@
   /* CTA Section */
   .cta-dark {
     width: 100%;
-    background: var(--paper);
+    background: transparent;
     padding: 2rem 2rem 6rem;
     text-align: center;
   }

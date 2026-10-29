@@ -40,8 +40,35 @@
   --tint-2: color-mix(in srgb, var(--leaf) 28%, transparent);
   --tint-3: color-mix(in srgb, var(--leaf-deep) 16%, transparent);
   --tint-4: color-mix(in srgb, var(--ink) 6%, transparent);
-  --orb-line: color-mix(in srgb, var(--ink) 10%, transparent);
+  --orb-line: transparent;
+  /* Circles fade out at the edge instead of ending in a hard line */
+  --orb-mask: radial-gradient(circle closest-side, #000 86%, transparent 100%);
   --orb-blend: multiply;
+
+  /* Autumn palette: ramps 100–900 (500 is the base). Roles and usage are
+     documented on /palette. Generated in OKLCH so steps stay even. */
+  --rust-100: #fae7e0; --rust-200: #f9c9b8; --rust-300: #f3a487; --rust-400: #ea7e56; --rust-500: #e05d26; --rust-600: #b7440c; --rust-700: #902b00; --rust-800: #6a1100; --rust-900: #470000;
+  --olive-100: #eceee2; --olive-200: #d7dcbd; --olive-300: #bdc590; --olive-400: #a4ae62; --olive-500: #919c39; --olive-600: #727b20; --olive-700: #545c02; --olive-800: #383e00; --olive-900: #1f2300;
+  --oat-100: #fffaf2; --oat-200: #fbefdc; --oat-300: #f4dfc0; --oat-400: #e6c79c; --oat-500: #cfa979; --oat-600: #a5845b; --oat-700: #7a6043; --oat-800: #50402c; --oat-900: #2b1f12;
+  --bark-100: #e8e6e4; --bark-200: #cbc5c0; --bark-300: #a89d95; --bark-400: #86776d; --bark-500: #6b5a4e; --bark-600: #594a3f; --bark-700: #473a31; --bark-800: #362b23; --bark-900: #261d16;
+  --sprout-100: #eef2e4; --sprout-200: #dee8c2; --sprout-300: #cada98; --sprout-400: #b7cc6c; --sprout-500: #a8c043; --sprout-600: #819621; --sprout-700: #5c6d00; --sprout-800: #3a4700; --sprout-900: #1b2400;
+  --ember-100: #fbece1; --ember-200: #fdd7bb; --ember-300: #fdbc8b; --ember-400: #fba158; --ember-500: #f78a1c; --ember-600: #c66700; --ember-700: #984600; --ember-800: #6c2600; --ember-900: #420500;
+  --rosehip-100: #fce7e2; --rosehip-200: #fec9bd; --rosehip-300: #fca490; --rosehip-400: #f67d63; --rosehip-500: #ee5b3c; --rosehip-600: #c24025; --rosehip-700: #98250b; --rosehip-800: #700600; --rosehip-900: #490000;
+  --chestnut-100: #f3e8e1; --chestnut-200: #e9ccba; --chestnut-300: #daa98a; --chestnut-400: #c9875b; --chestnut-500: #ba6b33; --chestnut-600: #98531f; --chestnut-700: #773b0a; --chestnut-800: #582500; --chestnut-900: #3a1000;
+
+  /* Phase gradients: 1 soft wash, 2 flows into the next phase, 3 a glow */
+  --gradient-seed-1: linear-gradient(135deg, var(--sprout-100), var(--sprout-300));
+  --gradient-seed-2: linear-gradient(135deg, var(--sprout-300), var(--ember-300));
+  --gradient-seed-3: radial-gradient(circle at 30% 30%, var(--sprout-200), var(--sprout-400) 60%, var(--sprout-500));
+  --gradient-build-1: linear-gradient(135deg, var(--ember-100), var(--ember-300));
+  --gradient-build-2: linear-gradient(135deg, var(--ember-300), var(--rosehip-300));
+  --gradient-build-3: radial-gradient(circle at 30% 30%, var(--ember-200), var(--ember-400) 60%, var(--ember-500));
+  --gradient-celebrate-1: linear-gradient(135deg, var(--rosehip-100), var(--rosehip-300));
+  --gradient-celebrate-2: linear-gradient(135deg, var(--rosehip-300), var(--chestnut-300));
+  --gradient-celebrate-3: radial-gradient(circle at 30% 30%, var(--rosehip-200), var(--rosehip-400) 60%, var(--rosehip-500));
+  --gradient-harvest-1: linear-gradient(135deg, var(--chestnut-100), var(--chestnut-300));
+  --gradient-harvest-2: linear-gradient(135deg, var(--chestnut-300), var(--sprout-300));
+  --gradient-harvest-3: radial-gradient(circle at 30% 30%, var(--chestnut-200), var(--chestnut-400) 60%, var(--chestnut-500));
 
   /* Type */
   --font-body: "Open Sans", sans-serif;

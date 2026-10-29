@@ -6,6 +6,9 @@
   // player is sent back there whenever its loop restarts from 0.
   const VIDEO_ID = 'xIC_wGnDEkE';
   const START = 22;
+  // Moments of the video to leave out, as [from, to] in seconds: when the
+  // player reaches one, it jumps to its end
+  const SKIP = [];
   const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&start=${START}&controls=0&playsinline=1&disablekb=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`;
 
   let player;
@@ -17,6 +20,12 @@
     send({ event: 'listening', id: 'hero' });
   }
 
+  // The fixed video dims as the page scrolls over it, so text stays readable
+  let dim = $state(0);
+  function dimVideo() {
+    dim = Math.min(1, window.scrollY / window.innerHeight);
+  }
+
   function onMessage(e) {
     if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname)) return;
     let data;
@@ -26,14 +35,17 @@
     if (ended || (typeof t === 'number' && t < START - 1)) {
       send({ event: 'command', func: 'seekTo', args: [START, true] });
       send({ event: 'command', func: 'playVideo', args: [] });
+      return;
     }
+    const skip = typeof t === 'number' && SKIP.find(([from, to]) => t >= from && t < to);
+    if (skip) send({ event: 'command', func: 'seekTo', args: [skip[1], true] });
   }
 </script>
 
-<svelte:window onmessage={onMessage} />
+<svelte:window onmessage={onMessage} onscroll={dimVideo} />
 
 <section id="main-top" class="hero">
-  <div class="hero-video" aria-hidden="true">
+  <div class="hero-video" aria-hidden="true" style="--dim: {dim}">
     <iframe bind:this={player} onload={listen} src={videoSrc} title="" tabindex="-1" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
   </div>
   <div class="hero-content">
@@ -57,17 +69,36 @@
     width: 100%;
     height: 100vh;
     min-height: 100vh;
-    background-image: url('/images/droneview.jpg');
-    background-position: center center;
-    background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    overflow: hidden;
+    /* The moon circle's turning orbit must not widen the page */
+    overflow-x: clip;
   }
 
+  /* The video stays fixed behind the page; the rest of the site slides up
+     over it. The drone photo shows until the video loads. */
   .hero-video {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: url('/images/droneview.jpg') center / cover no-repeat;
+  }
+
+  .hero-video::after {
+    content: '';
     position: absolute;
     inset: 0;
+    background: var(--veil-tone, linear-gradient(135deg, rgba(20, 16, 12, 0.55), rgba(60, 30, 15, 0.25)));
+  }
+
+  /* A second veil that deepens as the page scrolls up over the video */
+  .hero-video::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--veil, rgba(18, 14, 11, 0.62));
+    opacity: var(--dim, 0);
     pointer-events: none;
   }
 
@@ -87,7 +118,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, color-mix(in srgb, var(--night) 55%, transparent), color-mix(in srgb, var(--accent) 20%, transparent));
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;

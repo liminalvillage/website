@@ -5,6 +5,8 @@
 /readings  /media          301
 /frameworks  /frameworks.html  200
 /dna         /dna.html         200
+/palette     /palette.html     200
+/concepts    /concepts.html    200
 /services        /services.html  200
 /services/admin  /services.html  200
 /lunations       /lunations.html  200

@@ -30,32 +30,51 @@
   .about {
     width: 100%;
     padding: 6rem 0 3rem;
-    background: var(--paper);
+    background: transparent;
   }
 
   .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
   }
 
+  /* Editorial section head: a generated number, then a large left-aligned
+     title above a hairline-separated section */
   .section-heading {
-    text-align: center;
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    align-items: baseline;
+    text-align: left;
     margin-bottom: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+
+  .section-heading::before {
+    counter-increment: section;
+    content: counter(section, decimal-leading-zero);
+    grid-row: 1 / span 2;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .section-heading > :global(*) {
+    grid-column: 2;
   }
 
   .section-heading h2 {
-    font-size: 1.6rem;
-    font-weight: 300;
-    letter-spacing: 4px;
+    font-size: clamp(2.4rem, 4.6vw, 4rem);
+    font-weight: var(--heading-weight, 300);
+    letter-spacing: -0.01em;
+    line-height: 1.05;
     color: var(--ink);
-    text-transform: uppercase;
+    text-transform: none;
   }
 
   .section-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+    text-align: left;
   }
 
   p {
@@ -63,7 +82,8 @@
     line-height: 1.75;
     color: var(--muted);
     max-width: 62ch;
-    margin: 0 auto 1.5rem;
+    /* An offset column: text starts a third of the way in */
+    margin: 0 0 1.5rem max(0px, min(33.333%, calc(100% - 62ch)));
     text-align: left;
   }
 
@@ -80,8 +100,13 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--orb-line);
+    -webkit-mask-image: var(--orb-mask);
+    mask-image: var(--orb-mask);
+    /* The mycelium illustration glows softly inside, the doorway to /dna */
     background:
       repeating-radial-gradient(circle at 50% 50%, transparent 0 22px, color-mix(in srgb, var(--ink) 6%, transparent) 22px 23px),
+      radial-gradient(circle closest-side, rgba(10, 8, 6, 0.62) 35%, rgba(10, 8, 6, 0.15)),
+      url('/images/concepts/mycelium-networks.svg') center / cover,
       var(--tint-1);
     text-align: center;
     animation: orb-drift 9s ease-in-out infinite;
@@ -156,7 +181,7 @@
     }
 
     .section-heading h2 {
-      font-size: 1.3rem;
+      font-size: 2.2rem;
     }
   }
 </style>

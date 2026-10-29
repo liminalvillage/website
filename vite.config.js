@@ -14,6 +14,8 @@ export default defineConfig({
         lunations: resolve(__dirname, 'lunations.html'),
         apply: resolve(__dirname, 'apply.html'),
         dna: resolve(__dirname, 'dna.html'),
+        palette: resolve(__dirname, 'palette.html'),
+        concepts: resolve(__dirname, 'concepts.html'),
       },
     },
   },

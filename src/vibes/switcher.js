@@ -1,9 +1,23 @@
 // Dev-only switcher for comparing vibes on the real page. Sets data-vibe on
 // <html>, loads that vibe's fonts, and remembers the choice in this browser.
+// It stays folded into a small dot in the corner, so the page looks as it
+// will live; click the dot to open it.
 import './vibes.css'
 
 const VIBES = {
   original: { label: 'Original' },
+  autumn: {
+    label: 'Autumn',
+    fonts: 'family=Outfit:wght@100..600&family=Quicksand:wght@300..700',
+  },
+  lunar: {
+    label: 'Lunarpunk',
+    fonts: 'family=Outfit:wght@100..600&family=Quicksand:wght@300..700',
+  },
+  psy: {
+    label: 'Psychedelic',
+    fonts: 'family=Outfit:wght@100..600&family=Quicksand:wght@300..700',
+  },
   solar: {
     label: 'Solarpunk',
     fonts: 'family=Quicksand:wght@300..700&family=Nunito:wght@300..700',
@@ -60,21 +74,36 @@ function render() {
   bar.className = 'vibe-switcher'
   bar.setAttribute('role', 'group')
   bar.setAttribute('aria-label', 'Vibe')
-  bar.innerHTML = Object.entries(VIBES)
-    .map(([key, v]) => `<button type="button" data-vibe="${key}">${v.label}</button>`)
-    .join('')
+  bar.innerHTML =
+    '<button type="button" class="vibe-toggle" aria-expanded="false" aria-label="Vibes"></button>' +
+    Object.entries(VIBES)
+      .map(([key, v]) => `<button type="button" data-vibe="${key}">${v.label}</button>`)
+      .join('')
+  const toggle = bar.querySelector('.vibe-toggle')
+  const fold = (open) => {
+    bar.classList.toggle('open', open)
+    toggle.setAttribute('aria-expanded', String(open))
+  }
   bar.addEventListener('click', (e) => {
     const b = e.target.closest('button')
-    if (b) apply(b.dataset.vibe)
+    if (!b) return
+    if (b === toggle) return fold(!bar.classList.contains('open'))
+    apply(b.dataset.vibe)
+    fold(false)
   })
 
   const style = document.createElement('style')
   style.textContent = `
-    .vibe-switcher { position: fixed; right: 3%; top: 31px; z-index: 2000;
-      display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(20, 20, 20, 0.72);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    .vibe-switcher { position: fixed; right: 3%; top: 36px; z-index: 2000;
+      display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px;
       font: 500 11px/1 system-ui, sans-serif; max-width: calc(100vw - 32px); overflow-x: auto; }
-    @media (max-width: 768px) { .vibe-switcher { top: auto; bottom: 72px; right: 50%; transform: translateX(50%); } }
+    .vibe-switcher.open { background: rgba(20, 20, 20, 0.72); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .vibe-switcher:not(.open) button:not(.vibe-toggle) { display: none; }
+    .vibe-switcher .vibe-toggle { width: 22px; height: 22px; padding: 0; opacity: 0.35;
+      background: radial-gradient(circle, rgba(255,255,255,0.9) 0 3px, transparent 4px); }
+    .vibe-switcher .vibe-toggle:hover, .vibe-switcher.open .vibe-toggle { opacity: 0.9; }
+    @media (max-width: 768px) { .vibe-switcher { top: 24px; right: 12px; } }
     .vibe-switcher button { border: 0; background: transparent; color: rgba(255,255,255,0.75);
       padding: 6px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; font: inherit; }
     .vibe-switcher button:hover { color: #fff; }
