@@ -333,7 +333,7 @@
   }
 
   .hand-b {
-    top: calc(372 / 640 * 100% - 1.2em);
+    top: calc(390 / 640 * 100% - 1.2em);
     right: 2.5%;
     animation-delay: calc(var(--pre) + 2.3s);
   }

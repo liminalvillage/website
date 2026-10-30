@@ -38,10 +38,10 @@
     { label: 'Liminal Village', frame: frame(HUB, 1.06), href: '#main-top' },
     { label: 'Overview', frame: OVERVIEW, href: '#main-top' },
     { label: 'About', frame: frame(ABOUT, 1.04), href: '#about' },
-    { label: 'Our DNA', frame: frame(DNA, 1.1), href: '#about' },
     ...(narrow
       ? PILLARS.map((p, i) => ({ label: ['Personal', 'Local', 'Global'][i], frame: frame(p, 1.08), href: '#about', slow: 1.6 }))
       : [{ label: 'Personal · Local · Global', frame: { x: ASPECTS.x, y: ASPECTS.y - 6, w: 300, h: 190 }, href: '#about', slow: 1.8 }]),
+    { label: 'Our DNA', frame: frame(DNA, 1.1), href: '#about' },
     { label: 'The Village', frame: frame(VILLAGE, 1.04), href: '#thevillage' },
     { label: 'Lunations', frame: frame(LUNATIONS, 1.04), href: '#lunations' },
     { label: 'Network', frame: frame(NETWORK, 1.04), href: '#network' },
