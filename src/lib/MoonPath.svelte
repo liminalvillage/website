@@ -66,14 +66,19 @@
   $: arcR = arcW * 0.95;
   $: theta = Math.asin(Math.min(1, arcW / 2 / arcR));
 
-  function place(t) {
+  // The line is drawn as if by hand: a small, uneven wobble (whole waves
+  // only, so the circle still closes)
+  const hand = (t) => 0.9 * Math.sin(t * Math.PI * 2 * 3 + 0.4) + 0.6 * Math.sin(t * Math.PI * 2 * 5 + 2.2) + 0.35 * Math.sin(t * Math.PI * 2 * 9 + 1.1);
+
+  function place(t, drawn = false) {
     const a = t * Math.PI * 2;
-    const rC = circle.r * ease(bloom);
+    const w = drawn ? hand(t) : 0;
+    const rC = circle.r * ease(bloom) + w;
     const cxC = circle.cx + rC * Math.sin(a);
     const cyC = circle.cy - rC * Math.cos(a);
     const phi = -theta + 2 * theta * t;
-    const cxA = vw / 2 + arcR * Math.sin(phi);
-    const cyA = arcTop + arcR - arcR * Math.cos(phi);
+    const cxA = vw / 2 + (arcR + w) * Math.sin(phi);
+    const cyA = arcTop + arcR - (arcR + w) * Math.cos(phi);
     const e = ease(m);
     return [mix(cxC, cxA, e), mix(cyC, cyA, e)];
   }
@@ -82,7 +87,7 @@
     let d = '';
     const n = 96;
     for (let i = 0; i <= n; i++) {
-      const [x, y] = place(from + ((to - from) * i) / n);
+      const [x, y] = place(from + ((to - from) * i) / n, true);
       d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
     }
     return d;

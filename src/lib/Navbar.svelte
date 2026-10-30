@@ -31,12 +31,13 @@
   const links = [
     { label: 'About', href: '#about' },
     { label: 'The Village', href: '#thevillage' },
+    { label: 'Game B', href: '/game-b' },
     { label: 'Lunations', href: '/lunations' },
     { label: 'DNA', href: '/dna' },
     { label: 'Community', href: '/services' },
     { label: 'Quests', href: '/quests.html' },
     { label: 'Media', href: '/media' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Join', href: '#contact' },
   ];
   // Section links point back to the home page from other pages
   const menuItems = links.map((item) =>
@@ -173,9 +174,9 @@
     align-items: center;
     gap: 10px;
     transition: color 0.5s cubic-bezier(0, 0, 0.7, 1);
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 300;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--nav-ink);
     text-decoration: none;
@@ -197,7 +198,7 @@
      (Liminal Logo New.pxd); on the light bar a filter darkens them to the
      ink colour, so the file itself stays untouched */
   .logo {
-    height: 28px;
+    height: 22px;
     width: auto;
     flex: none;
     transition: filter 0.5s ease, opacity 0.5s ease;
@@ -208,7 +209,7 @@
   .navbar-title::before {
     content: '';
     position: absolute;
-    left: -80px;
+    left: -84px;
     top: 50%;
     width: 200px;
     height: 160px;
@@ -394,18 +395,18 @@
     }
 
     .navbar-title {
-      font-size: 12px;
-      letter-spacing: 2px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
       gap: 10px;
     }
 
     .logo {
-      height: 22px;
+      height: 18px;
     }
 
     /* The same light, scaled with the smaller logo */
     .navbar-title::before {
-      left: -84px;
+      left: -87px;
       transform: scale(0.79);
     }
 

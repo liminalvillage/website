@@ -1,5 +1,7 @@
-/* Shared design variables for every page of the main site. Vibes in
-   src/vibes/ override these; these values are the site as it has looked. */
+@import './brand.css';
+
+/* Shared design variables for every page of the main site. brand.css sets
+   the look on top of these; season.js tints the paper and glows. */
 
 :root {
   /* Palette */

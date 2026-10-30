@@ -54,8 +54,9 @@ async function boot() {
     import('./App.svelte'),
     import('./app.css'),
   ])
-  // Vibe explorations stay out of production builds
-  if (import.meta.env.DEV) import('./vibes/switcher.js')
+  // The colours follow the season, a step at each new moon
+  const { applySeason } = await import('./theme/season.js')
+  applySeason()
   return mount(App, { target: document.getElementById('app') })
 }
 

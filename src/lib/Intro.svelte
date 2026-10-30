@@ -10,7 +10,27 @@
   import { phase } from 'lune';
   import { litPath } from './moonShape.js';
 
-  const DRAW_MS = 6200;
+  // First the logo's two rings drift in from either side and meet (PRE_MS),
+  // then the forest draws itself in (DRAW_MS)
+  const PRE_MS = 2800;
+  const DRAW_MS = 6200 + PRE_MS;
+
+  // A ring drawn as if by hand: a slightly uneven loop whose end runs a
+  // little past its start
+  function handRing(cx, cy, r, seed) {
+    let n = seed;
+    const rand = () => ((n = (n * 9301 + 49297) % 233280) / 233280);
+    const waves = [2, 3, 5].map((k) => ({ k, a: 0.6 + rand() * 0.8, p: rand() * Math.PI * 2 }));
+    const start = rand() * Math.PI * 2;
+    return Array.from({ length: 81 }, (_, i) => {
+      const t = i / 80;
+      const a = start + Math.PI * 2 * 1.05 * t;
+      const rr = r + waves.reduce((sum, w) => sum + w.a * Math.sin(w.k * a + w.p), 0) * 0.5 + t * 1.2;
+      return `${i ? 'L' : 'M'}${(cx + rr * Math.cos(a)).toFixed(1)} ${(cy + rr * Math.sin(a)).toFixed(1)}`;
+    }).join('');
+  }
+  const ringA = handRing(50, 50, 40, 7);
+  const ringB = handRing(50, 50, 40, 31);
   // The handover, in ms: the moon becomes the logo (two rings) on its way to
   // the hub moon, holds, then spins back into one moon as it lands
   const TO_LOGO = 1400;
@@ -157,7 +177,19 @@
 
 {#if !gone}
   <div class="intro" class:done on:wheel={skip} on:click={skip} on:touchstart={skip} aria-hidden="true">
-    <div class="drawing" bind:this={drawing}>{@html svg}</div>
+    <!-- The logo's two rings drift in from either side and overlap -->
+    <div class="logo-in">
+      <svg class="ring-a" viewBox="0 0 100 100"><path d={ringA} pathLength="1" /></svg>
+      <svg class="ring-b" viewBox="0 0 100 100"><path d={ringB} pathLength="1" /></svg>
+    </div>
+    <div class="drawing" bind:this={drawing}>
+      {@html svg}
+      <!-- Written along the ground line, by hand -->
+      {#if svg}
+        <p class="hand hand-a">where Game A ends</p>
+        <p class="hand hand-b">Game B starts</p>
+      {/if}
+    </div>
   </div>
 {/if}
 
@@ -215,7 +247,111 @@
 
 
   .drawing {
+    position: relative;
     width: min(1100px, 100%);
+    --pre: 2.8s;
+  }
+
+  /* The opening: two hand-drawn rings, one from each side, meeting in the
+     middle as the logo, then fading as the forest begins */
+  .logo-in {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    animation: logo-out 0.7s ease 2.1s forwards;
+  }
+
+  .logo-in svg {
+    position: absolute;
+    top: -46px;
+    width: 92px;
+    height: 92px;
+    overflow: visible;
+  }
+
+  .logo-in path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.2s ease forwards;
+  }
+
+  .ring-a {
+    left: -71px;
+    animation: from-left 1.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .ring-b {
+    left: -21px;
+    animation: from-right 1.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  @keyframes from-left {
+    from {
+      transform: translateX(-45vw);
+    }
+  }
+
+  @keyframes from-right {
+    from {
+      transform: translateX(45vw);
+    }
+  }
+
+  @keyframes logo-out {
+    to {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+
+  /* Handwriting beside the ground line's spirals: under the left one, which
+     curls down, and over the right one, which curls up */
+  .hand {
+    position: absolute;
+    margin: 0;
+    font-family: 'Caveat', cursive;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.7vw, 1.4rem);
+    opacity: 0.85;
+    color: var(--line);
+    white-space: nowrap;
+    clip-path: inset(0 100% 0 0);
+    animation: write 1.4s ease-out forwards;
+    transition: color 1.4s ease, opacity 0.9s ease;
+  }
+
+  .hand-a {
+    top: calc(500 / 640 * 100%);
+    left: 3.5%;
+    animation-delay: calc(var(--pre) + 0.3s);
+  }
+
+  .hand-b {
+    top: calc(372 / 640 * 100% - 1.2em);
+    right: 2.5%;
+    animation-delay: calc(var(--pre) + 2.3s);
+  }
+
+  /* The ground line draws slowly from left to right, before the rest */
+  .drawing :global(path.ground) {
+    animation-duration: 2.6s;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1);
+  }
+
+  @keyframes write {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  .done .hand {
+    opacity: 0;
   }
 
   .drawing :global(path) {
@@ -244,13 +380,13 @@
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     animation: draw 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: calc(var(--o) * 4.2s);
+    animation-delay: calc(var(--pre) + var(--o) * 4.2s);
   }
 
   .drawing :global(.moon-glow) {
     opacity: 0;
     filter: blur(14px);
-    animation: glow 1.6s ease forwards 4.2s;
+    animation: glow 1.6s ease forwards calc(var(--pre) + 4.2s);
   }
 
   @keyframes draw {

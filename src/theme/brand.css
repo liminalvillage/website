@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..600&family=Quicksand:wght@300..700&family=Playpen+Sans:wght@200..400&display=swap');
+
+/* The brand look for every page: oat paper, bark ink, thin round type.
+   (It began as the "autumn" vibe among the explorations.) The paper and
+   glow colours shift with the seasons; see season.js. */
+
+/* Thin, round headings set in sentence case */
+html :is(h1, h2, h3, h4) {
+  font-family: var(--font-heading) !important;
+  font-weight: var(--heading-weight) !important;
+  letter-spacing: var(--heading-tracking) !important;
+  text-transform: none !important;
+  font-variation-settings: var(--heading-axes, normal);
+}
+
+html body {
+  background-attachment: fixed;
+}
+
+/* The wordmark is written by hand, simply: thin and round like the headings */
+html:root .navbar-title {
+  font-family: 'Playpen Sans', var(--font-heading);
+  font-weight: 250;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  font-size: 17px;
+}
+
+@media (max-width: 768px) {
+  html:root .navbar-title {
+    font-size: 14px;
+  }
+}
+
+/* The palette (see /palette for when to use which colour): oat paper, bark
+   ink, rust for action, olive in support, and one colour per lunation phase:
+   Seed sprout, Build ember, Celebrate rosehip, Harvest chestnut. */
+html:root {
+  --bar-bg: rgba(255, 250, 242, 0.82);
+  --bar-solid: rgba(255, 250, 242, 0.97);
+  --ink: var(--bark-900);
+  --ink-soft: var(--bark-800);
+  --muted: var(--bark-600);
+  --accent: var(--rust-600);
+  --accent-deep: var(--rust-700);
+  --accent-soft: var(--ember-200);
+  --leaf: var(--sprout-500);
+  --leaf-deep: var(--olive-700);
+  --paper: color-mix(in srgb, var(--oat-100) 55%, transparent);
+  --surface: color-mix(in srgb, #fff 35%, transparent);
+  --night: var(--bark-900);
+  --on-dark: var(--oat-100);
+  --on-accent: var(--oat-100);
+  --line: color-mix(in srgb, var(--bark-900) 10%, transparent);
+  --page-bg:
+    radial-gradient(55vw 45vw at 10% 8%, var(--ember-200), transparent 70%),
+    radial-gradient(50vw 40vw at 95% 40%, var(--rosehip-200), transparent 70%),
+    radial-gradient(60vw 45vw at 40% 95%, var(--sprout-200), transparent 70%),
+    var(--oat-100);
+
+  /* Circles: pale tints from one warm family, so they sit calmly together */
+  --tint-1: color-mix(in srgb, var(--ember-200) 80%, transparent);
+  --tint-2: color-mix(in srgb, var(--rosehip-200) 70%, transparent);
+  --tint-3: color-mix(in srgb, var(--oat-300) 85%, transparent);
+  --tint-4: color-mix(in srgb, var(--chestnut-200) 75%, transparent);
+  --orb-line: transparent;
+  --moon-lit: #fff8ec;
+  --moon-shadow: var(--oat-300);
+
+  --card-bg: color-mix(in srgb, #fff 50%, transparent);
+  --card-border: color-mix(in srgb, var(--bark-900) 8%, transparent);
+  --card-blur: none;
+  --card-shadow: 0 12px 36px rgba(117, 54, 20, 0.06);
+  --card-shadow-hover: 0 20px 48px rgba(117, 54, 20, 0.12);
+
+  --font-heading: "Outfit", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Quicksand", system-ui, sans-serif;
+  --heading-weight: 300;
+  --heading-tracking: 0.02em;
+}

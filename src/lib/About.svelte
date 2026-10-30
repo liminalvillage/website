@@ -21,7 +21,7 @@
         <p class="dna-text">Why we exist, what we value and how we live together is all in</p>
         <a class="dna-btn" href="/dna">our DNA →</a>
       </div>
-      <p class="lead"><strong>Visitors of the Liminal Village are invited to focus on these three aspects:</strong></p>
+      <p class="lead"><strong>Visitors and members of the Liminal Village are invited to focus on our transition to Game B on 3 levels</strong></p>
     </div>
   </div>
 </section>

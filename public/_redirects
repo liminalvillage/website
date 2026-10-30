@@ -7,6 +7,9 @@
 /dna         /dna.html         200
 /palette     /palette.html     200
 /concepts    /concepts.html    200
+/game-b         /game-b.html         200
+/value-streams  /game-b              301
+/memories       /memories.html       200
 /services        /services.html  200
 /services/admin  /services.html  200
 /lunations       /lunations.html  200

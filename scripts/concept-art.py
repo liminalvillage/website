@@ -413,8 +413,16 @@ def intro():
             d = r * rng.uniform(0.2, 0.5)
             a.ring(cx + d * math.cos(ang), cy + d * math.sin(ang), r * rng.uniform(0.2, 0.36), 0.8, 0.7)
 
-    # the ground line
-    a.line(a.wobble([(60, ground), (300, ground + 3), (600, ground - 2), (900, ground + 2), (1140, ground)], 1), 1.1, 0.8)
+    # the ground line, drawn left to right: it starts from a small spiral
+    # curling down on the left (where Game A ends) and finishes in one curling
+    # up on the right (where Game B starts)
+    def spiral(cx, cy, a0, a1, r0, r1, n=28):
+        return [(cx + (r0 + (r1 - r0) * i / n) * math.cos(a0 + (a1 - a0) * i / n),
+                 cy + (r0 + (r1 - r0) * i / n) * math.sin(a0 + (a1 - a0) * i / n)) for i in range(n + 1)]
+    left = spiral(44, ground + 22, -math.pi / 2 - 2.5 * math.pi, -math.pi / 2, 2, 18)
+    right = spiral(1156, ground - 22, math.pi / 2, math.pi / 2 + 2.5 * math.pi, 18, 2)
+    ground_from = len(a.body)
+    a.line(a.wobble(left + [(80, ground + 1), (300, ground + 3), (600, ground - 2), (900, ground + 2), (1120, ground)] + right, 0.4), 1.1, 0.8)
     # canopy tree: trunk, branches, crown
     a.line(a.wobble([(560, ground), (563, 400), (558, 320), (561, 250)], 1), 1.8, 0.9)
     for bx, by in [(510, 225), (612, 215)]:
@@ -468,7 +476,7 @@ def intro():
     # moon into the hub's moon as the drawing fades
     body = []
     for i, el in enumerate(a.body):
-        cls = ' class="moon"' if moon_from <= i < moon_to else ''
+        cls = ' class="moon"' if moon_from <= i < moon_to else ' class="ground"' if i == ground_from else ''
         body.append(el.replace('<path ', f'<path pathLength="1"{cls} style="--o:{i / len(a.body):.3f}" ', 1))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
             f'role="img" aria-label="A forest under the moon"><title>A forest under the moon</title>'

@@ -4,6 +4,7 @@
   // circle, or the bottom dock) flies the camera into the next idea, where its
   // content fades in, and back out on the way to the one after. The village
   // video plays behind (VideoBackdrop). All copy is the home page's own.
+  import Ring from './Ring.svelte';
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
   import LunationTimer from '../lib/LunationTimer.svelte';
@@ -44,7 +45,7 @@
     { label: 'The Village', frame: frame(VILLAGE, 1.04), href: '#thevillage' },
     { label: 'Lunations', frame: frame(LUNATIONS, 1.04), href: '#lunations' },
     { label: 'Network', frame: frame(NETWORK, 1.04), href: '#network' },
-    { label: 'Contact', frame: frame(CONTACT, 1.04), href: '#contact' },
+    { label: 'Join', frame: frame(CONTACT, 1.04), href: '#contact' },
     { label: 'Overview', frame: OVERVIEW, href: '#main-top' },
   ];
 
@@ -71,6 +72,14 @@
       const at = Math.min(vw * 0.9, vh * 0.84) / (r * 2.08);
       const a = el.classList.contains('hub') ? (at * 0.9 - cam.s) / (at * 0.3) : (at * 1.9 - cam.s) / (at * 0.6);
       el.style.setProperty('--ring-a', Math.min(1, Math.max(0, a)));
+      // Zoomed out, a big circle's title glides from the top of the circle
+      // to its middle, so each one reads as a centred label
+      if (el.classList.contains('world-orb')) {
+        const title = el.querySelector('.title');
+        const far = Math.min(1, Math.max(0, (at * 0.6 - cam.s) / (at * 0.3)));
+        const shift = (r - (title.offsetTop + title.offsetHeight / 2)) * far;
+        for (const t of el.querySelectorAll('.title, .eyebrow')) t.style.transform = `translateY(${shift}px)`;
+      }
     }
     // Content belonging to a circle fades in as you zoom close enough to read it
     for (const el of world.querySelectorAll('[data-r]')) {
@@ -211,9 +220,15 @@
 <svelte:window on:resize={resize} on:keydown={onKey} />
 
 <main class="journey" on:touchstart={onTouchStart} on:touchend={onTouchEnd}>
-  <div class="world" bind:this={world}>
+  <div
+    class="world"
+    class:about-focus={STOPS[stop]?.label === 'About'}
+    class:about-inside={STOPS[stop]?.href === '#about' && STOPS[stop]?.label !== 'About'}
+    bind:this={world}
+  >
     <!-- Liminal Village -->
     <section class="orb hub" style={place(HUB)}>
+      <Ring seed={1} />
       <h1 data-r={HUB.r} data-mode="label" data-near="1" data-c={`${HUB.x},${HUB.y},${HUB.r * 1.4}`}>Liminal Village</h1>
       <p class="sub" data-r={HUB.r} data-mode="label" data-near="1" data-c={`${HUB.x},${HUB.y},${HUB.r * 1.4}`}>Open Source Innovation Eco-Tech Hub</p>
       <p class="line" data-r={HUB.r} data-mode="label" data-near="1" data-c={`${HUB.x},${HUB.y},${HUB.r * 1.4}`}>A node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network</p>
@@ -222,22 +237,35 @@
 
     <!-- About, with the DNA and the three aspects inside it -->
     <section class="orb world-orb" style={place(ABOUT)} on:click={() => toLabel('About')}>
+      <Ring seed={2} />
       <h2 class="title" data-r={ABOUT.r} data-mode="label">About</h2>
-      <p class="body" data-r={ABOUT.r} data-c={`${ABOUT.x},${ABOUT.y},${ABOUT.r}`}>
-        Liminal Village is a co-living and co-creation eco-tech hub in the center of Italy.
-        We have been experimenting with forming and weaving temporary communities aimed at
-        creating value for the world, heal themselves and heal the collective, by emphasising
-        the balance of personal, local and global regeneration. Inspired by the concept of a
-        Resource-Based Economy, Liminal, meaning "a place of transition" or "a place that
-        occupies both sides", is an embodied experimental ground where value-aligned people
-        come together to co-create and experience the future they would like to see (eg:
-        <a href="https://www.gameb.wiki/index.php?title=Game_B" target="_blank" rel="noopener">Game B</a>).
-        Using natural cycles to guide progress, we focus on reinventing how we can live in
-        harmony with each other and the planet, by "upgrading the operating system of society"
-        and transitioning from scarcity based market economies to "access abundance".
-      </p>
+      <!-- Set like notes: the same words, some larger, some in hand -->
+      <div class="body notes" data-r={ABOUT.r} data-c={`${ABOUT.x},${ABOUT.y},${ABOUT.r}`}>
+        <p class="note-lead">Liminal Village is a co-living and co-creation eco-tech hub in the center of Italy.</p>
+        <p>
+          We have been experimenting with forming and weaving temporary communities aimed at
+          creating value for the world, heal themselves and heal the collective, by emphasising
+          the balance of <strong>personal, local and global regeneration</strong>.
+        </p>
+        <p>
+          Inspired by the concept of a <em>Resource-Based Economy</em>, Liminal, meaning
+          <span class="hand">"a place of transition"</span> or
+          <span class="hand">"a place that occupies both sides"</span>, is an embodied experimental ground
+          where value-aligned people come together to co-create and experience the future they
+          would like to see (eg:
+          <a href="https://www.gameb.wiki/index.php?title=Game_B" target="_blank" rel="noopener">Game B</a>).
+        </p>
+        <p>
+          Using natural cycles to guide progress, we focus on reinventing how we can live in
+          harmony with each other and the planet, by
+          <span class="hand">"upgrading the operating system of society"</span>
+          and transitioning from scarcity based market economies to
+          <span class="hand big">"access abundance"</span>.
+        </p>
+      </div>
     </section>
     <section class="orb inner dna" style={place(DNA)} on:click|stopPropagation={() => toLabel('Our DNA')}>
+      <Ring seed={3} />
       <span class="peek" data-r={ABOUT.r} data-c={`${ABOUT.x},${ABOUT.y},${ABOUT.r}`}>our DNA</span>
       <div class="deep" data-r={DNA.r} data-c={`${DNA.x},${DNA.y},${DNA.r * 2}`}>
         <p class="dna-text">Why we exist, what we value and how we live together is all in</p>
@@ -245,11 +273,13 @@
       </div>
     </section>
     <section class="orb inner aspects" style={place(ASPECTS)} on:click|stopPropagation={() => toLabel(narrow ? 'Personal' : 'Personal · Local · Global')}>
+      <Ring seed={4} />
       <span class="peek" data-r={ABOUT.r} data-c={`${ABOUT.x},${ABOUT.y},${ABOUT.r}`}>Personal · Local · Global</span>
-      <p class="lead" data-r={ASPECTS.r * 0.85} data-c={`${ASPECTS.x},${ASPECTS.y},${ASPECTS.r * 2}`}>Visitors of the Liminal Village are invited to focus on these three aspects:</p>
+      <p class="lead" data-r={ASPECTS.r * 0.85} data-c={`${ASPECTS.x},${ASPECTS.y},${ASPECTS.r * 2}`}>Visitors and members of the Liminal Village are invited to focus on our transition to Game B on 3 levels</p>
     </section>
     {#each PILLARS as p, i}
       <section class="orb pillar t{i + 1}" style={place(p)}>
+        <Ring seed={50 + i} />
         <div data-r={ASPECTS.r * 0.85} data-c={`${ASPECTS.x},${ASPECTS.y},${ASPECTS.r * 2}`}>
           <h3>{['Personal', 'Local', 'Global'][i]}</h3>
           <p>
@@ -265,6 +295,7 @@
 
     <!-- The Village -->
     <section class="orb world-orb" style={place(VILLAGE)} on:click={() => toLabel('The Village')}>
+      <Ring seed={6} />
       <h2 class="title" data-r={VILLAGE.r} data-mode="label">The Village</h2>
       <p class="body" data-r={VILLAGE.r} data-c={`${VILLAGE.x},${VILLAGE.y},${VILLAGE.r}`}>
         The co-creation village is situated on the smooth hills of the Tronto Valley in the
@@ -279,6 +310,7 @@
 
     <!-- Lunations -->
     <section class="orb world-orb" style={place(LUNATIONS)} on:click={() => toLabel('Lunations')}>
+      <Ring seed={7} />
       <h2 class="title" data-r={LUNATIONS.r} data-mode="label">Lunations</h2>
       <p class="body" data-r={LUNATIONS.r} data-c={`${LUNATIONS.x},${LUNATIONS.y},${LUNATIONS.r}`}>
         We align our activity to the lunar cycles to synchronize group working patterns around
@@ -294,6 +326,7 @@
 
     <!-- Network -->
     <section class="orb world-orb" style={place(NETWORK)} on:click={() => toLabel('Network')}>
+      <Ring seed={8} />
       <p class="eyebrow" data-r={NETWORK.r} data-mode="label">Part of the ReGenerativa network</p>
       <h2 class="title" data-r={NETWORK.r} data-mode="label">A node in a regenerative network</h2>
       <p class="body" data-r={NETWORK.r} data-c={`${NETWORK.x},${NETWORK.y},${NETWORK.r}`}>
@@ -306,17 +339,20 @@
       </p>
     </section>
 
-    <!-- Contact -->
-    <section class="orb world-orb" style={place(CONTACT)} on:click={() => toLabel('Contact')}>
-      <h2 class="title" data-r={CONTACT.r} data-mode="label">Contact</h2>
-      <div class="body" data-r={CONTACT.r} data-c={`${CONTACT.x},${CONTACT.y},${CONTACT.r}`}>
-        <h4>Location</h4>
-        <p>
-          In between Europe and Africa, between northern and southern Italy, between the
-          mountains and sea, between the hilltop and the valley, between nature and civilization
+    <!-- Join: the invitation to start -->
+    <section class="orb world-orb" style={place(CONTACT)} on:click={() => toLabel('Join')}>
+      <Ring seed={9} />
+      <h2 class="title" data-r={CONTACT.r} data-mode="label">Start your transition to Game B</h2>
+      <div class="body join" data-r={CONTACT.r} data-c={`${CONTACT.x},${CONTACT.y},${CONTACT.r}`}>
+        <p class="join-lead">Apply to visit, or become a member of the Liminal Village.</p>
+        <div class="join-ways">
+          <a class="pill" href="/apply">Apply to visit</a>
+          <a class="pill" href="/apply">Become a member</a>
+        </div>
+        <p class="hand where">
+          in between Europe and Africa, northern and southern Italy, the mountains and the sea,
+          the hilltop and the valley, nature and civilization
         </p>
-        <h4>Info / Visits / Stays / Volunteers</h4>
-        <p><a href="/apply">Fill in this form</a></p>
       </div>
     </section>
   </div>
@@ -369,7 +405,6 @@
     justify-content: center;
     text-align: center;
     background: radial-gradient(circle closest-side, rgba(255, 176, 120, 0.16), rgba(255, 176, 120, 0.04) 85%, transparent);
-    box-shadow: inset 0 0 0 var(--px, 1px) rgba(255, 255, 255, calc(0.32 * var(--ring-a, 1)));
     cursor: pointer;
     text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
   }
@@ -416,8 +451,7 @@
 
   /* Titles start low enough that even three lines stay inside the ring */
   .world-orb {
-    justify-content: flex-start;
-    padding: 140px 90px 0;
+    padding: 90px 110px;
   }
 
   /* Titles never shrink below ~18px on screen, so the overview reads */
@@ -439,10 +473,129 @@
 
   .body {
     margin: 0;
+    max-width: 540px;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* About, set like notes: centred, the opening line larger, the key
+     phrases weighted, and the quotes written by hand */
+  /* Sized so the whole block, title included, stays well inside the ring */
+  .notes {
     max-width: 560px;
     font-size: 16.5px;
-    line-height: 1.6;
-    text-align: left;
+  }
+
+  .body.notes p {
+    margin: 0 0 1em;
+  }
+
+  .body.notes p:last-child {
+    margin: 0;
+  }
+
+  .notes .note-lead {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 1.45em;
+    line-height: 1.3;
+  }
+
+  .notes strong,
+  .notes em {
+    color: inherit;
+  }
+
+  .notes strong {
+    font-weight: 600;
+  }
+
+  .notes em {
+    font-style: italic;
+  }
+
+  .notes .hand {
+    font-family: 'Caveat', cursive;
+    font-size: 1.35em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .notes .hand.big {
+    font-size: 1.7em;
+  }
+
+  /* While About is read, the circles inside it (the DNA and the three
+     aspects) step back, so their lines never cross the words; they return
+     as the camera travels in to them */
+  .world.about-focus .inner,
+  .world.about-focus .pillar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ...and the other way round: inside About, its words step back so they
+     never run across the circles coming in. Each fades out before the other
+     fades in. */
+  /* (a filter, as the camera sets each block's opacity inline) */
+  .world.about-inside .notes {
+    filter: opacity(0);
+  }
+
+  .notes {
+    transition: filter 0.4s ease 0.5s;
+  }
+
+  .world.about-inside .notes {
+    transition-delay: 0s;
+  }
+
+  .inner,
+  .pillar {
+    transition: opacity 0.8s ease 0.4s;
+  }
+
+  .world.about-focus .inner,
+  .world.about-focus .pillar {
+    transition-delay: 0s;
+  }
+
+  /* The invitation to join */
+  .join-lead {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 1.4em;
+    line-height: 1.35;
+  }
+
+  .join-ways {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 26px 0 30px;
+  }
+
+  .join .pill {
+    padding: 12px 26px;
+    border-width: 1px;
+    font-size: 14px;
+    letter-spacing: 2.5px;
+    background: rgba(251, 246, 238, 0.08);
+    transition: background 0.3s ease;
+  }
+
+  .join .pill:hover {
+    background: rgba(251, 246, 238, 0.2);
+  }
+
+  .join .where {
+    max-width: 440px;
+    margin: 0 auto;
+    font-family: 'Caveat', cursive;
+    font-size: 1.35em;
+    line-height: 1.25;
+    opacity: 0.85;
   }
 
   .body h4 {
@@ -493,13 +646,12 @@
     padding: 0 16px;
   }
 
-  /* Across the middle, where the circle is widest, so the words stay
-     inside its ring */
+  /* Above the three small circles and inside the big one's ring, so the
+     words cross no line */
   .peek {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
+    top: 21%;
+    font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
   }
