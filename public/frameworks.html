@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Playpen+Sans:wght@200..400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{ --text:#333; --primary:#D6A15B; --light:#EFEFEF; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; }
   /* Same page, ReGenerativa palette (see src/regenerativa/regenerativa.css) */
@@ -33,7 +33,10 @@
 
   header{border-bottom:1px solid var(--line);}
   header .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;}
-  .brand{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:500;letter-spacing:2px;color:var(--dark);}
+  /* The same logo and wordmark as the site's header on light pages */
+  .brand{display:inline-flex;align-items:center;gap:10px;font-family:"Playpen Sans",sans-serif;font-size:17px;font-weight:250;letter-spacing:.01em;color:var(--dark);}
+  .brand img{height:22px;width:auto;filter:brightness(0);opacity:.85;}
+  @media (max-width:760px){.brand{font-size:14px;}.brand img{height:18px;}}
   .back{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
   .back:hover{color:var(--primary);}
 
@@ -117,7 +120,7 @@
 <body>
 <header>
   <div class="wrap">
-    <a href="/" class="brand" data-site-name>Liminal Village</a>
+    <a href="/" class="brand"><img src="/images/liminal-village-logo-rings.png" alt="" width="409" height="281"><span data-site-name>Liminal Village</span></a>
     <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to site</a>
   </div>
 </header>
