@@ -10,6 +10,8 @@
   // once the page opens, so this page belongs to the same story
   let svg = '';
   onMount(() => {
+    // This page moves by its own tabs, not by scrolling (see Navbar)
+    document.body.dataset.ownScroll = '';
     fetch('/images/concepts/intro-forest-moon.svg')
       .then((r) => r.text())
       .then((text) => (svg = text))

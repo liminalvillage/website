@@ -203,7 +203,9 @@
   function stepTab(d) {
     const i = TABS.findIndex((t) => t.id === view);
     const next = TABS[i + d];
+    // Past the first or last tab, scrolling carries on along the menu
     if (next) show(next.id);
+    else dispatchEvent(new CustomEvent('page-step', { detail: d }));
   }
 
   function onWheel(e) {

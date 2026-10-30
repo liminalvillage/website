@@ -64,8 +64,105 @@
     wordmark = e.detail.index > 0;
   };
 
+  // --- moving along the menu ------------------------------------------------
+  // The pages in the menu's order, the home page (with its circles) first.
+  // Scrolling past the end of one carries on to the next, and the drawn
+  // loop travels along the dock to it; the loop can also be dragged.
+  const clean = (href) => href.replace(/\.html$/, '').replace(/\/+$/, '') || '/';
+  const pages = ['/', ...menuItems.filter((item) => !item.href.includes('#')).map((item) => clean(item.href))];
+  const at = home ? 0 : pages.indexOf(clean(here));
+
+  let list;
+  let loop = { x: 0, w: 0, shown: false };
+  let dragging = false;
+  let pull = 0;
+  let leaving = false;
+
+  // Fit the loop round the link it marks
+  function place(href) {
+    const a = list?.querySelector(`a[href="${CSS.escape(href)}"]`);
+    if (!a) return (loop = { ...loop, shown: false });
+    loop = { x: a.offsetLeft, w: a.offsetWidth, shown: true };
+  }
+  $: if (list && !dragging && !leaving) place(active);
+
+  function travel(href) {
+    leaving = true;
+    // From the home page's circles, the loop starts from where it is, or
+    // from the first word when nothing is marked yet
+    if (!loop.shown) place(menuItems[0].href);
+    requestAnimationFrame(() => place(href));
+    setTimeout(() => (location.href = href), 650);
+  }
+
+  function step(d) {
+    if (at < 0 || leaving) return;
+    const to = at + d;
+    if (to < 0) return;
+    const page = pages[to % pages.length];
+    travel(page === '/' ? '/' : menuItems.find((item) => clean(item.href) === page).href);
+  }
+  const onStep = (e) => step(e.detail);
+
+  // On ordinary pages, a deliberate scroll past the bottom (or the top)
+  // tugs the loop towards the next (or previous) page, then goes there
+  let sum = 0;
+  let sumTimer;
+  function onWheel(e) {
+    if (home || 'ownScroll' in document.body.dataset || leaving) return;
+    const root = document.documentElement;
+    const atEnd = e.deltaY > 0 && window.scrollY + window.innerHeight >= root.scrollHeight - 2;
+    const atStart = e.deltaY < 0 && window.scrollY <= 0;
+    if (!atEnd && !atStart) return (sum = pull = 0);
+    sum += e.deltaY;
+    clearTimeout(sumTimer);
+    sumTimer = setTimeout(() => (sum = pull = 0), 600);
+    pull = Math.max(-1, Math.min(1, sum / 700));
+    if (Math.abs(pull) >= 1) {
+      pull = 0;
+      step(sum > 0 ? 1 : -1);
+    }
+  }
+
+  // Dragging the loop along the words, then letting go on one, goes there
+  let start = null;
+  function grab(e) {
+    if (leaving) return;
+    e.preventDefault();
+    start = { px: e.clientX, x: loop.x, last: e.clientX };
+    dragging = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+  function drag(e) {
+    if (!start) return;
+    start.last = e.clientX;
+    const max = list.scrollWidth - loop.w;
+    loop = { ...loop, x: Math.max(0, Math.min(max, start.x + e.clientX - start.px)) };
+  }
+  function drop() {
+    if (!start) return;
+    // The word nearest where the loop was let go (from the last move, as a
+    // cancelled pointer reports no position)
+    const mid = start.last - list.getBoundingClientRect().left;
+    start = null;
+    dragging = false;
+    const a = [...list.querySelectorAll('a')].reduce((best, el) =>
+      Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid) < Math.abs(best.offsetLeft + best.offsetWidth / 2 - mid) ? el : best
+    );
+    const href = a.getAttribute('href');
+    if (href === active) return place(active);
+    place(href);
+    // The home page's own circles move by the journey; other words load their page
+    if (href.startsWith('#')) a.click();
+    else travel(href);
+  }
+
   onMount(() => {
     addEventListener('journey-stop', onJourney);
+    addEventListener('page-step', onStep);
+    addEventListener('wheel', onWheel, { passive: true });
+    addEventListener('resize', () => place(active));
+    document.fonts?.ready.then(() => place(active));
     // Pages opened at an anchor start below the hero
     onScroll();
     if (!home) return;
@@ -97,7 +194,19 @@
 </header>
 
 <nav class="dock" class:light={pastHero} aria-label="Main" style="--progress: {progress}">
-  <ul>
+  <ul bind:this={list}>
+    <!-- The drawn loop round the current place; drag it to another word -->
+    <span
+      class="loop"
+      class:shown={loop.shown}
+      class:dragging
+      style="left: {loop.x}px; width: {loop.w}px; --pull: {pull}"
+      on:pointerdown={grab}
+      on:pointermove={drag}
+      on:pointerup={drop}
+      on:pointercancel={drop}
+      aria-hidden="true"
+    ></span>
     <!-- The links stand on a drawn ground line; the bright part of it grows
          with your progress through the page -->
     <svg class="ground" viewBox="0 0 1000 18" preserveAspectRatio="none" aria-hidden="true">
@@ -154,11 +263,11 @@
     mask-image: linear-gradient(#000 55%, transparent);
   }
 
+  /* On the light pages, no bar at all: only the soft blur that dissolves
+     downward, so the paper runs right up to the top */
   .navbar.fade.past-hero {
     --nav-ink: var(--dark-color);
-    background: var(--bar-bg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: none;
   }
 
   /* Invert: a white title blended with difference reads light on the video
@@ -354,23 +463,46 @@
     stroke: var(--dark-color);
   }
 
-  .dock.light a.active::before {
+  .dock.light .loop {
     filter: brightness(0);
+  }
+
+  .dock.light .loop.shown {
     opacity: 0.8;
   }
 
   /* The current place gets a loose hand-drawn loop around it, like a
-     circle drawn round a word in a notebook */
+     circle drawn round a word in a notebook. It travels along the words to
+     the next place, leans towards it as you scroll past the end of a page,
+     and can be picked up and dragged. */
   .dock a.active {
     color: #fff;
   }
 
-  .dock a.active::before {
-    content: '';
+  .loop {
     position: absolute;
-    inset: 2px 0;
+    top: 2px;
+    bottom: 2px;
+    z-index: 1;
     background: url('/images/dock-loop.svg') center / 100% 100% no-repeat;
-    pointer-events: none;
+    opacity: 0;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    transform: translateX(calc(var(--pull, 0) * 18px)) rotate(calc(var(--pull, 0) * 6deg));
+    transition: left 0.6s cubic-bezier(0.5, 0, 0.2, 1), width 0.6s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.4s ease,
+      transform 0.3s ease;
+  }
+
+  .loop.shown {
+    opacity: 1;
+  }
+
+  .loop.dragging {
+    cursor: grabbing;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    transform: scale(1.08) rotate(-3deg);
   }
 
   /* Room for the dock below the last content */

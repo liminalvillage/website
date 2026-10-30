@@ -137,7 +137,8 @@
     });
   }
 
-  const next = () => !busy && go(stop + 1);
+  // Past the last circle, scrolling carries on along the menu to the next page
+  const next = () => !busy && (stop === STOPS.length - 1 ? dispatchEvent(new CustomEvent('page-step', { detail: 1 })) : go(stop + 1));
   const prev = () => !busy && go(stop - 1);
 
   // --- input -----------------------------------------------------------------
