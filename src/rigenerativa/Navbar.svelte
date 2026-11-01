@@ -24,6 +24,7 @@
     { label: 'Percorso', href: '#ri-percorso' },
     { label: 'Attività', href: '#ri-attivita' },
     { label: 'La rete', href: '#ri-rete' },
+    { label: 'Rigeneratori', href: '#ri-rigeneratori' },
     { label: 'Contatti', href: '#ri-contatti' },
   ];
   export let brandHref = '#ri-top';
@@ -156,7 +157,7 @@
   .menu {
     list-style: none;
     display: flex;
-    gap: 2.1rem;
+    gap: 1.8rem;
     margin: 0;
     padding: 0;
   }

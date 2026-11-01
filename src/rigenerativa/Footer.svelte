@@ -36,6 +36,7 @@
             <li><a href={home('#ri-chi-siamo')}>Chi siamo</a></li>
             <li><a href={home('#ri-percorso')}>Percorso</a></li>
             <li><a href={home('#ri-attivita')}>Attività</a></li>
+            <li><a href={home('#ri-rigeneratori')}>Rigeneratori</a></li>
             <li><a href={home('#ri-contatti')}>Contatti</a></li>
           </ul>
         </div>

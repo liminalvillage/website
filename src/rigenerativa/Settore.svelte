@@ -4,6 +4,7 @@
   import { settori, bySlug, settoreUrl, homeUrl, settoreHost } from './settori.js';
   import Navbar from './Navbar.svelte';
   import Rete from './Rete.svelte';
+  import Rigeneratori from './Rigeneratori.svelte';
   import Contatti from './Contatti.svelte';
   import Footer from './Footer.svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
@@ -22,6 +23,7 @@
     { label: 'Servizi', href: '#ri-servizi' },
     { label: 'Metodo', href: '#ri-metodo' },
     { label: 'Settori', href: '#ri-settori' },
+    { label: 'Rigeneratori', href: '#ri-rigeneratori' },
     { label: 'Contatti', href: '#ri-contatti' },
   ];
 
@@ -177,6 +179,7 @@
     </div>
   </section>
 
+  <Rigeneratori topic={s.name} />
   <Contatti topic={s.name} />
   <Footer />
 </main>

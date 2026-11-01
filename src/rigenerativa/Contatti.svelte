@@ -7,8 +7,7 @@
   import Copy from '@lucide/svelte/icons/copy';
   import Check from '@lucide/svelte/icons/check';
 
-  // TODO: confirm the company mailbox before going live.
-  const EMAIL = 'info@rigenerativa.it';
+  import { EMAIL, mailto } from './contact.js';
 
   const asks = [
     {
@@ -42,7 +41,7 @@
   let copyTimer;
 
   $: ask = asks[picked];
-  $: href = `mailto:${EMAIL}?subject=${encodeURIComponent(`${ask.subject}${topic ? ` · ${topic}` : ''} · dal sito`)}&body=${encodeURIComponent(ask.body)}`;
+  $: href = mailto(`${ask.subject}${topic ? ` · ${topic}` : ''}`, ask.body);
 
   async function copy() {
     try {
