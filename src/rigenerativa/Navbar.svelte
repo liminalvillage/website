@@ -1,5 +1,7 @@
 <script>
   import { onMount } from 'svelte';
+  import Menu from '@lucide/svelte/icons/menu';
+  import X from '@lucide/svelte/icons/x';
 
   let mobileMenuOpen = false;
   let scrolled = false;
@@ -58,9 +60,7 @@
       aria-label={mobileMenuOpen ? 'Chiudi il menu' : 'Apri il menu'}
       aria-expanded={mobileMenuOpen}
     >
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+      {#if mobileMenuOpen}<X size={26} strokeWidth={1.5} />{:else}<Menu size={26} strokeWidth={1.5} />{/if}
     </button>
 
     <ul class="menu" class:open={mobileMenuOpen}>
@@ -213,23 +213,15 @@
     display: none;
     background: none;
     border: none;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
     cursor: pointer;
-    padding: 0.5rem;
+    color: var(--nav-ink);
+    transition: color 0.5s ease;
   }
-
-  .bar {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--nav-ink);
-    transition: transform 0.4s var(--rg-ease), opacity 0.3s ease, background 0.5s ease;
-  }
-
-  .nav.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav.open .bar:nth-child(2) { opacity: 0; }
-  .nav.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   @media (max-width: 900px) {
     .nav-inner {

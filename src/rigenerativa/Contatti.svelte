@@ -1,22 +1,33 @@
 <script>
+  import House from '@lucide/svelte/icons/house';
+  import Landmark from '@lucide/svelte/icons/landmark';
+  import Hexagon from '@lucide/svelte/icons/hexagon';
+  import Mail from '@lucide/svelte/icons/mail';
+  import ArrowRight from '@lucide/svelte/icons/arrow-right';
+  import Copy from '@lucide/svelte/icons/copy';
+  import Check from '@lucide/svelte/icons/check';
+
   // TODO: confirm the company mailbox before going live.
   const EMAIL = 'info@rigenerativa.it';
 
   const asks = [
     {
       title: 'Hai uno spazio da rigenerare?',
+      icon: House,
       text: 'Edifici, terreni o strutture dismesse: valutiamo insieme un progetto di gestione e trasformazione.',
       subject: 'Uno spazio da rigenerare',
       body: "Buongiorno,\n\nvorrei proporvi uno spazio da rigenerare.\n\nDove si trova:\nChe tipo di spazio è (edificio, terreno, struttura dismessa):\nCosa immagino:\n\n",
     },
     {
       title: 'Sei un ente o un comune?',
+      icon: Landmark,
       text: 'Co-progettazione, gare, fondi europei e modelli di gestione condivisa dei beni comuni.',
       subject: 'Collaborazione con un ente',
       body: "Buongiorno,\n\nscrivo per conto di (ente / comune):\n\nVorremmo approfondire:\n\n",
     },
     {
       title: 'Vuoi aprire un nodo?',
+      icon: Hexagon,
       text: 'Il nostro modello è replicabile: formazione, strumenti digitali e affiliazione alla rete.',
       subject: 'Aprire un nodo della rete',
       body: "Buongiorno,\n\nvorrei aprire un nodo della rete.\n\nDove:\nChi siamo:\n\n",
@@ -61,6 +72,7 @@
             on:click={() => (picked = i)}
           >
             <span class="check" aria-hidden="true"></span>
+            <span class="ask-icon" aria-hidden="true"><svelte:component this={a.icon} size={22} strokeWidth={1.5} /></span>
             <h3>{a.title}</h3>
             <p>{a.text}</p>
           </button>
@@ -68,9 +80,9 @@
       </div>
 
       <div class="actions">
-        <a class="rg-btn rg-btn-gold" {href}>Scrivici: {ask.subject.toLowerCase()} <span class="arrow">→</span></a>
+        <a class="rg-btn rg-btn-gold" {href}><Mail size={18} strokeWidth={1.75} />Scrivici: {ask.subject.toLowerCase()} <ArrowRight class="arrow" size={18} strokeWidth={1.75} /></a>
         <button class="copy" on:click={copy} aria-live="polite">
-          {copied ? 'Indirizzo copiato ✓' : `Copia ${EMAIL}`}
+          {#if copied}<Check size={16} strokeWidth={2} />Indirizzo copiato{:else}<Copy size={16} strokeWidth={1.75} />Copia {EMAIL}{/if}
         </button>
       </div>
     </div>
@@ -168,6 +180,23 @@
     box-shadow: inset 0 0 0 4px var(--rg-cream);
   }
 
+  .ask-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+    background: rgba(244, 239, 228, 0.1);
+    color: var(--rg-gold-soft);
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  .ask.on .ask-icon {
+    background: var(--rg-forest-dark);
+    color: var(--rg-cream);
+  }
+
   .ask h3 {
     color: #fff;
     font-size: 1.45rem;
@@ -199,6 +228,9 @@
   }
 
   .copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     background: none;
     border: none;
     color: rgba(244, 239, 228, 0.8);

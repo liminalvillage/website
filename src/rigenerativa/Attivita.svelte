@@ -1,11 +1,17 @@
 <script>
   import { fly, fade, slide } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
+  import Building2 from '@lucide/svelte/icons/building-2';
+  import Wheat from '@lucide/svelte/icons/wheat';
+  import Waypoints from '@lucide/svelte/icons/waypoints';
+  import BookOpen from '@lucide/svelte/icons/book-open';
+  import ArrowRight from '@lucide/svelte/icons/arrow-right';
 
   // Condensed from art. 4 (oggetto sociale) of the atto costitutivo, 15 aprile 2026.
   const groups = [
     {
       title: 'Luoghi',
+      icon: Building2,
       areas: [
         {
           name: 'Rigenerazione degli spazi fisici',
@@ -27,6 +33,7 @@
     },
     {
       title: 'Terra ed economia viva',
+      icon: Wheat,
       areas: [
         {
           name: 'Economia viva e filiere rigenerative',
@@ -48,6 +55,7 @@
     },
     {
       title: 'Tecnologia e governance',
+      icon: Waypoints,
       areas: [
         {
           name: 'Tecnologia digitale e reti',
@@ -69,6 +77,7 @@
     },
     {
       title: 'Conoscenza e scambio',
+      icon: BookOpen,
       areas: [
         {
           name: 'Formazione e ricerca',
@@ -142,6 +151,7 @@
           on:click={() => pickGroup(i)}
           on:keydown={(e) => onTabKey(e, i)}
         >
+          <span class="tab-icon"><svelte:component this={g.icon} size={20} strokeWidth={1.5} /></span>
           <span class="tab-title">{g.title}</span>
           <span class="tab-count">{g.areas.length}</span>
         </button>
@@ -163,7 +173,7 @@
               >
                 <span class="item-num">{String(offsets[group] + i + 1).padStart(2, '0')}</span>
                 <span class="item-name">{a.name}</span>
-                <span class="item-arrow" aria-hidden="true">→</span>
+                <span class="item-arrow" aria-hidden="true"><ArrowRight size={20} strokeWidth={1.5} /></span>
               </button>
               {#if area === i}
                 <div class="inline" transition:slide={{ duration: 350, easing: cubicOut }}>
@@ -189,9 +199,7 @@
             </ul>
           </div>
         {/key}
-        <svg class="sprig" viewBox="0 0 120 120" aria-hidden="true">
-          <path d="M60 118V40M60 80c-18 0-28-12-28-28 18 0 28 12 28 28zM60 62c16 0 26-10 26-26-16 0-26 10-26 26zM60 40c0-14 6-24 18-30" />
-        </svg>
+        <span class="mark" aria-hidden="true"><svelte:component this={groups[group].icon} size={168} strokeWidth={0.75} /></span>
       </div>
     </div>
   </div>
@@ -204,16 +212,15 @@
 
   .tabs {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
     margin-bottom: 2.5rem;
   }
 
   .tab {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     padding: 1.1rem 1.3rem;
     border: 1px solid var(--rg-line);
     border-radius: 14px;
@@ -235,6 +242,29 @@
     background: var(--rg-forest-dark);
     border-color: var(--rg-forest-dark);
     color: var(--rg-cream);
+  }
+
+  .tab-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 10px;
+    background: var(--rg-cream);
+    color: var(--rg-forest);
+    flex-shrink: 0;
+    transition: background 0.4s var(--rg-ease), color 0.4s var(--rg-ease);
+  }
+
+  .tab.on .tab-icon {
+    background: rgba(244, 239, 228, 0.12);
+    color: var(--rg-gold-soft);
+  }
+
+  .tab-title {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.2;
   }
 
   .tab-count {
@@ -299,6 +329,7 @@
   }
 
   .item-arrow {
+    display: inline-flex;
     opacity: 0;
     transform: translateX(-8px);
     color: var(--rg-gold);
@@ -370,21 +401,18 @@
     color: var(--rg-cream);
   }
 
-  .sprig {
+  .mark {
     position: absolute;
-    right: -10px;
-    bottom: -14px;
-    width: 150px;
-    height: 150px;
-    fill: none;
-    stroke: rgba(221, 185, 121, 0.28);
-    stroke-width: 1.2;
-    stroke-linecap: round;
+    right: -24px;
+    bottom: -28px;
+    display: flex;
+    color: rgba(221, 185, 121, 0.22);
+    pointer-events: none;
   }
 
   @media (max-width: 960px) {
     .tabs {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .explorer {
@@ -410,7 +438,12 @@
   @media (max-width: 520px) {
     .tab {
       font-size: 1.05rem;
-      padding: 0.9rem 1rem;
+      padding: 0.75rem;
+      gap: 0.6rem;
+    }
+
+    .tab-count {
+      display: none;
     }
 
     .inline {

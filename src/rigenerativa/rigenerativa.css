@@ -85,6 +85,14 @@ a:hover {
 
 /* ---------- shared building blocks ---------- */
 
+/* Lucide icons: one stroke weight, sized in em so they sit on the text's line. */
+svg.lucide {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: -0.15em;
+}
+
+
 .rg-container {
   max-width: 1200px;
   margin: 0 auto;

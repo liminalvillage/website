@@ -1,31 +1,41 @@
 <script>
   import { onMount } from 'svelte';
   import { gsap, reduced } from './motion.js';
+  import KeyRound from '@lucide/svelte/icons/key-round';
+  import PencilRuler from '@lucide/svelte/icons/pencil-ruler';
+  import Hammer from '@lucide/svelte/icons/hammer';
+  import Sprout from '@lucide/svelte/icons/sprout';
+  import Users from '@lucide/svelte/icons/users';
 
   // The path named in the Chi siamo lead: from taking a place on to sharing it.
   const steps = [
     {
       title: 'Presa in gestione',
+      icon: KeyRound,
       text: 'Edifici civili e industriali, aree rurali e strutture dismesse: ne assumiamo la piena responsabilità, con forme di gestione, concessione o custodia fiduciaria.',
       tags: ['Edifici', 'Terre', 'Strutture dismesse'],
     },
     {
       title: 'Progettazione bioclimatica',
+      icon: PencilRuler,
       text: "Ascoltiamo il luogo e progettiamo con il clima, l'acqua e i materiali che offre: architettura bioclimatica, BIM e digital twin, energia off-grid.",
       tags: ['Bioclimatica', 'BIM', 'Off-grid'],
     },
     {
       title: 'Costruzione',
+      icon: Hammer,
       text: 'Bioedilizia, restauro e recupero adattivo come General Contractor, con materiali naturali e riciclati, fitodepurazione e biolaghi.',
       tags: ['Bioedilizia', 'Restauro', 'Materiali riciclati'],
     },
     {
       title: 'Vita culturale e agricola',
+      icon: Sprout,
       text: 'Il luogo si riempie: programmazione culturale, ospitalità, eventi e residenze; agroecologia, food forest e agricoltura supportata dalla comunità.',
       tags: ['Cultura', 'Ospitalità', 'Agroecologia'],
     },
     {
       title: 'Gestione condivisa',
+      icon: Users,
       text: 'Accompagniamo le comunità locali verso la cura condivisa dei beni comuni, con governance distribuita e strumenti digitali aperti.',
       tags: ['Beni comuni', 'Governance', 'Comunità'],
     },
@@ -78,8 +88,8 @@
       <ol class="track" bind:this={track}>
         {#each steps as s, i}
           <li class="step" class:lit={i <= current}>
+            <span class="node" aria-hidden="true"><svelte:component this={s.icon} size={20} strokeWidth={1.5} /></span>
             <span class="index">0{i + 1}</span>
-            <span class="node" aria-hidden="true"></span>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
             <ul class="tags">
@@ -166,7 +176,7 @@
   .step {
     position: relative;
     width: min(420px, 34vw);
-    padding: 3.5rem 3rem 0 0;
+    padding: 4.75rem 3rem 0 0;
     opacity: 0.38;
     transition: opacity 0.7s var(--rg-ease);
   }
@@ -177,29 +187,38 @@
 
   .index {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 22px;
+    left: 64px;
+    transform: translateY(-50%);
+    padding: 0 0.6rem;
+    background: var(--rg-bark);
     font-size: 0.7rem;
     letter-spacing: 3px;
+    line-height: 1;
     color: var(--rg-gold-soft);
+    z-index: 1;
   }
 
   .node {
     position: absolute;
-    top: calc(1.75rem - 6px);
+    top: 0;
     left: 0;
-    width: 12px;
-    height: 12px;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
     border-radius: 50%;
-    border: 1.5px solid var(--rg-gold);
+    border: 1px solid rgba(201, 163, 91, 0.6);
     background: var(--rg-bark);
-    transition: background 0.5s ease, box-shadow 0.5s ease;
+    color: var(--rg-gold-soft);
+    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
     z-index: 1;
   }
 
   .step.lit .node {
     background: var(--rg-gold);
-    box-shadow: 0 0 0 6px rgba(201, 163, 91, 0.15), 0 0 18px rgba(221, 185, 121, 0.6);
+    color: var(--rg-night);
+    box-shadow: 0 0 0 6px rgba(201, 163, 91, 0.15), 0 0 22px rgba(221, 185, 121, 0.5);
   }
 
   .step h3 {
@@ -234,7 +253,7 @@
   /* The root line the nodes sit on; it grows with the pinned scroll. */
   .root {
     position: absolute;
-    top: 1.75rem;
+    top: 22px;
     left: 0;
     right: 0;
     height: 1px;
@@ -272,9 +291,9 @@
     .step {
       width: auto;
       opacity: 1;
-      padding: 0 0 2.75rem 2.5rem;
+      padding: 0 0 2.75rem 2.75rem;
       border-left: 1px solid rgba(244, 239, 228, 0.18);
-      margin-left: 6px;
+      margin-left: 22px;
     }
 
     .step:last-child {
@@ -282,17 +301,20 @@
     }
 
     .index {
-      left: 2.5rem;
+      left: 2.75rem;
+      padding: 0;
+      background: none;
     }
 
     .node {
-      top: 0.15rem;
-      left: -7px;
+      left: -22px;
       background: var(--rg-gold);
+      color: var(--rg-night);
     }
 
     .step h3 {
-      margin-top: 1.5rem;
+      margin-top: 0;
+      padding-top: 3.25rem;
     }
   }
 

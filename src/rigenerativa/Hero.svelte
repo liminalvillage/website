@@ -1,16 +1,23 @@
 <script>
   import { onMount } from 'svelte';
   import { gsap, reduced } from './motion.js';
-  import { mycelium } from './mycelium.js';
+  import { hexmesh, HOME_CELL, LEVELS } from './hexmesh.js';
+  import ArrowRight from '@lucide/svelte/icons/arrow-right';
+  import MapPin from '@lucide/svelte/icons/map-pin';
+  import Hexagon from '@lucide/svelte/icons/hexagon';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronRight from '@lucide/svelte/icons/chevron-right';
 
   let hero;
   let canvas;
   let photo;
   let touch = false;
+  let cell = null;
+  let stats = LEVELS.map((l) => ({ ...l, online: 0, total: 0 }));
 
   onMount(() => {
     touch = matchMedia('(hover: none)').matches;
-    const stop = mycelium(canvas, { area: hero, reduced });
+    const stop = hexmesh(canvas, { area: hero, reduced, onCell: (id) => (cell = id), onStats: (s) => (stats = s) });
     const ctx = gsap.context(() => {
       if (reduced) return;
       gsap.to(photo, {
@@ -33,7 +40,10 @@
   <canvas bind:this={canvas} class="web" aria-hidden="true"></canvas>
 
   <div class="hero-content rg-container">
-    <p class="eyebrow"><span>Rigenerativa S.r.l.</span><span class="dot"></span><span>Castorano, Marche</span></p>
+    <p class="eyebrow">
+      <span>Rigenerativa S.r.l.</span>
+      <span class="place"><MapPin size="1.3em" strokeWidth={1.75} />Castorano, Marche</span>
+    </p>
     <h1>
       <span class="line"><span>Rigeneriamo luoghi,</span></span>
       <span class="line"><span><em>comunità</em> e territori</span></span>
@@ -42,19 +52,36 @@
       Trasformiamo spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali, unendo bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni.
     </p>
     <div class="hero-actions">
-      <a href="#ri-contatti" class="rg-btn rg-btn-gold">Collabora con noi <span class="arrow">→</span></a>
+      <a href="#ri-contatti" class="rg-btn rg-btn-gold">Collabora con noi <ArrowRight class="arrow" size="1.4em" strokeWidth={1.75} /></a>
       <a href="#ri-attivita" class="rg-btn rg-btn-ghost">Cosa facciamo</a>
     </div>
   </div>
 
   <div class="hero-foot rg-container">
+    <div class="story">
+    <ol class="layers" aria-label="Livelli della rete sulla griglia H3">
+      {#each stats as l, i}
+        {#if i}<li class="sep" aria-hidden="true"><ChevronRight size={14} strokeWidth={1.5} /></li>{/if}
+        <li class="layer" class:on={l.online > 0}>
+          <Hexagon size={10 + i * 4} strokeWidth={1.5} />
+          <span class="layer-name">{l.label}</span>
+          <span class="layer-count">{l.online}<span class="of">/{l.total}</span></span>
+          <span class="layer-res">r{l.res}</span>
+        </li>
+      {/each}
+    </ol>
     <p class="hint">
-      <span class="pulse" aria-hidden="true"></span>
-      {touch ? 'Tocca lo schermo: la rete cresce' : 'Muovi il cursore, clicca: la rete cresce'}
+      <span class="hex" class:home={!cell || cell === HOME_CELL}><Hexagon size="1.5em" strokeWidth={1.75} /></span>
+      {#if cell}
+        <span>Cella H3 <code>{cell}</code>{cell === HOME_CELL ? ' · Castorano' : ''}</span>
+      {:else}
+        <span>{touch ? 'Tocca' : 'Clicca'} un esagono: un nuovo progetto entra in rete</span>
+      {/if}
     </p>
+    </div>
     <a href="#ri-chi-siamo" class="scroll-hint" aria-label="Scorri in basso">
       <span>Scopri</span>
-      <span class="stem" aria-hidden="true"></span>
+      <ChevronDown class="bob" size="1.6em" strokeWidth={1.5} />
     </a>
   </div>
 </section>
@@ -121,12 +148,11 @@
     animation: rise 1.2s var(--rg-ease) 0.1s both;
   }
 
-  .dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--rg-gold);
-    box-shadow: 0 0 10px var(--rg-gold);
+  .place {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--rg-gold-soft);
   }
 
   h1 {
@@ -189,6 +215,63 @@
     animation: rise 1.2s var(--rg-ease) 1s both;
   }
 
+  .story {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .layers {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+  }
+
+  .layer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 239, 228, 0.14);
+    background: rgba(27, 34, 26, 0.45);
+    backdrop-filter: blur(6px);
+    color: rgba(244, 239, 228, 0.45);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    transition: color 0.6s ease, border-color 0.6s ease;
+  }
+
+  .layer.on {
+    color: var(--rg-cream);
+    border-color: rgba(221, 185, 121, 0.45);
+  }
+
+  .layer.on :global(svg) {
+    color: var(--rg-gold);
+  }
+
+  .layer-count {
+    font-variant-numeric: tabular-nums;
+    color: var(--rg-gold-soft);
+  }
+
+  .layer:not(.on) .layer-count {
+    color: inherit;
+  }
+
+  .layer-count .of,
+  .layer-res {
+    opacity: 0.55;
+  }
+
+  .sep {
+    display: inline-flex;
+    color: rgba(244, 239, 228, 0.35);
+  }
+
   .hint {
     display: flex;
     align-items: center;
@@ -198,15 +281,24 @@
     letter-spacing: 1.5px;
   }
 
-  .pulse {
-    position: relative;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--rg-gold);
+  .hint code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.95em;
+    letter-spacing: 0.5px;
+    color: var(--rg-gold-soft);
   }
 
-  .pulse::after {
+  .hex {
+    position: relative;
+    display: inline-flex;
+    color: rgba(244, 239, 228, 0.7);
+  }
+
+  .hex.home {
+    color: var(--rg-gold);
+  }
+
+  .hex.home::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -231,12 +323,9 @@
     color: var(--rg-gold-soft);
   }
 
-  .stem {
-    width: 1px;
-    height: 46px;
-    background: linear-gradient(var(--rg-gold), transparent);
-    transform-origin: top;
-    animation: grow 2.4s var(--rg-ease) infinite;
+  .scroll-hint :global(.bob) {
+    color: var(--rg-gold);
+    animation: bob 2.2s var(--rg-ease) infinite;
   }
 
   @keyframes lift {
@@ -250,14 +339,13 @@
   }
 
   @keyframes ping {
-    from { transform: scale(1); opacity: 0.9; }
-    to { transform: scale(3.2); opacity: 0; }
+    from { transform: scale(0.6); opacity: 0.9; }
+    to { transform: scale(1.8); opacity: 0; }
   }
 
-  @keyframes grow {
-    0% { transform: scaleY(0); opacity: 1; }
-    60% { transform: scaleY(1); opacity: 1; }
-    100% { transform: scaleY(1); opacity: 0; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
   }
 
   @media (max-width: 640px) {
@@ -268,7 +356,17 @@
     }
 
     .hero-foot {
-      justify-content: center;
+      justify-content: flex-start;
+      bottom: 1.25rem;
+    }
+
+    .hero-content {
+      padding-bottom: 10rem;
+    }
+
+    .sep,
+    .layer-res {
+      display: none;
     }
 
     .scroll-hint {

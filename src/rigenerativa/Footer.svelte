@@ -1,4 +1,5 @@
 <script>
+  import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   const year = new Date().getFullYear();
 
   // Company data required on the website of an Italian S.r.l. (art. 2250 c.c.),
@@ -37,10 +38,10 @@
         <div class="col">
           <h4>La rete</h4>
           <ul>
-            <li><a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa</a></li>
-            <li><a href="https://liminalvillage.com" target="_blank" rel="noopener noreferrer">Liminal Village</a></li>
-            <li><a href="https://refactory.earth" target="_blank" rel="noopener noreferrer">ReFactory</a></li>
-            <li><a href="https://casaselva.earth" target="_blank" rel="noopener noreferrer">Casa Selva</a></li>
+            <li><a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
+            <li><a href="https://liminalvillage.com" target="_blank" rel="noopener noreferrer">Liminal Village<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
+            <li><a href="https://refactory.earth" target="_blank" rel="noopener noreferrer">ReFactory<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
+            <li><a href="https://casaselva.earth" target="_blank" rel="noopener noreferrer">Casa Selva<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
           </ul>
         </div>
 
@@ -169,5 +170,16 @@
     .top { grid-template-columns: 1fr; gap: 2rem; }
     .cols { grid-template-columns: repeat(2, 1fr); }
     .cols .col:last-child { grid-column: 1 / -1; }
+  }
+
+  .col a :global(.ext) {
+    margin-left: 0.3rem;
+    opacity: 0.55;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .col a:hover :global(.ext) {
+    opacity: 1;
+    transform: translate(2px, -2px);
   }
 </style>

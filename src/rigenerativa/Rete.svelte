@@ -1,4 +1,7 @@
 <script>
+  import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
+  import MapPin from '@lucide/svelte/icons/map-pin';
+
   const sites = [
     {
       name: 'Liminal Village',
@@ -68,13 +71,13 @@
         >
           <div class="card-image">
             <img src={s.image} alt="" loading="lazy" />
-            <span class="badge">0{i + 1}</span>
+            <span class="badge"><MapPin size={14} strokeWidth={1.75} />0{i + 1}</span>
           </div>
           <div class="card-body">
             <p class="role">{s.role}</p>
             <h3>{s.name}</h3>
             <p class="blurb">{s.blurb}</p>
-            <span class="more">Visita il sito <span class="arrow">↗</span></span>
+            <span class="more">Visita il sito <ArrowUpRight class="arrow" size={16} strokeWidth={1.75} /></span>
           </div>
           <span class="sheen" aria-hidden="true"></span>
         </a>
@@ -151,6 +154,9 @@
   }
 
   .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -192,6 +198,9 @@
   }
 
   .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     font-size: 0.72rem;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -199,12 +208,11 @@
     color: var(--rg-forest);
   }
 
-  .more .arrow {
-    display: inline-block;
+  .more :global(.arrow) {
     transition: transform 0.4s var(--rg-ease);
   }
 
-  .card:hover .more .arrow {
+  .card:hover .more :global(.arrow) {
     transform: translate(3px, -3px);
   }
 
