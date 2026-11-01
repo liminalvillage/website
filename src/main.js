@@ -4,13 +4,17 @@ const host = typeof window !== 'undefined'
   ? window.location.hostname.toLowerCase()
   : ''
 
+// ?settore=<slug> previews a rigenerativa.it sector page on any host.
+const settoreParam = typeof window !== 'undefined'
+  && new URLSearchParams(window.location.search).has('settore')
+
 const site = host.includes('casaselva')
   ? 'casaselva'
   : (host.includes('refactory') || host.includes('brickfactory'))
     ? 'refactory'
     : host.includes('regenerativa')
       ? 'regenerativa'
-      : host.includes('rigenerativa')
+      : (host.includes('rigenerativa') || settoreParam)
         ? 'rigenerativa'
         : 'liminal'
 
@@ -54,6 +58,19 @@ async function boot() {
   if (site === 'rigenerativa') {
     document.documentElement.setAttribute('data-site', 'rigenerativa')
     document.documentElement.setAttribute('lang', 'it')
+    // Sector subdomains: edilizia.rigenerativa.it, agricoltura.rigenerativa.it, …
+    const { bySlug, currentSettore } = await import('./rigenerativa/settori.js')
+    const slug = currentSettore()
+    if (slug) {
+      const s = bySlug[slug]
+      document.title = `${s.name} — Rigenerativa S.r.l.`
+      setMeta('description', `${s.meta} Rigenerativa S.r.l., Castorano (AP), Marche.`)
+      const [{ default: Settore }] = await Promise.all([
+        import('./rigenerativa/Settore.svelte'),
+        import('./rigenerativa/rigenerativa.css'),
+      ])
+      return mount(Settore, { target: document.getElementById('app'), props: { slug } })
+    }
     document.title = 'Rigenerativa S.r.l. — Rigenerazione di luoghi, comunità e territori'
     setMeta('description',
       'Rigenerativa S.r.l. trasforma spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali: bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni. Castorano (AP), Marche.')

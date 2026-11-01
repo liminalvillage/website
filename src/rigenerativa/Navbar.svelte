@@ -18,13 +18,16 @@
     progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
   };
 
-  const menuItems = [
+  // Sector pages pass their own sections and a brand link back to rigenerativa.it.
+  export let items = [
     { label: 'Chi siamo', href: '#ri-chi-siamo' },
     { label: 'Percorso', href: '#ri-percorso' },
     { label: 'Attività', href: '#ri-attivita' },
     { label: 'La rete', href: '#ri-rete' },
     { label: 'Contatti', href: '#ri-contatti' },
   ];
+  export let brandHref = '#ri-top';
+  const menuItems = items;
 
   // Highlight the section that crosses the middle of the viewport.
   onMount(() => {
@@ -49,7 +52,7 @@
 
 <nav class="nav" class:scrolled class:open={mobileMenuOpen}>
   <div class="nav-inner">
-    <a href="#ri-top" class="brand" on:click={() => (mobileMenuOpen = false)}>
+    <a href={brandHref} class="brand" on:click={() => (mobileMenuOpen = false)}>
       <img src="/images/regenerativa/logo.png" alt="" class="brand-logo" />
       <span class="brand-text">Rigenerativa</span>
     </a>

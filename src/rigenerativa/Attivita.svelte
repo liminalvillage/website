@@ -6,6 +6,8 @@
   import Waypoints from '@lucide/svelte/icons/waypoints';
   import BookOpen from '@lucide/svelte/icons/book-open';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
+  import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
+  import { bySlug, settoreUrl, settoreHost } from './settori.js';
 
   // Condensed from art. 4 (oggetto sociale) of the atto costitutivo, 15 aprile 2026.
   const groups = [
@@ -15,18 +17,22 @@
       areas: [
         {
           name: 'Rigenerazione degli spazi fisici',
+          settore: 'edilizia',
           text: 'Gestione, costruzione e restauro di edifici e aree dismesse; General Contractor; bioedilizia e architettura bioclimatica; fotovoltaico e accumulo off-grid; biolaghi e fitodepurazione; efficienza energetica (ESCO).',
         },
         {
           name: 'Vita negli spazi rigenerati',
+          settore: 'ospitalita',
           text: 'Attività outdoor, turismo lento e itinerari culturali e spirituali; ospitalità diffusa e glamping; ristorazione e filiera corta; eventi, festival e residenze artistiche; benessere e yoga.',
         },
         {
           name: "L'acqua come bene comune",
+          settore: 'acqua',
           text: 'Gestione comunitaria di sorgenti, pozzi e bacini; concessioni idriche; infrastrutture idriche locali; modelli di governance ispirati ai principi di Elinor Ostrom.',
         },
         {
           name: 'Stewardship dei beni comuni',
+          settore: 'governance',
           text: 'Ruolo di custode fiduciario di terre e patrimoni; community land trust, cohousing e diritto di superficie; accompagnamento di comunità e istituzioni verso la gestione condivisa.',
         },
       ],
@@ -37,18 +43,22 @@
       areas: [
         {
           name: 'Economia viva e filiere rigenerative',
+          settore: 'agricoltura',
           text: 'Botteghe e mercati di prodotti locali; agroecologia e permacultura; food forest e orti collettivi; Community Supported Agriculture; apicoltura; fattorie didattiche; rewilding e pascolo rigenerativo.',
         },
         {
           name: 'Riciclo e tracciamento delle risorse',
+          settore: 'edilizia',
           text: 'Recupero di materiali edilizi e industriali; filiere di upcycling; Digital Product Passport e material flow analysis; consulenza su simbiosi industriale, LCA e rendicontazione CSRD.',
         },
         {
           name: 'Macchinari per processi rigenerativi',
+          settore: 'agricoltura',
           text: 'Produzione e manutenzione di macchine agricole e agroforestali, sistemi di compostaggio, depurazione e riscaldamento a biomassa; logistica sostenibile e mobilità condivisa.',
         },
         {
           name: 'Carbonio, biodiversità e finanza rigenerativa',
+          settore: 'agricoltura',
           text: 'Crediti di carbonio e di biodiversità da riforestazione e agricoltura rigenerativa; pagamenti per servizi ecosistemici; green bond e capitale paziente per gli ecosistemi.',
         },
       ],
@@ -59,18 +69,22 @@
       areas: [
         {
           name: 'Tecnologia digitale e reti',
+          settore: 'tecnologia',
           text: 'Software gestionali SaaS; BIM e digital twin di edifici e territori; piattaforme GIS cooperative e osservatori territoriali aperti; software per la federazione di reti multi-nodo.',
         },
         {
           name: 'Intelligenza artificiale',
+          settore: 'tecnologia',
           text: 'Computer vision per cantieri e riconoscimento di specie; agenti AI per il coordinamento di reti di fornitori; individuazione di scarti riutilizzabili; manutenzione predittiva e pianificazione territoriale.',
         },
         {
           name: 'Governance distribuita',
+          settore: 'governance',
           text: 'Sociocrazia, S3, olocrazia e decisioni per consenso; piattaforme decisionali digitali; modelli di economia pluricapitale e misurazione dell’impatto; gestione di aree naturali protette.',
         },
         {
           name: 'Reti rigenerative e licenze del modello',
+          settore: 'rete',
           text: 'Un modello replicabile di rigenerazione territoriale attraverso nodi locali affiliati; licenze del marchio e del metodo; formazione dei gestori; marchio collettivo di qualità rigenerativa.',
         },
       ],
@@ -81,14 +95,17 @@
       areas: [
         {
           name: 'Formazione e ricerca',
+          settore: 'formazione',
           text: 'Corsi in presenza e online; fablab e maker space; poli di ricerca applicata; supporto all’accesso a fondi europei e nazionali (Horizon Europe, LIFE, PNRR) e alla nascita di startup.',
         },
         {
           name: 'Comunicazione ed editoria',
+          settore: 'formazione',
           text: 'Video, podcast e documentari; marketing territoriale; campagne di crowdfunding; pubblicazioni su rigenerazione, bioedilizia, permacultura ed economia circolare.',
         },
         {
           name: 'Voucher e scambio locale',
+          settore: 'rete',
           text: 'Voucher fisici e digitali per servizi e spazi della rete; valute complementari, banca del tempo e crediti reciproci; crowdfunding e fondi di co-investimento comunitario.',
         },
       ],
@@ -180,6 +197,7 @@
                   <ul class="chips">
                     {#each chips(a.text) as c}<li>{c}</li>{/each}
                   </ul>
+                  <a class="more" href={settoreUrl(a.settore)}>Settore {bySlug[a.settore].name}: {settoreHost(a.settore)} <ArrowUpRight size={16} strokeWidth={1.75} /></a>
                 </div>
               {/if}
             </li>
@@ -197,6 +215,7 @@
                 <li in:fly={{ y: 10, duration: 450, delay: 80 + i * 45, easing: cubicOut }}>{c}</li>
               {/each}
             </ul>
+            <a class="more" href={settoreUrl(current.settore)}>Scopri il settore {bySlug[current.settore].name} <ArrowUpRight size={18} strokeWidth={1.75} /></a>
           </div>
         {/key}
         <span class="mark" aria-hidden="true"><svelte:component this={groups[group].icon} size={168} strokeWidth={0.75} /></span>
@@ -399,6 +418,36 @@
     background: rgba(244, 239, 228, 0.08);
     border: 1px solid rgba(244, 239, 228, 0.16);
     color: var(--rg-cream);
+  }
+
+  .more {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--rg-gold-soft);
+    border-bottom: 1px solid rgba(221, 185, 121, 0.4);
+    padding-bottom: 0.2rem;
+  }
+
+  .more:hover {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .inline .more {
+    margin-top: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-size: 0.85rem;
+    color: var(--rg-forest);
+    border-color: var(--rg-line);
   }
 
   .mark {

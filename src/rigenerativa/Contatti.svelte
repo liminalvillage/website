@@ -34,12 +34,15 @@
     },
   ];
 
+  // A sector page tags the subject, so the mailbox can tell edilizia from agricoltura.
+  export let topic = '';
+
   let picked = 0;
   let copied = false;
   let copyTimer;
 
   $: ask = asks[picked];
-  $: href = `mailto:${EMAIL}?subject=${encodeURIComponent(`${ask.subject} · dal sito`)}&body=${encodeURIComponent(ask.body)}`;
+  $: href = `mailto:${EMAIL}?subject=${encodeURIComponent(`${ask.subject}${topic ? ` · ${topic}` : ''} · dal sito`)}&body=${encodeURIComponent(ask.body)}`;
 
   async function copy() {
     try {

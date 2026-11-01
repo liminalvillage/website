@@ -1,5 +1,10 @@
 <script>
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
+  import { settori, settoreUrl, homeUrl, currentSettore } from './settori.js';
+
+  // On a sector subdomain the home sections live on rigenerativa.it.
+  const here = currentSettore();
+  const home = (hash) => (here ? homeUrl(hash) : hash);
   const year = new Date().getFullYear();
 
   // Company data required on the website of an Italian S.r.l. (art. 2250 c.c.),
@@ -28,10 +33,19 @@
         <div class="col">
           <h4>Esplora</h4>
           <ul>
-            <li><a href="#ri-chi-siamo">Chi siamo</a></li>
-            <li><a href="#ri-percorso">Percorso</a></li>
-            <li><a href="#ri-attivita">Attività</a></li>
-            <li><a href="#ri-contatti">Contatti</a></li>
+            <li><a href={home('#ri-chi-siamo')}>Chi siamo</a></li>
+            <li><a href={home('#ri-percorso')}>Percorso</a></li>
+            <li><a href={home('#ri-attivita')}>Attività</a></li>
+            <li><a href={home('#ri-contatti')}>Contatti</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h4>Settori</h4>
+          <ul>
+            {#each settori as s}
+              <li><a href={settoreUrl(s.slug)} aria-current={here === s.slug ? 'page' : null}>{s.name}</a></li>
+            {/each}
           </ul>
         </div>
 
@@ -79,7 +93,7 @@
 
   .top {
     display: grid;
-    grid-template-columns: 1.2fr 2.2fr;
+    grid-template-columns: 1fr 2.8fr;
     gap: 3rem;
     margin-bottom: 3rem;
   }
@@ -116,7 +130,7 @@
 
   .cols {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.4fr;
+    grid-template-columns: 1fr 1fr 1fr 1.4fr;
     gap: 2rem;
   }
 
@@ -147,7 +161,8 @@
     transition: color 0.25s ease;
   }
 
-  .col a:hover {
+  .col a:hover,
+  .col a[aria-current] {
     color: var(--rg-gold-soft);
   }
 
@@ -169,7 +184,6 @@
   @media (max-width: 900px) {
     .top { grid-template-columns: 1fr; gap: 2rem; }
     .cols { grid-template-columns: repeat(2, 1fr); }
-    .cols .col:last-child { grid-column: 1 / -1; }
   }
 
   .col a :global(.ext) {
