@@ -28,6 +28,7 @@
           <h4>Esplora</h4>
           <ul>
             <li><a href="#ri-chi-siamo">Chi siamo</a></li>
+            <li><a href="#ri-percorso">Percorso</a></li>
             <li><a href="#ri-attivita">Attività</a></li>
             <li><a href="#ri-contatti">Contatti</a></li>
           </ul>

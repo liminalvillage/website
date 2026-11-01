@@ -1,6 +1,10 @@
 <script>
+  import { onMount } from 'svelte';
+
   let mobileMenuOpen = false;
   let scrolled = false;
+  let progress = 0;
+  let active = '';
 
   const toggleMenu = () => {
     mobileMenuOpen = !mobileMenuOpen;
@@ -8,26 +12,52 @@
 
   const onScroll = () => {
     scrolled = window.scrollY > 40;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
   };
 
   const menuItems = [
     { label: 'Chi siamo', href: '#ri-chi-siamo' },
+    { label: 'Percorso', href: '#ri-percorso' },
     { label: 'Attività', href: '#ri-attivita' },
     { label: 'La rete', href: '#ri-rete' },
     { label: 'Contatti', href: '#ri-contatti' },
   ];
+
+  // Highlight the section that crosses the middle of the viewport.
+  onMount(() => {
+    onScroll();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) active = '#' + e.target.id;
+      },
+      { rootMargin: '-50% 0px -50% 0px' }
+    );
+    menuItems.forEach((m) => {
+      const el = document.querySelector(m.href);
+      if (el) io.observe(el);
+    });
+    const top = document.querySelector('#ri-top');
+    if (top) io.observe(top);
+    return () => io.disconnect();
+  });
 </script>
 
 <svelte:window on:scroll={onScroll} />
 
-<nav class="nav" class:scrolled>
+<nav class="nav" class:scrolled class:open={mobileMenuOpen}>
   <div class="nav-inner">
     <a href="#ri-top" class="brand" on:click={() => (mobileMenuOpen = false)}>
-      <img src="/images/regenerativa/logo.png" alt="Rigenerativa" class="brand-logo" />
+      <img src="/images/regenerativa/logo.png" alt="" class="brand-logo" />
       <span class="brand-text">Rigenerativa</span>
     </a>
 
-    <button class="toggler" on:click={toggleMenu} aria-label="Apri il menu">
+    <button
+      class="toggler"
+      on:click={toggleMenu}
+      aria-label={mobileMenuOpen ? 'Chiudi il menu' : 'Apri il menu'}
+      aria-expanded={mobileMenuOpen}
+    >
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
@@ -38,7 +68,8 @@
         <li>
           <a
             href={item.href}
-            target={item.external ? '_self' : null}
+            class:active={active === item.href}
+            aria-current={active === item.href ? 'true' : null}
             on:click={() => (mobileMenuOpen = false)}
           >
             {item.label}
@@ -47,6 +78,7 @@
       {/each}
     </ul>
   </div>
+  <div class="progress" style="transform: scaleX({progress})" aria-hidden="true"></div>
 </nav>
 
 <style>
@@ -56,17 +88,18 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(250, 246, 236, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: all 0.4s ease;
-    border-bottom: 1px solid transparent;
+    background: transparent;
+    transition: background 0.5s ease, box-shadow 0.5s ease, backdrop-filter 0.5s ease;
+    --nav-ink: var(--rg-cream);
   }
 
-  .nav.scrolled {
-    background: rgba(250, 246, 236, 0.95);
-    border-bottom: 1px solid var(--rg-line);
-    box-shadow: 0 2px 20px rgba(44, 53, 39, 0.05);
+  .nav.scrolled,
+  .nav.open {
+    background: rgba(250, 246, 236, 0.86);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    box-shadow: 0 1px 0 var(--rg-line), 0 8px 30px rgba(44, 53, 39, 0.06);
+    --nav-ink: var(--rg-bark);
   }
 
   .nav-inner {
@@ -76,21 +109,39 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    transition: padding 0.5s ease;
+  }
+
+  .nav.scrolled .nav-inner {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 
   .brand {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    color: var(--rg-bark);
+    color: var(--nav-ink);
     text-decoration: none;
     font-family: "Cormorant Garamond", serif;
+    transition: color 0.5s ease;
+  }
+
+  .brand:hover {
+    color: var(--nav-ink);
   }
 
   .brand-logo {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
+    filter: brightness(0) invert(0.95);
+    transition: filter 0.5s ease;
+  }
+
+  .nav.scrolled .brand-logo,
+  .nav.open .brand-logo {
+    filter: none;
   }
 
   .brand-text {
@@ -102,19 +153,21 @@
   .menu {
     list-style: none;
     display: flex;
-    gap: 2rem;
+    gap: 2.1rem;
     margin: 0;
     padding: 0;
   }
 
   .menu li a {
-    color: var(--rg-bark);
-    font-size: 0.82rem;
+    color: var(--nav-ink);
+    font-size: 0.74rem;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.25rem 0;
     position: relative;
+    opacity: 0.82;
+    transition: color 0.5s ease, opacity 0.3s ease;
   }
 
   .menu li a::after {
@@ -122,20 +175,38 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -4px;
-    height: 1px;
-    background: var(--rg-forest);
+    bottom: -5px;
+    height: 1.5px;
+    background: var(--rg-gold);
     transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 0.3s ease;
+    transform-origin: left;
+    transition: transform 0.45s var(--rg-ease);
   }
 
-  .menu li a:hover {
-    color: var(--rg-forest);
+  .menu li a:hover,
+  .menu li a.active {
+    opacity: 1;
   }
 
-  .menu li a:hover::after {
+  .menu li a:hover::after,
+  .menu li a.active::after {
     transform: scaleX(1);
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rg-moss), var(--rg-gold));
+    transform-origin: left;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .nav.scrolled .progress {
+    opacity: 1;
   }
 
   .toggler {
@@ -152,11 +223,19 @@
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--rg-bark);
-    transition: all 0.3s;
+    background: var(--nav-ink);
+    transition: transform 0.4s var(--rg-ease), opacity 0.3s ease, background 0.5s ease;
   }
 
-  @media (max-width: 860px) {
+  .nav.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav.open .bar:nth-child(2) { opacity: 0; }
+  .nav.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 900px) {
+    .nav-inner {
+      padding: 0.9rem 1.25rem;
+    }
+
     .toggler {
       display: flex;
     }
@@ -169,15 +248,14 @@
       flex-direction: column;
       gap: 0;
       background: rgba(250, 246, 236, 0.98);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--rg-line);
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.35s ease;
+      transition: max-height 0.45s var(--rg-ease);
     }
 
     .menu.open {
-      max-height: 500px;
+      max-height: 420px;
+      border-bottom: 1px solid var(--rg-line);
     }
 
     .menu li {
@@ -190,8 +268,16 @@
 
     .menu li a {
       display: block;
-      padding: 1rem 2rem;
-      font-size: 0.78rem;
+      padding: 1.05rem 1.25rem;
+      color: var(--rg-bark);
+    }
+
+    .menu li a::after {
+      display: none;
+    }
+
+    .menu li a.active {
+      color: var(--rg-forest);
     }
   }
 </style>

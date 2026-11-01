@@ -1,15 +1,60 @@
-<section id="ri-top" class="hero">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="eyebrow">Rigenerativa S.r.l. · Castorano, Marche</p>
-    <h1>Rigeneriamo luoghi,<br /><em>comunità</em> e territori</h1>
-    <p class="tagline">Trasformiamo spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali, unendo bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni.</p>
+<script>
+  import { onMount } from 'svelte';
+  import { gsap, reduced } from './motion.js';
+  import { mycelium } from './mycelium.js';
+
+  let hero;
+  let canvas;
+  let photo;
+  let touch = false;
+
+  onMount(() => {
+    touch = matchMedia('(hover: none)').matches;
+    const stop = mycelium(canvas, { area: hero, reduced });
+    const ctx = gsap.context(() => {
+      if (reduced) return;
+      gsap.to(photo, {
+        yPercent: 18,
+        scale: 1.08,
+        ease: 'none',
+        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+      });
+    }, hero);
+    return () => {
+      stop();
+      ctx.revert();
+    };
+  });
+</script>
+
+<section id="ri-top" class="hero" bind:this={hero}>
+  <div class="photo" bind:this={photo} aria-hidden="true"></div>
+  <div class="shade" aria-hidden="true"></div>
+  <canvas bind:this={canvas} class="web" aria-hidden="true"></canvas>
+
+  <div class="hero-content rg-container">
+    <p class="eyebrow"><span>Rigenerativa S.r.l.</span><span class="dot"></span><span>Castorano, Marche</span></p>
+    <h1>
+      <span class="line"><span>Rigeneriamo luoghi,</span></span>
+      <span class="line"><span><em>comunità</em> e territori</span></span>
+    </h1>
+    <p class="tagline">
+      Trasformiamo spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali, unendo bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni.
+    </p>
     <div class="hero-actions">
-      <a href="#ri-contatti" class="btn btn-primary">Collabora con noi</a>
-      <a href="#ri-attivita" class="btn btn-ghost">Cosa facciamo</a>
+      <a href="#ri-contatti" class="rg-btn rg-btn-gold">Collabora con noi <span class="arrow">→</span></a>
+      <a href="#ri-attivita" class="rg-btn rg-btn-ghost">Cosa facciamo</a>
     </div>
+  </div>
+
+  <div class="hero-foot rg-container">
+    <p class="hint">
+      <span class="pulse" aria-hidden="true"></span>
+      {touch ? 'Tocca lo schermo: la rete cresce' : 'Muovi il cursore, clicca: la rete cresce'}
+    </p>
     <a href="#ri-chi-siamo" class="scroll-hint" aria-label="Scorri in basso">
-      <span class="arrow"></span>
+      <span>Scopri</span>
+      <span class="stem" aria-hidden="true"></span>
     </a>
   </div>
 </section>
@@ -19,54 +64,94 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--rg-night);
+    color: var(--rg-cream);
+    isolation: isolate;
+  }
+
+  .photo {
+    position: absolute;
+    inset: -6% 0 -12%;
     background-image: url('/images/regenerativa/green-field.jpg');
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+    opacity: 0.42;
+    z-index: -3;
+    will-change: transform;
   }
 
-  .hero-overlay {
+  .shade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(44, 53, 39, 0.7) 0%,
-      rgba(44, 74, 49, 0.5) 55%,
-      rgba(138, 106, 74, 0.35) 100%
-    );
+    z-index: -2;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(63, 106, 69, 0.35), transparent 60%),
+      linear-gradient(180deg, rgba(27, 34, 26, 0.55) 0%, rgba(27, 34, 26, 0.25) 45%, rgba(27, 34, 26, 0.92) 100%);
+  }
+
+  .web {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
   }
 
   .hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 0 2rem;
-    max-width: 920px;
-    animation: rg-fade-in-slow 1.5s ease;
+    width: 100%;
+    padding-top: 7rem;
+    padding-bottom: 6rem;
   }
 
   .eyebrow {
-    color: rgba(244, 239, 228, 0.85);
-    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: rgba(244, 239, 228, 0.78);
+    font-size: 0.72rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    font-weight: 300;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    animation: rise 1.2s var(--rg-ease) 0.1s both;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--rg-gold);
+    box-shadow: 0 0 10px var(--rg-gold);
   }
 
   h1 {
     font-family: "Cormorant Garamond", serif;
     color: #fff;
-    font-size: clamp(2.4rem, 6.5vw, 5rem);
+    font-size: clamp(2.9rem, 8.4vw, 7.4rem);
     font-weight: 300;
-    letter-spacing: 3px;
-    margin: 0 0 1.5rem 0;
-    line-height: 1.08;
+    letter-spacing: -0.5px;
+    line-height: 0.98;
+    margin: 0 0 2.25rem;
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+
+  .line > span {
+    display: inline-block;
+    animation: lift 1.4s var(--rg-ease) both;
+  }
+
+  .line:nth-child(2) > span {
+    animation-delay: 0.14s;
   }
 
   h1 em {
@@ -76,93 +161,118 @@
   }
 
   .tagline {
-    color: rgba(244, 239, 228, 0.95);
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    color: rgba(244, 239, 228, 0.86);
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
     font-weight: 300;
-    font-style: italic;
-    letter-spacing: 0.5px;
-    margin: 0 auto 3rem;
-    line-height: 1.55;
-    max-width: 720px;
+    max-width: 560px;
+    margin: 0 0 2.75rem;
+    line-height: 1.75;
+    animation: rise 1.2s var(--rg-ease) 0.45s both;
   }
 
   .hero-actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
+    gap: 0.9rem;
     flex-wrap: wrap;
+    animation: rise 1.2s var(--rg-ease) 0.6s both;
   }
 
-  .btn {
-    display: inline-block;
-    padding: 14px 36px;
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.4s ease;
-    border: 1.5px solid;
-    cursor: pointer;
+  .hero-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+    animation: rise 1.2s var(--rg-ease) 1s both;
   }
 
-  .btn-primary {
+  .hint {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: rgba(244, 239, 228, 0.6);
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+  }
+
+  .pulse {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     background: var(--rg-gold);
-    color: var(--rg-bark);
-    border-color: var(--rg-gold);
   }
 
-  .btn-primary:hover {
-    background: var(--rg-gold-soft);
-    border-color: var(--rg-gold-soft);
-    color: var(--rg-bark);
-    transform: translateY(-2px);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-
-  .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #fff;
-    color: #fff;
-    transform: translateY(-2px);
+  .pulse::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--rg-gold);
+    animation: ping 2.2s ease-out infinite;
   }
 
   .scroll-hint {
-    position: absolute;
-    bottom: -10vh;
-    left: 50%;
-    transform: translateX(-50%);
-    text-decoration: none;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: rgba(244, 239, 228, 0.7);
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
   }
 
-  .arrow {
-    display: block;
-    width: 22px;
-    height: 22px;
-    border-left: 2px solid rgba(255, 255, 255, 0.7);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
-    transform: rotate(-45deg);
-    animation: bounce 2.2s infinite;
+  .scroll-hint:hover {
+    color: var(--rg-gold-soft);
   }
 
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0) rotate(-45deg);
+  .stem {
+    width: 1px;
+    height: 46px;
+    background: linear-gradient(var(--rg-gold), transparent);
+    transform-origin: top;
+    animation: grow 2.4s var(--rg-ease) infinite;
+  }
+
+  @keyframes lift {
+    from { transform: translateY(105%); }
+    to { transform: translateY(0); }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ping {
+    from { transform: scale(1); opacity: 0.9; }
+    to { transform: scale(3.2); opacity: 0; }
+  }
+
+  @keyframes grow {
+    0% { transform: scaleY(0); opacity: 1; }
+    60% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 0; }
+  }
+
+  @media (max-width: 640px) {
+    .eyebrow {
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      letter-spacing: 3px;
     }
-    40% { transform: translateY(-10px) rotate(-45deg); }
-    60% { transform: translateY(-5px) rotate(-45deg); }
-  }
 
-  @media (max-width: 768px) {
-    .hero {
-      background-attachment: scroll;
+    .hero-foot {
+      justify-content: center;
     }
-    h1 { letter-spacing: 2px; }
+
+    .scroll-hint {
+      display: none;
+    }
   }
 </style>

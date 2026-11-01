@@ -22,28 +22,61 @@
       href: 'https://casaselva.earth',
     },
   ];
+
+  const canHover = typeof matchMedia !== 'undefined'
+    && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches;
+
+  // Cards lean toward the pointer; --mx/--my also place the light sheen.
+  function tilt(e) {
+    if (!canHover) return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    el.style.setProperty('--rx', `${(0.5 - y) * 7}deg`);
+    el.style.setProperty('--ry', `${(x - 0.5) * 9}deg`);
+    el.style.setProperty('--mx', `${x * 100}%`);
+    el.style.setProperty('--my', `${y * 100}%`);
+  }
+
+  function untilt(e) {
+    const el = e.currentTarget;
+    el.style.setProperty('--rx', '0deg');
+    el.style.setProperty('--ry', '0deg');
+  }
 </script>
 
-<section id="ri-rete" class="rete">
-  <div class="container">
-    <div class="section-heading">
-      <p class="eyebrow">La rete</p>
-      <h2>I luoghi che rigeneriamo</h2>
-      <p class="sub">
+<section id="ri-rete" class="rete rg-section">
+  <div class="rg-container">
+    <div class="heading" data-reveal>
+      <p class="rg-eyebrow">La rete</p>
+      <h2 class="rg-h2">I luoghi che <em>rigeneriamo</em></h2>
+      <p class="rg-sub">
         Rigenerativa opera all'interno della rete <a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa</a>, che unisce comunità, tecnologie e modelli aperti per una civiltà ecologica.
       </p>
     </div>
 
-    <div class="grid">
-      {#each sites as s}
-        <a class="card" href={s.href} target="_blank" rel="noopener noreferrer">
-          <div class="card-image" style="background-image: url('{s.image}')"></div>
+    <div class="grid" data-reveal="stagger">
+      {#each sites as s, i}
+        <a
+          class="card"
+          href={s.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          on:pointermove={tilt}
+          on:pointerleave={untilt}
+        >
+          <div class="card-image">
+            <img src={s.image} alt="" loading="lazy" />
+            <span class="badge">0{i + 1}</span>
+          </div>
           <div class="card-body">
             <p class="role">{s.role}</p>
             <h3>{s.name}</h3>
             <p class="blurb">{s.blurb}</p>
-            <span class="more">Scopri →</span>
+            <span class="more">Visita il sito <span class="arrow">↗</span></span>
           </div>
+          <span class="sheen" aria-hidden="true"></span>
         </a>
       {/each}
     </div>
@@ -52,77 +85,86 @@
 
 <style>
   .rete {
-    padding: 7rem 0 6rem;
-    background: var(--rg-cream-soft);
+    background: var(--rg-cream);
+    background-image: var(--rg-grain);
   }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .heading {
+    margin-bottom: 4rem;
   }
 
-  .section-heading {
-    text-align: center;
-    margin-bottom: 3.5rem;
-  }
-
-  .eyebrow {
-    color: var(--rg-gold);
-    font-size: 0.75rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-
-  .section-heading h2 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    color: var(--rg-bark);
-    margin-bottom: 0.75rem;
-    font-style: italic;
-  }
-
-  .sub {
-    color: var(--rg-muted);
-    font-size: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
+  .heading a {
+    color: var(--rg-forest);
+    border-bottom: 1px solid currentColor;
   }
 
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 1.75rem;
+    perspective: 1200px;
   }
 
   .card {
+    --rx: 0deg;
+    --ry: 0deg;
+    --mx: 50%;
+    --my: 0%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: var(--rg-cream);
+    background: var(--rg-cream-soft);
     border: 1px solid var(--rg-line);
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
-    text-decoration: none;
     color: inherit;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--rg-ease), box-shadow 0.6s var(--rg-ease);
   }
 
   .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(44, 53, 39, 0.1);
-    border-color: var(--rg-forest);
+    color: inherit;
+    box-shadow: 0 30px 60px -20px rgba(44, 53, 39, 0.3);
+    transition: transform 0.15s linear, box-shadow 0.6s var(--rg-ease);
   }
 
   .card-image {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+  }
+
+  .card-image img {
     width: 100%;
-    height: 220px;
-    background-size: cover;
-    background-position: center;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+    transition: transform 1.2s var(--rg-ease), filter 0.8s ease;
+    filter: saturate(0.85);
+  }
+
+  .card:hover .card-image img {
+    transform: scale(1.1);
+    filter: saturate(1.05);
+  }
+
+  .badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(27, 34, 26, 0.55);
+    backdrop-filter: blur(6px);
+    color: var(--rg-cream);
   }
 
   .card-body {
-    padding: 1.6rem 1.75rem 1.75rem;
+    padding: 1.75rem 1.85rem 1.85rem;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -130,42 +172,60 @@
 
   .role {
     font-size: 0.7rem;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--rg-gold);
     font-weight: 600;
-    margin-bottom: 0.55rem;
+    color: var(--rg-soil);
+    margin-bottom: 0.5rem;
   }
 
   .card h3 {
-    font-size: 1.5rem;
-    color: var(--rg-forest-dark);
-    margin-bottom: 0.7rem;
-    letter-spacing: 1px;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
   }
 
   .blurb {
     color: var(--rg-muted);
-    font-size: 0.92rem;
-    line-height: 1.7;
+    font-size: 0.93rem;
     flex: 1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .more {
-    color: var(--rg-forest);
-    font-size: 0.78rem;
-    letter-spacing: 2px;
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     font-weight: 600;
+    color: var(--rg-forest);
   }
 
-  .card:hover .more {
-    color: var(--rg-gold);
+  .more .arrow {
+    display: inline-block;
+    transition: transform 0.4s var(--rg-ease);
   }
 
-  @media (max-width: 900px) {
-    .grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    .rete { padding: 5rem 0 4rem; }
+  .card:hover .more .arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .sheen {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.35), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    mix-blend-mode: soft-light;
+  }
+
+  .card:hover .sheen {
+    opacity: 1;
+  }
+
+  @media (max-width: 960px) {
+    .grid {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+    }
   }
 </style>

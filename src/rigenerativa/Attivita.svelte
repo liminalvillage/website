@@ -1,4 +1,7 @@
 <script>
+  import { fly, fade, slide } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+
   // Condensed from art. 4 (oggetto sociale) of the atto costitutivo, 15 aprile 2026.
   const groups = [
     {
@@ -82,128 +85,340 @@
       ],
     },
   ];
+
+  // Each area's text is a list of offerings separated by semicolons.
+  const chips = (text) => text.replace(/\.$/, '').split(/;\s*/).map((c) => c[0].toUpperCase() + c.slice(1));
+
+  let offsets = [];
+  let n = 0;
+  for (const g of groups) {
+    offsets.push(n);
+    n += g.areas.length;
+  }
+  const total = n;
+
+  let group = 0;
+  let area = 0;
+
+  $: current = groups[group].areas[area];
+  $: number = String(offsets[group] + area + 1).padStart(2, '0');
+
+  function pickGroup(i) {
+    group = i;
+    area = 0;
+  }
+
+  // Arrow keys move between tabs, as in the WAI-ARIA tabs pattern.
+  function onTabKey(e, i) {
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const next = (i + d + groups.length) % groups.length;
+    pickGroup(next);
+    document.getElementById(`ri-tab-${next}`)?.focus();
+  }
 </script>
 
-<section id="ri-attivita" class="attivita">
-  <div class="container">
-    <div class="section-heading">
-      <p class="eyebrow">Attività</p>
-      <h2>Cosa facciamo</h2>
-      <p class="sub">Un'offerta integrata e modulare, dal cantiere alla comunità.</p>
+<section id="ri-attivita" class="attivita rg-section">
+  <div class="rg-container">
+    <div class="heading" data-reveal>
+      <div>
+        <p class="rg-eyebrow">Attività</p>
+        <h2 class="rg-h2">Cosa facciamo</h2>
+        <p class="rg-sub">Un'offerta integrata e modulare, dal cantiere alla comunità: {total} ambiti di attività in quattro campi.</p>
+      </div>
     </div>
 
-    {#each groups as g}
-      <div class="group">
-        <h3 class="group-title">{g.title}</h3>
-        <div class="grid">
-          {#each g.areas as a}
-            <article class="card">
-              <h4>{a.name}</h4>
-              <p>{a.text}</p>
-            </article>
+    <div class="tabs" role="tablist" aria-label="Campi di attività" data-reveal="stagger">
+      {#each groups as g, i}
+        <button
+          id="ri-tab-{i}"
+          role="tab"
+          class="tab"
+          class:on={group === i}
+          aria-selected={group === i}
+          aria-controls="ri-panel"
+          tabindex={group === i ? 0 : -1}
+          on:click={() => pickGroup(i)}
+          on:keydown={(e) => onTabKey(e, i)}
+        >
+          <span class="tab-title">{g.title}</span>
+          <span class="tab-count">{g.areas.length}</span>
+        </button>
+      {/each}
+    </div>
+
+    <div id="ri-panel" class="explorer" role="tabpanel" aria-labelledby="ri-tab-{group}">
+      <ol class="list">
+        {#key group}
+          {#each groups[group].areas as a, i}
+            <li in:fly={{ y: 14, duration: 500, delay: i * 60, easing: cubicOut }}>
+              <button
+                class="item"
+                class:on={area === i}
+                aria-expanded={area === i}
+                on:click={() => (area = i)}
+                on:mouseenter={() => (area = i)}
+                on:focus={() => (area = i)}
+              >
+                <span class="item-num">{String(offsets[group] + i + 1).padStart(2, '0')}</span>
+                <span class="item-name">{a.name}</span>
+                <span class="item-arrow" aria-hidden="true">→</span>
+              </button>
+              {#if area === i}
+                <div class="inline" transition:slide={{ duration: 350, easing: cubicOut }}>
+                  <ul class="chips">
+                    {#each chips(a.text) as c}<li>{c}</li>{/each}
+                  </ul>
+                </div>
+              {/if}
+            </li>
           {/each}
-        </div>
+        {/key}
+      </ol>
+
+      <div class="detail" aria-live="polite">
+        {#key current}
+          <div class="detail-inner" in:fade={{ duration: 400 }}>
+            <p class="detail-meta"><span>{number}</span> / {total} · {groups[group].title}</p>
+            <h3>{current.name}</h3>
+            <ul class="chips">
+              {#each chips(current.text) as c, i}
+                <li in:fly={{ y: 10, duration: 450, delay: 80 + i * 45, easing: cubicOut }}>{c}</li>
+              {/each}
+            </ul>
+          </div>
+        {/key}
+        <svg class="sprig" viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M60 118V40M60 80c-18 0-28-12-28-28 18 0 28 12 28 28zM60 62c16 0 26-10 26-26-16 0-26 10-26 26zM60 40c0-14 6-24 18-30" />
+        </svg>
       </div>
-    {/each}
+    </div>
   </div>
 </section>
 
 <style>
-  .attivita {
-    padding: 7rem 0 6rem;
-    background: var(--rg-cream);
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
-  .section-heading {
-    text-align: center;
+  .heading {
     margin-bottom: 3.5rem;
   }
 
-  .eyebrow {
-    color: var(--rg-gold);
-    font-size: 0.75rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 1rem;
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
   }
 
-  .section-heading h2 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  .tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid var(--rg-line);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.4);
     color: var(--rg-bark);
-    margin-bottom: 0.75rem;
-    font-style: italic;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.25rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.4s var(--rg-ease), color 0.4s var(--rg-ease), border-color 0.4s var(--rg-ease), transform 0.4s var(--rg-ease);
   }
 
-  .sub {
-    color: var(--rg-muted);
-    font-size: 1rem;
-    max-width: 540px;
-    margin: 0 auto;
+  .tab:hover {
+    border-color: var(--rg-moss);
+    transform: translateY(-2px);
   }
 
-  .group {
-    margin-bottom: 3.5rem;
+  .tab.on {
+    background: var(--rg-forest-dark);
+    border-color: var(--rg-forest-dark);
+    color: var(--rg-cream);
   }
 
-  .group:last-child {
-    margin-bottom: 0;
-  }
-
-  .group-title {
-    font-size: 1.6rem;
+  .tab-count {
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    min-width: 1.7rem;
+    height: 1.7rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--rg-cream);
     color: var(--rg-forest-dark);
-    letter-spacing: 1px;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.5rem;
+  }
+
+  .tab.on .tab-count {
+    background: var(--rg-gold);
+    color: var(--rg-night);
+  }
+
+  .explorer {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .list {
+    list-style: none;
+    border-top: 1px solid var(--rg-line);
+  }
+
+  .list > li {
     border-bottom: 1px solid var(--rg-line);
   }
 
-  .grid {
+  .item {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-  }
-
-  .card {
-    padding: 1.6rem 1.5rem;
-    background: var(--rg-cream-soft);
-    border: 1px solid var(--rg-line);
-    border-top: 3px solid var(--rg-gold);
-    border-radius: 6px;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(44, 53, 39, 0.08);
-  }
-
-  .card h4 {
-    font-size: 1.25rem;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0.25rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
     color: var(--rg-bark);
-    margin-bottom: 0.6rem;
-    font-weight: 500;
   }
 
-  .card p {
+  .item-num {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
     color: var(--rg-muted);
-    font-size: 0.88rem;
-    line-height: 1.65;
   }
 
-  @media (max-width: 1024px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
+  .item-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    line-height: 1.2;
+    transition: color 0.35s ease, transform 0.5s var(--rg-ease);
   }
 
-  @media (max-width: 640px) {
-    .attivita { padding: 5rem 0 4rem; }
-    .grid { grid-template-columns: 1fr; }
+  .item-arrow {
+    opacity: 0;
+    transform: translateX(-8px);
+    color: var(--rg-gold);
+    transition: opacity 0.35s ease, transform 0.5s var(--rg-ease);
+  }
+
+  .item.on .item-name {
+    color: var(--rg-forest);
+    transform: translateX(6px);
+  }
+
+  .item.on .item-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .inline {
+    display: none;
+  }
+
+  .detail {
+    position: sticky;
+    top: 6rem;
+    min-height: 360px;
+    padding: 2.75rem;
+    border-radius: 22px;
+    background: var(--rg-forest-dark);
+    background-image: var(--rg-grain), radial-gradient(circle at 100% 100%, rgba(201, 163, 91, 0.22), transparent 55%);
+    color: var(--rg-cream);
+    overflow: hidden;
+  }
+
+  .detail-meta {
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(244, 239, 228, 0.6);
+    margin-bottom: 1.25rem;
+  }
+
+  .detail-meta span {
+    color: var(--rg-gold-soft);
+  }
+
+  .detail h3 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 300;
+    margin-bottom: 1.75rem;
+    max-width: 90%;
+  }
+
+  .chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .chips li {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    background: rgba(244, 239, 228, 0.08);
+    border: 1px solid rgba(244, 239, 228, 0.16);
+    color: var(--rg-cream);
+  }
+
+  .sprig {
+    position: absolute;
+    right: -10px;
+    bottom: -14px;
+    width: 150px;
+    height: 150px;
+    fill: none;
+    stroke: rgba(221, 185, 121, 0.28);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  @media (max-width: 960px) {
+    .tabs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .explorer {
+      grid-template-columns: 1fr;
+    }
+
+    .detail {
+      display: none;
+    }
+
+    .inline {
+      display: block;
+      padding: 0 0.25rem 1.5rem 3.5rem;
+    }
+
+    .inline .chips li {
+      background: var(--rg-cream);
+      border-color: var(--rg-line);
+      color: var(--rg-text);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .tab {
+      font-size: 1.05rem;
+      padding: 0.9rem 1rem;
+    }
+
+    .inline {
+      padding-left: 0.25rem;
+    }
+
+    .item {
+      grid-template-columns: 2rem 1fr auto;
+    }
   }
 </style>
