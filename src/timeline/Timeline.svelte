@@ -29,7 +29,9 @@
   import { loadTimeline, SPANS, PEOPLE, KINDS, STATUS, CHILDREN, stretches, stays, festivals } from './source.js';
   import { leafFor } from './leaves.js';
   import Pick from './Pick.svelte';
+  import MoonCycle from './MoonCycle.svelte';
   import { POINTS, QUARTERS, heatAt, lunarNewYear } from './compass.js';
+  import { SEASON_ART, EMERGE } from './seasonArt.js';
   import { seasonColours } from '../theme/season.js';
   import { sunLongitude } from '../calendar/sun.js';
 
@@ -123,6 +125,7 @@
   }
   // the hub's words in the middle are wide and low
   const hubClear = (a) => (Math.abs(Math.cos(a)) > 0.5 ? 740 : 230);
+  const ART_R = 190; // the radius of a season's drawing, in the spiral's units
   function buildRose() {
     const points = POINTS.map((pt) => {
       const a = lonAngle(pt.lon);
@@ -133,6 +136,8 @@
       return { ...q, a, a0: lonAngle(q.from), a1: lonAngle(q.to), ...reachAt(a) };
     });
     const reach = Math.max(...points.map((p) => p.outer + 420), ...quarters.map((q) => q.outer + 420));
+    // the rim of the whole circle: just beyond the outermost moons
+    const rim = Math.max(...lunations.map((l, i) => at(i).r)) + D / 2 + 30;
     // how far the words reach, across and up and down (a word is about
     // 650 across and 160 high, at the size the whole year is seen at)
     if (phone) {
@@ -140,9 +145,13 @@
       for (const p of points) p.at = p.outer + 40;
       const halfW = Math.max(...points.map((p) => Math.abs(p.at * Math.cos(p.a))));
       const halfH = Math.max(...points.map((p) => Math.abs(p.at * Math.sin(p.a))));
-      return { points, quarters: quarters.map((q) => ({ ...q, hidden: true })), reach, solstices: [], halfW, halfH };
+      return { points, quarters: quarters.map((q) => ({ ...q, hidden: true })), reach, solstices: [], halfW, halfH, rim };
     }
-    for (const p of points) p.at = p.outer + 190;
+    // each point's drawing sits between the rim and its words
+    for (const p of points) {
+      p.art = rim + ART_R + 10;
+      p.at = Math.max(p.outer + 190, rim + ART_R * 2 + 50);
+    }
     const ext = [...points.map((p) => ({ a: p.a, r: p.at })), ...quarters.map((q) => ({ a: q.a, r: q.outer + 120 }))];
     const halfW = Math.max(...ext.map((e) => Math.abs(e.r * Math.cos(e.a)) + (Math.abs(Math.cos(e.a)) > 0.35 ? 680 : 340)));
     const halfH = Math.max(...ext.map((e) => Math.abs(e.r * Math.sin(e.a)) + (Math.abs(Math.sin(e.a)) > 0.35 ? 170 : 90)));
@@ -153,7 +162,7 @@
       const i = theta.findIndex((th, k) => k < theta.length - 1 && th <= target && theta[k + 1] > target);
       if (i >= 0) solstices.push(i + (target - theta[i]) / (theta[i + 1] - theta[i]));
     }
-    return { points, quarters, reach, solstices, halfW, halfH };
+    return { points, quarters, reach, solstices, halfW, halfH, rim };
   }
   let rose = null;
   const wedge = (a0, a1, r) => `M0 0L${r * Math.cos(a0)} ${r * Math.sin(a0)}A${r} ${r} 0 0 1 ${r * Math.cos(a1)} ${r * Math.sin(a1)}Z`;
@@ -197,7 +206,7 @@
         l.items
           .filter((it) => it.wheel)
           .map((it) => {
-            const room = i < lunations.length - 1 ? gap(i) + 60 / Math.hypot(at(i + 1).x - at(i).x, at(i + 1).y - at(i).y) : 0.2;
+            const room = i < lunations.length - 1 ? gap(i) + 120 / Math.hypot(at(i + 1).x - at(i).x, at(i + 1).y - at(i).y) : 0.2;
             const t = Math.min(Math.max(i + (it.at - l.start) / (l.end - l.start), i + room), i + 1 - room);
             return { ...it, t, turn: /solstice|equinox/i.test(it.title) };
           }),
@@ -220,7 +229,17 @@
   let world;
   let vw = 1200;
   let vh = 800;
-  let cam = { x: 0, y: 0, ls: Math.log(0.2) };
+  let cam = { x: 0, y: 0, ls: Math.log(0.2), tilt: 0 };
+  // a first step towards 3D: the whole spiral laid back in perspective
+  let tilted = false;
+  function toggleTilt() {
+    tilted = !tilted;
+    gsap.to(cam, { tilt: tilted ? 52 : 0, duration: 1.2, ease: 'sine.inOut', onUpdate: apply });
+  }
+  $: if (level === 1 && tilted) {
+    tilted = false;
+    gsap.to(cam, { tilt: 0, duration: 0.6, onUpdate: apply });
+  }
   let level = 0;
   let li = 0;
   let busy = false;
@@ -247,7 +266,9 @@
     if (!world) return;
     const s = Math.exp(cam.ls);
     const cy = TOP + (vh - TOP - BOTTOM) / 2;
-    world.style.transform = `translate(${vw / 2 - cam.x * s}px, ${cy - cam.y * s}px) scale(${s})`;
+    world.style.transform = cam.tilt
+      ? `translate(${vw / 2}px, ${cy}px) scale(1, ${Math.cos((cam.tilt * Math.PI) / 180).toFixed(4)}) translate(${-cam.x * s}px, ${-cam.y * s}px) scale(${s})`
+      : `translate(${vw / 2 - cam.x * s}px, ${cy - cam.y * s}px) scale(${s})`;
     world.style.setProperty('--inv', 1 / s);
   }
 
@@ -307,6 +328,8 @@
   // the title and the three below change one after the other: the old
   // fades away, then the new comes in, so they never sit over each other
   const fadeOut = (node) => ({ duration: 260, css: (t) => `opacity: ${t}` });
+  // the moon unrolls into the line: it widens and flattens as it goes
+  const unroll = () => ({ duration: 520, css: (t) => `transform: scale(${1 + (1 - t) * 1.6}, ${0.12 + t * 0.88}); opacity: ${t}` });
   const fadeIn = (node) => ({ delay: 280, duration: 420, css: (t) => `opacity: ${t}; transform: translateY(${(1 - t) * 6}px)` });
 
   function go(l, i = li) {
@@ -573,6 +596,7 @@
   // the small map: hovering a moon shows its number in the middle; the middle
   // itself is the way back to the whole spiral
   let mapHover = null;
+  let noteClosed = false;
   let scrubEl;
   let scrubbing = false;
   // the slider moves the line directly (no zoom), at most once a frame
@@ -972,22 +996,61 @@
             <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#rose-fade)" />
           </mask>
         </defs>
+        <!-- the sun: the spiral sits at its golden heart, faint rays all round -->
+        <radialGradient id="sun-heart" cx="0" cy="0" r={rose.reach * 0.62} gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#ffe7a0" stop-opacity="0.75" />
+          <stop offset="0.45" stop-color="#ffefc4" stop-opacity="0.35" />
+          <stop offset="1" stop-color="#fff6dc" stop-opacity="0" />
+        </radialGradient>
+        <circle class="sun-heart" r={rose.reach * 0.62} fill="url(#sun-heart)" />
+        <!-- its rays shine out from the rim of the whole circle -->
+        <g class="sun-rays">
+          {#each Array(36) as _, k}
+            {@const a = (k * Math.PI) / 18}
+            {@const r0 = rose.rim}
+            {@const w = k % 2 ? 0.022 : 0.036}
+            {@const r1 = r0 + 190 * (k % 3 === 0 ? 1 : k % 2 ? 0.5 : 0.72)}
+            <path d="M{r0 * Math.cos(a - w)} {r0 * Math.sin(a - w)}Q{(r0 + r1) / 2 * Math.cos(a)} {(r0 + r1) / 2 * Math.sin(a)} {r1 * Math.cos(a)} {r1 * Math.sin(a)}Q{(r0 + r1) / 2 * Math.cos(a)} {(r0 + r1) / 2 * Math.sin(a)} {r0 * Math.cos(a + w)} {r0 * Math.sin(a + w)}Z" />
+          {/each}
+        </g>
         <!-- the four quarters of the year, each in its own wash -->
         <g mask="url(#rose-mask)">
           {#each rose.quarters as q}<path class="quarter" d={wedge(q.a0, q.a1, rose.reach)} style="fill: {q.colour}" />{/each}
         </g>
+        <!-- a drawing for each turning of the sun, on the circle's edge, its
+             edges feathered into the washes; it wakes when hovered -->
+        <radialGradient id="season-fade-g" cx="0" cy="0" r="80" gradientUnits="userSpaceOnUse">
+          <stop offset="0.45" stop-color="#fff" />
+          <stop offset="1" stop-color="#000" />
+        </radialGradient>
+        <mask id="season-fade" maskContentUnits="userSpaceOnUse" x="-100" y="-100" width="200" height="200" maskUnits="userSpaceOnUse">
+          <circle r="80" fill="url(#season-fade-g)" />
+        </mask>
+        {#if !phone}
+          {#each rose.points as pt}
+            {@const art = SEASON_ART[pt.lon]}
+            <g class="season-art" mask="url(#season-fade)" transform="translate({pt.art * Math.cos(pt.a)} {pt.art * Math.sin(pt.a)}) scale({ART_R / 78})" style="--wash: {art.sky}">
+              <!-- above the ground, the season's wash; below, the earth -->
+              <path class="season-wash" d="M-78 0 A78 78 0 0 1 78 0Z" />
+              <path class="season-earth" d="M-78 0 A78 78 0 0 0 78 0Z" />
+              <path class="season-ground" d="M-74 0 C-40 -1.5 -10 1.5 20 -0.5 S60 1 74 0" />
+              <g class="season-myc">
+                {#each art.threads as d}<path {d} />{/each}
+                {#each art.spores as p}<circle cx={p.x} cy={p.y} r={p.r} />{/each}
+              </g>
+              <g class="season-ink">{#each art.ink as d}<path {d} />{/each}</g>
+              <g class="season-emerge">
+                {#each art.emerge as e, k}<path d={EMERGE[e.kind]} transform="translate({e.x} {e.y})" class="em-{e.kind}" style="--k: {k}" />{/each}
+              </g>
+            </g>
+          {/each}
+        {/if}
         <!-- the cross of solstices and equinoxes, never over the spiral or its words -->
         {#each rose.points as pt}
           {@const c = Math.cos(pt.a)}
           {@const s = Math.sin(pt.a)}
-          <path class="axis" d="M{hubClear(pt.a) * c} {hubClear(pt.a) * s}L{pt.inner * c} {pt.inner * s}" />
+          {#if phone}<path class="axis" d="M{hubClear(pt.a) * c} {hubClear(pt.a) * s}L{pt.inner * c} {pt.inner * s}" />{/if}
           {#if !phone}<path class="axis" d="M{pt.outer * c} {pt.outer * s}L{(pt.outer + 150) * c} {(pt.outer + 150) * s}" />{/if}
-        {/each}
-        <!-- where the solar year turns along the line -->
-        {#each rose.solstices as t}
-          {@const a = out(t, -38)}
-          {@const b = out(t, -112)}
-          <path class="solar" d="M{a.x} {a.y}L{b.x} {b.y}" />
         {/each}
         <!-- the Chinese New Year, a seal by its moon -->
         {#each phone ? [] : newYears as l}
@@ -1037,14 +1100,11 @@
         {#each Array(FUTURE * 4) as _, k}
           <path class="future" d={stretch(n - 1 + k / 4, n - 1 + (k + 1) / 4, 6)} style="opacity: {0.5 * (1 - k / (FUTURE * 4)) ** 1.3}" />
         {/each}
-        {#each years as y}
-          <path class="year-tick" d={`M${at(y.t).x} ${at(y.t).y}L${out(y.t, -90).x} ${out(y.t, -90).y}`} />
-        {/each}
         <!-- longer stretches, between the turns, their names along them -->
         {#each SPANS as sp, k}
           {#if idx(sp.from) >= 0 && idx(sp.to) >= 0}
             {@const upright = Math.sin(thetaAt((idx(sp.from) + idx(sp.to)) / 2)) > 0}
-            <path id="span-{k}" class="span" d={upright ? stretch(idx(sp.to) + 0.4, idx(sp.from) - 0.4, 40, D / 2 + 70) : stretch(idx(sp.from) - 0.4, idx(sp.to) + 0.4, 40, D / 2 + 70)} style="stroke: {sp.colour}" />
+            <path id="span-{k}" class="span" d={upright ? stretch(idx(sp.to) + 0.4, idx(sp.from) - 0.4, 40, D / 2 + 100) : stretch(idx(sp.from) - 0.4, idx(sp.to) + 0.4, 40, D / 2 + 100)} style="stroke: {sp.colour}" />
             <text class="span-text"><textPath href="#span-{k}" startOffset="50%" text-anchor="middle">{sp.title}</textPath></text>
           {/if}
         {/each}
@@ -1066,7 +1126,7 @@
       </svg>
 
       <div class="hub">
-        <p class="hub-eyebrow">the village's year in moons</p>
+        <p class="hub-eyebrow">the solar cycle · the village's year in moons</p>
         <p class="hub-title">Lunation {lunations[0].index} → {lunations[n - 1].index}</p>
         <button class="hub-now" on:click={() => go(1, nowIndex)}>go to now →</button>
       </div>
@@ -1172,9 +1232,38 @@
         </header>
 
         {/key}
+        <!-- a small note under the details, inviting visitors to co-create the moon -->
+  {#if level === 1 && !linear && here && !member && !noteClosed && !itemsOf(here).filter((it) => !it.pinned && !it.sample).length}
+    <aside class="invite" in:rise={{ y: 24, duration: 500, delay: 900 }} out:rise={{ y: 24, duration: 250 }}>
+      <svg class="invite-leaf" viewBox="-12 -30 24 32" aria-hidden="true"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /><path class="v" d="M0 -2 L0 -26" /></svg>
+      <p><b>Lunation {here.index} may already be in planning.</b> Would you like to co-create it with us?</p>
+      <a href="/apply">Apply to visit or join</a>
+      <button type="button" class="invite-x" aria-label="Close the note" on:click={() => (noteClosed = true)}>×</button>
+    </aside>
+  {/if}
 
-        <!-- the line of the weeks: every lunation end to end, as one ribbon
-             that flows along to the next, like moving round the spiral -->
+        {#if !linear}
+          <!-- the lunation as a moon in four quarters; a sideways swipe or a
+               drag unrolls it into the lunar cycle -->
+          <!-- svelte-ignore a11y_no_static_element_interactions -->
+          <div class="moon-view" on:pointerdown={dragStart} out:unroll in:fadeIn>
+            {#key here.index}
+              <MoonCycle
+                L={here}
+                items={itemsOf(here).filter((it) => it.at && !off.has(it.kind))}
+                spans={allStretches.filter((x) => overlaps(x, here) && !off.has(x.kind))}
+                beats={rhythms.filter((r) => !off.has(r.kind)).flatMap((r) => r.beats.filter((b) => b.at >= here.start && b.at <= here.end).map((b) => ({ at: b.at, title: r.title, colour: tint(r) })))}
+                {tint}
+                {lively}
+                {day}
+                {nowMs}
+                onPick={(it) => (picked = it)}
+              />
+            {/key}
+          </div>
+        {:else}
+        <!-- the lunar cycle: every lunation end to end, as one ribbon that
+             flows along to the next, like moving round the spiral -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class="line-area" class:grab={level === 1} bind:clientWidth={segW} on:click={openDay} on:pointerdown={dragStart}>
@@ -1296,6 +1385,7 @@
             {/each}
           </div>
         </div>
+        {/if}
 
         <!-- on a narrow screen the leaves stand alone; a tap reads one here -->
         <!-- along the line: the whole year in small, the part in view marked;
@@ -1341,19 +1431,14 @@
             <li><i class="lg-today"></i>today</li>
             <li class="lg-note">tap the line to open a day · samples until Holons holds the village's own</li>
           </ul>
-          {#if (compact || wide) && itemsOf(here).some((it) => it.at)}
+          {#if (compact || wide || !linear) && itemsOf(here).some((it) => it.at)}
             <p class="picked">
-              {#if picked && (wide || picked.lunation === here.index)}{picked.title} · {day(picked.at)}{:else}tap a {wide ? 'dot' : 'leaf'} to read it{/if}
+              {#if picked && (wide || picked.lunation === here.index)}{picked.title} · {day(picked.at)}{#if picked.where} · {picked.where}{/if}{:else}tap a {wide ? 'dot' : 'mark'} to read it{/if}
             </p>
           {/if}
           {#if !itemsOf(here).filter((it) => !it.pinned && !it.sample).length}
             {#if member}
               <p class="quiet">Nothing noted in Holons for this lunation yet.</p>
-            {:else}
-              <p class="quiet">
-                This lunation may already be in planning, and what's on will show here.
-                Would you like to co-create it with us? <a href="/apply">Apply to visit or to join as a member</a>.
-              </p>
             {/if}
           {/if}
         </div>
@@ -1429,15 +1514,33 @@
   <!-- the timeline, as a round toggle beside the small map: on, the moons
        lie along the line; off, one lunation at a time -->
   {#if n}
-    <button type="button" class="line-toggle" class:on={level === 1 && linear} class:alone={level === 0} aria-pressed={level === 1 && linear} title={level === 1 && linear ? 'back to one lunation at a time' : 'see the timeline'} use:toTop on:click={() => (level === 0 ? (go(1, nowIndex), setTimeout(() => setLinear(true), 1600)) : setLinear(!linear))}>
-      <svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M-10 0 H10" /><circle cx="-5.5" r="2.4" /><circle cx="1.5" r="2.4" /><circle cx="7.5" r="1.6" /></svg>
-      <span>timeline</span>
-    </button>
+    <!-- the three ways to see: the sun (the solar cycle), the moon (one
+         lunation), the line (the lunar cycle) -->
+    <nav class="views" class:alone={level === 0} aria-label="Ways to see the year" use:toTop>
+      <button type="button" class:on={level === 0} aria-pressed={level === 0} title="solar: the year as a spiral round the sun" on:click={() => go(0)}>
+        <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="4.6" />{#each Array(8) as _, k}<path d="M{7 * Math.cos((k * Math.PI) / 4)} {7 * Math.sin((k * Math.PI) / 4)}L{9.6 * Math.cos((k * Math.PI) / 4)} {9.6 * Math.sin((k * Math.PI) / 4)}" />{/each}</svg>
+        <span>solar</span>
+      </button>
+      <button type="button" class:on={level === 1 && !linear} aria-pressed={level === 1 && !linear} title="lunar: one lunation, its moon in four quarters" on:click={() => (level === 0 ? go(1, nowIndex) : setLinear(false))}>
+        <svg viewBox="-12 -12 24 24" aria-hidden="true"><path class="fill" d="M2 -8.5 A8.5 8.5 0 1 0 2 8.5 A6.5 8.5 0 0 1 2 -8.5Z" /></svg>
+        <span>lunar</span>
+      </button>
+      <button type="button" class:on={level === 1 && linear} aria-pressed={level === 1 && linear} title="linear: the moons along a line" on:click={() => (level === 0 ? (go(1, nowIndex), setTimeout(() => setLinear(true), 1600)) : setLinear(true))}>
+        <svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M-10 0 H10" /><circle class="fill" cx="-5.5" r="2.4" /><circle class="fill" cx="1.5" r="2.4" /><circle class="fill" cx="7.5" r="1.6" /></svg>
+        <span>linear</span>
+      </button>
+    </nav>
   {/if}
+
+
 
   <!-- the compass's key, and its switch -->
   {#if n && level === 0}
     <aside class="key">
+      <button type="button" class="key-switch" on:click={toggleTilt} aria-pressed={tilted}>
+        <svg viewBox="-10 -10 20 20" aria-hidden="true"><ellipse rx="8" ry="4" /><path d="M0 -8V4" /></svg>
+        {tilted ? 'lay the spiral flat' : 'tilt the spiral'}
+      </button>
       <button type="button" class="key-switch" on:click={toggleCompass} aria-pressed={compass}>
         <svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="8" /><path d="M0 -8V8M-8 0H8" /></svg>
         seasons compass {compass ? 'on' : 'off'}
@@ -1447,7 +1550,7 @@
       {/if}
       {#if compass && keyOpen}
         <ul>
-          <li><i class="k-solar"></i>the solar year turns at the winter solstice</li>
+          <li><i class="k-solar"></i>the solar year turns at the winter solstice (Yule, the gold wheel)</li>
           <li><b>2027</b> the calendar year, from 1 January</li>
           <li><svg class="k-wheel" viewBox="-8 -8 16 16" aria-hidden="true"><circle r="6.5" />{#each Array(8) as _, k}<path d="M0 0L{6.5 * Math.cos((k * Math.PI) / 4)} {6.5 * Math.sin((k * Math.PI) / 4)}" />{/each}</svg>the wheel of the year: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasadh and Mabon</li>
           <li><i class="k-seal"></i>Chinese New Year: {newYears.map((l) => `${l.lny.animal}, ${day(l.start)} ${l.lny.year}`).join(' · ')}</li>
@@ -1576,7 +1679,7 @@
   }
 
   .bands.wash {
-    opacity: 0.55;
+    opacity: 0.7;
   }
 
   .bands.wash path {
@@ -1589,13 +1692,221 @@
   }
 
   .thread {
-    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke: color-mix(in srgb, var(--bark-900) 85%, transparent);
     stroke-width: calc(1px * var(--inv, 1));
   }
 
   /* --- the seasons compass ---------------------------------------------------- */
+  .sun-rays path {
+    fill: #f2c46b;
+    opacity: 0.22;
+  }
+
+  .season-art {
+    pointer-events: visiblePainted;
+    cursor: default;
+    opacity: 0.32;
+    transition: opacity 0.6s ease;
+    transform-box: fill-box;
+  }
+
+  .season-art:hover {
+    opacity: 1;
+  }
+
+  .season-wash {
+    fill: var(--wash);
+    opacity: 0.55;
+    transition: opacity 0.6s ease;
+  }
+
+  .season-art:hover .season-wash {
+    opacity: 0.85;
+  }
+
+  .season-earth {
+    fill: #b8a7c8;
+    opacity: 0.35;
+    transition: opacity 0.6s ease;
+  }
+
+  .season-art:hover .season-earth {
+    opacity: 0.7;
+  }
+
+  .season-ground {
+    fill: none;
+    stroke: var(--bark-900);
+    stroke-width: calc(0.7px * var(--inv, 1));
+  }
+
+  /* the threads below the ground: faint, and bright when the drawing wakes */
+  .season-myc path {
+    fill: none;
+    stroke: color-mix(in srgb, var(--bark-900) 45%, transparent);
+    stroke-width: calc(0.4px * var(--inv, 1));
+    transition: stroke 0.6s ease;
+  }
+
+  .season-myc circle {
+    fill: color-mix(in srgb, var(--bark-900) 35%, transparent);
+  }
+
+  .season-art:hover .season-myc path {
+    stroke: #fffaf2;
+    stroke-width: calc(0.7px * var(--inv, 1));
+  }
+
+  .season-art:hover .season-myc circle {
+    fill: #fffaf2;
+  }
+
+  .season-ink {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+
+  .season-art:hover .season-ink {
+    animation: sway 3.2s ease-in-out infinite;
+  }
+
+  .season-ink path,
+  .season-emerge path {
+    fill: none;
+    stroke: var(--bark-900);
+    stroke-width: calc(0.55px * var(--inv, 1));
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .season-emerge path {
+    opacity: 0;
+    transition: opacity 0.5s ease calc(var(--k) * 0.12s);
+  }
+
+  .season-art:hover .season-emerge path {
+    opacity: 1;
+    animation: drift 4s ease-in-out calc(var(--k) * -0.7s) infinite;
+  }
+
+  .season-emerge .em-flower,
+  .season-emerge .em-bee,
+  .season-emerge .em-bloom {
+    fill: #f2c64e;
+  }
+
+  .season-emerge .em-petal {
+    fill: #f2b7b0;
+  }
+
+  .season-emerge .em-leaf {
+    fill: #e09a52;
+  }
+
+  @keyframes sway {
+    50% {
+      transform: rotate(1.6deg);
+    }
+  }
+
+  @keyframes drift {
+    50% {
+      translate: 3px 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .season-art:hover .season-ink,
+    .season-art:hover .season-emerge path {
+      animation: none;
+    }
+  }
+
+  /* the stretches on the spiral are colour only; hover shows their names */
+  .span {
+    pointer-events: stroke;
+    cursor: default;
+  }
+
+  .span-text {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .span:hover + .span-text {
+    opacity: 1;
+  }
+
+  /* a small note in the corner */
+  .invite {
+    position: relative;
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 4px 10px;
+    align-items: start;
+    width: min(300px, 80vw);
+    padding: 12px 34px 12px 12px;
+    border: 1px solid color-mix(in srgb, var(--bark-900) 12%, transparent);
+    border-radius: 16px 16px 4px 16px;
+    background: color-mix(in srgb, var(--tl-paper, #fffaf2) 96%, #fff);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--bark-900) 14%, transparent);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+
+  .invite-leaf {
+    grid-row: span 2;
+    width: 22px;
+    height: 28px;
+    overflow: visible;
+    animation: sway 4s ease-in-out infinite;
+    transform-origin: 50% 100%;
+  }
+
+  .invite-leaf path {
+    fill: color-mix(in srgb, #7d9466 60%, transparent);
+    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke-width: 1;
+  }
+
+  .invite-leaf .v {
+    fill: none;
+  }
+
+  .invite p {
+    margin: 0;
+  }
+
+  .invite b {
+    font-weight: 500;
+  }
+
+  .invite a {
+    justify-self: start;
+    color: var(--bark-900);
+    font: 300 12px 'Playpen Sans', 'Quicksand', sans-serif;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--bark-900) 40%, transparent);
+    text-underline-offset: 3px;
+  }
+
+  .invite-x {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    color: var(--bark-600, #7a6550);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
   .quarter {
-    opacity: 0.13;
+    opacity: 0.2;
     mix-blend-mode: multiply;
   }
 
@@ -1604,12 +1915,6 @@
     stroke-opacity: 0.55;
     stroke-width: calc(1.6px * var(--inv, 1));
     stroke-dasharray: calc(6px * var(--inv, 1)) calc(5px * var(--inv, 1));
-  }
-
-  .solar {
-    stroke: #e3a92f;
-    stroke-width: calc(3.5px * var(--inv, 1));
-    stroke-linecap: round;
   }
 
   .seal {
@@ -1630,6 +1935,12 @@
     gap: calc(2px * var(--inv, 1));
     white-space: nowrap;
     text-align: center;
+  }
+
+  .cmp b,
+  .cmp span,
+  .quarter-name > div {
+    text-shadow: 0 0 calc(6px * var(--inv, 1)) var(--tl-paper, #fffaf2), 0 0 calc(3px * var(--inv, 1)) var(--tl-paper, #fffaf2);
   }
 
   .cmp b {
@@ -1788,10 +2099,8 @@
   }
 
   .k-solar {
-    width: 3px !important;
-    height: 11px !important;
-    border-radius: 2px !important;
-    background: #e3a92f;
+    background: #e9b448;
+    box-shadow: inset 0 0 0 1px var(--bark-900);
   }
 
   .k-seal {
@@ -1835,13 +2144,8 @@
     background: linear-gradient(90deg, #6f8fc0, #9cc48a, #f0c24f, #e2502f, #d9893a, #9a86b8);
   }
 
-  .year-tick {
-    stroke: var(--bark-900);
-    stroke-width: calc(1.5px * var(--inv, 1));
-  }
-
   .span {
-    stroke-width: 54;
+    stroke-width: 46;
     opacity: 0.8;
   }
 
@@ -3290,11 +3594,20 @@
     stroke-linecap: round;
   }
 
-  .line-toggle {
+  .views {
     position: fixed;
     top: 16px;
     right: 112px;
     z-index: 1200;
+    display: flex;
+    gap: 10px;
+  }
+
+  .views.alone {
+    right: 24px;
+  }
+
+  .views button {
     display: grid;
     justify-items: center;
     gap: 3px;
@@ -3305,11 +3618,7 @@
     cursor: pointer;
   }
 
-  .line-toggle.alone {
-    right: 24px;
-  }
-
-  .line-toggle svg {
+  .views svg {
     width: 40px;
     height: 40px;
     padding: 8px;
@@ -3321,36 +3630,79 @@
     transition: background 0.3s ease, border-color 0.3s ease;
   }
 
-  .line-toggle path {
+  .views path,
+  .views circle {
+    fill: none;
     stroke: currentColor;
     stroke-width: 1.3;
     stroke-linecap: round;
   }
 
-  .line-toggle circle {
+  .views .fill {
     fill: currentColor;
+    stroke: none;
   }
 
-  .line-toggle span {
+  .views span {
     font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
   }
 
-  .line-toggle:hover svg {
+  .views button:hover svg {
     border-color: color-mix(in srgb, var(--bark-900) 50%, transparent);
   }
 
-  .line-toggle.on svg {
+  .views button.on svg {
     background: var(--bark-900);
-    color: #fffaf2;
     border-color: var(--bark-900);
+    color: #fffaf2;
   }
 
-  .line-toggle.on path {
-    stroke: #fffaf2;
+  /* lunar: the details on the left, the whole moon beside them on the right,
+     sized to the window; personal, local and global below */
+  .closeup:not(.linear) {
+    grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: auto;
+    grid-auto-rows: auto;
+    align-items: start;
+    column-gap: 24px;
   }
 
-  .line-toggle.on circle {
-    fill: #fffaf2;
+  .closeup:not(.linear) .title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .closeup:not(.linear) .moon-view {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .closeup:not(.linear) .moon-view :global(.moon-cycle) {
+    width: 100%;
+    max-height: calc(100vh - 190px);
+  }
+
+  .closeup:not(.linear) > :global(:not(.title):not(.moon-view):not(.invite)) {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 900px) {
+    .closeup:not(.linear) {
+      grid-template-columns: 1fr;
+    }
+
+    .closeup:not(.linear) .moon-view {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+
+  .moon-view {
+    padding: 8px 0 4px;
+    display: grid;
+    place-items: center;
+    transform-origin: 50% 50%;
+    cursor: grab;
   }
 
   .map-centre circle {
