@@ -500,6 +500,159 @@ def intro():
             f'{"".join(body)}</svg>')
 
 
+# --- the four turnings of the sun, for the timeline's solar view -------------
+# Each a cross-section of the land in the concept style: above the ground
+# what the season shows, below it roots and mycelium with their spore clouds.
+
+def _land(a, ground, trunks, hyphae_from, spore_clouds):
+    rng = a.rng
+    a.line(a.wobble([(0, ground), (200, ground + 3), (400, ground - 2), (600, ground + 2), (800, ground)], 1), 1.4, 0.8)
+
+    def root(x, y, ang, length, depth):
+        if depth == 0 or length < 8:
+            return
+        x2, y2 = x + length * math.cos(ang), y + length * math.sin(ang)
+        a.line(a.wobble([(x, y), ((x + x2) / 2 + rng.uniform(-6, 6), (y + y2) / 2), (x2, y2)], 1), 0.4 + depth * 0.25, 0.75)
+        for _ in range(2):
+            root(x2, y2, ang + rng.uniform(-0.6, 0.6), length * 0.7, depth - 1)
+
+    for rx in trunks:
+        for _ in range(2):
+            root(rx, ground + 2, math.pi / 2 + rng.uniform(-0.6, 0.6), 60, 5)
+    nodes = []
+
+    def hypha(x, y, ang, steps, w):
+        pts = [(x, y)]
+        for _ in range(steps):
+            ang += rng.uniform(-0.35, 0.35)
+            x += 12 * math.cos(ang)
+            y += 12 * math.sin(ang)
+            if y < ground + 4:
+                y = ground + 4
+            pts.append((x, y))
+            if rng.random() < 0.12 and w > 0.5:
+                hypha(x, y, ang + rng.choice([-1, 1]) * rng.uniform(0.5, 1.1), steps // 2, w * 0.7)
+            if rng.random() < 0.05:
+                nodes.append((x, y))
+        a.line(a.wobble(pts, 0.8), w, 0.8)
+
+    for sx in hyphae_from:
+        hypha(sx, ground + 6, math.pi / 2 + rng.uniform(-0.8, 0.8), 26, 1.3)
+    for (x, y) in nodes[:spore_clouds]:
+        a.stipple(x, y, rng.uniform(14, 28), 34, 0.65)
+
+
+def season_winter():
+    """The winter solstice: a bare tree under a thin moon, snow in the air;
+    below, the mycelium at its busiest."""
+    a = Art(21)
+    a.field('#141a30', [(400, 160, 320, '#3a4a7a', 0.6), (650, 300, 200, '#6a6a9a', 0.35), (200, 680, 300, '#2a1f3a', 0.7)])
+    rng = a.rng
+    ground = 470
+    a.line(a.wobble([(400, ground), (404, 380), (398, 300), (402, 220)], 1.2), 2.6, 0.95)
+
+    def branch(x, y, ang, length, depth):
+        if depth == 0:
+            return
+        x2, y2 = x + length * math.cos(ang), y + length * math.sin(ang)
+        a.line(a.wobble([(x, y), ((x + x2) / 2 + rng.uniform(-5, 5), (y + y2) / 2), (x2, y2)], 0.8), 0.5 + depth * 0.35, 0.85)
+        for _ in range(2):
+            branch(x2, y2, ang + rng.uniform(-0.55, 0.55), length * 0.68, depth - 1)
+
+    for ang in (-2.4, -1.9, -1.25, -0.75):
+        branch(400, 300 + rng.uniform(-30, 30), ang, 80, 5)
+    mx, my, mr = 610, 130, 38
+    a.ring(mx, my, mr, 1.1, 0.9)
+    arc = [(mx + 14 + mr * 0.9 * math.cos(t), my + mr * 0.9 * math.sin(t)) for t in [math.pi * (0.62 + 0.76 * i / 30) for i in range(31)]]
+    a.line(a.wobble(arc, 0.3), 0.9, 0.8)
+    for _ in range(6):
+        a.stipple(rng.uniform(80, 720), rng.uniform(60, 400), rng.uniform(20, 40), 26, 0.55)
+    _land(a, ground, (400,), (150, 300, 400, 500, 650), 22)
+    a.grain()
+    return a.svg('The winter solstice')
+
+
+def season_spring():
+    """The spring equinox: shoots and buds, a young tree's first crown."""
+    a = Art(22)
+    a.field('#12261c', [(380, 200, 300, '#3f6a3a', 0.6), (640, 260, 190, '#a85a6a', 0.35), (200, 700, 300, '#24304a', 0.6)])
+    rng = a.rng
+    ground = 470
+    a.line(a.wobble([(400, ground), (402, 400), (399, 330)], 1), 2, 0.9)
+    a.ring(400, 280, 62, 1.1, 0.9)
+    for _ in range(5):
+        ang = rng.uniform(0, math.tau)
+        d = 62 * rng.uniform(0.2, 0.5)
+        a.ring(400 + d * math.cos(ang), 280 + d * math.sin(ang), 62 * rng.uniform(0.2, 0.34), 0.8, 0.75)
+    for i in range(14):
+        x = 90 + i * 48 + rng.uniform(-8, 8)
+        h = rng.uniform(30, 80)
+        a.line(a.wobble([(x, ground), (x + rng.uniform(-6, 6), ground - h / 2), (x + rng.uniform(-10, 10), ground - h)], 0.6), 1, 0.85)
+        for k in range(5):
+            t = math.tau * k / 5
+            a.ring(x + 7 * math.cos(t), ground - h + 7 * math.sin(t), 4, 0.7, 0.8)
+    for _ in range(4):
+        a.stipple(rng.uniform(100, 700), rng.uniform(120, 380), rng.uniform(18, 30), 22, 0.5)
+    _land(a, ground, (400, 200, 600), (200, 400, 600), 14)
+    a.grain()
+    return a.svg('The spring equinox')
+
+
+def season_summer():
+    """The summer solstice: the full sun over a wide crown and the herbs in seed."""
+    a = Art(23)
+    a.field('#2a1d0e', [(400, 140, 320, '#c08a2a', 0.6), (650, 300, 200, '#b8743a', 0.4), (200, 700, 300, '#3a2a1a', 0.6)])
+    rng = a.rng
+    ground = 470
+    sx, sy = 400, 120
+    a.ring(sx, sy, 46, 1.4, 0.95)
+    for k in range(16):
+        t = math.tau * k / 16
+        a.line(a.wobble([(sx + 58 * math.cos(t), sy + 58 * math.sin(t)), (sx + 80 * math.cos(t), sy + 80 * math.sin(t))], 0.6), 1.1, 0.85)
+    for x, top, r in [(250, 300, 90), (560, 320, 75)]:
+        a.line(a.wobble([(x, ground), (x + 3, (ground + top) / 2), (x - 1, top + r * 0.6)], 0.8), 2, 0.9)
+        a.ring(x, top, r, 1.2, 0.9)
+        for _ in range(6):
+            ang = rng.uniform(0, math.tau)
+            d = r * rng.uniform(0.2, 0.5)
+            a.ring(x + d * math.cos(ang), top + d * math.sin(ang), r * rng.uniform(0.2, 0.34), 0.8, 0.75)
+    for i in range(18):
+        x = 60 + i * 40 + rng.uniform(-8, 8)
+        h = rng.uniform(25, 60)
+        a.line(a.wobble([(x, ground), (x + rng.uniform(-5, 5), ground - h / 2), (x + rng.uniform(-8, 8), ground - h)], 0.5), 0.9, 0.8)
+        a.ring(x + rng.uniform(-6, 6), ground - h, 4.5, 0.8, 0.8)
+    _land(a, ground, (250, 560), (150, 350, 600), 12)
+    a.grain()
+    return a.svg('The summer solstice')
+
+
+def season_autumn():
+    """The autumn equinox: mushrooms fruiting from the threads, leaves letting go."""
+    a = Art(24)
+    a.field('#24130e', [(400, 180, 300, '#a8502a', 0.55), (640, 280, 200, '#c08a2a', 0.4), (200, 700, 320, '#3a1f2a', 0.7)])
+    rng = a.rng
+    ground = 470
+    for cx, h, w in [(220, 70, 52), (330, 44, 32), (470, 90, 64), (610, 52, 36), (690, 30, 22)]:
+        stem = [(cx - w * 0.22, ground), (cx - w * 0.18, ground - h * 0.5), (cx - w * 0.12, ground - h)]
+        a.line(a.wobble(stem, 0.6), 1.1, 0.9)
+        a.line(a.wobble([(cx + w * 0.22, ground), (cx + w * 0.18, ground - h * 0.5), (cx + w * 0.12, ground - h)], 0.6), 1.1, 0.9)
+        cap = [(cx + w * math.cos(t), ground - h - w * 0.75 * math.sin(t)) for t in [math.pi * i / 24 for i in range(25)]]
+        a.line(a.wobble(cap + [(cx - w, ground - h)], 0.5), 1.3, 0.95)
+        for k in range(4):
+            a.ring(cx + rng.uniform(-w * 0.55, w * 0.55), ground - h - rng.uniform(w * 0.15, w * 0.55), rng.uniform(2.5, 5), 0.8, 0.85)
+        for k in range(7):
+            u = (k + 1) / 8
+            a.line(f'M{f(cx - w + 2 * w * u)} {f(ground - h)} L{f(cx - w * 0.15 + w * 0.3 * u)} {f(ground - h + 6)}', 0.5, 0.6)
+    for _ in range(9):
+        x, y = rng.uniform(80, 720), rng.uniform(60, 330)
+        t = rng.uniform(0, math.tau)
+        pts = [(x + 16 * math.cos(t + s * 0.9) * (1 if s < 4 else 0.3), y + 16 * math.sin(t + s * 0.9) * 0.5) for s in range(8)]
+        a.line(a.wobble([(x, y), (x + 10 * math.cos(t) - 6, y + 10 * math.sin(t) - 9), (x + 20 * math.cos(t), y + 20 * math.sin(t)), (x + 10 * math.cos(t) + 6, y + 10 * math.sin(t) + 9), (x, y)], 0.4), 0.9, 0.8)
+    _land(a, ground, (220, 470, 610), (150, 250, 380, 480, 600, 700), 26)
+    a.grain()
+    return a.svg('The autumn equinox')
+
+
 ART = {
     'spiral': spiral,
     'holonic-architecture': holons,
@@ -510,6 +663,10 @@ ART = {
     'mycelium-networks': mycelium,
     'game-b': gameb,
     'intro-forest-moon': intro,
+    'season-winter': season_winter,
+    'season-spring': season_spring,
+    'season-summer': season_summer,
+    'season-autumn': season_autumn,
 }
 
 if __name__ == '__main__':

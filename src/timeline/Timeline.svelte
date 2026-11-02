@@ -20,7 +20,7 @@
   // whose permissions decide who may note what, and who may see
   // members-only things. The page only shows. Fed by Holons later (see
   // source.js).
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { phase as moonNow } from 'lune';
   import { fly as rise } from 'svelte/transition';
   import gsap from 'gsap';
@@ -31,7 +31,6 @@
   import Pick from './Pick.svelte';
   import MoonCycle from './MoonCycle.svelte';
   import { POINTS, QUARTERS, heatAt, lunarNewYear } from './compass.js';
-  import { SEASON_ART, EMERGE } from './seasonArt.js';
   import { seasonColours } from '../theme/season.js';
   import { sunLongitude } from '../calendar/sun.js';
 
@@ -125,7 +124,9 @@
   }
   // the hub's words in the middle are wide and low
   const hubClear = (a) => (Math.abs(Math.cos(a)) > 0.5 ? 740 : 230);
-  const ART_R = 190; // the radius of a season's drawing, in the spiral's units
+  // the four turnings' images, in the concept-art style (scripts/concept-art.py)
+  const SEASON_NAME = { 270: 'winter', 0: 'spring', 90: 'summer', 180: 'autumn' };
+  const IMG_R = 540;
   function buildRose() {
     const points = POINTS.map((pt) => {
       const a = lonAngle(pt.lon);
@@ -147,11 +148,8 @@
       const halfH = Math.max(...points.map((p) => Math.abs(p.at * Math.sin(p.a))));
       return { points, quarters: quarters.map((q) => ({ ...q, hidden: true })), reach, solstices: [], halfW, halfH, rim };
     }
-    // each point's drawing sits between the rim and its words
-    for (const p of points) {
-      p.art = rim + ART_R + 10;
-      p.at = Math.max(p.outer + 190, rim + ART_R * 2 + 50);
-    }
+    // the words stand just beyond each turning's image
+    for (const p of points) p.at = Math.max(p.outer + 190, rim + IMG_R * 0.75 + 40);
     const ext = [...points.map((p) => ({ a: p.a, r: p.at })), ...quarters.map((q) => ({ a: q.a, r: q.outer + 120 }))];
     const halfW = Math.max(...ext.map((e) => Math.abs(e.r * Math.cos(e.a)) + (Math.abs(Math.cos(e.a)) > 0.35 ? 680 : 340)));
     const halfH = Math.max(...ext.map((e) => Math.abs(e.r * Math.sin(e.a)) + (Math.abs(Math.sin(e.a)) > 0.35 ? 170 : 90)));
@@ -282,14 +280,25 @@
     const f = frame();
     // beside the compass, room for the map and the key on either side
     const s = level === 1 ? fill() : Math.min((vw - 2 * (f.side ?? vw * 0.03)) / f.w, ((vh - TOP - BOTTOM - 2 * (f.sideY ?? 0)) * 0.96) / f.h);
-    const to = { x: f.x, y: f.y, ls: Math.log(s) };
+    let to = { x: f.x, y: f.y, ls: Math.log(s) };
+    // lunar: the spiral's moon lands exactly on the lunation's circle, at
+    // its size and place on screen, so the one becomes the other
+    const target = level === 1 && !linear ? moonRect() : null;
+    if (target) {
+      const ms = target.size / D;
+      const cy = TOP + (vh - TOP - BOTTOM) / 2;
+      to = { x: f.x - (target.x - vw / 2) / ms, y: f.y - (target.y - cy) / ms, ls: Math.log(ms) };
+    }
     // seen from afar with the moons drawn small, they show only their numbers
     if (level === 0) small = s * D < 30;
     gsap.killTweensOf(cam);
     if (instant) {
       Object.assign(cam, to);
-      return apply();
+      apply();
+      if (level === 1) landed = true;
+      return;
     }
+    landed = false;
     // between two moons close up, the page steps aside, the camera eases
     // back just enough to see the curve, glides round the spiral along the
     // line itself, and grows into the next moon: one circular movement
@@ -307,8 +316,8 @@
         ease: 'sine.inOut',
         onUpdate() {
           const q = at(t0 + (t1 - t0) * o.p);
-          cam.x = q.x;
-          cam.y = q.y;
+          cam.x = q.x + (to.x - at(t1).x) * o.p;
+          cam.y = q.y + (to.y - at(t1).y) * o.p;
           cam.ls = near + (far - near) * Math.sin(Math.PI * o.p) ** 0.8;
           apply();
         },
@@ -317,12 +326,13 @@
           apply();
           travelling = false;
           busy = false;
+          landed = true;
         },
       });
       return;
     }
     busy = true;
-    gsap.to(cam, { ...to, duration: 1.5, ease: 'sine.inOut', onUpdate: apply, onComplete: () => (busy = false) });
+    gsap.to(cam, { ...to, duration: 1.5, ease: 'sine.inOut', onUpdate: apply, onComplete: () => ((busy = false), (landed = level === 1)) });
   }
 
   // the title and the three below change one after the other: the old
@@ -332,10 +342,20 @@
   const unroll = () => ({ duration: 520, css: (t) => `transform: scale(${1 + (1 - t) * 1.6}, ${0.12 + t * 0.88}); opacity: ${t}` });
   const fadeIn = (node) => ({ delay: 280, duration: 420, css: (t) => `opacity: ${t}; transform: translateY(${(1 - t) * 6}px)` });
 
-  function go(l, i = li) {
+  // where the lunation's night circle sits on screen, once it is laid out
+  function moonRect() {
+    const c = document.querySelector('.moon-view .mc-night');
+    if (!c) return null;
+    const r = c.getBoundingClientRect();
+    return r.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2, size: r.width } : null;
+  }
+  // lunar: once the spiral's moon has landed, it hands over to the night moon
+  let landed = false;
+  async function go(l, i = li) {
     const from = level === 1 && l === 1 ? li : null;
     level = l;
     li = Math.max(0, Math.min(lunations.length - 1, i));
+    if (l === 1 && !linear) await tick();
     fly(false, from);
   }
 
@@ -521,6 +541,7 @@
     if (!zoomFrame) zoomFrame = requestAnimationFrame(zoomLoop);
   };
   function setLinear(on) {
+    if (!on && linear) tick().then(() => fly(true));
     linear = on;
     dayOpen = null;
     rest = FIRST_REST;
@@ -597,6 +618,7 @@
   // itself is the way back to the whole spiral
   let mapHover = null;
   let noteClosed = false;
+  $: inviting = level === 1 && !linear && !!here && !member && !noteClosed && !itemsOf(here).filter((it) => !it.pinned && !it.sample).length;
   let scrubEl;
   let scrubbing = false;
   // the slider moves the line directly (no zoom), at most once a frame
@@ -973,7 +995,7 @@
 
 <svelte:window on:resize={resize} on:keydown={onKey} on:pointermove={dragMove} on:pointerup={dragEnd} />
 
-<main class="tl" class:close={level === 1 && !travelling} bind:this={page} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
+<main class="tl" class:landed={level === 1 && !linear && landed} class:close={level === 1 && !travelling} bind:this={page} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
   <div class="glow" aria-hidden="true"></div>
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <filter id="tl-wash" x="-20%" y="-20%" width="140%" height="140%">
@@ -1003,45 +1025,48 @@
           <stop offset="1" stop-color="#fff6dc" stop-opacity="0" />
         </radialGradient>
         <circle class="sun-heart" r={rose.reach * 0.62} fill="url(#sun-heart)" />
-        <!-- its rays shine out from the rim of the whole circle -->
-        <g class="sun-rays">
-          {#each Array(36) as _, k}
-            {@const a = (k * Math.PI) / 18}
-            {@const r0 = rose.rim}
-            {@const w = k % 2 ? 0.022 : 0.036}
-            {@const r1 = r0 + 190 * (k % 3 === 0 ? 1 : k % 2 ? 0.5 : 0.72)}
-            <path d="M{r0 * Math.cos(a - w)} {r0 * Math.sin(a - w)}Q{(r0 + r1) / 2 * Math.cos(a)} {(r0 + r1) / 2 * Math.sin(a)} {r1 * Math.cos(a)} {r1 * Math.sin(a)}Q{(r0 + r1) / 2 * Math.cos(a)} {(r0 + r1) / 2 * Math.sin(a)} {r0 * Math.cos(a + w)} {r0 * Math.sin(a + w)}Z" />
+        <!-- its rays shine out from the rim of the whole circle: slim beams of
+             light, gold at the rim and fading into the paper, softly blurred,
+             over a glowing corona -->
+        <radialGradient id="ray-fade" cx="0" cy="0" r={rose.rim + 230} gradientUnits="userSpaceOnUse">
+          <stop offset={(rose.rim - 10) / (rose.rim + 230)} stop-color="#f4b84a" stop-opacity="0.9" />
+          <stop offset={(rose.rim + 60) / (rose.rim + 230)} stop-color="#f7c96a" stop-opacity="0.55" />
+          <stop offset="1" stop-color="#fff2cc" stop-opacity="0" />
+        </radialGradient>
+        <filter id="ray-glow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="9" />
+        </filter>
+        <circle class="corona" r={rose.rim + 6} filter="url(#ray-glow)" />
+        <g class="sun-rays" filter="url(#ray-glow)">
+          {#each Array(48) as _, k}
+            {@const a = (k * Math.PI) / 24 + (k % 2 ? 0.02 : 0)}
+            {@const r0 = rose.rim - 10}
+            {@const r1 = r0 + 230 * (k % 4 === 0 ? 1 : k % 2 ? 0.45 : 0.7)}
+            {@const w = (k % 4 === 0 ? 26 : k % 2 ? 12 : 18) / r0}
+            {@const m = r0 + (r1 - r0) * 0.3}
+            <path d="M{r0 * Math.cos(a - w)} {r0 * Math.sin(a - w)}Q{m * Math.cos(a - w * 0.6)} {m * Math.sin(a - w * 0.6)} {r1 * Math.cos(a)} {r1 * Math.sin(a)}Q{m * Math.cos(a + w * 0.6)} {m * Math.sin(a + w * 0.6)} {r0 * Math.cos(a + w)} {r0 * Math.sin(a + w)}Z" />
           {/each}
         </g>
         <!-- the four quarters of the year, each in its own wash -->
         <g mask="url(#rose-mask)">
           {#each rose.quarters as q}<path class="quarter" d={wedge(q.a0, q.a1, rose.reach)} style="fill: {q.colour}" />{/each}
         </g>
+        <radialGradient id="season-feather-g" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0.5" stop-color="#fff" />
+          <stop offset="0.98" stop-color="#000" />
+        </radialGradient>
+        <mask id="season-feather" maskContentUnits="objectBoundingBox">
+          <rect width="1" height="1" fill="url(#season-feather-g)" />
+        </mask>
         <!-- a drawing for each turning of the sun, on the circle's edge, its
              edges feathered into the washes; it wakes when hovered -->
-        <radialGradient id="season-fade-g" cx="0" cy="0" r="80" gradientUnits="userSpaceOnUse">
-          <stop offset="0.45" stop-color="#fff" />
-          <stop offset="1" stop-color="#000" />
-        </radialGradient>
-        <mask id="season-fade" maskContentUnits="userSpaceOnUse" x="-100" y="-100" width="200" height="200" maskUnits="userSpaceOnUse">
-          <circle r="80" fill="url(#season-fade-g)" />
-        </mask>
         {#if !phone}
           {#each rose.points as pt}
-            {@const art = SEASON_ART[pt.lon]}
-            <g class="season-art" mask="url(#season-fade)" transform="translate({pt.art * Math.cos(pt.a)} {pt.art * Math.sin(pt.a)}) scale({ART_R / 78})" style="--wash: {art.sky}">
-              <!-- above the ground, the season's wash; below, the earth -->
-              <path class="season-wash" d="M-78 0 A78 78 0 0 1 78 0Z" />
-              <path class="season-earth" d="M-78 0 A78 78 0 0 0 78 0Z" />
-              <path class="season-ground" d="M-74 0 C-40 -1.5 -10 1.5 20 -0.5 S60 1 74 0" />
-              <g class="season-myc">
-                {#each art.threads as d}<path {d} />{/each}
-                {#each art.spores as p}<circle cx={p.x} cy={p.y} r={p.r} />{/each}
-              </g>
-              <g class="season-ink">{#each art.ink as d}<path {d} />{/each}</g>
-              <g class="season-emerge">
-                {#each art.emerge as e, k}<path d={EMERGE[e.kind]} transform="translate({e.x} {e.y})" class="em-{e.kind}" style="--k: {k}" />{/each}
-              </g>
+            {@const cx = rose.rim * Math.cos(pt.a)}
+            {@const cy = rose.rim * Math.sin(pt.a)}
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <g class="season-art">
+              <image href="/images/concepts/season-{SEASON_NAME[pt.lon]}.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} mask="url(#season-feather)" preserveAspectRatio="xMidYMid slice" />
             </g>
           {/each}
         {/if}
@@ -1155,7 +1180,7 @@
 
   <!-- close up: the same order every time -->
   {#if level === 1 && here}
-      <section class="closeup" class:linear class:wide class:away={travelling} on:scroll={(e) => e.currentTarget.scrollLeft && (e.currentTarget.scrollLeft = 0)} out:rise={{ y: 16, duration: 220 }}>
+      <section class="closeup" class:has-invite={inviting} class:linear class:wide class:away={travelling} on:scroll={(e) => e.currentTarget.scrollLeft && (e.currentTarget.scrollLeft = 0)} out:rise={{ y: 16, duration: 220 }}>
         <!-- the title and the three below change in place, one after the
              other (never over each other), as the line flows on -->
         <!-- along the line, no single moon heads the page: each names itself on
@@ -1673,6 +1698,18 @@
     stroke-linecap: round;
   }
 
+  .landed .moon-view {
+    opacity: 1;
+  }
+
+  .moon.focused {
+    transition: opacity 0.6s ease 0.4s;
+  }
+
+  .landed .moon.focused {
+    opacity: 0;
+  }
+
   .bands path {
     fill: none;
     stroke-linecap: butt;
@@ -1697,112 +1734,38 @@
   }
 
   /* --- the seasons compass ---------------------------------------------------- */
-  .sun-rays path {
-    fill: #f2c46b;
-    opacity: 0.22;
+  .compass .sun-rays path {
+    fill: url(#ray-fade);
+    stroke: none;
   }
 
+  .sun-rays {
+    opacity: 1;
+  }
+
+  .corona {
+    fill: none;
+    stroke: #ffd98a;
+    stroke-width: 70;
+    opacity: 0.5;
+  }
+
+  /* each season a large painting in its quarter of the circle, faded
+     behind the spiral and feathered into the washes; hovered, it wakes */
+  /* each turning's image sits on the circle's edge, feathered into the
+     washes, and comes forward when hovered */
   .season-art {
     pointer-events: visiblePainted;
     cursor: default;
-    opacity: 0.32;
-    transition: opacity 0.6s ease;
-    transform-box: fill-box;
+    opacity: 0.7;
+    transition: opacity 0.8s ease;
   }
 
   .season-art:hover {
-    opacity: 1;
-  }
-
-  .season-wash {
-    fill: var(--wash);
-    opacity: 0.55;
-    transition: opacity 0.6s ease;
-  }
-
-  .season-art:hover .season-wash {
-    opacity: 0.85;
-  }
-
-  .season-earth {
-    fill: #b8a7c8;
-    opacity: 0.35;
-    transition: opacity 0.6s ease;
-  }
-
-  .season-art:hover .season-earth {
-    opacity: 0.7;
-  }
-
-  .season-ground {
-    fill: none;
-    stroke: var(--bark-900);
-    stroke-width: calc(0.7px * var(--inv, 1));
+    opacity: 0.95;
   }
 
   /* the threads below the ground: faint, and bright when the drawing wakes */
-  .season-myc path {
-    fill: none;
-    stroke: color-mix(in srgb, var(--bark-900) 45%, transparent);
-    stroke-width: calc(0.4px * var(--inv, 1));
-    transition: stroke 0.6s ease;
-  }
-
-  .season-myc circle {
-    fill: color-mix(in srgb, var(--bark-900) 35%, transparent);
-  }
-
-  .season-art:hover .season-myc path {
-    stroke: #fffaf2;
-    stroke-width: calc(0.7px * var(--inv, 1));
-  }
-
-  .season-art:hover .season-myc circle {
-    fill: #fffaf2;
-  }
-
-  .season-ink {
-    transform-box: fill-box;
-    transform-origin: 50% 100%;
-  }
-
-  .season-art:hover .season-ink {
-    animation: sway 3.2s ease-in-out infinite;
-  }
-
-  .season-ink path,
-  .season-emerge path {
-    fill: none;
-    stroke: var(--bark-900);
-    stroke-width: calc(0.55px * var(--inv, 1));
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .season-emerge path {
-    opacity: 0;
-    transition: opacity 0.5s ease calc(var(--k) * 0.12s);
-  }
-
-  .season-art:hover .season-emerge path {
-    opacity: 1;
-    animation: drift 4s ease-in-out calc(var(--k) * -0.7s) infinite;
-  }
-
-  .season-emerge .em-flower,
-  .season-emerge .em-bee,
-  .season-emerge .em-bloom {
-    fill: #f2c64e;
-  }
-
-  .season-emerge .em-petal {
-    fill: #f2b7b0;
-  }
-
-  .season-emerge .em-leaf {
-    fill: #e09a52;
-  }
-
   @keyframes sway {
     50% {
       transform: rotate(1.6deg);
@@ -1812,13 +1775,6 @@
   @keyframes drift {
     50% {
       translate: 3px 6px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .season-art:hover .season-ink,
-    .season-art:hover .season-emerge path {
-      animation: none;
     }
   }
 
@@ -1839,10 +1795,10 @@
 
   /* a small note in the corner */
   .invite {
-    position: relative;
-    grid-column: 1;
-    grid-row: 2;
-    margin-top: 18px;
+    position: fixed;
+    right: 24px;
+    bottom: 92px;
+    z-index: 8;
     display: grid;
     grid-template-columns: 22px 1fr;
     gap: 4px 10px;
@@ -1906,7 +1862,7 @@
   }
 
   .quarter {
-    opacity: 0.2;
+    opacity: 0.1;
     mix-blend-mode: multiply;
   }
 
@@ -2358,7 +2314,6 @@
   @keyframes rise-in {
     from {
       opacity: 0;
-      transform: translateY(18px);
     }
   }
 
@@ -3660,7 +3615,7 @@
   /* lunar: the details on the left, the whole moon beside them on the right,
      sized to the window; personal, local and global below */
   .closeup:not(.linear) {
-    grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
+    grid-template-columns: minmax(260px, 1fr) auto minmax(0, 1fr);
     grid-template-rows: auto;
     grid-auto-rows: auto;
     align-items: start;
@@ -3672,14 +3627,21 @@
     grid-row: 1;
   }
 
+  /* lunar: the moon in the centre, the details beside it on the left */
   .closeup:not(.linear) .moon-view {
     grid-column: 2;
     grid-row: 1 / span 2;
   }
 
   .closeup:not(.linear) .moon-view :global(.moon-cycle) {
-    width: 100%;
-    max-height: calc(100vh - 190px);
+    width: auto;
+    height: calc(100vh - 190px);
+    max-width: 52vw;
+  }
+
+  /* while the note is open in the corner, the moon steps up out of its way */
+  .closeup.has-invite .moon-view :global(.moon-cycle) {
+    height: calc(100vh - 300px);
   }
 
   .closeup:not(.linear) > :global(:not(.title):not(.moon-view):not(.invite)) {
@@ -3691,13 +3653,55 @@
       grid-template-columns: 1fr;
     }
 
+    /* one column: the moon comes straight after the title, before the details */
     .closeup:not(.linear) .moon-view {
       grid-column: 1;
-      grid-row: auto;
+      grid-row: 2;
+    }
+
+    .closeup:not(.linear) .moon-view :global(.moon-cycle) {
+      width: 100%;
+      height: auto;
+      max-width: none;
+    }
+
+    .closeup:not(.linear) .title {
+      grid-row: 1;
+    }
+
+    .closeup:not(.linear) .invite {
+      grid-row: 3;
     }
   }
 
+  /* on a phone: small view buttons in the corner, no labels, no small map */
+  @media (max-width: 640px) {
+    .views {
+      top: 14px;
+      right: 12px;
+      gap: 6px;
+    }
+
+    .views svg {
+      width: 34px;
+      height: 34px;
+      padding: 7px;
+    }
+
+    .views span {
+      display: none;
+    }
+
+    .map {
+      display: none;
+    }
+  }
+
+  /* the lunation's circle shows once the spiral's moon has landed on it;
+     then the spiral's moon steps away beneath it */
   .moon-view {
+    opacity: 0;
+    transition: opacity 0.6s ease;
     padding: 8px 0 4px;
     display: grid;
     place-items: center;
