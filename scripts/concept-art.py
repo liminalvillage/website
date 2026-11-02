@@ -14,6 +14,7 @@ circles, was drawn the same way: 260 seeded dots in a 400px disc.)
 Everything is seeded, so the same script always draws the same images.
 """
 import math
+import re
 import random
 from pathlib import Path
 
@@ -474,10 +475,25 @@ def intro():
 
     # The moon's lines are marked (class "moon") so the page can fly the
     # moon into the hub's moon as the drawing fades
+    # The drawing sweeps in from left to right, as the ground line does:
+    # each line starts in turn by where it stands across the page (its
+    # leftmost point), so nothing on the right fills in before the left; the
+    # moon still comes last
+    def left_of(el):
+        d = re.search(r' d="([^"]+)"', el)
+        nums = [float(n) for n in re.findall(r'-?\d+(?:\.\d+)?', d.group(1))] if d else []
+        return min(nums[0::2]) if nums else 0
+    xs = [left_of(el) for el in a.body]
     body = []
     for i, el in enumerate(a.body):
         cls = ' class="moon"' if moon_from <= i < moon_to else ' class="ground"' if i == ground_from else ''
-        body.append(el.replace('<path ', f'<path pathLength="1"{cls} style="--o:{i / len(a.body):.3f}" ', 1))
+        if moon_from <= i < moon_to:
+            o = 0.92 + 0.08 * (i - moon_from) / max(1, moon_to - moon_from)
+        elif i == ground_from:
+            o = 0
+        else:
+            o = 0.9 * min(1, max(0, xs[i] / W))
+        body.append(el.replace('<path ', f'<path pathLength="1"{cls} style="--o:{o:.3f}" ', 1))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
             f'role="img" aria-label="A forest under the moon"><title>A forest under the moon</title>'
             f'<circle class="moon-glow moon" cx="{mx}" cy="{my}" r="{mr * 1.6}" fill="{WHITE}" opacity="0.14"/>'

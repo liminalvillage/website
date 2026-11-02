@@ -1,4 +1,5 @@
 <script>
+  import { hyphae } from '../lib/hyphae.js';
   // The value streams page, as one row of tabs over one screen, with no page
   // scroll. "Game B": what the experiment is. "8 forms of capital": a flower
   // of eight overlapping circles; choosing a petal opens that capital (what
@@ -44,18 +45,52 @@
   let view = 'gameb';
 
   // --- the flower --------------------------------------------------------
+  // Eight petals, pointed like a real flower's and overlapping softly, each
+  // a little different, with fine veins, round a small heart
   const FC = 230;
-  const PETAL = 92;
-  const REACH = 98;
+  const REACH = 150; // where each petal's name sits
+  let fseed = 9;
+  const frand = () => ((fseed = (fseed * 16807) % 2147483647) / 2147483647);
+  // a petal along the x axis, from near the heart to its tip
+  function petalShape() {
+    const [r0, tip, w] = [30, 196 + frand() * 14, 58 + frand() * 12];
+    const lean = (frand() - 0.5) * 10;
+    return {
+      d: `M${r0} 0 C${r0 + 30} ${-w} ${tip - 70} ${-w * 0.95 + lean} ${tip} ${lean / 2} C${tip - 70} ${w * 0.95 + lean} ${r0 + 30} ${w} ${r0} 0Z`,
+      veins: [
+        `M${r0 + 6} 0 Q${tip / 2} ${lean / 3} ${tip - 10} ${lean / 2}`,
+        ...[0.18, 0.3, 0.42, 0.54, 0.66, 0.78].flatMap((t) => {
+          const x = r0 + (tip - r0) * t;
+          const h = w * Math.sin(Math.PI * Math.min(1, t * 1.1)) * 0.82;
+          return [`M${x} 0 Q${x + 16} ${-h * 0.45} ${x + 30} ${-h * 0.85}`, `M${x} 0 Q${x + 16} ${h * 0.45} ${x + 30} ${h * 0.85}`];
+        }),
+      ],
+    };
+  }
+  const shapes = Array.from({ length: 8 }, petalShape);
+  // From each petal's tip, mycelium grows out and fades into the page,
+  // grown as in the mycelium pattern-language drawing (see hyphae.js)
+  const { lines: threads, spores } = hyphae({
+    seed: 7,
+    step: 9,
+    steps: 22,
+    starts: Array.from({ length: 16 }, (_, k) => {
+      const a = (Math.PI * 2 * Math.floor(k / 2)) / 8 - Math.PI / 2 + ((k % 2) - 0.5) * 0.3;
+      return [FC + 190 * Math.cos(a), FC + 190 * Math.sin(a), a, 1.1];
+    }),
+  });
+  // warm pigments, rose through terracotta to ochre, like a watercolour
+  const PIGMENTS = ['#c25a72', '#d7745c', '#e39a55', '#dcb25c', '#cf8a4f', '#b9665a', '#d98a86', '#a95a74'];
   $: petals = capitals.map((c, i) => {
     const a = (Math.PI * 2 * i) / capitals.length - Math.PI / 2;
     return {
       ...c,
       i,
-      x: FC + REACH * Math.cos(a),
-      y: FC + REACH * Math.sin(a),
-      lx: FC + (REACH + 52) * Math.cos(a),
-      ly: FC + (REACH + 52) * Math.sin(a),
+      deg: (a * 180) / Math.PI,
+      pigment: PIGMENTS[i % PIGMENTS.length],
+      shape: shapes[i],
+      lx: FC + REACH * Math.cos(a),
+      ly: FC + REACH * Math.sin(a),
       moons: YEAR.filter((x) => x.capitals.includes(c.name)),
       criteria: CRITERIA.find((k) => k.capital === c.name)?.items ?? [],
     };
@@ -292,6 +327,45 @@
   {#if view === 'capital'}
     <div class="flower-view" in:fly={{ y: 28 * tabDir, duration: 600, opacity: 0 }}>
       <svg class="flower" viewBox="0 0 {FC * 2} {FC * 2}" role="group" aria-label="The eight forms of capital">
+        <defs>
+          <!-- the mycelium fades out into the page -->
+          <radialGradient id="fade-out" cx={FC} cy={FC} r="340" gradientUnits="userSpaceOnUse">
+            <stop offset="0.55" stop-color="#fff" stop-opacity="1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </radialGradient>
+          <mask id="myc-mask" maskUnits="userSpaceOnUse" x="-400" y="-400" width="1260" height="1260">
+            <rect x="-400" y="-400" width="1260" height="1260" fill="url(#fade-out)" />
+          </mask>
+          <!-- watercolour: uneven edges, pigment pooling at the rim, paper grain -->
+          <filter id="wash" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4" result="warp" />
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="10" xChannelSelector="R" yChannelSelector="G" result="shape" />
+            <feGaussianBlur in="shape" stdDeviation="1.4" result="soft" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="11" result="grain" />
+            <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.25" result="speckle" />
+            <feComposite in="soft" in2="speckle" operator="in" result="pigment" />
+            <feMorphology in="shape" operator="erode" radius="2.5" result="inner" />
+            <feComposite in="shape" in2="inner" operator="out" result="rim" />
+            <feGaussianBlur in="rim" stdDeviation="1.2" result="pool" />
+            <feMerge><feMergeNode in="pigment" /><feMergeNode in="pool" /></feMerge>
+          </filter>
+          <!-- ink, drawn by hand: a slight waver -->
+          <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="7" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          {#each petals as p (p.name)}
+            <linearGradient id="pg-{p.i}" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color={p.pigment} stop-opacity="0.95" />
+              <stop offset="0.55" stop-color={p.pigment} stop-opacity="0.7" />
+              <stop offset="1" stop-color={p.pigment} stop-opacity="0.35" />
+            </linearGradient>
+          {/each}
+        </defs>
+        <g class="mycelium" mask="url(#myc-mask)" aria-hidden="true">
+          {#each threads as t}<path d={t.d} style="stroke-width: {t.w * 0.55}" />{/each}
+          {#each spores as sp}<circle cx={sp.x} cy={sp.y} r={sp.r} />{/each}
+        </g>
         {#each petals as p (p.name)}
           <g
             class="petal"
@@ -304,13 +378,19 @@
             on:click={() => (petal = p.name)}
             on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), (petal = p.name))}
           >
-            <circle cx={p.x} cy={p.y} r={PETAL} />
+            <g transform="translate({FC} {FC}) rotate({p.deg})">
+              <path class="leaf" d={p.shape.d} fill="url(#pg-{p.i})" filter="url(#wash)" />
+              <g filter="url(#ink)">
+                <path class="outline" d={p.shape.d} />
+                {#each p.shape.veins as d}<path class="vein" {d} />{/each}
+              </g>
+            </g>
           </g>
         {/each}
         {#each petals as p (p.name)}
           <text class="plabel" class:on={p.name === petal} x={p.lx} y={p.ly}>{p.name}</text>
         {/each}
-        <circle class="heart" cx={FC} cy={FC} r="34" />
+        <circle class="heart" cx={FC} cy={FC} r="34" filter="url(#ink)" />
         <text class="heart-label" x={FC} y={FC - 2}>8</text>
         <text class="heart-sub" x={FC} y={FC + 13}>forms</text>
       </svg>
@@ -735,7 +815,7 @@
     box-shadow: inset 0 0 0 1px var(--ember-600), 0 0 10px color-mix(in srgb, var(--ember-400) 55%, transparent);
   }
 
-  /* --- 8 forms of capital: a flower of eight circles ------------------- */
+  /* --- 8 forms of capital: a flower of eight petals -------------------- */
   /* The flower is sized by the height it is given, so it always fits on
      screen; the details beside it scroll on their own if long */
   .flower-view {
@@ -758,16 +838,44 @@
     outline: none;
   }
 
-  .petal circle {
-    fill: var(--tint);
-    fill-opacity: 0.32;
-    stroke: color-mix(in srgb, var(--bark-900) 22%, transparent);
-    stroke-width: 1;
-    mix-blend-mode: multiply;
+  .petal {
+    transform-box: view-box;
     transform-origin: 230px 230px;
-    transition: fill-opacity 0.4s ease, stroke 0.4s ease;
     animation: bloom 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
     animation-delay: calc(var(--k) * 80ms);
+  }
+
+  /* each petal a wash of warm pigment, layering over the next */
+  .petal .leaf {
+    opacity: 0.78;
+    mix-blend-mode: multiply;
+    transition: opacity 0.4s ease;
+  }
+
+  .petal .outline {
+    fill: none;
+    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke-width: 0.9;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .mycelium path {
+    fill: none;
+    stroke: color-mix(in srgb, var(--bark-900) 55%, transparent);
+    stroke-linecap: round;
+  }
+
+  .mycelium circle {
+    fill: color-mix(in srgb, var(--bark-900) 55%, transparent);
+  }
+
+  .petal .vein {
+    fill: none;
+    stroke: color-mix(in srgb, var(--bark-900) 32%, transparent);
+    stroke-width: 0.55;
+    stroke-linecap: round;
+    pointer-events: none;
   }
 
   @keyframes bloom {
@@ -777,14 +885,18 @@
     }
   }
 
-  .petal:hover circle,
-  .petal:focus-visible circle {
-    fill-opacity: 0.5;
+  .petal:hover .leaf,
+  .petal:focus-visible .leaf {
+    opacity: 0.8;
   }
 
-  .petal.on circle {
-    fill-opacity: 0.7;
-    stroke: color-mix(in srgb, var(--bark-900) 55%, transparent);
+  /* the chosen petal glows, as if lit from within */
+  .petal.on .leaf {
+    opacity: 0.95;
+  }
+
+  .petal.on {
+    filter: drop-shadow(0 0 12px rgba(255, 150, 70, 0.55));
   }
 
   .plabel,
@@ -797,8 +909,13 @@
   .plabel {
     font-family: 'Outfit', system-ui, sans-serif;
     font-size: 15px;
-    font-weight: 300;
-    fill: var(--bark-800);
+    font-weight: 400;
+    fill: var(--bark-900);
+    /* a soft paper halo, so names read over the painted petals */
+    paint-order: stroke;
+    stroke: color-mix(in srgb, var(--oat-100) 75%, transparent);
+    stroke-width: 4px;
+    stroke-linejoin: round;
   }
 
   .plabel.on {
@@ -807,22 +924,19 @@
   }
 
   .heart {
-    fill: var(--oat-100);
-    stroke: color-mix(in srgb, var(--bark-900) 30%, transparent);
+    fill: #fbf4e6;
+    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke-width: 1;
   }
 
   .heart-label {
-    font-family: 'Outfit', system-ui, sans-serif;
-    font-size: 20px;
-    font-weight: 300;
+    font: 300 18px 'Playpen Sans', 'Quicksand', sans-serif;
     fill: var(--bark-900);
   }
 
   .heart-sub {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    fill: var(--bark-500);
+    font: 300 10.5px 'Playpen Sans', 'Quicksand', sans-serif;
+    fill: var(--bark-800);
   }
 
   .detail {
@@ -2018,7 +2132,7 @@
     .tmoon,
     .orbs li,
     .tile,
-    .petal circle {
+    .petal {
       animation: none;
     }
 

@@ -18,6 +18,7 @@
 
   const now = Date.now();
   const cycle = lunationAt(now);
+  const endDate = new Date(cycle.to + 1).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/Rome' });
   const moon = phase(new Date(now));
   const k = Math.floor(((moon.phase + 1 / 16) % 1) * 8);
   const length = cycle.to + 1 - cycle.from;
@@ -205,8 +206,19 @@
     {/each}
     </g>
   </svg>
-  <p class="label" style="top: {arcTop + 30}px">Lunation {cycle.index} · {PHASES[k]} · day {day} of {days}</p>
 </div>
+
+<!-- where we are in the moon, in the top right corner once the arc has
+     docked, with a way into this lunation on the timeline -->
+<aside class="where" class:shown={visible && m >= 1}>
+  <p class="where-num">Lunation {cycle.index}</p>
+  <p>{PHASES[k]}, day {day} of {days}</p>
+  <p class="where-next">new moon on {endDate}</p>
+  <a class="where-go" href="/timeline?at=now">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6c5.6-.2 9.6 4 9.4 9.6-.2 5.2-4.4 9.2-9.6 9.2-5.4 0-9.2-4.2-9.2-9.6C2.6 6.6 6.6 2.8 12 2.6Z" /><path d="M9 12h6.5M13 9.2l2.8 2.8-2.8 2.8" /></svg>
+    go to this lunation
+  </a>
+</aside>
 
 <style>
   /* Above the header, whose blur would otherwise veil the docked arc */
@@ -288,31 +300,74 @@
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
   }
 
-  .label {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: 0;
-    text-align: center;
-    font: 400 11px/1.4 var(--font-body);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(251, 246, 238, 0.8);
+  /* top right: three short lines and a way in */
+  .where {
+    position: fixed;
+    top: 26px;
+    right: 28px;
+    z-index: 1001;
+    text-align: right;
+    color: rgba(251, 246, 238, 0.85);
     text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(-6px);
+    pointer-events: none;
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
 
-  .docked .label {
+  .where.shown {
     opacity: 1;
     transform: none;
+    pointer-events: auto;
+  }
+
+  .where p {
+    margin: 0;
+    font: 400 12px/1.5 var(--font-body);
+  }
+
+  .where .where-num {
+    font: 300 17px/1.3 'Outfit', system-ui, sans-serif;
+    color: #fbf6ee;
+  }
+
+  .where-next {
+    opacity: 0.75;
+  }
+
+  .where-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    color: #fbf6ee;
+    font: 300 12.5px 'Playpen Sans', 'Quicksand', sans-serif;
+    text-decoration: none;
+  }
+
+  .where-go svg {
+    position: static;
+    width: 26px;
+    height: 26px;
+    transition: transform 0.4s ease;
+  }
+
+  .where-go:hover svg {
+    transform: rotate(90deg);
+  }
+
+  .where-go path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .moon-path,
     .pm,
-    .label {
+    .where {
       transition: none;
     }
   }

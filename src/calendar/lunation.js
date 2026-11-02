@@ -1,7 +1,9 @@
 // Lunations — which lunar cycle a moment falls in, and what it is called.
-// A port of @holons/core/flows/lunation.ts (Meeus/moontool new moons, the
-// numbering the Telegram bot's /newmoon counts by), so the site names a cycle
-// the same way the bot, the kiosk and the Flows board do. Keep in step.
+// A port of @holons/core/flows/lunation.ts (Meeus/moontool new moons), with
+// one difference: the village counts one higher than that code (and the bot,
+// and the kiosk's calendar) do. The moon from 10 October to 9 November 2026
+// is Lunation 84, so the count here is the village's, and every page that
+// names a lunation uses it.
 
 export const SYNODIC_MONTH_DAYS = 29.53058868;
 const JULIAN_UNIX_EPOCH = 2440587.5;
@@ -58,7 +60,8 @@ function indexContaining(ts) {
 function numberOf(newMoonMs) {
   const BASE_JULIAN = 2423436.40347;
   const BASE_SYNODIC = 29.530588861;
-  return Math.round((julianOf(newMoonMs) - BASE_JULIAN) / BASE_SYNODIC) - 1200;
+  // the village's count: one higher than @holons/core's (- 1200)
+  return Math.round((julianOf(newMoonMs) - BASE_JULIAN) / BASE_SYNODIC) - 1199;
 }
 
 /** The lunar cycle containing `ts`: { index, from, to } (ms, inclusive). */

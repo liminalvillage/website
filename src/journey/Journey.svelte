@@ -517,14 +517,15 @@
   }
 
   .notes .hand {
-    font-family: 'Caveat', cursive;
-    font-size: 1.35em;
+    font-family: 'Playpen Sans', 'Quicksand', sans-serif;
+    font-weight: 300;
+    font-size: 1em;
     line-height: 1;
     white-space: nowrap;
   }
 
   .notes .hand.big {
-    font-size: 1.7em;
+    font-size: 1.25em;
   }
 
   /* While About is read, the circles inside it (the DNA and the three
@@ -593,9 +594,10 @@
   .join .where {
     max-width: 440px;
     margin: 0 auto;
-    font-family: 'Caveat', cursive;
-    font-size: 1.35em;
-    line-height: 1.25;
+    font-family: 'Playpen Sans', 'Quicksand', sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+    line-height: 1.4;
     opacity: 0.85;
   }
 

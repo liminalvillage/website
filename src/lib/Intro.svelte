@@ -315,9 +315,9 @@
   .hand {
     position: absolute;
     margin: 0;
-    font-family: 'Caveat', cursive;
-    font-weight: 400;
-    font-size: clamp(1rem, 1.7vw, 1.4rem);
+    font-family: 'Playpen Sans', 'Quicksand', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.78rem, 1.25vw, 1.02rem);
     opacity: 0.85;
     color: var(--line);
     white-space: nowrap;
@@ -333,7 +333,7 @@
   }
 
   .hand-b {
-    top: calc(390 / 640 * 100% - 1.2em);
+    top: calc(408 / 640 * 100% - 1.2em);
     right: 2.5%;
     animation-delay: calc(var(--pre) + 2.3s);
   }

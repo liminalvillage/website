@@ -1,7 +1,7 @@
 // The year ahead in moons: from the lunation we are in now (84, autumn 2026)
-// to the hundredth, early in 2028. Dates come from the site's lunation
-// calculation; the village counts one higher than it does (the moon that
-// begins on 9 November 2026 is Lunation 85), so COUNT_SHIFT adds one.
+// to the hundredth, early in 2028. Dates and numbers come from the site's
+// lunation calculation, which counts as the village does (the moon that
+// begins on 9 November 2026 is Lunation 85).
 // Each lunation has a name of its own (for the whole cycle, new moon to new
 // moon, not one night), a theme that follows the season in
 // Le Marche and a short description, and names the forms of capital it grows
@@ -205,7 +205,6 @@ const THEMES = {
 const day = (ms) => new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/Rome' });
 const yearOf = (ms) => new Date(ms).toLocaleDateString('en-GB', { year: 'numeric', timeZone: 'Europe/Rome' });
 
-const COUNT_SHIFT = 1;
 const FIRST = 84;
 const LAST = 100;
 
@@ -213,10 +212,10 @@ export const YEAR = (() => {
   const out = [];
   const now = Date.now();
   let l = lunationAt(Date.UTC(2026, 9, 20));
-  while (l.index + COUNT_SHIFT <= LAST) {
-    const index = l.index + COUNT_SHIFT;
+  while (l.index <= LAST) {
+    const index = l.index;
     if (index >= FIRST) {
-      out.push({ index, from: day(l.from), to: day(l.to), year: yearOf(l.to), now: now >= l.from && now <= l.to, sky: skyFor(l.from, l.to), ...THEMES[index] });
+      out.push({ index, start: l.from, end: l.to, from: day(l.from), to: day(l.to), year: yearOf(l.to), now: now >= l.from && now <= l.to, sky: skyFor(l.from, l.to), ...THEMES[index] });
     }
     l = lunationAt(l.to + 86400000);
   }

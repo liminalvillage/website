@@ -17,6 +17,7 @@ export default defineConfig({
         palette: resolve(__dirname, 'palette.html'),
         concepts: resolve(__dirname, 'concepts.html'),
         gameB: resolve(__dirname, 'game-b.html'),
+        timeline: resolve(__dirname, 'timeline.html'),
         memories: resolve(__dirname, 'memories.html'),
       },
     },

@@ -128,7 +128,8 @@ export function toEvents(quests, year) {
     if (seen.has(id)) continue;
     seen.add(id);
     const completed = isCompleted(q);
-    const common = { title: q.title || 'Untitled', category: q.category || '', location: q.location || '' };
+    // the timeline also reads a quest's cadence and how it stands
+    const common = { title: q.title || 'Untitled', category: q.category || '', location: q.location || '', series: id, frequency: questFrequency(q) ?? '', stance: q.stance ?? '', question: q.question === true };
     const occurrences = questFrequency(q)
       ? questOccurrences(q, completed ? { start: window.start, end: new Date() } : window)
       : [];

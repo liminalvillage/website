@@ -10,7 +10,9 @@
 import { VILLAGE_HOLON as HOLON_ID, readLenses } from '../lib/holosphere.mjs';
 const TASK_TYPES = ['', 'task', 'quest', 'todo', 'recurring'];
 const EVENT_TYPES = ['event', 'meeting', 'appointment'];
-const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location'];
+// (stance and question are the timeline's: imagined / committed / remembered,
+// and whether the quest is a question still to decide)
+const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location', 'stance', 'question'];
 
 const isAgenda = (q) => {
   const type = String(q.type ?? '').trim().toLowerCase();
