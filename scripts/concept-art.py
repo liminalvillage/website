@@ -21,6 +21,15 @@ from pathlib import Path
 OUT = Path(__file__).resolve().parent.parent / 'public' / 'images' / 'concepts'
 S = 800  # canvas size
 WHITE = '#fbf6ee'
+GROW_CSS = ('<style>'
+            '.pop{transform-box:fill-box;transform-origin:50% 100%;animation:pop 1.4s cubic-bezier(.2,.9,.3,1.3) both}'
+            '@keyframes pop{from{transform:scale(0);opacity:0}}'
+            '.fall{animation:fall 7s linear infinite both}'
+            '@keyframes fall{from{transform:translate(0,-60px);opacity:0}15%{opacity:1}to{transform:translate(30px,220px);opacity:0}}'
+            '.glow{animation:glow 3.5s ease-in-out infinite both}'
+            '@keyframes glow{0%,100%{opacity:.25}50%{opacity:1}}'
+            '@media (prefers-reduced-motion:reduce){.pop,.fall,.glow{animation:none}}'
+            '</style>')
 
 
 def f(x):
@@ -30,6 +39,7 @@ def f(x):
 class Art:
     def __init__(self, seed):
         self.rng = random.Random(seed)
+        self.growing = False
         self.defs = []
         self.body = []
 
@@ -95,10 +105,19 @@ class Art:
     def ring(self, cx, cy, r, w=1.2, op=0.85):
         self.line(self.wobble(self.circle_pts(cx, cy, r, max(24, int(r / 3))), jitter=min(1.4, r / 40)), w, op)
 
+    # --- what grows when the drawing is hovered: drawn into a second file,
+    # each new thing popping up, sprouting or drifting in turn
+    def grow_start(self):
+        self._grow = len(self.body)
+
+    def grow_end(self, kind='pop', delay=0.2):
+        new = ''.join(self.body[self._grow:])
+        self.body[self._grow:] = [f'<g class="{kind}" style="animation-delay:{f(delay)}s">{new}</g>']
+
     def svg(self, title):
         return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {S} {S}" width="{S}" height="{S}" '
                 f'role="img" aria-label="{title}"><title>{title}</title>'
-                f'<defs>{"".join(self.defs)}</defs>{"".join(self.body)}</svg>')
+                f'<defs>{"".join(self.defs)}</defs>{GROW_CSS if self.growing else ""}{"".join(self.body)}</svg>')
 
 
 # --- the concepts ------------------------------------------------------------
@@ -517,7 +536,6 @@ def intro():
 
 def _land(a, ground, trunks, hyphae_from, spore_clouds):
     rng = a.rng
-    a.line(a.wobble([(0, ground), (200, ground + 3), (400, ground - 2), (600, ground + 2), (800, ground)], 1), 1.4, 0.8)
 
     def root(x, y, ang, length, depth):
         if depth == 0 or length < 8:
@@ -553,7 +571,7 @@ def _land(a, ground, trunks, hyphae_from, spore_clouds):
         a.stipple(x, y, rng.uniform(14, 28), 34, 0.65)
 
 
-def season_winter():
+def season_winter(more=False):
     """The winter solstice: a bare tree under a thin moon, snow in the air;
     below, the mycelium at its busiest."""
     a = Art(21)
@@ -578,18 +596,21 @@ def season_winter():
     a.line(a.wobble(arc, 0.3), 0.9, 0.8)
     # snow falling everywhere, lying on the branches and on the ground
     a.dots(400, 260, 380, 260, WHITE, (1.4, 3.6), 0.9)
-    a.body.append(f'<path d="M0 {ground - 6} C200 {ground - 16} 400 {ground - 4} 600 {ground - 14} S800 {ground - 8} 800 {ground - 8} L800 {ground + 4} L0 {ground + 4}Z" fill="{WHITE}" opacity="0.85"/>')
+    a.dots(400, ground - 6, 400, 140, WHITE, (1.5, 3.2), 0.75)
     for _ in range(14):
         x, y = rng.uniform(80, 720), rng.uniform(60, 420)
         for k in range(3):
             t = k * math.pi / 3
             a.line(f'M{f(x - 7 * math.cos(t))} {f(y - 7 * math.sin(t))} L{f(x + 7 * math.cos(t))} {f(y + 7 * math.sin(t))}', 0.9, 0.85)
     _land(a, ground, (400,), (150, 300, 400, 500, 650), 22)
+    if more:
+        a.growing = True
+        _grow_winter(a, ground)
     a.grain()
     return a.svg('The winter solstice')
 
 
-def season_spring():
+def season_spring(more=False):
     """The spring equinox: shoots and buds, a young tree's first crown."""
     a = Art(22)
     a.field('#12261c', [(380, 200, 300, '#3f6a3a', 0.6), (640, 260, 190, '#a85a6a', 0.35), (200, 700, 300, '#24304a', 0.6)])
@@ -609,18 +630,21 @@ def season_spring():
             t = math.tau * k / 5
             a.ring(x + 7 * math.cos(t), ground - h + 7 * math.sin(t), 4, 0.7, 0.8)
     # blossom: the crown and the air full of pink and white petals
-    a.dots(400, 280, 80, 70, '#f4a6bf', (3, 6), 0.95)
-    a.dots(400, 280, 70, 40, WHITE, (2, 4), 0.9)
-    a.dots(400, 300, 360, 70, '#f7c3d3', (2, 4), 0.8)
+    a.dots(400, 280, 70, 26, '#f4a6bf', (2, 4), 0.6)
+    a.dots(400, 280, 60, 14, WHITE, (1.5, 3), 0.6)
+    a.dots(400, 300, 360, 30, '#f7c3d3', (1.5, 3), 0.5)
     for i in range(14):
         a.dots(90 + i * 48, ground - 40 - (i * 37) % 40, 10, 6, '#ffe07a' if i % 2 else '#ffffff', (2.5, 4.5), 0.95)
     a.dots(400, ground + 10, 380, 40, '#9fd27a', (2, 4), 0.8)
     _land(a, ground, (400, 200, 600), (200, 400, 600), 14)
+    if more:
+        a.growing = True
+        _grow_spring(a, ground)
     a.grain()
     return a.svg('The spring equinox')
 
 
-def season_summer():
+def season_summer(more=False):
     """The summer solstice: the full sun over a wide crown and the herbs in seed."""
     a = Art(23)
     a.field('#2a1d0e', [(400, 140, 320, '#c08a2a', 0.6), (650, 300, 200, '#b8743a', 0.4), (200, 700, 300, '#3a2a1a', 0.6)])
@@ -655,11 +679,14 @@ def season_summer():
         a.body.append(f'<circle cx="{x}" cy="{ground - h}" r="9" fill="#6a3a1a"/>')
     a.dots(400, 250, 360, 50, '#fff0a8', (1.5, 3), 0.7)
     _land(a, ground, (250, 560), (150, 350, 600), 12)
+    if more:
+        a.growing = True
+        _grow_summer(a, ground)
     a.grain()
     return a.svg('The summer solstice')
 
 
-def season_autumn():
+def season_autumn(more=False):
     """The autumn equinox: mushrooms fruiting from the threads, leaves letting go."""
     a = Art(24)
     a.field('#24130e', [(400, 180, 300, '#a8502a', 0.55), (640, 280, 200, '#c08a2a', 0.4), (200, 700, 320, '#3a1f2a', 0.7)])
@@ -691,8 +718,80 @@ def season_autumn():
     for cx, h, w in [(220, 70, 52), (470, 90, 64), (610, 52, 36)]:
         a.body.append(f'<path d="M{cx - w} {ground - h} C{cx - w} {ground - h - w * 1.1} {cx + w} {ground - h - w * 1.1} {cx + w} {ground - h} Z" fill="#c8452a" opacity="0.55"/>')
     _land(a, ground, (220, 470, 610), (150, 250, 380, 480, 600, 700), 26)
+    if more:
+        a.growing = True
+        _grow_autumn(a, ground)
     a.grain()
     return a.svg('The autumn equinox')
+
+
+# --- what wakes in each drawing when it is hovered --------------------------
+
+def _grow_winter(a, ground):
+    rng = a.rng
+    for k in range(60):
+        a.grow_start()
+        a.dots(rng.uniform(40, 760), rng.uniform(20, 300), 4, 2, WHITE, (1.5, 3.2), 0.95)
+        a.grow_end('fall', -rng.uniform(0, 7))
+    for k in range(10):
+        a.grow_start()
+        a.stipple(rng.uniform(120, 680), rng.uniform(ground + 60, 760), rng.uniform(16, 30), 30, 0.9)
+        a.grow_end('glow', -rng.uniform(0, 3.5))
+
+
+def _grow_spring(a, ground):
+    rng = a.rng
+    for k in range(18):
+        x = rng.uniform(60, 740)
+        h = rng.uniform(22, 60)
+        a.grow_start()
+        a.line(a.wobble([(x, ground), (x + rng.uniform(-4, 4), ground - h / 2), (x + rng.uniform(-6, 6), ground - h)], 0.5), 1, 0.9)
+        a.body.append(f'<ellipse cx="{f(x - 6)}" cy="{f(ground - h * 0.55)}" rx="6" ry="2.6" fill="#9fd27a" opacity="0.9" transform="rotate(-30 {f(x - 6)} {f(ground - h * 0.55)})"/>')
+        a.body.append(f'<ellipse cx="{f(x + 6)}" cy="{f(ground - h * 0.4)}" rx="6" ry="2.6" fill="#9fd27a" opacity="0.9" transform="rotate(30 {f(x + 6)} {f(ground - h * 0.4)})"/>')
+        a.dots(x, ground - h, 3, 3, rng.choice(['#f4a6bf', '#ffe07a', WHITE]), (2, 3.5), 0.95)
+        a.grow_end('pop', 0.2 + k * 0.18)
+    for k in range(12):
+        a.grow_start()
+        a.dots(rng.uniform(80, 720), rng.uniform(ground + 30, 740), 3, 1, '#ffe07a', (2.5, 3.5), 0.95)
+        a.grow_end('glow', -rng.uniform(0, 3.5))
+
+
+def _grow_summer(a, ground):
+    rng = a.rng
+    for k, x in enumerate([180, 300, 470, 620, 520, 90, 360]):
+        h = rng.uniform(50, 110)
+        a.grow_start()
+        a.line(a.wobble([(x, ground), (x + 3, ground - h / 2), (x, ground - h)], 0.6), 1.4, 0.9)
+        for j in range(10):
+            t = math.tau * j / 10
+            a.body.append(f'<ellipse cx="{f(x + 10 * math.cos(t))}" cy="{f(ground - h + 10 * math.sin(t))}" rx="6" ry="3" '
+                          f'transform="rotate({f(math.degrees(t))} {f(x + 10 * math.cos(t))} {f(ground - h + 10 * math.sin(t))})" fill="#f6c534" opacity="0.95"/>')
+        a.body.append(f'<circle cx="{x}" cy="{f(ground - h)}" r="6" fill="#6a3a1a"/>')
+        a.grow_end('pop', 0.2 + k * 0.3)
+    for k in range(30):
+        a.grow_start()
+        a.dots(rng.uniform(40, 760), rng.uniform(40, ground - 20), 3, 1, '#fff0a8', (2, 3.5), 0.95)
+        a.grow_end('glow', -rng.uniform(0, 3.5))
+
+
+def _grow_autumn(a, ground):
+    rng = a.rng
+    for k in range(12):
+        cx = rng.uniform(60, 740)
+        h = rng.uniform(14, 34)
+        w = h * rng.uniform(0.6, 0.9)
+        a.grow_start()
+        a.line(f'M{f(cx)} {f(ground)} L{f(cx)} {f(ground - h)}', 1.6, 0.9)
+        a.body.append(f'<path d="M{f(cx - w)} {f(ground - h)} C{f(cx - w)} {f(ground - h - w * 1.1)} {f(cx + w)} {f(ground - h - w * 1.1)} {f(cx + w)} {f(ground - h)} Z" '
+                      f'fill="{rng.choice(["#c8452a", "#e0702a", "#e8a33a"])}" opacity="0.9"/>')
+        a.dots(cx, ground - h - w * 0.45, w * 0.5, 3, WHITE, (1, 2), 0.9)
+        a.grow_end('pop', 0.2 + k * 0.22)
+    for k in range(18):
+        x, y = rng.uniform(40, 760), rng.uniform(20, 260)
+        c = rng.choice(['#e0702a', '#c8452a', '#e8a33a'])
+        a.grow_start()
+        a.body.append(f'<path d="M{f(x)} {f(y)} c-6 -4 -6 -12 0 -16 c6 4 6 12 0 16Z" fill="{c}" opacity="0.9" transform="rotate({f(rng.uniform(0, 180))} {f(x)} {f(y)})"/>')
+        a.grow_end('fall', -rng.uniform(0, 7))
 
 
 ART = {
@@ -709,6 +808,10 @@ ART = {
     'season-spring': season_spring,
     'season-summer': season_summer,
     'season-autumn': season_autumn,
+    'season-winter-more': lambda: season_winter(True),
+    'season-spring-more': lambda: season_spring(True),
+    'season-summer-more': lambda: season_summer(True),
+    'season-autumn-more': lambda: season_autumn(True),
 }
 
 if __name__ == '__main__':

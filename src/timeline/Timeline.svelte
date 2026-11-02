@@ -30,6 +30,7 @@
   import { leafFor } from './leaves.js';
   import Pick from './Pick.svelte';
   import MoonCycle from './MoonCycle.svelte';
+  import Spiral3D from './Spiral3D.svelte';
   import { POINTS, QUARTERS, heatAt, lunarNewYear } from './compass.js';
   import { seasonColours } from '../theme/season.js';
   import { sunLongitude } from '../calendar/sun.js';
@@ -128,9 +129,11 @@
   const SEASON_NAME = { 270: 'winter', 0: 'spring', 90: 'summer', 180: 'autumn' };
   // the seasons as one band round the rim, each painting its quarter and
   // dissolving into the next at the edges
-  const IMG_R = 1650;
+  const IMG_R = 4400;
+  let seasonHover = null;
   const BAND_IN = 220;
-  const BAND_OUT = 360;
+  const BAND_OUT = 2600;
+  const RAY_OUT = 900;
   const annulus = (a0, a1, r0, r1) =>
     `M${r0 * Math.cos(a0)} ${r0 * Math.sin(a0)}L${r1 * Math.cos(a0)} ${r1 * Math.sin(a0)}A${r1} ${r1} 0 0 1 ${r1 * Math.cos(a1)} ${r1 * Math.sin(a1)}L${r0 * Math.cos(a1)} ${r0 * Math.sin(a1)}A${r0} ${r0} 0 0 0 ${r0 * Math.cos(a0)} ${r0 * Math.sin(a0)}Z`;
   function buildRose() {
@@ -155,7 +158,7 @@
       return { points, quarters: quarters.map((q) => ({ ...q, hidden: true })), reach, solstices: [], halfW, halfH, rim };
     }
     // the words stand just beyond each turning's image
-    for (const p of points) p.at = Math.max(p.outer + 190, rim + BAND_OUT + 40);
+    for (const p of points) p.at = p.outer + 190;
     const ext = [...points.map((p) => ({ a: p.a, r: p.at })), ...quarters.map((q) => ({ a: q.a, r: q.outer + 120 }))];
     const halfW = Math.max(...ext.map((e) => Math.abs(e.r * Math.cos(e.a)) + (Math.abs(Math.cos(e.a)) > 0.35 ? 680 : 340)));
     const halfH = Math.max(...ext.map((e) => Math.abs(e.r * Math.sin(e.a)) + (Math.abs(Math.sin(e.a)) > 0.35 ? 170 : 90)));
@@ -217,6 +220,27 @@
       )
     : [];
 
+  // the past: m lunations back from the first, at the same angular pace,
+  // its radius closing in towards the heart (never into the hub's words)
+  const PAST_FLOOR = 600;
+  function pastAt(m) {
+    const n0 = theta.length;
+    const step = n0 > 1 ? (theta[n0 - 1] - theta[0]) / (n0 - 1) : 0.5;
+    const a = theta[0] - m * step;
+    const r = PAST_FLOOR + (R0 - PAST_FLOOR) * Math.exp(-m / 16);
+    return { x: r * Math.cos(a), y: r * Math.sin(a), r };
+  }
+  $: firstIndex = lunations[0]?.index ?? 84;
+  $: pastMoons = theta.length ? Array.from({ length: firstIndex - 1 }, (_, k) => {
+    const m = k + 1;
+    const p = pastAt(m);
+    return { index: firstIndex - m, x: p.x, y: p.y, r: Math.max(10, (D / 2) * 0.32 * (p.r / R0)) };
+  }) : [];
+  $: pastPath = theta.length ? Array.from({ length: (firstIndex - 1) * 8 + 1 }, (_, k) => {
+    const p = pastAt(k / 8);
+    return `${k ? 'L' : 'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
+  }).join('') : '';
+
   // the line stops short of each moon's circle, so nothing crosses it
   function gap(i) {
     const a = at(i);
@@ -236,6 +260,9 @@
   let cam = { x: 0, y: 0, ls: Math.log(0.2), tilt: 0 };
   // a first step towards 3D: the whole spiral laid back in perspective
   let tilted = false;
+  // the spiral as a 3D cone, rising through time
+  let three = false;
+  $: if (level === 1 && three) three = false;
   function toggleTilt() {
     tilted = !tilted;
     gsap.to(cam, { tilt: tilted ? 52 : 0, duration: 1.2, ease: 'sine.inOut', onUpdate: apply });
@@ -1010,7 +1037,17 @@
     </filter>
   </svg>
   <div class="threads"><Mycelium opacity={0.2} /></div>
-  <div class="world" class:phone class:small bind:this={world} data-level={level}>
+  {#if three && level === 0}
+    <Spiral3D
+      known={lunations.map((l, i) => ({ index: l.index, angle: theta[i], heat: l.heat, now: l.now }))}
+      {firstIndex}
+      onPick={(i) => ((three = false), go(1, i))}
+      onFlat={() => (three = false)}
+      quarters={rose?.quarters ?? []}
+      points={rose?.points ?? []}
+    />
+  {/if}
+  <div class="world" class:three={three && level === 0} class:phone class:small bind:this={world} data-level={level}>
     {#if n && compass && rose}
       <svg class="path compass" viewBox="-5000 -5000 10000 10000" aria-hidden="true">
         <defs>
@@ -1026,8 +1063,9 @@
         </defs>
         <!-- the sun: the spiral sits at its golden heart, faint rays all round -->
         <radialGradient id="sun-heart" cx="0" cy="0" r={rose.reach * 0.62} gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#ffe7a0" stop-opacity="0.75" />
-          <stop offset="0.45" stop-color="#ffefc4" stop-opacity="0.35" />
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.9" />
+          <stop offset="0.2" stop-color="#fff3cc" stop-opacity="0.75" />
+          <stop offset="0.55" stop-color="#ffe39a" stop-opacity="0.4" />
           <stop offset="1" stop-color="#fff6dc" stop-opacity="0" />
         </radialGradient>
         <circle class="sun-heart" r={rose.reach * 0.62} fill="url(#sun-heart)" />
@@ -1039,7 +1077,8 @@
         <radialGradient id="band-fade" cx="0" cy="0" r={rose.rim + BAND_OUT} gradientUnits="userSpaceOnUse">
           <stop offset={(rose.rim - BAND_IN) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="0" />
           <stop offset={(rose.rim - BAND_IN * 0.3) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="1" />
-          <stop offset={(rose.rim + BAND_OUT * 0.55) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="1" />
+          <stop offset={(rose.rim + 400) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="1" />
+          <stop offset={(rose.rim + 1300) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="0.5" />
           <stop offset="1" stop-color="#fff" stop-opacity="0" />
         </radialGradient>
         <!-- a drawing for each turning of the sun, on the circle's edge, its
@@ -1051,38 +1090,39 @@
             <mask id="band-{pt.lon}" maskUnits="userSpaceOnUse" x="-5000" y="-5000" width="10000" height="10000">
               <!-- its quarter, fading in and out across the band, and in steps
                    into its neighbours on either side -->
-              <path d={annulus(pt.a - 0.42, pt.a + 0.42, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" />
+              <path d={annulus(pt.a - 0.66, pt.a + 0.66, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" />
               {#each [0.8, 0.6, 0.4, 0.22, 0.1] as o, k}
-                <path d={annulus(pt.a + 0.42 + k * 0.07, pt.a + 0.49 + k * 0.07, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
-                <path d={annulus(pt.a - 0.49 - k * 0.07, pt.a - 0.42 - k * 0.07, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
+                <path d={annulus(pt.a + 0.66 + k * 0.05, pt.a + 0.71 + k * 0.05, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
+                <path d={annulus(pt.a - 0.71 - k * 0.05, pt.a - 0.66 - k * 0.05, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
               {/each}
             </mask>
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <g class="season-art" mask="url(#band-{pt.lon})">
+            <g class="season-art" class:awake={seasonHover === pt.lon} mask="url(#band-{pt.lon})" on:mouseenter={() => (seasonHover = pt.lon)} on:mouseleave={() => (seasonHover = null)}>
               <image href="/images/concepts/season-{SEASON_NAME[pt.lon]}.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} preserveAspectRatio="xMidYMid slice" />
+              <!-- hovered, the season grows: snow falls, shoots sprout, mushrooms rise -->
+              {#if seasonHover === pt.lon}
+                <image class="more" href="/images/concepts/season-{SEASON_NAME[pt.lon]}-more.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} preserveAspectRatio="xMidYMid slice" />
+              {/if}
             </g>
           {/each}
         {/if}
-        <!-- its rays shine out from the rim of the whole circle: slim beams of
-             light, gold at the rim and fading into the paper, softly blurred,
-             over a glowing corona -->
-        <radialGradient id="ray-fade" cx="0" cy="0" r={rose.rim + 230} gradientUnits="userSpaceOnUse">
-          <stop offset={(rose.rim - 10) / (rose.rim + 230)} stop-color="#f4b84a" stop-opacity="0.9" />
-          <stop offset={(rose.rim + 60) / (rose.rim + 230)} stop-color="#f7c96a" stop-opacity="0.55" />
-          <stop offset="1" stop-color="#fff2cc" stop-opacity="0" />
+        <!-- its light: bright white at the heart, warming to yellow, and soft
+             shafts of it reaching out past the rim, blurred, fading into the paper -->
+        <radialGradient id="ray-fade" cx="0" cy="0" r={rose.rim + RAY_OUT} gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.95" />
+          <stop offset="0.3" stop-color="#fff4cf" stop-opacity="0.8" />
+          <stop offset={rose.rim / (rose.rim + RAY_OUT)} stop-color="#f9cf6a" stop-opacity="0.6" />
+          <stop offset="1" stop-color="#f6c45a" stop-opacity="0" />
         </radialGradient>
-        <filter id="ray-glow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox">
-          <feGaussianBlur stdDeviation="9" />
+        <filter id="ray-bloom" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="70" />
         </filter>
-        <circle class="corona" r={rose.rim + 6} filter="url(#ray-glow)" />
-        <g class="sun-rays" filter="url(#ray-glow)">
-          {#each Array(48) as _, k}
-            {@const a = (k * Math.PI) / 24 + (k % 2 ? 0.02 : 0)}
-            {@const r0 = rose.rim - 10}
-            {@const r1 = r0 + 230 * (k % 4 === 0 ? 1 : k % 2 ? 0.45 : 0.7)}
-            {@const w = (k % 4 === 0 ? 26 : k % 2 ? 12 : 18) / r0}
-            {@const m = r0 + (r1 - r0) * 0.3}
-            <path d="M{r0 * Math.cos(a - w)} {r0 * Math.sin(a - w)}Q{m * Math.cos(a - w * 0.6)} {m * Math.sin(a - w * 0.6)} {r1 * Math.cos(a)} {r1 * Math.sin(a)}Q{m * Math.cos(a + w * 0.6)} {m * Math.sin(a + w * 0.6)} {r0 * Math.cos(a + w)} {r0 * Math.sin(a + w)}Z" />
+        <g class="sun-rays" filter="url(#ray-bloom)">
+          {#each Array(36) as _, k}
+            {@const a = (k * Math.PI) / 18 + (k % 3 ? 0.03 : 0)}
+            {@const r1 = rose.rim + RAY_OUT * (k % 4 === 0 ? 1 : k % 2 ? 0.55 : 0.78)}
+            {@const w = k % 4 === 0 ? 0.07 : 0.045}
+            <path d="M0 0L{r1 * Math.cos(a - w)} {r1 * Math.sin(a - w)}Q{(r1 + 60) * Math.cos(a)} {(r1 + 60) * Math.sin(a)} {r1 * Math.cos(a + w)} {r1 * Math.sin(a + w)}Z" />
           {/each}
         </g>
         <!-- the cross of solstices and equinoxes, never over the spiral or its words -->
@@ -1126,6 +1166,13 @@
         <g class="stipple">
           {#each specks as d}<circle cx={d.x} cy={d.y} style="--r: {d.r}" />{/each}
         </g>
+        <!-- the past, back to Lunation 1: the spiral carries on inwards in
+             faint, tightening rings, like a tree's, until Holons holds what
+             happened in them -->
+        <path class="past-thread" d={pastPath} />
+        {#each pastMoons as m}
+          <circle class="past-moon" cx={m.x} cy={m.y} r={m.r}><title>Lunation {m.index}</title></circle>
+        {/each}
         <!-- the line in fine ink -->
         <path class="thread" d={stretch(0, n - 1, 600)} />
         {#each wheelDays as w}
@@ -1539,7 +1586,7 @@
   {/if}
 
   <!-- a few ways to look at the year -->
-  <form class="filters" on:submit|preventDefault aria-label="Filter the moons">
+  <form class="filters" class:hidden-close={level === 1} on:submit|preventDefault aria-label="Filter the moons" use:toTop>
     <span>show moons</span>
     <Pick bind:value={lean} label="Leaning" options={[{ value: '', label: 'leaning anywhere' }, ...['personal', 'local', 'global'].map((v) => ({ value: v, label: `leaning ${v}` }))]} />
     <Pick bind:value={capital} label="Goal" options={[{ value: '', label: 'for any goal' }, ...CAPITALS.map((c) => ({ value: c, label: `for ${c.toLowerCase()} capital` }))]} />
@@ -1577,9 +1624,9 @@
   <!-- the compass's key, and its switch -->
   {#if n && level === 0}
     <aside class="key">
-      <button type="button" class="key-switch" on:click={toggleTilt} aria-pressed={tilted}>
-        <svg viewBox="-10 -10 20 20" aria-hidden="true"><ellipse rx="8" ry="4" /><path d="M0 -8V4" /></svg>
-        {tilted ? 'lay the spiral flat' : 'tilt the spiral'}
+      <button type="button" class="key-switch" on:click={() => (three = !three)} aria-pressed={three}>
+        <svg viewBox="-10 -10 20 20" aria-hidden="true"><ellipse rx="8" ry="3" cy="4" /><ellipse rx="5" ry="2" cy="-1" /><ellipse rx="2.5" ry="1" cy="-5" /></svg>
+        {three ? 'the flat spiral' : 'the spiral in 3D'}
       </button>
       <button type="button" class="key-switch" on:click={toggleCompass} aria-pressed={compass}>
         <svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="8" /><path d="M0 -8V8M-8 0H8" /></svg>
@@ -1600,7 +1647,7 @@
     </aside>
   {/if}
 
-  <p class="hint">
+  <p class="hint" class:hidden3d={three}>
     {level === 0 ? 'scroll in to travel moon by moon' : 'scroll on through the moons · scroll back quickly for the whole year'}
     {#if !live}<br /><span>draft themes · Holons not connected yet{member ? ' · member view' : ''}</span>{/if}
   </p>
@@ -1725,6 +1772,11 @@
     opacity: 0;
   }
 
+  .world.three {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .bands path {
     fill: none;
     stroke-linecap: butt;
@@ -1743,6 +1795,19 @@
     fill: color-mix(in srgb, var(--bark-900) 22%, transparent);
   }
 
+  .past-thread {
+    fill: none;
+    stroke: color-mix(in srgb, var(--bark-900) 22%, transparent);
+    stroke-width: calc(0.8px * var(--inv, 1));
+  }
+
+  .path .past-moon {
+    fill: color-mix(in srgb, #fffdf8 70%, transparent);
+    stroke: color-mix(in srgb, var(--bark-900) 25%, transparent);
+    stroke-width: calc(0.6px * var(--inv, 1));
+    pointer-events: visiblePainted;
+  }
+
   .thread {
     stroke: color-mix(in srgb, var(--bark-900) 85%, transparent);
     stroke-width: calc(1px * var(--inv, 1));
@@ -1754,15 +1819,28 @@
     stroke: none;
   }
 
+  /* the rays fade in as the page opens, then breathe slowly */
   .sun-rays {
-    opacity: 1;
+    opacity: 0.75;
+    animation: rays-in 2.4s ease-out both, rays-breathe 9s ease-in-out 2.4s infinite;
   }
 
-  .corona {
-    fill: none;
-    stroke: #ffd98a;
-    stroke-width: 70;
-    opacity: 0.5;
+  @keyframes rays-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes rays-breathe {
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sun-rays {
+      animation: none;
+    }
   }
 
   /* each season a large painting in its quarter of the circle, faded
@@ -1772,12 +1850,13 @@
   .season-art {
     pointer-events: visiblePainted;
     cursor: default;
-    opacity: 0.7;
+    opacity: 0.32;
     transition: opacity 0.8s ease;
   }
 
-  .season-art:hover {
-    opacity: 0.95;
+  .season-art:hover,
+  .season-art.awake {
+    opacity: 0.8;
   }
 
   /* the threads below the ground: faint, and bright when the drawing wakes */
@@ -1906,6 +1985,14 @@
     gap: calc(2px * var(--inv, 1));
     white-space: nowrap;
     text-align: center;
+  }
+
+  /* a soft patch of paper behind each turning's words, so a painting never
+     runs through them */
+  .cmp > div {
+    padding: calc(4px * var(--inv, 1)) calc(10px * var(--inv, 1));
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--tl-paper, #fffaf2) 92%, transparent) 55%, transparent 100%);
   }
 
   .cmp b,
@@ -3736,16 +3823,17 @@
     fill: var(--bark-900);
   }
 
+  /* in the header row, beside the logo */
   .filters {
     position: fixed;
-    top: 92px;
-    left: 24px;
-    z-index: 5;
+    top: 30px;
+    left: 230px;
+    z-index: 1200;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 4px 12px;
-    max-width: calc(100vw - 200px);
+    max-width: calc(100vw - 460px);
     font: 300 13.5px 'Playpen Sans', 'Quicksand', sans-serif;
     color: var(--bark-700, #5a4632);
   }
@@ -3776,8 +3864,16 @@
     cursor: pointer;
   }
 
-  .close .filters {
+  .filters.hidden-close {
     display: none;
+  }
+
+  @media (max-width: 900px) {
+    .filters {
+      top: 64px;
+      left: 16px;
+      max-width: calc(100vw - 32px);
+    }
   }
 
   .hint {
@@ -3789,6 +3885,10 @@
     font: 300 12px 'Playpen Sans', 'Quicksand', sans-serif;
     color: var(--bark-600, #7a6550);
     text-align: right;
+  }
+
+  .hint.hidden3d {
+    display: none;
   }
 
   .close .hint {
