@@ -161,6 +161,25 @@
   // which way a word leans out from its point, so it grows away from the spiral
   const anchor = (a) => `${Math.cos(a) > 0.35 ? 0 : Math.cos(a) < -0.35 ? -100 : -50}%, ${Math.sin(a) > 0.35 ? 0 : Math.sin(a) < -0.35 ? -100 : -50}%`;
   $: newYears = lunations.filter((l) => l.lny);
+  // stipple along the outside of the band, denser where the year is warm
+  $: specks = theta.length
+    ? (() => {
+        let k = 11;
+        const r = () => ((k = (k * 16807) % 2147483647) / 2147483647);
+        const out_ = [];
+        // soft clouds here and there along the outside, thinning outwards
+        for (let t = 0.6; t <= n - 1.6; t += 1.4 + r() * 1.6) {
+          const size = 14 + Math.round(r() * 14);
+          for (let j = 0; j < size; j++) {
+            const g = (r() + r() + r()) / 3 - 0.5;
+            const p = out(t + g * 0.35, 40 + r() ** 2.2 * 75);
+            out_.push({ x: p.x, y: p.y, r: 0.45 + r() * 0.7 });
+          }
+        }
+        return out_;
+      })()
+    : [];
+
   // the band in small steps, each in the warmth of its own days, so its
   // colour flows along the year instead of changing moon by moon
   $: bandBits = lunations.flatMap((l, i) =>
@@ -850,16 +869,24 @@
         <!-- the line, each lunation's stretch in its season's colour -->
         <!-- one band, its colour flowing with the warmth of the year, and one
              thread along it; the moons sit on top -->
-        <g class="bands">
+        <!-- the band as watercolour: a pale wide wash, a deeper core laid a
+             little off, and the pigment pooling at both edges -->
+        <!-- one soft wash, laid as one, so its pieces never darken where they meet -->
+        <g class="bands wash">
           {#each bandBits as b}<path d={stretch(b.t0, b.t1, 4)} style="stroke: {b.colour}" />{/each}
         </g>
+        <!-- stipple gathering just outside the band, as in the diagrams -->
+        <g class="stipple">
+          {#each specks as d}<circle cx={d.x} cy={d.y} style="--r: {d.r}" />{/each}
+        </g>
+        <!-- the line in fine ink -->
         <path class="thread" d={stretch(0, n - 1, 600)} />
         {#each wheelDays as w}
           {@const p = at(w.t)}
           <g class="wheel-day" class:turn={w.turn} style="transform: translate({p.x}px, {p.y}px) scale(var(--inv, 1))">
             <title>{w.title}, {day(w.at)}</title>
-            <circle r="6.5" />
-            {#each Array(8) as _, k}<path d="M0 0L{6.5 * Math.cos((k * Math.PI) / 4)} {6.5 * Math.sin((k * Math.PI) / 4)}" />{/each}
+            <circle r="4.2" />
+            {#each Array(8) as _, k}<path d="M0 0L{4.2 * Math.cos((k * Math.PI) / 4)} {4.2 * Math.sin((k * Math.PI) / 4)}" />{/each}
           </g>
         {/each}
         <!-- and on beyond the hundredth: the spiral fades out into the stars -->
@@ -913,7 +940,9 @@
         on:click={() => go(1, i)}
         aria-label="Lunation {l.index}: {l.name}, from {day(l.start)}"
       >
+        <span class="wash-blob" style="--dx: {((i * 37) % 9) - 4}%; --dy: {((i * 53) % 9) - 4}%"></span>
         <Ring seed={i + 40} />
+        <span class="inner"><Ring seed={i + 90} /></span>
         <span class="num">{l.index}</span>
         <span class="when">{l.now ? 'now' : day(l.start)}</span>
       </button>
@@ -1354,23 +1383,33 @@
     stroke-linecap: round;
   }
 
-  .bands {
-    opacity: 0.85;
-  }
-
   .bands path {
-    stroke-width: 56;
+    fill: none;
     stroke-linecap: butt;
   }
 
+  .bands.wash {
+    opacity: 0.55;
+  }
+
+  .bands.wash path {
+    stroke-width: 50;
+  }
+
+  .stipple circle {
+    r: calc(var(--r) * 1px * var(--inv, 1));
+    fill: color-mix(in srgb, var(--bark-900) 22%, transparent);
+  }
+
   .thread {
-    stroke: color-mix(in srgb, var(--bark-900) 40%, transparent);
-    stroke-width: calc(1.2px * var(--inv, 1));
+    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke-width: calc(1px * var(--inv, 1));
   }
 
   /* --- the seasons compass ---------------------------------------------------- */
   .quarter {
-    opacity: 0.16;
+    opacity: 0.13;
+    mix-blend-mode: multiply;
   }
 
   .axis {
@@ -1728,15 +1767,41 @@
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: radial-gradient(circle closest-side, #fffdf8 0%, color-mix(in srgb, #fffdf8 65%, var(--glow)) 55%, var(--glow) 100%);
-    box-shadow: 0 10px 36px color-mix(in srgb, var(--glow2) 60%, transparent);
+    background: radial-gradient(circle closest-side, #fffdf8 0%, #fffdf8 72%, color-mix(in srgb, #fffdf8 70%, var(--glow)) 100%);
     color: inherit;
     cursor: pointer;
     transition: box-shadow 0.3s ease;
   }
 
-  .moon:hover {
-    box-shadow: 0 10px 60px var(--glow2);
+  /* a moon in the diagrams' hand: a wash laid a little off, its ink ring,
+     a fainter ring within, and a crescent of stipple */
+  .wash-blob {
+    position: absolute;
+    inset: -7%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, var(--glow2) 0%, color-mix(in srgb, var(--glow2) 60%, transparent) 70%, transparent 100%);
+    mix-blend-mode: multiply;
+    transform: translate(var(--dx), var(--dy));
+    transition: opacity 0.4s ease;
+  }
+
+  .inner {
+    position: absolute;
+    inset: 11%;
+    opacity: 0.45;
+  }
+
+  .inner,
+  /* close up, the moon is the page's paper: its drawing steps aside */
+  .close .moon .inner,
+  .close .moon .wash-blob {
+    opacity: 0;
+  }
+
+  .moon:hover .wash-blob {
+    opacity: 1.6;
+    filter: saturate(1.3);
   }
 
   .num {
@@ -1748,8 +1813,14 @@
     color: var(--bark-700, #5a4632);
   }
 
-  .now {
-    box-shadow: 0 0 0 calc(3px * var(--inv, 1)) var(--rust, #c4463c), 0 10px 50px color-mix(in srgb, var(--glow2) 80%, transparent);
+  /* drawn just inside the moon's own edge, so the line never crosses it */
+  .now::after {
+    content: '';
+    position: absolute;
+    inset: 3%;
+    border: calc(1.6px * var(--inv, 1)) solid var(--rust, #c4463c);
+    border-radius: 50%;
+    pointer-events: none;
   }
 
   .now .when {
@@ -1766,8 +1837,13 @@
     transition: box-shadow 0.3s ease, opacity 0.5s ease, filter 0.5s ease;
   }
 
-  .hundred {
-    box-shadow: 0 0 0 10px color-mix(in srgb, var(--glow) 60%, transparent), 0 0 120px var(--glow2);
+  .hundred::after {
+    content: '';
+    position: absolute;
+    inset: 4%;
+    border: calc(0.8px * var(--inv, 1)) solid color-mix(in srgb, var(--bark-900) 55%, transparent);
+    border-radius: 50%;
+    pointer-events: none;
   }
 
   /* --- close up ----------------------------------------------------------------- */
