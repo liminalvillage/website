@@ -1380,7 +1380,7 @@
   {#if n && level === 1}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-    <nav class="map" aria-label="The year in small">
+    <nav class="map" aria-label="The year in small" use:toTop>
       <svg viewBox="-60 -60 120 120">
         {#if compass}
           {#each QUARTERS as q}<path class="map-quarter" d={wedge(lonAngle(q.from), lonAngle(q.to), 58)} style="fill: {q.colour}" />{/each}
@@ -2078,7 +2078,7 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    padding-right: 130px;
+    padding-right: 24px;
   }
 
   .title h2 {
@@ -2661,7 +2661,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    padding: 6px 140px 0 0;
+    padding: 6px 24px 0 0;
   }
 
   .line-head > span {
@@ -3232,19 +3232,20 @@
 
   /* --- the map of the spiral, top right -------------------------------------- */
   /* the map sits in the top left corner, under the logo */
+  /* the small map and the timeline toggle live in the header's top right */
   .map {
     position: fixed;
-    top: 90px;
-    right: 24px;
-    z-index: 5;
-    width: 104px;
+    top: 10px;
+    right: 22px;
+    z-index: 1100;
+    width: 76px;
     text-align: center;
   }
 
   .map svg {
     display: block;
-    width: 104px;
-    height: 104px;
+    width: 76px;
+    height: 76px;
     overflow: visible;
   }
 
@@ -3291,8 +3292,8 @@
 
   .line-toggle {
     position: fixed;
-    top: 120px;
-    right: 142px;
+    top: 16px;
+    right: 112px;
     z-index: 1200;
     display: grid;
     justify-items: center;
@@ -3305,14 +3306,13 @@
   }
 
   .line-toggle.alone {
-    top: 42px;
     right: 24px;
   }
 
   .line-toggle svg {
-    width: 46px;
-    height: 46px;
-    padding: 10px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
     box-sizing: border-box;
     border: 1px solid color-mix(in srgb, var(--bark-900) 22%, transparent);
     border-radius: 50%;
@@ -3440,11 +3440,11 @@
 
     .map,
     .map svg {
-      width: 86px;
+      width: 64px;
     }
 
     .map svg {
-      height: 86px;
+      height: 64px;
     }
 
     .hint,
