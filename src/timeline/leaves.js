@@ -77,5 +77,23 @@ export const LEAVES = {
     shape: 'M0 -2 C-14 -10 -12 -26 -4 -26 C-1 -26 0 -23 0 -21 C0 -23 1 -26 4 -26 C12 -26 14 -10 0 -2Z',
     veins: ['M0 -4 L0 -20', 'M0 -12 L-5 -16', 'M0 -12 L5 -16'],
   },
+  // a holy day: a soft cross, four petals, kept in the purple of the Miro
+  cross: {
+    pigment: '#7d4f9e',
+    shape: 'M-2.4 -2 C-2.6 -8 -2.6 -11 -2.2 -12 C-6 -12 -9 -12 -10 -14.6 C-9 -17 -6 -17.2 -2.2 -17.2 C-2.6 -21 -2.6 -27 0 -29 C2.6 -27 2.6 -21 2.2 -17.2 C6 -17.2 9 -17 10 -14.6 C9 -12 6 -12 2.2 -12 C2.6 -11 2.6 -8 2.4 -2 C1.4 0 -1.4 0 -2.4 -2Z',
+    veins: ['M0 -3 L0 -26', 'M-8 -14.6 L8 -14.6'],
+  },
+  // an event or a gathering: a soft burst
+  burst: {
+    pigment: '#d7745c',
+    shape: 'M0 -1 Q-2 -7 -8 -6 Q-6 -11 -12 -14 Q-6 -16 -8 -22 Q-2 -20 0 -27 Q2 -20 8 -22 Q6 -16 12 -14 Q6 -11 8 -6 Q2 -7 0 -1Z',
+    veins: ['M0 -14 L0 -23', 'M0 -14 L7 -18', 'M0 -14 L-7 -18', 'M0 -14 L6 -8', 'M0 -14 L-6 -8'],
+  },
+  // a birthday: a round, friendly star
+  birthday: {
+    pigment: '#d9709e',
+    shape: 'M0 -28 C2 -22 4 -20 10 -19.5 C5.5 -16 4.5 -13 6.2 -6.5 C1.6 -9.6 -1.6 -9.6 -6.2 -6.5 C-4.5 -13 -5.5 -16 -10 -19.5 C-4 -20 -2 -22 0 -28Z',
+    veins: ['M0 -6 L0 -1'],
+  },
 };
 export const leafFor = (symbol) => LEAVES[symbol] ?? LEAVES.gathering;

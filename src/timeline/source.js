@@ -36,15 +36,38 @@ import { sunTimes, sunLongitude } from '../calendar/sun.js';
 
 const DAY = 86_400_000;
 
-// The kinds of time the map brings together
+// The kinds of time, in Jillian's scale of permanence, from the most
+// enduring to the most responsive: the sky and the seasons, the land's
+// cycles, culture and its holy days, people and their commitments,
+// organisation and money, and intentions and daily choices. Eight bands on
+// her scale, gathered into six, as Laura and Jillian asked (four to six
+// main categories, each with its own colour, switched on and off by role).
+// Permanence is not importance: the scale shows what should inform what.
 export const KINDS = {
-  astronomical: { label: 'astronomical', note: 'moons, solstices, equinoxes, the sky', colour: '#5f7fae', leaf: 'star' },
-  ecological: { label: 'ecological', note: 'the land: pruning, sowing, the harvests', colour: '#7fa65a', leaf: 'eco' },
-  cultural: { label: 'cultural', note: 'feasts, festivals, holidays, deadlines', colour: '#d7745c', leaf: 'gathering' },
-  relational: { label: 'relational', note: 'family, visits, celebrations, care', colour: '#c25a72', leaf: 'heart' },
-  economic: { label: 'economic & organisational', note: 'residencies, crowdfunding, rentals, structures', colour: '#c9a54a', leaf: 'hex' },
-  developmental: { label: 'developmental', note: 'reflection, preparation, integration, sensing ahead', colour: '#8a74b0', leaf: 'vision' },
+  // colours and icons from Jillian's Scale of Permanence sheet
+  astronomical: { label: 'sky & seasons', note: 'moons, solstices, equinoxes, the climate of the year', colour: '#46557a', leaf: 'star', icon: 'sparkle' },
+  ecological: { label: 'land', note: 'the land and living cycles: pruning, sowing, harvests', colour: '#7d9466', leaf: 'eco', icon: 'sprig' },
+  cultural: { label: 'culture & holy days', note: 'feasts, holy days, festivals, school and civic calendars', colour: '#b5694a', leaf: 'gathering', icon: 'bunting' },
+  relational: { label: 'people', note: 'family, guests, children, celebrations, care', colour: '#c49a3c', leaf: 'heart', icon: 'people' },
+  economic: { label: 'organisation & economy', note: 'hosting seasons, residencies, rentals, funding, structures', colour: '#3f6f6e', leaf: 'hex', icon: 'cubes' },
+  developmental: { label: 'intentions & daily choices', note: 'reflection, sensing ahead, preparation, responsive planning', colour: '#6b5a8e', leaf: 'vision', icon: 'spiral' },
 };
+
+// Everything to do with the children shows in one colour, at a glance
+export const CHILDREN = '#5f9fd6';
+
+// Which mark a dated thing takes, from the Miro legend Laura and Jillian
+// keep: the (purple) cross for holy days, a burst for events and
+// gatherings, a star for birthdays; the land's work keeps its plant leaf.
+const HOLY = /\b(sant[o'’ ]|san |santa |easter|pasqua|pasquetta|christmas|natale|immacolata|candelora|venuta|ognissanti|befana|ferragosto|assumption|epiphany|nativity)/i;
+const EVENT = /festival|carnevale|quintana|joust|gathering|party|conference|fair\b|fiera|celebration|festa/i;
+export function markFor(it) {
+  if (it.wheel || it.question) return it.symbol;
+  if (/birthday|compleanno/i.test(it.title)) return 'birthday';
+  if (HOLY.test(it.title)) return 'cross';
+  if (EVENT.test(it.title)) return 'burst';
+  return it.symbol;
+}
 
 // How an item stands: remembered (it happened), committed (agreed, by whom,
 // with what), imagined (considered, hoped for, explored). The land's own
@@ -189,7 +212,7 @@ export const SAMPLE_STRETCHES = [
   { from: '2027-05-01', to: '2027-06-15', title: 'Crowdfunding', kind: 'economic', status: 'imagined' },
   { from: '2027-05-10', to: '2027-06-15', title: 'Strawberries', kind: 'ecological' },
   { from: '2027-06-01', to: '2027-07-10', title: 'Mulberries', kind: 'ecological' },
-  { from: '2027-06-10', to: '2027-09-14', title: 'School summer holidays', where: 'Le Marche', kind: 'cultural' },
+  { from: '2027-06-10', to: '2027-09-14', title: 'School summer holidays', where: 'Le Marche', kind: 'cultural', children: true },
   { from: '2027-07-01', to: '2027-08-31', title: 'Summer rentals', kind: 'economic', status: 'imagined' },
   { from: '2027-09-10', to: '2027-10-10', title: 'Grape harvest', kind: 'ecological' },
   { from: '2027-10-20', to: '2027-11-30', title: 'Olive harvest and pressing', kind: 'ecological' },
@@ -202,6 +225,8 @@ export const SAMPLE_NOTES = [
   { on: '2027-02-01T10:00:00Z', title: 'Crowdfunding: spring or autumn?', kind: 'economic', status: 'imagined', question: true },
   { on: '2027-03-15T10:00:00Z', title: 'Beds for volunteers and guests this summer?', kind: 'relational', status: 'imagined', question: true },
   { on: '2027-06-20T10:00:00Z', title: 'Midsummer gathering', kind: 'relational', status: 'committed' },
+  { on: '2027-04-18T10:00:00Z', title: "A child's birthday", kind: 'relational', status: 'committed', children: true },
+  { on: '2027-09-15T08:00:00Z', title: 'Back to school (about)', kind: 'cultural', children: true },
 ];
 // Who is here, and for how long: for members only (Holons' permissions);
 // visitors only ever see the lantern's code words. Roles, not names.
@@ -251,7 +276,7 @@ function pinsOf(l, qs) {
     const at = Date.parse(d.on);
     if (at >= l.start && at <= l.end) pins.push({ id: `note-${l.index}-${k}`, sample: true, ...d, at, symbol: d.question ? 'question' : KINDS[d.kind].leaf });
   });
-  return pins.map((p) => ({ ...p, lunation: l.index, q: qOf(p.at), visibility: 'public', pinned: true }));
+  return pins.map((p) => ({ ...p, symbol: markFor(p), lunation: l.index, q: qOf(p.at), visibility: 'public', pinned: true }));
 }
 
 // --- Holons' quests, as the timeline reads them ------------------------------

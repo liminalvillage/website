@@ -25,9 +25,8 @@
   import { fly as rise } from 'svelte/transition';
   import gsap from 'gsap';
   import Ring from '../journey/Ring.svelte';
-  import LunationArt from './LunationArt.svelte';
   import Mycelium from '../lib/Mycelium.svelte';
-  import { loadTimeline, SPANS, PEOPLE, KINDS, STATUS, stretches, stays, festivals } from './source.js';
+  import { loadTimeline, SPANS, PEOPLE, KINDS, STATUS, CHILDREN, stretches, stays, festivals } from './source.js';
   import { leafFor } from './leaves.js';
   import Pick from './Pick.svelte';
   import { POINTS, QUARTERS, heatAt, lunarNewYear } from './compass.js';
@@ -340,10 +339,18 @@
     return false;
   }
   function onWheel(e) {
-    if (canScroll(e.target, e.deltaY)) return;
+    const sideways = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    // a pinch (the trackpad sends it as a scroll with Ctrl held) zooms first
+    if (level === 1 && e.ctrlKey) {
+      e.preventDefault();
+      return pinch(e.deltaY);
+    }
+    if (!(sideways && level === 1) && canScroll(e.target, e.deltaY)) return;
     e.preventDefault();
+    // a sideways swipe close up slides along the line straight away
+    if (level === 1 && !linear && !e.ctrlKey && Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 3) setLinear(true);
     if (level === 1 && linear && !e.ctrlKey) return pan(pos + (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) / segPx);
-    if (level === 1 && e.ctrlKey && e.deltaY > 0) return go(0);
+    if (level === 1 && e.ctrlKey) return pinch(e.deltaY);
     burst += e.deltaY;
     clearTimeout(burstTimer);
     burstTimer = setTimeout(() => (burst = 0), 400);
@@ -375,8 +382,22 @@
   }
 
   let touch = null;
-  const onTouchStart = (e) => (touch = { x: e.touches[0].clientX, y: e.touches[0].clientY });
+  let pinchFrom = 0;
+  const fingers = (e) => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  function onTouchStart(e) {
+    if (e.touches.length === 2) {
+      touch = null;
+      pinchFrom = fingers(e);
+    } else touch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }
+  function onTouchMove(e) {
+    if (e.touches.length !== 2 || !pinchFrom) return;
+    const d = fingers(e);
+    pinch(-Math.log(d / pinchFrom) / 0.012);
+    pinchFrom = d;
+  }
   function onTouchEnd(e) {
+    if (e.touches.length < 2) pinchFrom = 0;
     if (!touch) return;
     const dx = touch.x - e.changedTouches[0].clientX;
     const dy = touch.y - e.changedTouches[0].clientY;
@@ -422,12 +443,14 @@
   // two lunations stand side by side and the line can be dragged, scrolled
   // sideways or slid along, back and forth through the year (as on the Miro)
   let linear = false;
-  const SCALE = 0.5; // along the line, at rest, a lunation is half the width
-  // how many lunations are in view: two at rest; sliding fast, the line
-  // eases out to see many at once, and back in as it slows
-  const REST = 1 / SCALE;
-  const WIDEST = 8;
-  let vis = REST;
+  // How many lunations are in view. `rest` is where a pinch leaves it (two
+  // to begin with); sliding fast, the line eases out beyond it to see many
+  // at once, and back to it as it slows.
+  const FIRST_REST = 2;
+  const NEAREST = 0.75;
+  const FARTHEST = 13;
+  let rest = FIRST_REST;
+  let vis = rest;
   let pos = 0; // along the line: the lunation at the left edge (fractional)
   let panning = false;
   let panTimer;
@@ -440,20 +463,28 @@
   function zoomLoop() {
     const idle = performance.now() - lastPan > 90;
     if (idle) speed *= 0.86;
-    const target = Math.min(WIDEST, REST + Math.max(0, speed - 1.2) * 1.4);
+    const target = Math.min(FARTHEST, rest + Math.max(0, speed - 1.2) * 1.4);
     const centre = pos + vis / 2;
     vis += (target - vis) * 0.12;
     pos = clampPos(centre - vis / 2);
     li = centreOf();
-    if (Math.abs(vis - REST) < 0.01 && speed < 0.05) {
-      vis = REST;
+    if (Math.abs(vis - rest) < 0.01 && speed < 0.05) {
+      vis = rest;
       pos = clampPos(pos);
       zoomFrame = 0;
       return;
     }
     zoomFrame = requestAnimationFrame(zoomLoop);
   }
-  const pan = (to) => {
+  const pan = (to, steady = false) => {
+    if (steady) {
+      pos = clampPos(to);
+      li = centreOf();
+      panning = true;
+      clearTimeout(panTimer);
+      panTimer = setTimeout(() => (panning = false), 160);
+      return;
+    }
     const t = performance.now();
     const next = clampPos(to);
     const dt = Math.max(8, t - lastPan) / 1000;
@@ -469,23 +500,92 @@
   function setLinear(on) {
     linear = on;
     dayOpen = null;
-    vis = REST;
+    rest = FIRST_REST;
+    vis = rest;
     speed = 0;
-    if (on) pos = Math.max(-0.5, li + 0.5 - REST / 2);
+    if (on) pos = Math.max(-0.5, li + 0.5 - rest / 2);
   }
   // zoomed out, the leaves step aside so only the line and its bands show
-  $: wide = linear && vis > REST + 0.35;
+  // zoomed out (sliding fast, or pinched far out), leaves and words step aside
+  $: wide = linear && (vis > rest + 0.35 || rest > 4.5);
+
+  // Pinching: out shows more moons, in fewer. Pinching out from moon by moon
+  // opens the line; past the whole year it returns to the spiral; pinching in
+  // past one moon returns to moon by moon.
+  let pinchEdge = 0;
+  function pinch(dy) {
+    if (level !== 1) return;
+    if (!linear) {
+      if (dy > 0) setLinear(true);
+      return;
+    }
+    const centre = pos + vis / 2;
+    const next = Math.max(NEAREST, Math.min(FARTHEST, rest * Math.exp(dy * 0.012)));
+    if ((next === FARTHEST && dy > 0) || (next === NEAREST && dy < 0)) {
+      pinchEdge += dy;
+      if (pinchEdge > 160) return ((pinchEdge = 0), go(0));
+      if (pinchEdge < -160) return ((pinchEdge = 0), setLinear(false));
+    } else pinchEdge = 0;
+    rest = next;
+    vis = next;
+    pos = clampPos(centre - vis / 2);
+    li = centreOf();
+    panning = true;
+    clearTimeout(panTimer);
+    panTimer = setTimeout(() => (panning = false), 160);
+  }
   // along the line, the moon behind stays the middle one, without a journey
   $: if (linear && level === 1 && theta.length && li >= 0) fly(true);
   // the pinned names sit at the screen's own left edge, where the line runs out
   let lanesEl;
   let lanesInset = 0;
   $: if (lanesEl && vw && linear) lanesInset = lanesEl.getBoundingClientRect().left;
+  // the view switch lives in the header row, above the site header's frosted
+  // strip, so it is lifted out to the page's top level
+  const toTop = (node) => {
+    document.body.appendChild(node);
+    return { destroy: () => node.remove() };
+  };
+  // zoomed out along the line: month names, and dots for what is noted
+  const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  function monthsIn(L) {
+    const out_ = [];
+    const d = new Date(L.start);
+    for (let m = new Date(d.getFullYear(), d.getMonth() + 1, 1); m.getTime() < L.end; m = new Date(m.getFullYear(), m.getMonth() + 1, 1)) {
+      out_.push({ x: (m.getTime() - L.start) / (L.end - L.start), name: MONTH[m.getMonth()] });
+    }
+    return out_;
+  }
+  function dotsIn(L) {
+    const px = (segW || 320) / vis;
+    const last = [];
+    return itemsOf(L)
+      .filter((it) => it.at && !off.has(it.kind))
+      .sort((a, b) => a.at - b.at)
+      .map((it) => {
+        const x = (it.at - L.start) / (L.end - L.start);
+        let row = 0;
+        while (last[row] !== undefined && (x - last[row]) * px < 11) row++;
+        last[row] = x;
+        return { it, x, row, colour: tint(it) };
+      });
+  }
+  // the small map: hovering a moon shows its number in the middle; the middle
+  // itself is the way back to the whole spiral
+  let mapHover = null;
   let scrubEl;
   let scrubbing = false;
+  // the slider moves the line directly (no zoom), at most once a frame
+  let scrubX = null;
+  let scrubFrame = 0;
   function scrubTo(e) {
-    const r = scrubEl.getBoundingClientRect();
-    pan(((e.clientX - r.left) / r.width) * n - vis / 2);
+    scrubX = e.clientX;
+    if (scrubFrame) return;
+    scrubFrame = requestAnimationFrame(() => {
+      scrubFrame = 0;
+      const r = scrubEl.getBoundingClientRect();
+      pan(((scrubX - r.left) / r.width) * n - vis / 2, true);
+    });
   }
   function scrubStart(e) {
     scrubbing = true;
@@ -493,15 +593,23 @@
   }
   let drag = null;
   function dragStart(e) {
-    if (!linear || e.button !== 0 || e.target.closest('.leaf, button, a')) return;
+    if (level !== 1 || e.button !== 0 || e.target.closest('.leaf, button, a')) return;
     drag = { x: e.clientX, pos, moved: false };
   }
   function dragMove(e) {
     if (scrubbing) return scrubTo(e);
     if (!drag) return;
     const dx = e.clientX - drag.x;
-    if (Math.abs(dx) > 4) drag.moved = true;
-    if (drag.moved) pan(drag.pos - dx / segPx);
+    if (Math.abs(dx) > 4 && !drag.moved) {
+      drag.moved = true;
+      // dragging the line moon by moon slides into the line view
+      if (!linear) {
+        setLinear(true);
+        drag = { ...drag, x: e.clientX, pos };
+        return;
+      }
+    }
+    if (drag.moved) pan(drag.pos - (e.clientX - drag.x) / segPx);
   }
   function dragEnd() {
     scrubbing = false;
@@ -510,7 +618,7 @@
   }
   $: offset = linear ? pos : li;
   $: trackW = linear ? (n / vis) * 100 : n * 100;
-  $: segPx = (segW || 320) * (linear ? SCALE : 1);
+  $: segPx = (segW || 320) / (linear ? rest : 1);
   $: compact = segPx < 640;
   $: WORDS = compact ? 0 : 120;
   $: NOTE = compact ? 46 : 42 + WORDS + 14; // the leaf, its words, and a little air
@@ -546,7 +654,7 @@
           const y0 = marks.some((m) => Math.abs(m - px) < 16) ? -15 : 0;
           // a twig: straight up with a little sway, or bending over to its leaf
           const twig = slid ? `M0 ${y0} C0 ${-h * 0.75} ${tx * 0.35} ${-h} ${tx} ${-h}` : `M0 ${y0} Q${k % 2 ? 4 : -4} ${-h / 2} 0 ${-h}`;
-          return { it, x, row, onMark: y0 < 0, dx: left - px, twig, tilt: slid ? 18 : ((k * 37) % 21) - 10, leaf: { ...leafFor(it.symbol), pigment: KINDS[it.kind]?.colour ?? leafFor(it.symbol).pigment } };
+          return { it, x, row, onMark: y0 < 0, dx: left - px, twig, tilt: slid ? 18 : ((k * 37) % 21) - 10, leaf: { ...leafFor(it.symbol), pigment: tint(it) ?? leafFor(it.symbol).pigment } };
         }
         return null;
       })
@@ -559,6 +667,42 @@
   let capital = '';
   let person = '';
   let kind = '';
+  // Each person keeps the kinds of time that matter for their part in the
+  // village: every kind can be switched off and on. The children's lens
+  // brings forward everything about the children, in one blue. Marks can be
+  // simple (a coloured dot) or lively (the drawn symbols). Remembered here.
+  let off = new Set();
+  let children = false;
+  let lively = true;
+  try {
+    off = new Set(JSON.parse(localStorage.getItem('lv-timeline-off') ?? '[]'));
+    lively = localStorage.getItem('lv-timeline-marks') !== 'simple';
+  } catch {}
+  function toggleKind(key) {
+    off.has(key) ? off.delete(key) : off.add(key);
+    off = new Set(off);
+    try {
+      localStorage.setItem('lv-timeline-off', JSON.stringify([...off]));
+    } catch {}
+  }
+  function setLively(on) {
+    lively = on;
+    try {
+      localStorage.setItem('lv-timeline-marks', on ? 'lively' : 'simple');
+    } catch {}
+  }
+  const OWN = { cross: '#7d4f9e', birthday: '#d9709e' };
+  const tint = (it) => (it.children ? CHILDREN : OWN[it.symbol] ?? KINDS[it.kind]?.colour);
+  // the small drawn icons of the kinds, after the Scale of Permanence sheet
+  const ICON = {
+    sparkle: 'M0 -7 C0.8 -1.5 1.5 -0.8 7 0 C1.5 0.8 0.8 1.5 0 7 C-0.8 1.5 -1.5 0.8 -7 0 C-1.5 -0.8 -0.8 -1.5 0 -7Z',
+    sprig: 'M-6 6 C-2 2 2 -2 6 -6 M-2 2 C-5 1 -6 -2 -5 -4 C-2 -3 -1 -1 -2 2Z M2 -2 C2 -5 4 -7 6 -7 C6 -4 5 -2 2 -2Z',
+    bunting: 'M-7 -4 C-2 -1 2 -1 7 -4 M-5 -3 L-3.5 2 L-2 -2 M0 -1.6 L1.5 3 L3 -1.8 M4.5 -2.6 L6 1.4',
+    people: 'M-4 -3 a1.6 1.6 0 1 0 0.01 0 M4 -3 a1.6 1.6 0 1 0 0.01 0 M0 -4.5 a1.8 1.8 0 1 0 0.01 0 M-6.5 5 C-6.5 1 -1.5 1 -1.5 5 M1.5 5 C1.5 1 6.5 1 6.5 5 M-3 5 C-3 0 3 0 3 5',
+    cubes: 'M-6 1 L-3 -0.5 L0 1 L0 4.5 L-3 6 L-6 4.5Z M0 1 L3 -0.5 L6 1 L6 4.5 L3 6 L0 4.5Z M-3 -4.5 L0 -6 L3 -4.5 L3 -1 L0 0.5 L-3 -1Z',
+    spiral: 'M0 0 C0 -1.5 2 -1.5 2 0 C2 2.5 -2.5 3 -3 0 C-3.5 -4 3.5 -4.5 4.5 0 C5.5 5 -5 6 -6 0',
+  };
+  $: dimmed = (it) => (kind && it.kind !== kind) || (children && !it.children);
   const capitalsOf = (l) => new Set([...(l.capitals ?? []), ...l.goals.map((g) => g.capital)]);
   $: matches = (l) =>
     (!lean || l.lean === lean) &&
@@ -622,7 +766,7 @@
             const beats = rhythms.filter((r) => r.kind === key && beatsNear(r));
             return { key, lanes, rows, beats };
           })
-          .filter((g) => g.lanes.length || g.beats.length)
+          .filter((g) => !off.has(g.key) && (g.lanes.length || g.beats.length))
           .map((g) => {
             const at = top;
             top += 18 + g.rows * 26 + g.beats.length * 22 + 8;
@@ -653,7 +797,7 @@
       return allStays.filter((x) => x.role !== 'keeping' && x.at <= t && x.until >= t).length;
     });
   }
-  const ROLE = { host: '#8a6a4a', keeping: '#9a8fb0', volunteer: '#7fa65a', guest: '#d7745c', steward: '#c9a54a' };
+  const ROLE = { host: '#8a6a4a', keeping: '#9a8fb0', volunteer: '#9b8ad0', guest: '#9b8ad0', steward: '#9b8ad0' };
   // what stands where in this moon, and the same season a year apart
   $: tally = here
     ? (() => {
@@ -805,7 +949,7 @@
 
 <svelte:window on:resize={resize} on:keydown={onKey} on:pointermove={dragMove} on:pointerup={dragEnd} />
 
-<main class="tl" class:close={level === 1 && !travelling} bind:this={page} on:touchstart|passive={onTouchStart} on:touchend={onTouchEnd}>
+<main class="tl" class:close={level === 1 && !travelling} bind:this={page} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
   <div class="glow" aria-hidden="true"></div>
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <filter id="tl-wash" x="-20%" y="-20%" width="140%" height="140%">
@@ -960,13 +1104,13 @@
           <div class="line-head">
             <span>kinds of time</span>
             {#each Object.entries(KINDS) as [key, k]}
-              <button type="button" class="kind-chip" class:on={kind === key} style="--c: {k.colour}" title={k.note} on:click={() => (kind = kind === key ? '' : key)} aria-pressed={kind === key}><i></i>{k.label}</button>
+              <button type="button" class="kind-chip" class:off={off.has(key)} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}><svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}</button>
             {/each}
+            <button type="button" class="kind-chip lens" class:on={children} style="--c: {CHILDREN}" on:click={() => (children = !children)} aria-pressed={children}><i></i>children</button>
           </div>
         {/if}
         {#key linear ? -1 : here.index}
         <header class="title" in:fadeIn out:fadeOut>
-          <LunationArt l={here} size={124} />
           <div>
             <h2>Lunation {here.index} <span class="name">{here.name}</span></h2>
             <p class="meta">{here.from} – {here.to} {here.year} · {here.season}{#if here.now} · tonight: {tonight.name.toLowerCase()}, {tonight.lit}% lit{/if}</p>
@@ -995,10 +1139,11 @@
                 <dt>Kinds of time</dt>
                 <dd class="kinds">
                   {#each Object.entries(KINDS) as [key, k]}
-                    <button type="button" class="kind-chip" class:on={kind === key} class:none={!kindCount[key]} style="--c: {k.colour}" title={k.note} on:click={() => (kind = kind === key ? '' : key)} aria-pressed={kind === key}>
-                      <i></i>{k.label}<small>{kindCount[key] ?? 0}</small>
+                    <button type="button" class="kind-chip" class:off={off.has(key)} class:none={!kindCount[key]} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}>
+                      <svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}<small>{kindCount[key] ?? 0}</small>
                     </button>
                   {/each}
+                  <button type="button" class="kind-chip lens" class:on={children} style="--c: {CHILDREN}" title="everything about the children, in one colour" on:click={() => (children = !children)} aria-pressed={children}><i></i>children</button>
                 </dd>
               </div>
               {#if tally}
@@ -1032,14 +1177,14 @@
              that flows along to the next, like moving round the spiral -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <div class="line-area" class:grab={linear} bind:clientWidth={segW} on:click={openDay} on:pointerdown={dragStart}>
+        <div class="line-area" class:grab={level === 1} bind:clientWidth={segW} on:click={openDay} on:pointerdown={dragStart}>
           <div class="track" class:panning style="width: {trackW}%; transform: translateX({(-offset * 100) / n}%)">
           <svg class="line" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true">
             <path d="M0 10 C200 8 400 12 600 9 S860 11 1000 10" />
           </svg>
           {#each lunations as L, li2}
           <div class="seg" class:here={linear ? li2 >= Math.floor(pos) && li2 <= Math.ceil(pos + 1) : li2 === li} class:first={li2 === Math.max(0, Math.floor(pos))} style="left: {(li2 * 100) / n}%; width: {100 / n}%">
-          <div class="end start"><i></i><span>{#if linear}<button type="button" class="moon-name" on:click={() => (setLinear(false), go(1, li2))} title="read this moon">Lunation {L.index} · {L.name}</button>{:else}Lunation {L.index}{/if}<br />{day(L.start)}</span></div>
+          <div class="end start"><i></i><em class="short"><b>{L.index}</b> {L.name}</em><span>{#if linear}<button type="button" class="moon-name" on:click={() => (setLinear(false), go(1, li2))} title="read this moon">Lunation {L.index} · {L.name}</button>{:else}Lunation {L.index}{/if}<br />{day(L.start)}</span></div>
           {#each L.quarters as q, k}
             {@const x0 = (q.start - L.start) / (L.end - L.start)}
             {@const x1 = (q.end - L.start) / (L.end - L.start)}
@@ -1061,16 +1206,30 @@
           {#if L.now && !L.quarters.slice(1).some((q) => Math.abs(((nowMs - q.start) / (L.end - L.start)) * segPx) < 22)}
             <div class="today-mark" style="left: {((nowMs - L.start) / (L.end - L.start)) * 100}%" title="today"></div>
           {/if}
-          {#each pinRows(L, itemsOf(L).filter((it) => it.at), segPx, NOTE, SLIDE, ROWS) as pn, k (pn.it.id)}
-            <div class="pin {pn.it.status ?? ''}" class:faded={kind && pn.it.kind !== kind} class:on-mark={pn.onMark} style="--ww: {WORDS}px; left: {pn.x * 100}%; --row: {pn.row}; --dx: {pn.dx}px; --d: {250 + k * 140}ms">
+          {#if wide}
+            <!-- zoomed out: the months along the line, and everything noted
+                 as a dot in its colour, stacked where days are close -->
+            {#each monthsIn(L) as m}
+              <span class="month" style="left: {m.x * 100}%">{m.name}</span>
+            {/each}
+            {#each dotsIn(L) as d (d.it.id)}
+              <button type="button" class="dot" class:faded={dimmed(d.it)} style="left: {d.x * 100}%; --row: {d.row}; --pig: {d.colour}" title="{d.it.title}, {day(d.it.at)}" aria-label="{d.it.title}, {day(d.it.at)}" on:click={() => (picked = d.it)}></button>
+            {/each}
+          {/if}
+          {#each pinRows(L, itemsOf(L).filter((it) => it.at && !off.has(it.kind)), segPx, NOTE, SLIDE, ROWS) as pn, k (pn.it.id)}
+            <div class="pin {pn.it.status ?? ''}" class:faded={dimmed(pn.it)} class:on-mark={pn.onMark} style="--ww: {WORDS}px; left: {pn.x * 100}%; --row: {pn.row}; --dx: {pn.dx}px; --d: {250 + k * 140}ms">
               <svg class="stem" aria-hidden="true">
                 <path class="twig" d={pn.twig} />
+                {#if !lively}
+                  <circle class="mark-dot" cx={pn.dx + 16} cy={-(LIFT + pn.row * ROW) - 7} r="6.5" style="--pig: {pn.leaf.pigment}" />
+                {:else}
                 <g class="leaf" role="button" tabindex="-1" aria-label={pn.it.title} on:click={() => (picked = pn.it)} on:keydown={() => (picked = pn.it)} transform="translate({pn.dx + 16} {-(LIFT + pn.row * ROW)}) rotate({pn.tilt}) scale(1.5)" style="--pig: {pn.leaf.pigment}">
                   <g class="unfurl">
                     <path class="blade" d={pn.leaf.shape} />
                     {#each pn.leaf.veins as v}<path class="vein" d={v} />{/each}
                   </g>
                 </g>
+                {/if}
               </svg>
               <div class="words" class:hidden={compact} title={pn.it.title}>
                 <b>{pn.it.title}</b><small>{day(pn.it.at)}{#if pn.it.where} · {pn.it.where}{/if}{#if pn.it.status} · {STATUS[pn.it.status].label}{/if}{#if pn.it.visibility === 'members'} · members{/if}</small>
@@ -1085,12 +1244,12 @@
         <!-- under the line: what lasts a while (the land's work, residencies,
              reflection), and, for members, who is here and for how long -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <div class="lanes" bind:this={lanesEl} class:grab={linear} on:pointerdown={dragStart} style="height: {strataH + (member ? 34 + stayRows * 22 + 22 : 0)}px">
+        <div class="lanes" bind:this={lanesEl} class:grab={level === 1} on:pointerdown={dragStart} style="height: {strataH + (member ? 34 + stayRows * 22 + 22 : 0)}px">
           {#if linear}
             <!-- along the line, each kind and rhythm keeps its name at the left -->
             <div class="pinned-names" style="left: {-lanesInset}px">
               {#each strata as g (g.key)}
-                <p class="stratum-name" class:faded={kind && kind !== g.key} style="top: {g.top}px; --c: {KINDS[g.key].colour}">{KINDS[g.key].label} time</p>
+                <p class="stratum-name" class:faded={kind && kind !== g.key} style="top: {g.top}px; --c: {KINDS[g.key].colour}">{KINDS[g.key].label}</p>
                 {#each g.beats as r, k (r.id)}
                   <p class="rhythm-name" class:faded={kind && kind !== g.key} style="top: {g.top + 18 + g.rows * 26 + k * 22}px">{r.title} · {EVERY[r.frequency] ?? r.frequency}</p>
                 {/each}
@@ -1101,10 +1260,10 @@
             {#each lunations as L, li2}
               <div class="seg" class:here={linear ? li2 >= Math.floor(pos) && li2 <= Math.ceil(pos + 1) : li2 === li} class:first={li2 === Math.max(0, Math.floor(pos))} style="left: {(li2 * 100) / n}%; width: {100 / n}%">
                 {#each strata as g (g.key)}
-                  <div class="stratum" class:faded={kind && kind !== g.key} style="top: {g.top}px; --c: {KINDS[g.key].colour}">
-                    <p class="stratum-name">{KINDS[g.key].label} time</p>
+                  <div class="stratum" class:faded={(kind && kind !== g.key) || children} style="top: {g.top}px; --c: {KINDS[g.key].colour}">
+                    <p class="stratum-name">{KINDS[g.key].label}</p>
                     {#each inLunation(L, g.lanes) as b (b.it.id)}
-                      <div class="stretch {b.it.status ?? 'land'}" style="left: {b.x0 * 100}%; width: {(b.x1 - b.x0) * 100}%; top: {18 + b.row * 26}px" title="{b.it.title}, {day(b.it.at)} to {day(b.it.until)}{b.it.status ? ` · ${STATUS[b.it.status].label}` : ''}">
+                      <div class="stretch {b.it.status ?? 'land'}" class:kids={b.it.children} style="{b.it.children ? `--c: ${CHILDREN};` : ''} left: {b.x0 * 100}%; width: {(b.x1 - b.x0) * 100}%; top: {18 + b.row * 26}px" title="{b.it.title}, {day(b.it.at)} to {day(b.it.until)}{b.it.status ? ` · ${STATUS[b.it.status].label}` : ''}">
                         <span class:cont={b.cont}>{b.it.title}{#if b.it.where} · {b.it.where}{/if}{#if b.it.status && !b.cont} · {STATUS[b.it.status].label}{/if}</span><i></i>
                       </div>
                     {/each}
@@ -1121,8 +1280,12 @@
                 {#if member}
                   <p class="who-here" style="top: {strataH + 8}px">who is here · members only</p>
                   {#each inLunation(L, stayLanes) as b (b.it.id)}
-                    <div class="stay" class:keeping={b.it.role === 'keeping'} style="left: {b.x0 * 100}%; width: {(b.x1 - b.x0) * 100}%; top: {strataH + 30 + b.row * 22}px; --c: {ROLE[b.it.role]}" title="{b.it.who}, {day(b.it.at)} to {day(b.it.until)}">
-                      <span class:cont={b.cont}>{b.it.who}</span><i></i>
+                    <div class="stay" class:keeping={b.it.role === 'keeping'} class:arc={['guest', 'volunteer', 'steward'].includes(b.it.role)} style="left: {b.x0 * 100}%; width: {(b.x1 - b.x0) * 100}%; top: {strataH + 30 + b.row * 22}px; --c: {ROLE[b.it.role]}" title="{b.it.who}, {day(b.it.at)} to {day(b.it.until)}">
+                      <span class:cont={b.cont}>{b.it.who}</span>
+                      {#if ['guest', 'volunteer', 'steward'].includes(b.it.role)}
+                        <!-- a guest's stay as an arc, from arrival to leaving -->
+                        <svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 9.5 Q50 -4 100 9.5" /></svg>
+                      {:else}<i></i>{/if}
                     </div>
                   {/each}
                   <div class="headcount" style="top: {strataH + 34 + stayRows * 22}px" title="how many are here, day by day">
@@ -1139,7 +1302,6 @@
              drag it, or tap a moon to go there -->
         {#if linear}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <button type="button" class="to-spiral" title="back to the whole spiral" aria-label="Back to the whole spiral" on:click={() => go(0)}><svg viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0 0 C0 -1.6 2 -1.6 2 0 C2 2.6 -2.6 3 -3 0 C-3.4 -4 3.6 -4.6 4.6 0 C5.6 5 -4.8 6 -6 0 C-7 -6 4 -8 8 -3" /></svg></button>
           <div class="scrub" bind:this={scrubEl} on:pointerdown={scrubStart}>
             {#each lunations as L, i}
               <span class:now={L.now} style="left: {((i + 0.5) / n) * 100}%">{L.index}</span>
@@ -1159,6 +1321,18 @@
               {/if}
             </section>
           {/if}
+          <ul class="legend marks" aria-label="The marks">
+            <li><svg viewBox="-12 -30 24 32" class="lg mk" style="--p: #7d4f9e"><path d="M-2.4 -2 C-2.6 -8 -2.6 -11 -2.2 -12 C-6 -12 -9 -12 -10 -14.6 C-9 -17 -6 -17.2 -2.2 -17.2 C-2.6 -21 -2.6 -27 0 -29 C2.6 -27 2.6 -21 2.2 -17.2 C6 -17.2 9 -17 10 -14.6 C9 -12 6 -12 2.2 -12 C2.6 -11 2.6 -8 2.4 -2 C1.4 0 -1.4 0 -2.4 -2Z" /></svg>holy day</li>
+            <li><svg viewBox="-13 -29 26 31" class="lg mk" style="--p: #d7745c"><path d="M0 -1 Q-2 -7 -8 -6 Q-6 -11 -12 -14 Q-6 -16 -8 -22 Q-2 -20 0 -27 Q2 -20 8 -22 Q6 -16 12 -14 Q6 -11 8 -6 Q2 -7 0 -1Z" /></svg>event</li>
+            <li><svg viewBox="-11 -29 22 30" class="lg mk" style="--p: #d9709e"><path d="M0 -28 C2 -22 4 -20 10 -19.5 C5.5 -16 4.5 -13 6.2 -6.5 C1.6 -9.6 -1.6 -9.6 -6.2 -6.5 C-4.5 -13 -5.5 -16 -10 -19.5 C-4 -20 -2 -22 0 -28Z" /></svg>birthday</li>
+            <li><svg viewBox="-13 -29 26 31" class="lg mk" style="--p: #7d9466"><path d="M0 0 C-4 -3 -9 -4 -8 -9 C-12 -11 -11 -15 -7 -16 C-10 -20 -7 -25 -3 -23 C-3 -28 3 -28 3 -23 C7 -25 10 -20 7 -16 C11 -15 12 -11 8 -9 C9 -4 4 -3 0 0Z" /></svg>the land</li>
+            <li><svg viewBox="0 0 30 12" class="lg-arc"><path d="M1 11 Q15 -3 29 11" /></svg>a guest's stay</li>
+            <li><i class="lg-kids"></i>children</li>
+            <li class="marks-switch" role="radiogroup" aria-label="Marks">
+              <button type="button" role="radio" aria-checked={!lively} class:on={!lively} on:click={() => setLively(false)}>simple</button>
+              <button type="button" role="radio" aria-checked={lively} class:on={lively} on:click={() => setLively(true)}>lively</button>
+            </li>
+          </ul>
           <ul class="legend" aria-label="How to read the line">
             <li><svg viewBox="-12 -30 24 32" class="lg committed"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /></svg>committed</li>
             <li><svg viewBox="-12 -30 24 32" class="lg imagined"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /></svg>imagined</li>
@@ -1167,9 +1341,9 @@
             <li><i class="lg-today"></i>today</li>
             <li class="lg-note">tap the line to open a day · samples until Holons holds the village's own</li>
           </ul>
-          {#if compact && itemsOf(here).some((it) => it.at)}
+          {#if (compact || wide) && itemsOf(here).some((it) => it.at)}
             <p class="picked">
-              {#if picked && picked.lunation === here.index}{picked.title} · {day(picked.at)}{:else}tap a leaf to read it{/if}
+              {#if picked && (wide || picked.lunation === here.index)}{picked.title} · {day(picked.at)}{:else}tap a {wide ? 'dot' : 'leaf'} to read it{/if}
             </p>
           {/if}
           {#if !itemsOf(here).filter((it) => !it.pinned && !it.sample).length}
@@ -1201,9 +1375,12 @@
       </section>
   {/if}
 
-  <!-- the spiral in small, to know where you are -->
-  {#if n}
-    <nav class="map" aria-label="The year">
+  <!-- the spiral in small, to know where you are: close up only (on the
+       whole spiral it would only repeat what is already there) -->
+  {#if n && level === 1}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <nav class="map" aria-label="The year in small">
       <svg viewBox="-60 -60 120 120">
         {#if compass}
           {#each QUARTERS as q}<path class="map-quarter" d={wedge(lonAngle(q.from), lonAngle(q.to), 58)} style="fill: {q.colour}" />{/each}
@@ -1220,18 +1397,19 @@
           {@const s = 46 / (R0 + TURN * 1.4)}
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <circle class="map-dot" class:here={level === 1 && i === li} class:now={l.now} class:dim={!matches(l)} cx={p.x * s} cy={p.y * s} r={level === 1 && i === li ? 5.5 : 3.2} style="fill: {l.heat}" on:click={() => go(1, i)}>
-            <title>Lunation {l.index}</title>
-          </circle>
+          <circle class="map-dot" class:here={level === 1 && i === li} class:now={l.now} class:dim={!matches(l)} cx={p.x * s} cy={p.y * s} r={level === 1 && i === li ? 5.5 : mapHover === i ? 4.6 : 3.2} style="fill: {l.heat}" on:click={() => go(1, i)} on:mouseenter={() => (mapHover = i)} on:mouseleave={() => (mapHover = null)} aria-label="Lunation {l.index}" />
         {/each}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <g class="map-centre" on:click={() => go(0)}>
+        <g class="map-centre" class:hovered={mapHover === 'centre'} on:click={() => go(0)} on:mouseenter={() => (mapHover = 'centre')} on:mouseleave={() => (mapHover = null)} aria-label="Back to the whole spiral">
           <circle r="20" />
-          <text y="3">{level === 1 && here ? here.index : '84–100'}</text>
+          {#if mapHover === 'centre'}
+            <path class="map-spiral" d="M0 0 C0 -2 2.6 -2 2.6 0 C2.6 3.4 -3.4 3.9 -3.9 0 C-4.4 -5.2 4.7 -6 6 0 C7.3 6.5 -6.2 7.8 -7.8 0" />
+          {:else}
+            <text y="3">{mapHover !== null ? lunations[mapHover].index : level === 1 && here ? here.index : '84–100'}</text>
+          {/if}
         </g>
       </svg>
-      {#if level === 1}<button class="map-back" on:click={() => go(0)}>the whole year</button>{/if}
     </nav>
   {/if}
 
@@ -1248,13 +1426,13 @@
     {/if}
   </form>
 
-  <!-- close up: moon by moon, or along the line -->
-  {#if level === 1}
-    <div class="view-switch" role="radiogroup" aria-label="How to read the moons">
-      <button type="button" role="radio" aria-checked="false" title="back to the whole spiral" on:click={() => go(0)}><svg viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0 0 C0 -1.6 2 -1.6 2 0 C2 2.6 -2.6 3 -3 0 C-3.4 -4 3.6 -4.6 4.6 0 C5.6 5 -4.8 6 -6 0 C-7 -6 4 -8 8 -3" /></svg>spiral</button>
-      <button type="button" role="radio" aria-checked={!linear} class:on={!linear} on:click={() => setLinear(false)}><svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="6.5" /><path d="M0 -6.5 A6.5 6.5 0 0 1 0 6.5 A4 6.5 0 0 0 0 -6.5Z" class="fill" /></svg>moon by moon</button>
-      <button type="button" role="radio" aria-checked={linear} class:on={linear} on:click={() => setLinear(true)}><svg viewBox="-10 -10 20 20" aria-hidden="true"><path d="M-9 0 H9" /><circle cx="-5" r="1.8" class="fill" /><circle cx="2" r="1.8" class="fill" /><circle cx="7.5" r="1.2" class="fill" /></svg>along the line</button>
-    </div>
+  <!-- the timeline, as a round toggle beside the small map: on, the moons
+       lie along the line; off, one lunation at a time -->
+  {#if n}
+    <button type="button" class="line-toggle" class:on={level === 1 && linear} class:alone={level === 0} aria-pressed={level === 1 && linear} title={level === 1 && linear ? 'back to one lunation at a time' : 'see the timeline'} use:toTop on:click={() => (level === 0 ? (go(1, nowIndex), setTimeout(() => setLinear(true), 1600)) : setLinear(!linear))}>
+      <svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M-10 0 H10" /><circle cx="-5.5" r="2.4" /><circle cx="1.5" r="2.4" /><circle cx="7.5" r="1.6" /></svg>
+      <span>timeline</span>
+    </button>
   {/if}
 
   <!-- the compass's key, and its switch -->
@@ -1288,6 +1466,15 @@
 <style>
   :global(body) {
     overflow: hidden;
+  }
+
+  /* The timeline's colours are fixed in the code: they are what each kind
+     and mark means (the cross is always purple). On screen they lean a
+     little towards the season the site is in, so they sit with its paper
+     (the biophilic seasonal rule), without ever becoming other colours. */
+  .tl :global(*) {
+    --cs: color-mix(in oklab, var(--c, #888) 86%, var(--tl-ember, #fdd7bb));
+    --pigs: color-mix(in oklab, var(--pig, #888) 86%, var(--tl-ember, #fdd7bb));
   }
 
   .tl {
@@ -1457,7 +1644,7 @@
 
   .quarter-name > div {
     padding: 0 calc(6px * var(--inv, 1));
-    border-bottom: calc(2px * var(--inv, 1)) solid color-mix(in srgb, var(--c) 70%, transparent);
+    border-bottom: calc(2px * var(--inv, 1)) solid color-mix(in srgb, var(--cs) 70%, transparent);
     font: 300 max(36px, calc(11px * var(--inv, 1))) 'Playpen Sans', 'Quicksand', sans-serif;
     color: var(--bark-800, #4a3828);
   }
@@ -1814,7 +2001,7 @@
   }
 
   /* drawn just inside the moon's own edge, so the line never crosses it */
-  .now::after {
+  .moon.now::after {
     content: '';
     position: absolute;
     inset: 3%;
@@ -1837,7 +2024,7 @@
     transition: box-shadow 0.3s ease, opacity 0.5s ease, filter 0.5s ease;
   }
 
-  .hundred::after {
+  .moon.hundred::after {
     content: '';
     position: absolute;
     inset: 4%;
@@ -1891,7 +2078,7 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    padding-left: 120px;
+    padding-right: 130px;
   }
 
   .title h2 {
@@ -2121,7 +2308,7 @@
 
   /* a leaf: a soft wash of its pigment, a fine ink edge, its veins */
   .blade {
-    fill: color-mix(in srgb, var(--pig) 62%, transparent);
+    fill: color-mix(in srgb, var(--pigs) 62%, transparent);
     stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
     stroke-width: 0.6;
     stroke-linejoin: round;
@@ -2220,7 +2407,7 @@
 
   /* --- imagined, remembered, questions ---------------------------------------- */
   .pin.imagined .blade {
-    fill: color-mix(in srgb, var(--pig) 10%, transparent);
+    fill: color-mix(in srgb, var(--pigs) 10%, transparent);
     stroke-dasharray: 1.6 1.4;
   }
 
@@ -2233,7 +2420,7 @@
   }
 
   .pin.remembered .blade {
-    fill: color-mix(in srgb, var(--pig) 30%, #e8e0d2);
+    fill: color-mix(in srgb, var(--pigs) 30%, #e8e0d2);
     stroke: color-mix(in srgb, var(--bark-900) 40%, transparent);
   }
 
@@ -2274,20 +2461,20 @@
     bottom: 2px;
     height: 6px;
     border-radius: 4px;
-    background: color-mix(in srgb, var(--c) 55%, transparent);
+    background: color-mix(in srgb, var(--cs) 55%, transparent);
   }
 
   .stretch.land i {
-    background: color-mix(in srgb, var(--c) 32%, transparent);
+    background: color-mix(in srgb, var(--cs) 32%, transparent);
   }
 
   .stretch.imagined i {
     background: none;
-    border: 1px dashed color-mix(in srgb, var(--c) 90%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--cs) 90%, transparent);
   }
 
   .stretch.remembered i {
-    background: color-mix(in srgb, var(--c) 22%, #ddd4c4);
+    background: color-mix(in srgb, var(--cs) 22%, #ddd4c4);
   }
 
   .stretch span,
@@ -2320,12 +2507,12 @@
   .stay i {
     height: 2px;
     bottom: 3px;
-    background: var(--c);
+    background: var(--cs);
   }
 
   .stay.keeping i {
     background: none;
-    border-top: 2px dotted var(--c);
+    border-top: 2px dotted var(--cs);
   }
 
   .stay span {
@@ -2388,11 +2575,80 @@
     transition: opacity 0.3s ease;
   }
 
+  /* zoomed out: the quarter moons, leaves and long labels step aside; each
+     lunation keeps its number and name, the months show, and what is noted
+     shows as dots */
   .wide .pin,
-  .wide .stretch span,
-  .wide .phase-mark span,
-  .wide .end span {
+  .wide .phase-mark,
+  .wide .end span,
+  .wide .stretch span.cont {
     opacity: 0;
+    pointer-events: none;
+  }
+
+  .end .short {
+    display: none;
+  }
+
+  .wide .end .short {
+    position: absolute;
+    top: 26px;
+    left: 50%;
+    display: block;
+    max-width: 150px;
+    overflow: hidden;
+    font-style: normal;
+    font-size: 11px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transform: translateX(-12px);
+    text-align: left;
+  }
+
+  .wide .end .short b {
+    font: 500 12px 'Outfit', system-ui, sans-serif;
+  }
+
+  .wide .end i {
+    width: 12px;
+    height: 12px;
+  }
+
+  .wide .stretch span {
+    max-width: calc(100% - 4px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .month {
+    position: absolute;
+    top: calc(70% - 30px);
+    font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
+    color: var(--bark-600, #7a6550);
+    transform: translateX(-50%);
+  }
+
+  .month::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 17px;
+    height: 8px;
+    border-left: 1px solid color-mix(in srgb, var(--bark-900) 30%, transparent);
+  }
+
+  .dot {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    top: calc(70% - 46px - var(--row) * 11px);
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    border-radius: 50%;
+    background: var(--pigs);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--bark-900) 25%, transparent);
   }
 
   .linear .title,
@@ -2405,8 +2661,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    padding: 6px 0 0 120px;
-    padding-right: 380px;
+    padding: 6px 140px 0 0;
   }
 
   .line-head > span {
@@ -2471,84 +2726,6 @@
     visibility: hidden;
   }
 
-  .view-switch {
-    position: fixed;
-    top: 86px;
-    right: 24px;
-    z-index: 6;
-    display: flex;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--bark-900) 6%, transparent);
-  }
-
-  .view-switch button {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 12px 4px 9px;
-    border: 0;
-    border-radius: 999px;
-    background: none;
-    color: var(--bark-700, #5a4632);
-    font: 300 12px 'Playpen Sans', 'Quicksand', sans-serif;
-    cursor: pointer;
-  }
-
-  .view-switch svg,
-  .to-spiral svg {
-    width: 15px;
-    height: 15px;
-    overflow: visible;
-  }
-
-  .view-switch path,
-  .view-switch circle,
-  .to-spiral path {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.3;
-    stroke-linecap: round;
-  }
-
-  .view-switch .fill {
-    fill: currentColor;
-    stroke: none;
-  }
-
-  .view-switch button:hover {
-    color: var(--bark-900);
-  }
-
-  .to-spiral {
-    position: fixed;
-    left: calc(50% - min(380px, 43vw) - 40px);
-    bottom: 82px;
-    z-index: 6;
-    display: grid;
-    place-items: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: 1px solid color-mix(in srgb, var(--bark-900) 20%, transparent);
-    border-radius: 50%;
-    background: var(--tl-paper, #fffaf2);
-    color: var(--bark-800, #4a3828);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .to-spiral:hover {
-    transform: rotate(-30deg);
-  }
-
-  .view-switch button.on {
-    background: var(--tl-paper, #fffaf2);
-    color: var(--bark-900);
-    box-shadow: 0 1px 4px color-mix(in srgb, var(--bark-900) 12%, transparent);
-  }
-
   .scrub {
     position: fixed;
     left: 50%;
@@ -2597,9 +2774,9 @@
     align-items: center;
     gap: 6px;
     padding: 2px 10px 3px 8px;
-    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cs) 45%, transparent);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--c) 12%, transparent);
+    background: color-mix(in srgb, var(--cs) 12%, transparent);
     color: var(--bark-900);
     font: inherit;
     font-size: 12.5px;
@@ -2611,7 +2788,7 @@
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: var(--c);
+    background: var(--cs);
   }
 
   .kind-chip small {
@@ -2623,9 +2800,38 @@
     opacity: 0.5;
   }
 
+  .kind-icon {
+    width: 14px;
+    height: 14px;
+    overflow: visible;
+  }
+
+  .kind-icon path {
+    fill: none;
+    stroke: var(--cs);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .kind-chip.off {
+    border-style: dashed;
+    background: none;
+    opacity: 0.55;
+  }
+
+  .kind-chip.off i {
+    background: none;
+    box-shadow: inset 0 0 0 1.5px var(--cs);
+  }
+
+  .kind-chip.lens {
+    margin-left: 6px;
+  }
+
   .kind-chip.on {
-    background: color-mix(in srgb, var(--c) 40%, transparent);
-    border-color: var(--c);
+    background: color-mix(in srgb, var(--cs) 40%, transparent);
+    border-color: var(--cs);
   }
 
   .faded {
@@ -2648,7 +2854,7 @@
     font: 300 10.5px 'Playpen Sans', 'Quicksand', sans-serif;
     letter-spacing: 0.04em;
     text-transform: lowercase;
-    color: color-mix(in srgb, var(--c) 80%, var(--bark-900));
+    color: color-mix(in srgb, var(--cs) 80%, var(--bark-900));
   }
 
   .stratum-name::after {
@@ -2657,7 +2863,7 @@
     width: 60px;
     margin-left: 8px;
     vertical-align: middle;
-    border-top: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--cs) 35%, transparent);
   }
 
   .seg:not(.here) .stratum-name {
@@ -2678,7 +2884,7 @@
     left: 0;
     right: 0;
     bottom: 5px;
-    border-top: 1px dotted color-mix(in srgb, var(--c) 60%, transparent);
+    border-top: 1px dotted color-mix(in srgb, var(--cs) 60%, transparent);
   }
 
   .rhythm i {
@@ -2688,12 +2894,12 @@
     height: 7px;
     margin-left: -3.5px;
     border-radius: 50%;
-    background: var(--c);
+    background: var(--cs);
   }
 
   .rhythm i.done {
     background: none;
-    box-shadow: inset 0 0 0 1.5px var(--c);
+    box-shadow: inset 0 0 0 1.5px var(--cs);
   }
 
   .rhythm span {
@@ -2798,6 +3004,71 @@
     margin: 0;
     font: 300 11.5px 'Playpen Sans', 'Quicksand', sans-serif;
     color: var(--bark-600, #7a6550);
+  }
+
+  /* the marks, after the Miro legend */
+  .lg.mk path {
+    fill: color-mix(in srgb, var(--p) 62%, transparent);
+  }
+
+  .lg-arc {
+    width: 26px;
+    height: 11px;
+  }
+
+  .lg-arc path,
+  .stay.arc path {
+    fill: none;
+    stroke: var(--c, #9b8ad0);
+    stroke-width: 1.6;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .lg-kids {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5f9fd6;
+  }
+
+  .stay.arc svg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    width: 100%;
+    height: 10px;
+    overflow: visible;
+  }
+
+  .mark-dot {
+    fill: var(--pigs);
+    stroke: color-mix(in srgb, var(--bark-900) 50%, transparent);
+    stroke-width: 0.8;
+    pointer-events: auto;
+  }
+
+  .marks-switch {
+    gap: 2px !important;
+    margin-left: 8px;
+    padding: 2px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bark-900) 6%, transparent);
+  }
+
+  .marks-switch button {
+    padding: 1px 9px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--bark-700, #5a4632);
+    font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
+    cursor: pointer;
+  }
+
+  .marks-switch button.on {
+    background: var(--tl-paper, #fffaf2);
+    color: var(--bark-900);
   }
 
   /* how to read the line */
@@ -2963,8 +3234,8 @@
   /* the map sits in the top left corner, under the logo */
   .map {
     position: fixed;
-    top: 74px;
-    left: 22px;
+    top: 90px;
+    right: 24px;
     z-index: 5;
     width: 104px;
     text-align: center;
@@ -3006,6 +3277,82 @@
     cursor: pointer;
   }
 
+  .map-centre.hovered circle {
+    fill: var(--tl-paper, #fffaf2);
+    stroke: color-mix(in srgb, var(--bark-900) 55%, transparent);
+  }
+
+  .map-spiral {
+    fill: none;
+    stroke: var(--bark-900);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+  }
+
+  .line-toggle {
+    position: fixed;
+    top: 120px;
+    right: 142px;
+    z-index: 1200;
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--bark-800, #4a3828);
+    cursor: pointer;
+  }
+
+  .line-toggle.alone {
+    top: 42px;
+    right: 24px;
+  }
+
+  .line-toggle svg {
+    width: 46px;
+    height: 46px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--bark-900) 22%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, #fffdf8 75%, transparent);
+    overflow: visible;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .line-toggle path {
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+
+  .line-toggle circle {
+    fill: currentColor;
+  }
+
+  .line-toggle span {
+    font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
+  }
+
+  .line-toggle:hover svg {
+    border-color: color-mix(in srgb, var(--bark-900) 50%, transparent);
+  }
+
+  .line-toggle.on svg {
+    background: var(--bark-900);
+    color: #fffaf2;
+    border-color: var(--bark-900);
+  }
+
+  .line-toggle.on path {
+    stroke: #fffaf2;
+  }
+
+  .line-toggle.on circle {
+    fill: #fffaf2;
+  }
+
   .map-centre circle {
     fill: color-mix(in srgb, #fffdf8 70%, transparent);
     stroke: color-mix(in srgb, var(--bark-900) 25%, transparent);
@@ -3018,21 +3365,10 @@
     fill: var(--bark-900);
   }
 
-  .map-back {
-    margin-top: 2px;
-    padding: 0;
-    border: 0;
-    border-bottom: 1px solid currentColor;
-    background: none;
-    color: var(--bark-700, #5a4632);
-    font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
-    cursor: pointer;
-  }
-
   .filters {
     position: fixed;
     top: 92px;
-    left: 150px;
+    left: 24px;
     z-index: 5;
     display: flex;
     flex-wrap: wrap;
@@ -3094,15 +3430,10 @@
 
   @media (max-width: 860px) {
     .title {
-      padding-left: 92px;
+      padding-right: 100px;
     }
 
-    .title :global(.art) {
-      width: 72px;
-      height: 72px;
-    }
-
-    .realms {
+      .realms {
       grid-template-columns: 1fr;
       gap: 12px;
     }
@@ -3129,14 +3460,10 @@
 
   @media (max-width: 640px) {
     .title {
-      padding-left: 104px;
+      padding-right: 96px;
     }
 
-    .title :global(.art) {
-      display: none;
-    }
-
-    .title h2 {
+      .title h2 {
       font-size: 28px;
     }
 
