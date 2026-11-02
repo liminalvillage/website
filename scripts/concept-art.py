@@ -63,6 +63,17 @@ class Art:
                         f'r="{f(0.6 + rng.random() * 1.1)}" opacity="{f(op * (0.4 + 0.6 * rng.random()))}"/>')
         self.body.append(f'<g fill="{WHITE}">{"".join(dots)}</g>')
 
+    def dots(self, cx, cy, r, n, color, size=(2, 5), op=0.85):
+        """Small filled dots in a colour: blossom, snow, leaves of light."""
+        rng = self.rng
+        out = []
+        for _ in range(n):
+            a = rng.random() * math.tau
+            d = r * math.sqrt(rng.random())
+            out.append(f'<circle cx="{f(cx + d * math.cos(a))}" cy="{f(cy + d * math.sin(a))}" '
+                       f'r="{f(rng.uniform(*size))}" opacity="{f(op * (0.5 + 0.5 * rng.random()))}"/>')
+        self.body.append(f'<g fill="{color}">{"".join(out)}</g>')
+
     def wobble(self, pts, jitter=1.6):
         """A smooth path through points, nudged so it reads as drawn by hand."""
         rng = self.rng
@@ -565,8 +576,14 @@ def season_winter():
     a.ring(mx, my, mr, 1.1, 0.9)
     arc = [(mx + 14 + mr * 0.9 * math.cos(t), my + mr * 0.9 * math.sin(t)) for t in [math.pi * (0.62 + 0.76 * i / 30) for i in range(31)]]
     a.line(a.wobble(arc, 0.3), 0.9, 0.8)
-    for _ in range(6):
-        a.stipple(rng.uniform(80, 720), rng.uniform(60, 400), rng.uniform(20, 40), 26, 0.55)
+    # snow falling everywhere, lying on the branches and on the ground
+    a.dots(400, 260, 380, 260, WHITE, (1.4, 3.6), 0.9)
+    a.body.append(f'<path d="M0 {ground - 6} C200 {ground - 16} 400 {ground - 4} 600 {ground - 14} S800 {ground - 8} 800 {ground - 8} L800 {ground + 4} L0 {ground + 4}Z" fill="{WHITE}" opacity="0.85"/>')
+    for _ in range(14):
+        x, y = rng.uniform(80, 720), rng.uniform(60, 420)
+        for k in range(3):
+            t = k * math.pi / 3
+            a.line(f'M{f(x - 7 * math.cos(t))} {f(y - 7 * math.sin(t))} L{f(x + 7 * math.cos(t))} {f(y + 7 * math.sin(t))}', 0.9, 0.85)
     _land(a, ground, (400,), (150, 300, 400, 500, 650), 22)
     a.grain()
     return a.svg('The winter solstice')
@@ -591,8 +608,13 @@ def season_spring():
         for k in range(5):
             t = math.tau * k / 5
             a.ring(x + 7 * math.cos(t), ground - h + 7 * math.sin(t), 4, 0.7, 0.8)
-    for _ in range(4):
-        a.stipple(rng.uniform(100, 700), rng.uniform(120, 380), rng.uniform(18, 30), 22, 0.5)
+    # blossom: the crown and the air full of pink and white petals
+    a.dots(400, 280, 80, 70, '#f4a6bf', (3, 6), 0.95)
+    a.dots(400, 280, 70, 40, WHITE, (2, 4), 0.9)
+    a.dots(400, 300, 360, 70, '#f7c3d3', (2, 4), 0.8)
+    for i in range(14):
+        a.dots(90 + i * 48, ground - 40 - (i * 37) % 40, 10, 6, '#ffe07a' if i % 2 else '#ffffff', (2.5, 4.5), 0.95)
+    a.dots(400, ground + 10, 380, 40, '#9fd27a', (2, 4), 0.8)
     _land(a, ground, (400, 200, 600), (200, 400, 600), 14)
     a.grain()
     return a.svg('The spring equinox')
@@ -621,6 +643,17 @@ def season_summer():
         h = rng.uniform(25, 60)
         a.line(a.wobble([(x, ground), (x + rng.uniform(-5, 5), ground - h / 2), (x + rng.uniform(-8, 8), ground - h)], 0.5), 0.9, 0.8)
         a.ring(x + rng.uniform(-6, 6), ground - h, 4.5, 0.8, 0.8)
+    # a bright sun and sunflowers
+    a.body.append(f'<circle cx="{sx}" cy="{sy}" r="40" fill="#ffd25a" opacity="0.9"/>')
+    a.body.append(f'<circle cx="{sx}" cy="{sy}" r="110" fill="#ffd25a" opacity="0.18"/>')
+    for x, h in [(120, 120), (680, 130), (420, 100), (740, 90), (60, 95)]:
+        a.line(a.wobble([(x, ground), (x + 4, ground - h / 2), (x, ground - h)], 0.6), 1.6, 0.9)
+        for k in range(12):
+            t = math.tau * k / 12
+            a.body.append(f'<ellipse cx="{f(x + 14 * math.cos(t))}" cy="{f(ground - h + 14 * math.sin(t))}" rx="8" ry="4" '
+                          f'transform="rotate({f(math.degrees(t))} {f(x + 14 * math.cos(t))} {f(ground - h + 14 * math.sin(t))})" fill="#f6c534" opacity="0.95"/>')
+        a.body.append(f'<circle cx="{x}" cy="{ground - h}" r="9" fill="#6a3a1a"/>')
+    a.dots(400, 250, 360, 50, '#fff0a8', (1.5, 3), 0.7)
     _land(a, ground, (250, 560), (150, 350, 600), 12)
     a.grain()
     return a.svg('The summer solstice')
@@ -648,6 +681,15 @@ def season_autumn():
         t = rng.uniform(0, math.tau)
         pts = [(x + 16 * math.cos(t + s * 0.9) * (1 if s < 4 else 0.3), y + 16 * math.sin(t + s * 0.9) * 0.5) for s in range(8)]
         a.line(a.wobble([(x, y), (x + 10 * math.cos(t) - 6, y + 10 * math.sin(t) - 9), (x + 20 * math.cos(t), y + 20 * math.sin(t)), (x + 10 * math.cos(t) + 6, y + 10 * math.sin(t) + 9), (x, y)], 0.4), 0.9, 0.8)
+    # leaves of fire falling and lying on the ground
+    for _ in range(46):
+        x, y = rng.uniform(40, 760), rng.uniform(40, ground - 10)
+        t = rng.uniform(0, 180)
+        c = rng.choice(['#e0702a', '#c8452a', '#e8a33a', '#a8402a'])
+        a.body.append(f'<path d="M{f(x)} {f(y)} c-6 -4 -6 -12 0 -16 c6 4 6 12 0 16Z" fill="{c}" opacity="0.9" transform="rotate({f(t)} {f(x)} {f(y)})"/>')
+    a.dots(400, ground - 4, 380, 120, '#d8682a', (2.5, 5), 0.9)
+    for cx, h, w in [(220, 70, 52), (470, 90, 64), (610, 52, 36)]:
+        a.body.append(f'<path d="M{cx - w} {ground - h} C{cx - w} {ground - h - w * 1.1} {cx + w} {ground - h - w * 1.1} {cx + w} {ground - h} Z" fill="#c8452a" opacity="0.55"/>')
     _land(a, ground, (220, 470, 610), (150, 250, 380, 480, 600, 700), 26)
     a.grain()
     return a.svg('The autumn equinox')

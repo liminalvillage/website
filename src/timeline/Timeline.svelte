@@ -126,7 +126,13 @@
   const hubClear = (a) => (Math.abs(Math.cos(a)) > 0.5 ? 740 : 230);
   // the four turnings' images, in the concept-art style (scripts/concept-art.py)
   const SEASON_NAME = { 270: 'winter', 0: 'spring', 90: 'summer', 180: 'autumn' };
-  const IMG_R = 540;
+  // the seasons as one band round the rim, each painting its quarter and
+  // dissolving into the next at the edges
+  const IMG_R = 1650;
+  const BAND_IN = 220;
+  const BAND_OUT = 360;
+  const annulus = (a0, a1, r0, r1) =>
+    `M${r0 * Math.cos(a0)} ${r0 * Math.sin(a0)}L${r1 * Math.cos(a0)} ${r1 * Math.sin(a0)}A${r1} ${r1} 0 0 1 ${r1 * Math.cos(a1)} ${r1 * Math.sin(a1)}L${r0 * Math.cos(a1)} ${r0 * Math.sin(a1)}A${r0} ${r0} 0 0 0 ${r0 * Math.cos(a0)} ${r0 * Math.sin(a0)}Z`;
   function buildRose() {
     const points = POINTS.map((pt) => {
       const a = lonAngle(pt.lon);
@@ -149,7 +155,7 @@
       return { points, quarters: quarters.map((q) => ({ ...q, hidden: true })), reach, solstices: [], halfW, halfH, rim };
     }
     // the words stand just beyond each turning's image
-    for (const p of points) p.at = Math.max(p.outer + 190, rim + IMG_R * 0.75 + 40);
+    for (const p of points) p.at = Math.max(p.outer + 190, rim + BAND_OUT + 40);
     const ext = [...points.map((p) => ({ a: p.a, r: p.at })), ...quarters.map((q) => ({ a: q.a, r: q.outer + 120 }))];
     const halfW = Math.max(...ext.map((e) => Math.abs(e.r * Math.cos(e.a)) + (Math.abs(Math.cos(e.a)) > 0.35 ? 680 : 340)));
     const halfH = Math.max(...ext.map((e) => Math.abs(e.r * Math.sin(e.a)) + (Math.abs(Math.sin(e.a)) > 0.35 ? 170 : 90)));
@@ -1025,6 +1031,38 @@
           <stop offset="1" stop-color="#fff6dc" stop-opacity="0" />
         </radialGradient>
         <circle class="sun-heart" r={rose.reach * 0.62} fill="url(#sun-heart)" />
+
+        <!-- the four quarters of the year, each in its own wash -->
+        <g mask="url(#rose-mask)">
+          {#each rose.quarters as q}<path class="quarter" d={wedge(q.a0, q.a1, rose.reach)} style="fill: {q.colour}" />{/each}
+        </g>
+        <radialGradient id="band-fade" cx="0" cy="0" r={rose.rim + BAND_OUT} gradientUnits="userSpaceOnUse">
+          <stop offset={(rose.rim - BAND_IN) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="0" />
+          <stop offset={(rose.rim - BAND_IN * 0.3) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="1" />
+          <stop offset={(rose.rim + BAND_OUT * 0.55) / (rose.rim + BAND_OUT)} stop-color="#fff" stop-opacity="1" />
+          <stop offset="1" stop-color="#fff" stop-opacity="0" />
+        </radialGradient>
+        <!-- a drawing for each turning of the sun, on the circle's edge, its
+             edges feathered into the washes; it wakes when hovered -->
+        {#if !phone}
+          {#each rose.points as pt}
+            {@const cx = (rose.rim + 70) * Math.cos(pt.a)}
+            {@const cy = (rose.rim + 70) * Math.sin(pt.a)}
+            <mask id="band-{pt.lon}" maskUnits="userSpaceOnUse" x="-5000" y="-5000" width="10000" height="10000">
+              <!-- its quarter, fading in and out across the band, and in steps
+                   into its neighbours on either side -->
+              <path d={annulus(pt.a - 0.42, pt.a + 0.42, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" />
+              {#each [0.8, 0.6, 0.4, 0.22, 0.1] as o, k}
+                <path d={annulus(pt.a + 0.42 + k * 0.07, pt.a + 0.49 + k * 0.07, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
+                <path d={annulus(pt.a - 0.49 - k * 0.07, pt.a - 0.42 - k * 0.07, rose.rim - BAND_IN, rose.rim + BAND_OUT)} style="fill: url(#band-fade)" opacity={o} />
+              {/each}
+            </mask>
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <g class="season-art" mask="url(#band-{pt.lon})">
+              <image href="/images/concepts/season-{SEASON_NAME[pt.lon]}.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} preserveAspectRatio="xMidYMid slice" />
+            </g>
+          {/each}
+        {/if}
         <!-- its rays shine out from the rim of the whole circle: slim beams of
              light, gold at the rim and fading into the paper, softly blurred,
              over a glowing corona -->
@@ -1047,29 +1085,6 @@
             <path d="M{r0 * Math.cos(a - w)} {r0 * Math.sin(a - w)}Q{m * Math.cos(a - w * 0.6)} {m * Math.sin(a - w * 0.6)} {r1 * Math.cos(a)} {r1 * Math.sin(a)}Q{m * Math.cos(a + w * 0.6)} {m * Math.sin(a + w * 0.6)} {r0 * Math.cos(a + w)} {r0 * Math.sin(a + w)}Z" />
           {/each}
         </g>
-        <!-- the four quarters of the year, each in its own wash -->
-        <g mask="url(#rose-mask)">
-          {#each rose.quarters as q}<path class="quarter" d={wedge(q.a0, q.a1, rose.reach)} style="fill: {q.colour}" />{/each}
-        </g>
-        <radialGradient id="season-feather-g" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0.5" stop-color="#fff" />
-          <stop offset="0.98" stop-color="#000" />
-        </radialGradient>
-        <mask id="season-feather" maskContentUnits="objectBoundingBox">
-          <rect width="1" height="1" fill="url(#season-feather-g)" />
-        </mask>
-        <!-- a drawing for each turning of the sun, on the circle's edge, its
-             edges feathered into the washes; it wakes when hovered -->
-        {#if !phone}
-          {#each rose.points as pt}
-            {@const cx = rose.rim * Math.cos(pt.a)}
-            {@const cy = rose.rim * Math.sin(pt.a)}
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <g class="season-art">
-              <image href="/images/concepts/season-{SEASON_NAME[pt.lon]}.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} mask="url(#season-feather)" preserveAspectRatio="xMidYMid slice" />
-            </g>
-          {/each}
-        {/if}
         <!-- the cross of solstices and equinoxes, never over the spiral or its words -->
         {#each rose.points as pt}
           {@const c = Math.cos(pt.a)}
