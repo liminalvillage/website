@@ -91,6 +91,9 @@
       return { colour: q.colour, depth, d: 'M' + c.map((p) => `${p.sx} ${p.sy}`).join('L') + 'Z' };
     });
   }).sort((s1, s2) => s2.depth - s1.depth));
+  // the colour of each season's painting, for the wash round its drawing
+  const FIELD = { winter: '#4a5680', spring: '#4f6a48', summer: '#b88a40', autumn: '#9a5232' };
+  const DRAW = 0.72; // the drawing, within its colour
   // each turning's painting floats beside the cone at its season, turning
   // round with it, nearer ones clearer, far ones faint; large enough that
   // neighbours melt into one another
@@ -165,10 +168,14 @@
     {#each paintings as pa (pa.lon)}
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <g class="painting" mask="url(#cone-art)" style="opacity: {artHover === pa.lon ? 0.9 : 0.2 + 0.4 * pa.near}" on:mouseenter={() => (artHover = pa.lon)} on:mouseleave={() => (artHover = null)}>
-        <image href="/images/concepts/season-{pa.name}.svg" x={pa.sx - pa.size / 2} y={pa.sy - pa.size / 2} width={pa.size} height={pa.size} />
-        {#if artHover === pa.lon}
-          <image href="/images/concepts/season-{pa.name}-more.svg" x={pa.sx - pa.size / 2} y={pa.sy - pa.size / 2} width={pa.size} height={pa.size} />
-        {/if}
+        <!-- the season's colour at full size, and its drawing a little smaller within it -->
+        <rect x={pa.sx - pa.size / 2} y={pa.sy - pa.size / 2} width={pa.size} height={pa.size} style="fill: {FIELD[pa.name]}" />
+        <g mask="url(#cone-art)">
+          <image href="/images/concepts/season-{pa.name}.svg" x={pa.sx - (pa.size * DRAW) / 2} y={pa.sy - (pa.size * DRAW) / 2} width={pa.size * DRAW} height={pa.size * DRAW} />
+          {#if artHover === pa.lon}
+            <image href="/images/concepts/season-{pa.name}-more.svg" x={pa.sx - (pa.size * DRAW) / 2} y={pa.sy - (pa.size * DRAW) / 2} width={pa.size * DRAW} height={pa.size * DRAW} />
+          {/if}
+        </g>
       </g>
     {/each}
     <!-- the sun's warmth round the cone's axis -->
