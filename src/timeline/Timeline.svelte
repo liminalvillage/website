@@ -264,6 +264,7 @@
   let tilted = false;
   // the spiral as a 3D cone, rising through time
   let three = false;
+  let lineKey = false; // the lunation's key, folded away until asked for
   $: if (level === 1 && three) three = false;
   // the solar view with everything in it: rings within rings. Pinching in
   // grows it out of the spiral (0, the spiral, to 1, the rings), following
@@ -273,21 +274,37 @@
   let growTimer;
   $: nested = grow > 0.001;
   let nestFrame = null;
+  // zoomed in the spiral of everything, the solar view behind moves with it
+  let nestZoom = { z: 1, x: 0, y: 0 };
+  $: if (!nested) nestZoom = { z: 1, x: 0, y: 0 };
+  // the solar view behind doesn't travel with it: it stays on the sun and
+  // fades back as the spiral grows in front (scaling it would cut its soft
+  // light into hard boxes)
+  $: bgFade = 0.3 + 0.7 / (1 + (nestZoom.z - 1) * 0.9);
+  // its words step aside sooner, so they never sit on the spiral's
+  $: labelFade = 1 / (1 + (nestZoom.z - 1) * 6);
+  // one pinch opens the spiral and rests there; zooming on in takes another
+  let lastWheel = 0;
+  let gestureAt = 0;
+  let openedAt = 0;
+  $: if (grow === 1) openedAt = Date.now();
   let nestRef;
+  // measured afresh each time it opens, from where the spiral is now
   function setGrow(v) {
     gsap.killTweensOf(growing);
+    if (!grow && v > 0) nestFrame = measure();
     growing.v = grow = Math.max(0, Math.min(1, v));
   }
   function growTo(v, duration = 0.9) {
-    if (v > 0 && !nestFrame) nestFrame = measure();
+    if (!grow && v > 0) nestFrame = measure();
     gsap.killTweensOf(growing);
     gsap.to(growing, { v, duration, ease: 'power2.inOut', onUpdate: () => (grow = growing.v) });
   }
+  // it finishes the way the fingers were going, once they have gone a little
   function growBy(d) {
-    if (!nestFrame) nestFrame = measure();
     setGrow(grow + d);
     clearTimeout(growTimer);
-    growTimer = setTimeout(() => growTo(grow > 0.35 ? 1 : 0, 0.6), 160);
+    growTimer = setTimeout(() => growTo((d > 0 ? grow > 0.12 : grow > 0.88) ? 1 : 0, 0.6), 160);
   }
   const openNest = () => ((three = false), growTo(1));
   const closeNest = () => growTo(0);
@@ -425,18 +442,19 @@
   // the title and the three below change one after the other: the old
   // fades away, then the new comes in, so they never sit over each other
   const fadeOut = (node) => ({ duration: 260, css: (t) => `opacity: ${t}` });
-  // the moon unrolls into the line: it widens and flattens as it goes
-  const unroll = () => ({ duration: 520, css: (t) => `transform: scale(${1 + (1 - t) * 1.6}, ${0.12 + t * 0.88}); opacity: ${t}` });
+  // the moon gives way to the line: it stays round, drawing in and fading
+  // as the line comes, never squashed into an oval
+  const unroll = () => ({ duration: 480, css: (t) => `transform: scale(${0.55 + t * 0.45}); opacity: ${t * t}` });
   const fadeIn = (node) => ({ delay: 280, duration: 420, css: (t) => `opacity: ${t}; transform: translateY(${(1 - t) * 6}px)` });
 
   // where the lunation's night circle sits on screen, once it is laid out
   function moonRect() {
-    const c = document.querySelector('.moon-view .mc-night');
+    const c = document.querySelector('.moon-view .mc-ground');
     if (!c) return null;
     const r = c.getBoundingClientRect();
     return r.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2, size: r.width } : null;
   }
-  // lunar: once the spiral's moon has landed, it hands over to the night moon
+  // lunar: once the spiral's moon has landed, it hands over to the lunar circle
   let landed = false;
   async function go(l, i = li) {
     const from = level === 1 && l === 1 ? li : null;
@@ -475,7 +493,24 @@
       e.preventDefault();
       return pinch(e.deltaY);
     }
-    if (level === 0 && grow === 1 && nestRef) return nestRef.wheel(e);
+    const t = Date.now();
+    if (t - lastWheel > 250) gestureAt = t;
+    lastWheel = t;
+    if (level === 1 && acrossYears) {
+      e.preventDefault();
+      yearAcc += e.deltaY;
+      clearTimeout(yearTimer);
+      yearTimer = setTimeout(() => (yearAcc = 0), 250);
+      if (Math.abs(yearAcc) > 90) {
+        stepYear(yearAcc > 0 ? 1 : -1);
+        yearAcc = -Math.sign(yearAcc) * 400; // one year per swipe
+      }
+      return;
+    }
+    if (level === 0 && grow === 1 && nestRef) {
+      if (openedAt > gestureAt) return e.preventDefault();
+      return nestRef.wheel(e);
+    }
     if (level === 0 && e.ctrlKey) {
       e.preventDefault();
       return pinch(e.deltaY);
@@ -538,6 +573,7 @@
     const dx = touch.x - e.changedTouches[0].clientX;
     const dy = touch.y - e.changedTouches[0].clientY;
     touch = null;
+    if (acrossYears && Math.abs(dy) > Math.abs(dx)) return Math.abs(dy) > 40 ? stepYear(Math.sign(dy)) : null;
     const d = Math.abs(dx) > Math.abs(dy) ? dx : dy;
     if (Math.abs(d) > 50) step(Math.sign(d));
   }
@@ -545,6 +581,8 @@
   function resize() {
     vw = window.innerWidth;
     vh = window.innerHeight;
+    // the rings follow the spiral to wherever it sits now
+    if (grow) requestAnimationFrame(() => (nestFrame = measure()));
     const was = phone;
     phone = vw < 640;
     if (theta.length && (was !== phone || !rose)) rose = buildRose();
@@ -653,7 +691,7 @@
   function pinch(dy) {
     // pinching in on the solar view opens it out into rings within rings
     if (level === 0) {
-      if (!three) growBy(-dy * 0.006);
+      if (!three) growBy(-dy * 0.016);
       return;
     }
     if (level !== 1) return;
@@ -970,8 +1008,25 @@
     : null;
   const YEAR_MS = 365.25 * 86_400_000;
   const sameSeason = (i, dir) => lunations.findIndex((l) => Math.abs(l.start - (lunations[i].start + dir * YEAR_MS)) < 16 * 86_400_000);
-  $: yearBefore = here ? sameSeason(li, -1) : -1;
-  $: yearAfter = here ? sameSeason(li, 1) : -1;
+  // across years: the lunar circle tips back, and the same time of year in
+  // the years before and after stacks above and below it, to step through
+  // without leaving the moon. Years the timeline doesn't hold yet are faint.
+  let acrossYears = false;
+  $: if (level !== 1 || linear) acrossYears = false;
+  $: yearStack = here && acrossYears ? [-2, -1, 1, 2].map((k) => {
+    const i = sameSeason(li, k);
+    if (i >= 0) return { k, i, index: lunations[i].index, name: lunations[i].name, start: lunations[i].start, heat: lunations[i].heat };
+    const start = here.start + k * YEAR_MS;
+    return { k, i: -1, index: Math.round(here.index + k * 12.368), name: '', start, heat: here.heat, ghost: true };
+  }) : [];
+  function stepYear(dir) {
+    const next = yearStack.find((y) => y.k === dir && !y.ghost);
+    if (!next) return;
+    li = next.i;
+    fly(true);
+  }
+  let yearAcc = 0;
+  let yearTimer;
 
   // beyond the hundredth: more moons, fading, and then a drift of stipple,
   // still, as in the pattern-language drawings
@@ -1132,7 +1187,8 @@
       frame={nestFrame}
       onOpen={(i) => (setGrow(0), go(1, i))}
       onClose={closeNest}
-      onPinchOut={(dy) => growBy(-dy * 0.006)}
+      onPinchOut={(dy) => growBy(-dy * 0.016)}
+      onZoom={(z) => (nestZoom = z)}
     />
   {/if}
   {#if three && level === 0}
@@ -1149,7 +1205,7 @@
       art={SEASON_NAME}
     />
   {/if}
-  <div class="world" class:three={three && level === 0} class:nesting={nested && level === 0} style:--grow={grow} class:phone class:small bind:this={world} data-level={level}>
+  <div class="world" class:three={three && level === 0} class:nesting={nested && level === 0} style:--grow={grow} style:translate={nestZoom.z > 1 ? `${nestZoom.x}px ${nestZoom.y}px` : null} style:scale={nestZoom.z > 1 ? nestZoom.z : null} style:--label-fade={labelFade} class:phone class:small bind:this={world} data-level={level}>
     {#if n && compass && rose}
       <svg class="path compass" viewBox="-5000 -5000 10000 10000" aria-hidden="true">
         <defs>
@@ -1358,15 +1414,15 @@
              other (never over each other), as the line flows on -->
         <!-- along the line, no single moon heads the page: each names itself on
              the line, and only the kinds of time stay up here -->
-        {#if linear}
-          <div class="line-head">
+        <!-- the kinds of time across the top, along the line and by the moon alike;
+             by the moon, with how many of each it holds -->
+        <div class="line-head">
             <span>kinds of time</span>
             {#each Object.entries(KINDS) as [key, k]}
-              <button type="button" class="kind-chip" class:off={off.has(key)} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}><svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}</button>
+              <button type="button" class="kind-chip" class:off={off.has(key)} class:none={!linear && !kindCount[key]} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}><svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}{#if !linear}<small>{kindCount[key] ?? 0}</small>{/if}</button>
             {/each}
             <button type="button" class="kind-chip lens" class:on={children} style="--c: {CHILDREN}" on:click={() => (children = !children)} aria-pressed={children}><i></i>children</button>
           </div>
-        {/if}
         {#key linear ? -1 : here.index}
         <header class="title" in:fadeIn out:fadeOut>
           <div>
@@ -1393,17 +1449,6 @@
                   {/each}
                 </dd>
               </div>
-              <div>
-                <dt>Kinds of time</dt>
-                <dd class="kinds">
-                  {#each Object.entries(KINDS) as [key, k]}
-                    <button type="button" class="kind-chip" class:off={off.has(key)} class:none={!kindCount[key]} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}>
-                      <svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}<small>{kindCount[key] ?? 0}</small>
-                    </button>
-                  {/each}
-                  <button type="button" class="kind-chip lens" class:on={children} style="--c: {CHILDREN}" title="everything about the children, in one colour" on:click={() => (children = !children)} aria-pressed={children}><i></i>children</button>
-                </dd>
-              </div>
               {#if tally}
                 <div>
                   <dt>This moon</dt>
@@ -1416,15 +1461,6 @@
                   </dd>
                 </div>
               {/if}
-              {#if yearBefore >= 0 || yearAfter >= 0}
-                <div>
-                  <dt>Across years</dt>
-                  <dd class="years">
-                    {#if yearBefore >= 0}<button type="button" on:click={() => go(1, yearBefore)}>← the same season a year before: Lunation {lunations[yearBefore].index}</button>{/if}
-                    {#if yearAfter >= 0}<button type="button" on:click={() => go(1, yearAfter)}>the same season a year on: Lunation {lunations[yearAfter].index} →</button>{/if}
-                  </dd>
-                </div>
-              {/if}
             </dl>
           </div>
         </header>
@@ -1433,7 +1469,6 @@
         <!-- a small note under the details, inviting visitors to co-create the moon -->
   {#if level === 1 && !linear && here && !member && !noteClosed && !itemsOf(here).filter((it) => !it.pinned && !it.sample).length}
     <aside class="invite" in:rise={{ y: 24, duration: 500, delay: 900 }} out:rise={{ y: 24, duration: 250 }}>
-      <svg class="invite-leaf" viewBox="-12 -30 24 32" aria-hidden="true"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /><path class="v" d="M0 -2 L0 -26" /></svg>
       <p><b>Lunation {here.index} may already be in planning.</b> Would you like to co-create it with us?</p>
       <a href="/apply">Apply to visit or join</a>
       <button type="button" class="invite-x" aria-label="Close the note" on:click={() => (noteClosed = true)}>×</button>
@@ -1444,7 +1479,27 @@
           <!-- the lunation as a moon in four quarters; a sideways swipe or a
                drag unrolls it into the lunar cycle -->
           <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <div class="moon-view" on:pointerdown={dragStart} out:unroll in:fadeIn>
+          <div class="moon-view" class:across={acrossYears} on:pointerdown={dragStart} out:unroll in:fadeIn>
+            <!-- the same time of year before (behind, above) and after (in front, below) -->
+            {#each yearStack as y (y.k)}
+              <div class="year-disc" class:ghost={y.ghost} class:after={y.k > 0} style="--k: {y.k}; --heat: {y.heat}">
+                <span class="year-ring"></span>
+              </div>
+            {/each}
+            <!-- the years as a small upright line beside the stack, flat and
+                 sharp: each year at the height of its ring, this one marked -->
+            {#if acrossYears}
+              <ol class="year-line" transition:rise={{ y: 6, duration: 300 }}>
+                {#each [...yearStack.filter((y) => y.k < 0), { k: 0, index: here.index, name: here.name, start: here.start, now: true }, ...yearStack.filter((y) => y.k > 0)] as y (y.k)}
+                  <li class:here={y.now} class:ghost={y.ghost} style="--k: {y.k}">
+                    <button type="button" disabled={y.now || y.ghost} on:click|stopPropagation={() => stepYear(y.k)}>
+                      <i></i><b>{yearOf(y.start)}</b>
+                      <span>Lunation {y.index}{y.name ? ` · ${y.name}` : ''}{y.ghost ? ' · not on the timeline yet' : ''}</span>
+                    </button>
+                  </li>
+                {/each}
+              </ol>
+            {/if}
             {#key here.index}
               <MoonCycle
                 L={here}
@@ -1609,7 +1664,10 @@
               {/if}
             </section>
           {/if}
-          <ul class="legend marks" aria-label="The marks">
+          <!-- the key, folded away until asked for -->
+          <button type="button" class="key-toggle" on:click={() => (lineKey = !lineKey)} aria-expanded={lineKey}>{lineKey ? 'hide key' : 'show key'}</button>
+          {#if lineKey}
+          <ul class="legend marks" aria-label="The marks" transition:rise={{ y: 6, duration: 220 }}>
             <li><svg viewBox="-12 -30 24 32" class="lg mk" style="--p: #7d4f9e"><path d="M-2.4 -2 C-2.6 -8 -2.6 -11 -2.2 -12 C-6 -12 -9 -12 -10 -14.6 C-9 -17 -6 -17.2 -2.2 -17.2 C-2.6 -21 -2.6 -27 0 -29 C2.6 -27 2.6 -21 2.2 -17.2 C6 -17.2 9 -17 10 -14.6 C9 -12 6 -12 2.2 -12 C2.6 -11 2.6 -8 2.4 -2 C1.4 0 -1.4 0 -2.4 -2Z" /></svg>holy day</li>
             <li><svg viewBox="-13 -29 26 31" class="lg mk" style="--p: #d7745c"><path d="M0 -1 Q-2 -7 -8 -6 Q-6 -11 -12 -14 Q-6 -16 -8 -22 Q-2 -20 0 -27 Q2 -20 8 -22 Q6 -16 12 -14 Q6 -11 8 -6 Q2 -7 0 -1Z" /></svg>event</li>
             <li><svg viewBox="-11 -29 22 30" class="lg mk" style="--p: #d9709e"><path d="M0 -28 C2 -22 4 -20 10 -19.5 C5.5 -16 4.5 -13 6.2 -6.5 C1.6 -9.6 -1.6 -9.6 -6.2 -6.5 C-4.5 -13 -5.5 -16 -10 -19.5 C-4 -20 -2 -22 0 -28Z" /></svg>birthday</li>
@@ -1621,7 +1679,7 @@
               <button type="button" role="radio" aria-checked={lively} class:on={lively} on:click={() => setLively(true)}>lively</button>
             </li>
           </ul>
-          <ul class="legend" aria-label="How to read the line">
+          <ul class="legend" aria-label="How to read the line" transition:rise={{ y: 6, duration: 220 }}>
             <li><svg viewBox="-12 -30 24 32" class="lg committed"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /></svg>committed</li>
             <li><svg viewBox="-12 -30 24 32" class="lg imagined"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /></svg>imagined</li>
             <li><svg viewBox="-12 -30 24 32" class="lg remembered"><path d="M0 0 C-11 -8 -12 -22 0 -31 C12 -22 11 -8 0 0Z" /></svg>remembered</li>
@@ -1629,10 +1687,11 @@
             <li><i class="lg-today"></i>today</li>
             <li class="lg-note">tap the line to open a day · samples until Holons holds the village's own</li>
           </ul>
+          {/if}
           {#if (compact || wide || !linear) && itemsOf(here).some((it) => it.at)}
-            <p class="picked">
-              {#if picked && (wide || picked.lunation === here.index)}{picked.title} · {day(picked.at)}{#if picked.where} · {picked.where}{/if}{:else}tap a {wide ? 'dot' : 'mark'} to read it{/if}
-            </p>
+            {#if picked && (wide || picked.lunation === here.index)}
+              <p class="picked">{picked.title} · {day(picked.at)}{#if picked.where} · {picked.where}{/if}</p>
+            {/if}
           {/if}
           {#if !itemsOf(here).filter((it) => !it.pinned && !it.sample).length}
             {#if member}
@@ -1646,7 +1705,7 @@
         <div class="realms" in:fadeIn out:fadeOut>
           {#each realms(here) as r}
             <section class="realm" class:lean={here.lean === r.key}>
-              <h3>{r.title}{#if here.lean === r.key}<span class="leans">this moon leans here</span>{/if}</h3>
+              <h3>{r.title}{#if here.lean === r.key}<span class="leans">this moon's focus</span>{/if}</h3>
               <ul>
                 {#each r.lines as line}<li>{line}</li>{/each}
               </ul>
@@ -1727,6 +1786,13 @@
         <svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M-10 0 H10" /><circle class="fill" cx="-5.5" r="2.4" /><circle class="fill" cx="1.5" r="2.4" /><circle class="fill" cx="7.5" r="1.6" /></svg>
         <span>linear</span>
       </button>
+      <!-- by the moon only: the same time of year across the years -->
+      {#if level === 1 && !linear}
+        <button type="button" class="years-view" class:on={acrossYears} aria-pressed={acrossYears} title="years: the same time of year, the years before and after" on:click={() => (acrossYears = !acrossYears)} transition:rise={{ y: -6, duration: 250 }}>
+          <svg viewBox="-12 -12 24 24" aria-hidden="true"><ellipse rx="8.5" ry="2.8" cy="-5.5" /><ellipse rx="8.5" ry="2.8" /><ellipse rx="8.5" ry="2.8" cy="5.5" /></svg>
+          <span>years</span>
+        </button>
+      {/if}
     </nav>
   {/if}
 
@@ -1912,6 +1978,22 @@
     pointer-events: none;
   }
 
+  /* the sun, washes and paintings zoom with the spiral as one picture; the
+     blurred rays rest while it does (a blur that size, scaled, tiles into boxes) */
+  .world.nesting {
+    transition: scale 0.28s ease-out, translate 0.28s ease-out;
+  }
+
+  .world.nesting .sun-rays {
+    opacity: calc(1 - var(--grow)) !important;
+    animation: none;
+  }
+
+  .world.nesting .label.cmp {
+    opacity: var(--label-fade, 1);
+    transition: opacity 0.3s ease;
+  }
+
   .bands path {
     fill: none;
     stroke-linecap: butt;
@@ -2028,42 +2110,25 @@
   }
 
   /* a small note in the corner */
+  /* tucked into the bottom corner, below everything else: narrow and tall,
+     the leaf above the words, so it covers nothing */
   .invite {
     position: fixed;
-    right: 24px;
-    bottom: 92px;
+    right: 16px;
+    bottom: 16px;
     z-index: 8;
     display: grid;
-    grid-template-columns: 22px 1fr;
-    gap: 4px 10px;
+    grid-template-columns: 1fr;
+    gap: 6px;
     align-items: start;
-    width: min(300px, 80vw);
-    padding: 12px 34px 12px 12px;
+    width: min(170px, 60vw);
+    padding: 14px 28px 14px 14px;
     border: 1px solid color-mix(in srgb, var(--bark-900) 12%, transparent);
     border-radius: 16px 16px 4px 16px;
     background: color-mix(in srgb, var(--tl-paper, #fffaf2) 96%, #fff);
     box-shadow: 0 10px 30px color-mix(in srgb, var(--bark-900) 14%, transparent);
     font-size: 12.5px;
     line-height: 1.45;
-  }
-
-  .invite-leaf {
-    grid-row: span 2;
-    width: 22px;
-    height: 28px;
-    overflow: visible;
-    animation: sway 4s ease-in-out infinite;
-    transform-origin: 50% 100%;
-  }
-
-  .invite-leaf path {
-    fill: color-mix(in srgb, #7d9466 60%, transparent);
-    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
-    stroke-width: 1;
-  }
-
-  .invite-leaf .v {
-    fill: none;
   }
 
   .invite p {
@@ -2493,13 +2558,16 @@
     filter: saturate(1.3);
   }
 
+  /* the number and day grow to stay readable when the spiral is small on
+     screen, but never past what fits inside the moon */
   .num {
-    font: 300 max(70px, calc(18px * var(--inv, 1))) / 1 'Outfit', system-ui, sans-serif;
+    font: 300 clamp(70px, calc(18px * var(--inv, 1)), 100px) / 1 'Outfit', system-ui, sans-serif;
   }
 
   .when {
-    font-size: max(30px, calc(10px * var(--inv, 1)));
+    font-size: clamp(30px, calc(10px * var(--inv, 1)), 40px);
     color: var(--bark-700, #5a4632);
+    white-space: nowrap;
   }
 
   /* drawn just inside the moon's own edge, so the line never crosses it */
@@ -2513,7 +2581,7 @@
   }
 
   .now .when {
-    font: 300 max(29.5px, calc(10.5px * var(--inv, 1))) 'Playpen Sans', 'Quicksand', sans-serif;
+    font: 300 clamp(29.5px, calc(10.5px * var(--inv, 1)), 40px) 'Playpen Sans', 'Quicksand', sans-serif;
     color: var(--rust, #c4463c);
   }
 
@@ -2602,21 +2670,21 @@
     color: var(--bark-600, #7a6550);
   }
 
+  /* each label above its content, so the content starts at the margin and
+     has the whole width */
   .facts {
     display: grid;
-    gap: 6px;
+    gap: 12px;
     margin: 0;
   }
 
   .facts > div {
     display: grid;
-    grid-template-columns: 64px 1fr;
-    align-items: baseline;
-    gap: 10px;
+    gap: 3px;
   }
 
   .facts dt {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--bark-600, #7a6550);
   }
 
@@ -2624,9 +2692,13 @@
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 6px 12px;
+    gap: 6px 8px;
     margin: 0;
     font-size: 14px;
+  }
+
+  .facts dd button {
+    text-align: left;
   }
 
   .theme {
@@ -2645,18 +2717,18 @@
     border-bottom: 1px dashed color-mix(in srgb, var(--bark-900) 50%, transparent);
   }
 
+  /* a goal to a line, so a long one never starts its second line indented */
   .goal {
+    display: block;
     font-size: 13px;
+  }
+
+  .goal + .goal {
+    margin-top: 3px;
   }
 
   .goal b {
     font-weight: 600;
-  }
-
-  .goal + .goal::before {
-    content: '·';
-    margin-right: 12px;
-    color: var(--bark-600, #7a6550);
   }
 
   /* the line across, with its weeks, as on the Miro: a ribbon of every
@@ -2851,10 +2923,7 @@
   }
 
   .words b {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block;
     font-weight: 400;
   }
 
@@ -3573,6 +3642,17 @@
   }
 
   /* how to read the line */
+  .key-toggle {
+    justify-self: center;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px dashed color-mix(in srgb, var(--bark-900) 40%, transparent);
+    background: none;
+    color: var(--bark-700, #5a4632);
+    font: 300 12px 'Playpen Sans', 'Quicksand', sans-serif;
+    cursor: pointer;
+  }
+
   .legend {
     display: flex;
     flex-wrap: wrap;
@@ -3700,13 +3780,20 @@
     text-transform: none;
   }
 
+  /* where the moon leans: a soft wash of warm light behind it, like a
+     highlighter's stroke, and a small note beside the name */
   .realm.lean h3 {
-    border-bottom: 2px solid var(--bark-900);
+    border-bottom-color: color-mix(in srgb, #e8b94a 70%, transparent);
+    border-bottom-width: 2px;
+    background: linear-gradient(transparent 45%, color-mix(in srgb, #ffd98a 45%, transparent) 45%, color-mix(in srgb, #ffd98a 45%, transparent) 92%, transparent 92%) no-repeat 0 0 / 100% 100%;
   }
 
   .leans {
-    font: 300 12px 'Playpen Sans', 'Quicksand', sans-serif;
-    color: var(--rust, #c4463c);
+    padding: 0 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffd98a 55%, var(--tl-paper, #fffaf2));
+    font: 300 11.5px 'Playpen Sans', 'Quicksand', sans-serif;
+    color: var(--bark-800, #4a3828);
   }
 
   .realm ul {
@@ -3828,7 +3915,8 @@
   }
 
   .views path,
-  .views circle {
+  .views circle,
+  .views ellipse {
     fill: none;
     stroke: currentColor;
     stroke-width: 1.3;
@@ -3864,12 +3952,31 @@
     column-gap: 24px;
   }
 
+  /* lunar: the kinds of time to the side, top right under the views,
+     aligned to the right */
+  .closeup:not(.linear) .line-head {
+    position: fixed;
+    top: 104px;
+    right: 16px;
+    z-index: 5;
+    justify-content: flex-end;
+    max-width: 300px;
+    padding: 0;
+  }
+
+  /* narrow, close to the edge: a tag or two to a row, the label on its own */
+  .closeup:not(.linear) .line-head > span {
+    flex-basis: 100%;
+    margin: 0 0 2px;
+    text-align: right;
+  }
+
   .closeup:not(.linear) .title {
     grid-column: 1;
     grid-row: 1;
   }
 
-  /* lunar: the moon in the centre, the details beside it on the left */
+  /* the moon in the centre, the details beside it on the left */
   .closeup:not(.linear) .moon-view {
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -3886,6 +3993,11 @@
     height: calc(100vh - 300px);
   }
 
+  /* and the legend keeps clear of the corner it sits in */
+  .closeup.has-invite .legend {
+    padding-right: 190px;
+  }
+
   .closeup:not(.linear) > :global(:not(.title):not(.moon-view):not(.invite)) {
     grid-column: 1 / -1;
   }
@@ -3898,7 +4010,16 @@
     /* one column: the moon comes straight after the title, before the details */
     .closeup:not(.linear) .moon-view {
       grid-column: 1;
-      grid-row: 2;
+      grid-row: 3;
+    }
+
+    /* one column: the kinds of time back in the flow, at the top */
+    .closeup:not(.linear) .line-head {
+      position: static;
+      max-width: none;
+      justify-content: flex-start;
+      grid-column: 1;
+      grid-row: 1;
     }
 
     .closeup:not(.linear) .moon-view :global(.moon-cycle) {
@@ -3908,11 +4029,11 @@
     }
 
     .closeup:not(.linear) .title {
-      grid-row: 1;
+      grid-row: 2;
     }
 
     .closeup:not(.linear) .invite {
-      grid-row: 3;
+      grid-row: 4;
     }
   }
 
@@ -3942,6 +4063,7 @@
   /* the lunation's circle shows once the spiral's moon has landed on it;
      then the spiral's moon steps away beneath it */
   .moon-view {
+    position: relative;
     opacity: 0;
     transition: opacity 0.6s ease;
     padding: 8px 0 4px;
@@ -3950,6 +4072,148 @@
     transform-origin: 50% 50%;
     cursor: grab;
   }
+
+  .moon-view > :global(.moon-cycle) {
+    grid-area: 1 / 1;
+    transition: transform 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  /* across years: this year's moon stays flat and sharp; the other years
+     lie as tilted rings above and below it */
+  .moon-view.across > :global(.moon-cycle) {
+    transform: scale(0.62);
+  }
+
+  .year-disc {
+    grid-area: 1 / 1;
+    position: relative;
+    width: min(338px, 49.6vw);
+    height: min(338px, 49.6vw);
+    transform: translateY(calc(var(--k) * 168px)) scale(calc(0.62 - (var(--k) * var(--k)) * 0.04), calc((0.62 - (var(--k) * var(--k)) * 0.04) * 0.42));
+    pointer-events: none;
+    z-index: 1;
+    animation: year-in 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  /* the other years: clear enough, the ones to come and the ones not on the
+     timeline fainter */
+  .year-disc {
+    opacity: calc(0.8 - (var(--k) * var(--k)) * 0.12);
+  }
+
+  .year-disc.ghost {
+    opacity: calc(0.45 - (var(--k) * var(--k)) * 0.06);
+  }
+
+  .year-ring {
+    pointer-events: none;
+  }
+
+  @keyframes year-in {
+    from {
+      opacity: 0;
+      transform: translateY(0) scale(0.62, 0.26);
+    }
+  }
+
+  .year-ring {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid color-mix(in srgb, var(--bark-900) 35%, transparent);
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, transparent 55%, color-mix(in srgb, var(--heat) 28%, transparent) 100%);
+  }
+
+  .year-disc.ghost .year-ring {
+    border-style: dashed;
+    background: color-mix(in srgb, var(--tl-paper, #fffaf2) 50%, transparent);
+  }
+
+  /* the year line: flat, beside the stack, a dot and a year at the height
+     of each ring, joined by a thread */
+  .year-line {
+    position: absolute;
+    left: calc(50% + min(150px, 22vw) + 40px);
+    top: 50%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    z-index: 3;
+  }
+
+  .year-line::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: -336px;
+    height: 672px;
+    border-left: 1px dashed color-mix(in srgb, var(--bark-900) 30%, transparent);
+  }
+
+  .year-line li {
+    position: absolute;
+    left: 0;
+    top: calc(var(--k) * 168px);
+    transform: translateY(-50%);
+  }
+
+  .year-line button {
+    display: grid;
+    grid-template-columns: 10px auto;
+    column-gap: 10px;
+    align-items: baseline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #2f3760;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .year-line button:disabled {
+    cursor: default;
+  }
+
+  .year-line i {
+    grid-row: span 2;
+    align-self: center;
+    width: 9px;
+    height: 9px;
+    border: 1px solid color-mix(in srgb, var(--bark-900) 55%, transparent);
+    border-radius: 50%;
+    background: var(--tl-paper, #fffaf2);
+  }
+
+  .year-line .here i {
+    background: #2f3760;
+    border-color: #2f3760;
+    box-shadow: 0 0 0 4px color-mix(in srgb, #2f3760 15%, transparent);
+  }
+
+  .year-line b {
+    font: 400 15px 'Outfit', system-ui, sans-serif;
+  }
+
+  .year-line .here b {
+    font-weight: 500;
+  }
+
+  .year-line span {
+    font: 300 11px 'Playpen Sans', 'Quicksand', sans-serif;
+    color: var(--bark-700, #5a4632);
+  }
+
+  .year-line .ghost {
+    opacity: 0.5;
+  }
+
+  .year-line button:not(:disabled):hover b {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+
 
   .map-centre circle {
     fill: color-mix(in srgb, #fffdf8 70%, transparent);

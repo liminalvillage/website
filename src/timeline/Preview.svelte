@@ -8,7 +8,7 @@
   export let x = 0;
   export let y = 0;
 
-  const W = 260;
+  const W = 300;
   const fmt = (t) => new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   $: items = (lunation?.items ?? []).filter((it) => it.title).slice().sort((a, b) => a.at - b.at);
   $: light = lunation?.sunAt ? lunation.sunAt.change : 0;
@@ -41,19 +41,20 @@
     {:else}
       <p class="quiet">nothing noted yet</p>
     {/if}
-    <p class="open">tap to open</p>
+
   </aside>
 {/if}
 
 <style>
+  /* not a card: the words float by the moon on a soft patch of paper,
+     as the compass's own labels do, a breath of the moon's warmth in it */
   .peek {
     position: fixed;
     z-index: 1300;
-    padding: 12px 14px 10px;
-    border: 1px solid color-mix(in srgb, var(--bark-900) 14%, transparent);
-    border-radius: 14px;
-    background: radial-gradient(circle at 0 0, color-mix(in srgb, var(--heat) 22%, #fffdf8), #fffdf8 70%);
-    box-shadow: 0 10px 30px -14px rgba(60, 40, 20, 0.35);
+    padding: 22px 30px 20px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--tl-paper, #fffaf2) 94%, var(--heat)) 60%, color-mix(in srgb, var(--tl-paper, #fffaf2) 70%, transparent) 80%, transparent 100%);
+    text-shadow: 0 0 6px var(--tl-paper, #fffaf2), 0 0 3px var(--tl-paper, #fffaf2);
     color: var(--bark-900);
     font: 300 12px/1.4 'Playpen Sans', 'Quicksand', sans-serif;
     pointer-events: none;
@@ -74,14 +75,8 @@
   }
 
   header b {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    place-items: center;
-    border: 1px solid color-mix(in srgb, var(--bark-900) 55%, transparent);
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--heat) 40%, #fffdf8);
-    font: 300 15px 'Outfit', system-ui, sans-serif;
+    font: 300 26px/1 'Outfit', system-ui, sans-serif;
+    color: color-mix(in srgb, var(--heat) 55%, #2f3760);
   }
 
   header span {
@@ -92,12 +87,12 @@
   header em {
     font-style: normal;
     font-size: 14px;
+    color: #2f3760;
   }
 
   small,
   .light,
   .quiet,
-  .open,
   .more {
     color: var(--bark-700, #5a4632);
   }
@@ -122,8 +117,8 @@
 
   li i {
     flex: none;
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     transform: translateY(-1px);
   }
@@ -138,9 +133,5 @@
     margin: 6px 0 0;
   }
 
-  .open {
-    margin: 8px 0 0;
-    font-size: 10.5px;
-    text-align: right;
-  }
+
 </style>
