@@ -263,6 +263,7 @@
   // the spiral as a 3D cone, rising through time
   let three = false;
   $: if (level === 1 && three) three = false;
+  $: if (!three) tipFrom = null;
   function toggleTilt() {
     tilted = !tilted;
     gsap.to(cam, { tilt: tilted ? 52 : 0, duration: 1.2, ease: 'sine.inOut', onUpdate: apply });
@@ -670,12 +671,29 @@
     scrubbing = true;
     scrubTo(e);
   }
+  // on the solar view, pulling the spiral up or down tips it into 3D, the
+  // drag carrying straight on into the cone
+  let tip = null;
+  let tipFrom = null;
+  function tipStart(e) {
+    if (level !== 0 || three || e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button, a, input, .views, .map, .filters, .key')) return;
+    tip = { x: e.clientX, y: e.clientY };
+  }
+  function tipMove(e) {
+    if (!tip) return;
+    if (Math.abs(e.clientY - tip.y) > 14 && Math.abs(e.clientY - tip.y) > Math.abs(e.clientX - tip.x)) {
+      tipFrom = { x: tip.x, y: tip.y };
+      tip = null;
+      three = true;
+    }
+  }
   let drag = null;
   function dragStart(e) {
     if (level !== 1 || e.button !== 0 || e.target.closest('.leaf, button, a')) return;
     drag = { x: e.clientX, pos, moved: false };
   }
   function dragMove(e) {
+    tipMove(e);
     if (scrubbing) return scrubTo(e);
     if (!drag) return;
     const dx = e.clientX - drag.x;
@@ -691,6 +709,7 @@
     if (drag.moved) pan(drag.pos - (e.clientX - drag.x) / segPx);
   }
   function dragEnd() {
+    tip = null;
     scrubbing = false;
     if (drag?.moved) setTimeout(() => (drag = null));
     else drag = null;
@@ -1028,7 +1047,7 @@
 
 <svelte:window on:resize={resize} on:keydown={onKey} on:pointermove={dragMove} on:pointerup={dragEnd} />
 
-<main class="tl" class:landed={level === 1 && !linear && landed} class:close={level === 1 && !travelling} bind:this={page} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
+<main class="tl" class:landed={level === 1 && !linear && landed} class:close={level === 1 && !travelling} bind:this={page} on:pointerdown={tipStart} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
   <div class="glow" aria-hidden="true"></div>
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <filter id="tl-wash" x="-20%" y="-20%" width="140%" height="140%">
@@ -1039,12 +1058,14 @@
   <div class="threads"><Mycelium opacity={0.2} /></div>
   {#if three && level === 0}
     <Spiral3D
-      known={lunations.map((l, i) => ({ index: l.index, angle: theta[i], heat: l.heat, now: l.now }))}
+      known={lunations.map((l, i) => ({ index: l.index, angle: theta[i], heat: l.heat, now: l.now, when: l.now ? 'now' : day(l.start) }))}
       {firstIndex}
       onPick={(i) => ((three = false), go(1, i))}
-      onFlat={() => (three = false)}
+      onFlat={() => ((three = false), (tipFrom = null))}
+      grab={tipFrom}
       quarters={rose?.quarters ?? []}
       points={rose?.points ?? []}
+      art={SEASON_NAME}
     />
   {/if}
   <div class="world" class:three={three && level === 0} class:phone class:small bind:this={world} data-level={level}>
@@ -1097,13 +1118,19 @@
               {/each}
             </mask>
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <g class="season-art" class:awake={seasonHover === pt.lon} mask="url(#band-{pt.lon})" on:mouseenter={() => (seasonHover = pt.lon)} on:mouseleave={() => (seasonHover = null)}>
+            <g class="season-art" class:awake={seasonHover === pt.lon} mask="url(#band-{pt.lon})">
               <image href="/images/concepts/season-{SEASON_NAME[pt.lon]}.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} preserveAspectRatio="xMidYMid slice" />
               <!-- hovered, the season grows: snow falls, shoots sprout, mushrooms rise -->
               {#if seasonHover === pt.lon}
                 <image class="more" href="/images/concepts/season-{SEASON_NAME[pt.lon]}-more.svg" x={cx - IMG_R} y={cy - IMG_R} width={IMG_R * 2} height={IMG_R * 2} preserveAspectRatio="xMidYMid slice" />
               {/if}
             </g>
+          {/each}
+          <!-- where each drawing can be woken: its own quarter of the band,
+               outside the spiral, so the images never catch the pointer elsewhere -->
+          {#each rose.points as pt}
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <path class="season-hit" d={annulus(pt.a - 0.7, pt.a + 0.7, rose.rim + 60, rose.rim + BAND_OUT)} on:mouseenter={() => (seasonHover = pt.lon)} on:mouseleave={() => (seasonHover = null)} />
           {/each}
         {/if}
         <!-- its light: bright white at the heart, warming to yellow, and soft
@@ -1772,8 +1799,11 @@
     opacity: 0;
   }
 
+  /* hidden, not just clear, so nothing in it (the season hover areas, the
+     moons) catches the pointer over the cone */
   .world.three {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   }
 
@@ -1847,14 +1877,19 @@
      behind the spiral and feathered into the washes; hovered, it wakes */
   /* each turning's image sits on the circle's edge, feathered into the
      washes, and comes forward when hovered */
+  .compass .season-hit {
+    fill: transparent;
+    stroke: none;
+    pointer-events: fill;
+  }
+
   .season-art {
-    pointer-events: visiblePainted;
+    pointer-events: none;
     cursor: default;
     opacity: 0.32;
     transition: opacity 0.8s ease;
   }
 
-  .season-art:hover,
   .season-art.awake {
     opacity: 0.8;
   }

@@ -14,8 +14,10 @@
   export let firstIndex = 84;
   export let onPick = () => {};
   export let onFlat = () => {};
+  export let grab = null; // { x, y }: opened by pulling the flat spiral, the pull carries on here
   export let quarters = []; // the seasons compass: [{ a0, a1, colour, name }]
-  export let points = []; // the solstices and equinoxes: [{ a, name }]
+  export let points = []; // the solstices and equinoxes: [{ a, name, note, lon }]
+  export let art = {}; // each turning's painting by its longitude: { 270: 'winter', ... }
 
   const FLAT = Math.PI / 2; // seen from straight above
   const TILT = 0.8;
@@ -28,6 +30,7 @@
   let drag = null;
   let frame = 0;
   let hover = null;
+  let artHover = null;
 
   const H = 7; // height per lunation
   const radiusOf = (index) => 26 + (index - 1) * 2.6;
@@ -75,8 +78,29 @@
     const c = place(0, 0, zTop);
     return { colour: q.colour, d: `M${c.sx} ${c.sy}` + ring.map((p) => `L${p.sx} ${p.sy}`).join('') + 'Z' };
   }));
+  // and all round its sides: the cone wrapped in the four washes, in thin
+  // slices so it curves, the near side lighter than the far
+  $: sides = (yaw, pitch, scale, quarters.flatMap((q) => {
+    const a1 = q.a1 > q.a0 ? q.a1 : q.a1 + Math.PI * 2;
+    const n = Math.max(2, Math.ceil((a1 - q.a0) / 0.14));
+    return Array.from({ length: n }, (_, k) => {
+      const b0 = q.a0 + ((a1 - q.a0) * k) / n;
+      const b1 = q.a0 + ((a1 - q.a0) * (k + 1)) / n + 0.004;
+      const c = [place(radiusOf(top) * 1.04, b0, zTop), place(radiusOf(top) * 1.04, b1, zTop), place(radiusOf(1), b1, -zTop), place(radiusOf(1), b0, -zTop)];
+      const depth = (c[0].depth + c[1].depth) / 2;
+      return { colour: q.colour, depth, d: 'M' + c.map((p) => `${p.sx} ${p.sy}`).join('L') + 'Z' };
+    });
+  }).sort((s1, s2) => s2.depth - s1.depth));
+  // each turning's painting floats beside the cone at its season, turning
+  // round with it, nearer ones clearer, far ones faint; large enough that
+  // neighbours melt into one another
+  $: paintings = (yaw, pitch, scale, points.filter((pt) => art[pt.lon]).map((pt) => {
+    const p = place(rimR * 1.3, pt.a, zTop * 0.25);
+    return { ...pt, name: art[pt.lon], ...p, size: Math.min(w, h) * 0.78 * p.k, near: Math.max(0, Math.min(1, 0.5 - p.depth / (2 * rimR))) };
+  }).sort((p1, p2) => p2.depth - p1.depth));
   $: turnings = (yaw, pitch, scale, points.map((pt) => ({
     name: pt.name,
+    note: pt.note,
     label: place(rimR * 1.12, pt.a, zTop),
     top: place(rimR, pt.a, zTop),
     foot: place(radiusOf(1) * 1.5, pt.a, -zTop),
@@ -88,10 +112,16 @@
     if (opening && !drag) {
       pitch += (TILT - pitch) * 0.06;
       if (Math.abs(pitch - TILT) < 0.005) opening = false;
-    } else if (spin && !drag && !hover) yaw += 0.0025;
+    } else if (spin && !drag && !hover && artHover === null) yaw += 0.0025;
     frame = requestAnimationFrame(loop);
   }
-  onMount(() => (frame = requestAnimationFrame(loop)));
+  onMount(() => {
+    if (grab) {
+      opening = false;
+      drag = { x: grab.x, y: grab.y, yaw, pitch: FLAT, fromFlat: true };
+    }
+    frame = requestAnimationFrame(loop);
+  });
   onDestroy(() => cancelAnimationFrame(frame));
 
   function down(e) {
@@ -101,7 +131,9 @@
   function move(e) {
     if (!drag) return;
     yaw = drag.yaw + (e.clientX - drag.x) * 0.006;
-    pitch = Math.max(0.05, Math.min(FLAT, drag.pitch + (e.clientY - drag.y) * 0.004));
+    // pulled out of the flat view, either way up tips it
+    const dy = drag.fromFlat ? -Math.abs(e.clientY - drag.y) : e.clientY - drag.y;
+    pitch = Math.max(0.05, Math.min(FLAT, drag.pitch + dy * 0.004));
   }
   // let go near the top view, and it lies down flat again
   function up() {
@@ -120,12 +152,32 @@
         <stop offset="0" stop-color="#ffe7a0" stop-opacity="0.7" />
         <stop offset="1" stop-color="#fff6dc" stop-opacity="0" />
       </radialGradient>
+      <radialGradient id="cone-art-fade">
+        <stop offset="0.1" stop-color="#fff" stop-opacity="1" />
+        <stop offset="0.5" stop-color="#fff" stop-opacity="0.6" />
+        <stop offset="0.8" stop-color="#fff" stop-opacity="0.15" />
+        <stop offset="0.98" stop-color="#fff" stop-opacity="0" />
+      </radialGradient>
+      <mask id="cone-art" maskContentUnits="objectBoundingBox">
+        <rect width="1" height="1" fill="url(#cone-art-fade)" />
+      </mask>
     </defs>
+    {#each paintings as pa (pa.lon)}
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <g class="painting" mask="url(#cone-art)" style="opacity: {artHover === pa.lon ? 0.9 : 0.2 + 0.4 * pa.near}" on:mouseenter={() => (artHover = pa.lon)} on:mouseleave={() => (artHover = null)}>
+        <image href="/images/concepts/season-{pa.name}.svg" x={pa.sx - pa.size / 2} y={pa.sy - pa.size / 2} width={pa.size} height={pa.size} />
+        {#if artHover === pa.lon}
+          <image href="/images/concepts/season-{pa.name}-more.svg" x={pa.sx - pa.size / 2} y={pa.sy - pa.size / 2} width={pa.size} height={pa.size} />
+        {/if}
+      </g>
+    {/each}
     <!-- the sun's warmth round the cone's axis -->
     <ellipse cx={w / 2} cy={h / 2} rx={Math.min(w, h) * 0.42} ry={Math.min(w, h) * 0.46} fill="url(#cone-sun)" />
+    {#each sides as sd}<path class="side" d={sd.d} style="fill: {sd.colour}; opacity: {0.1 + 0.14 * Math.max(0, Math.min(1, 0.5 - sd.depth / 600))}" />{/each}
     {#each washes as q}<path class="wash" d={q.d} style="fill: {q.colour}" />{/each}
     {#each turnings as t}<line class="turning" x1={t.top.sx} y1={t.top.sy} x2={t.foot.sx} y2={t.foot.sy} />{/each}
     {#each segments as s}
+      {#if !s.b.past}<line class="seg-wash" x1={s.a.sx} y1={s.a.sy} x2={s.b.sx} y2={s.b.sy} style="stroke: {s.b.heat}; stroke-width: {16 * s.b.k}" />{/if}
       <line class="seg" class:past={s.a.past} x1={s.a.sx} y1={s.a.sy} x2={s.b.sx} y2={s.b.sy} style="stroke: {s.b.past ? '' : s.b.heat}; opacity: {Math.max(0.25, Math.min(1, 0.6 + (-s.depth / 400)))}" />
     {/each}
     {#each dots as p (p.index)}
@@ -134,17 +186,22 @@
       {:else}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <g class="moon" class:now={p.now} transform="translate({p.sx} {p.sy}) scale({p.k})" on:click|stopPropagation={() => onPick(p.i)} on:mouseenter={() => (hover = p)} on:mouseleave={() => (hover = null)} role="button" tabindex="-1" aria-label="Lunation {p.index}">
-          <circle r="13" style="fill: color-mix(in srgb, {p.heat} 40%, #fffdf8)" />
-          <text y="4">{p.index}</text>
+          <circle class="blob" r="19" cx={((p.index * 37) % 5) - 2} cy={((p.index * 53) % 5) - 2} style="fill: color-mix(in srgb, {p.heat} 50%, transparent)" />
+          <circle class="paper" r="16" style="fill: color-mix(in srgb, {p.heat} 14%, #fffdf8)" />
+          <circle class="ink" r="15" />
+          <circle class="ink inner" r="12.5" />
+          <text y="2">{p.index}</text>
+          <text class="when" y="9.5">{p.when}</text>
         </g>
       {/if}
     {/each}
     {#each turnings as t}
       <text class="turning-name" x={t.label.sx} y={t.label.sy}>{t.name}</text>
+      {#if t.note}<text class="turning-note" x={t.label.sx} y={t.label.sy + 14}>{t.note}</text>{/if}
     {/each}
   </svg>
   <p class="cone-note">
-    {#if hover}Lunation {hover.index}{#if hover.past} · before the timeline: its story comes from Holons{/if}{:else}drag to turn the spiral, up to lay it flat · tap a moon to open it{/if}
+    {#if artHover !== null}{points.find((pt) => pt.lon === artHover)?.name ?? ''}{:else if hover}Lunation {hover.index}{#if hover.past} · before the timeline: its story comes from Holons{/if}{:else}drag to turn the spiral, up to lay it flat · tap a moon to open it{/if}
   </p>
   <button type="button" class="cone-spin" on:click={() => (spin = !spin)}>{spin ? 'pause' : 'turn'}</button>
 </div>
@@ -155,20 +212,77 @@
     inset: 84px 0 90px;
     cursor: grab;
     touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .cone.dragging {
     cursor: grabbing;
   }
 
+  /* the paintings fade out on their own: never cut off at the edge of the
+     drawing, above the footer */
   svg {
     display: block;
     width: 100%;
     height: 100%;
+    overflow: visible;
   }
 
   .wash {
     opacity: 0.32;
+  }
+
+  .painting {
+    cursor: default;
+    transition: opacity 0.6s ease;
+  }
+
+  .side {
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  .seg-wash {
+    stroke-linecap: round;
+    opacity: 0.32;
+    mix-blend-mode: multiply;
+  }
+
+  .moon .blob {
+    stroke: none;
+    mix-blend-mode: multiply;
+  }
+
+  .moon .ink {
+    fill: none;
+  }
+
+  .moon:hover .blob {
+    filter: saturate(1.4);
+  }
+
+  .moon .ink.inner {
+    opacity: 0.4;
+  }
+
+  .moon .when {
+    font: 300 4.5px 'Outfit', system-ui, sans-serif;
+    fill: var(--bark-700, #5a4632);
+  }
+
+  .moon.now .when {
+    fill: var(--rust, #c4463c);
+  }
+
+  .turning-note {
+    font: 300 10px 'Playpen Sans', 'Quicksand', sans-serif;
+    fill: var(--bark-700, #5a4632);
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: #fffdf8;
+    stroke-width: 4px;
+    pointer-events: none;
   }
 
   .turning {
@@ -204,18 +318,29 @@
     stroke-width: 0.6;
   }
 
+  /* no browser box round a clicked moon; with the keyboard, its ring glows */
   .moon {
     cursor: pointer;
+    outline: none;
+  }
+
+  .moon:focus-visible .ink:not(.inner) {
+    stroke: var(--rust, #c4463c);
+    stroke-width: 1.6;
   }
 
   .moon circle {
-    stroke: color-mix(in srgb, var(--bark-900) 55%, transparent);
-    stroke-width: 0.8;
+    stroke: none;
   }
 
-  .moon.now circle {
+  .moon .ink {
+    stroke: color-mix(in srgb, var(--bark-900) 70%, transparent);
+    stroke-width: 0.7;
+  }
+
+  .moon.now .ink:not(.inner) {
     stroke: var(--rust, #c4463c);
-    stroke-width: 2;
+    stroke-width: 1.4;
   }
 
   .moon text {
