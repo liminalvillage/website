@@ -31,6 +31,8 @@
   import Pick from './Pick.svelte';
   import MoonCycle from './MoonCycle.svelte';
   import Spiral3D from './Spiral3D.svelte';
+  import Nested from './Nested.svelte';
+  import Preview from './Preview.svelte';
   import { POINTS, QUARTERS, heatAt, lunarNewYear } from './compass.js';
   import { seasonColours } from '../theme/season.js';
   import { sunLongitude } from '../calendar/sun.js';
@@ -263,6 +265,57 @@
   // the spiral as a 3D cone, rising through time
   let three = false;
   $: if (level === 1 && three) three = false;
+  // the solar view with everything in it: rings within rings. Pinching in
+  // grows it out of the spiral (0, the spiral, to 1, the rings), following
+  // the fingers, and it settles to whichever is nearer when they stop
+  let grow = 0;
+  const growing = { v: 0 };
+  let growTimer;
+  $: nested = grow > 0.001;
+  let nestFrame = null;
+  let nestRef;
+  function setGrow(v) {
+    gsap.killTweensOf(growing);
+    growing.v = grow = Math.max(0, Math.min(1, v));
+  }
+  function growTo(v, duration = 0.9) {
+    if (v > 0 && !nestFrame) nestFrame = measure();
+    gsap.killTweensOf(growing);
+    gsap.to(growing, { v, duration, ease: 'power2.inOut', onUpdate: () => (grow = growing.v) });
+  }
+  function growBy(d) {
+    if (!nestFrame) nestFrame = measure();
+    setGrow(grow + d);
+    clearTimeout(growTimer);
+    growTimer = setTimeout(() => growTo(grow > 0.35 ? 1 : 0, 0.6), 160);
+  }
+  const openNest = () => ((three = false), growTo(1));
+  const closeNest = () => growTo(0);
+  // where the flat spiral sits on screen: its centre, and pixels per unit
+  function measure() {
+    const el = world?.querySelector('svg.path');
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    const s = r.width / 10000;
+    return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, s, rim: (rose?.rim ?? (n ? at(n - 1).r + D : 2000)) * s, outer: n ? at(n - 1).r * s : 300 };
+  }
+  // the 3D cone opens exactly where the flat spiral is, then tips away
+  let flat3 = null;
+  function open3D() {
+    flat3 = measure();
+    setGrow(0);
+    three = true;
+  }
+  // a glimpse of the lunation under the pointer, on the spiral flat or in 3D
+  let peek = null;
+  let peekX = 0;
+  let peekY = 0;
+  const peekAt = (i, e) => {
+    peek = i === null || i === undefined ? null : lunations[i];
+    if (e) [peekX, peekY] = [e.clientX, e.clientY];
+  };
+  $: if (level !== 0) peek = null;
+  $: if (level === 1 && grow) setGrow(0);
   $: if (!three) tipFrom = null;
   function toggleTilt() {
     tilted = !tilted;
@@ -422,6 +475,12 @@
       e.preventDefault();
       return pinch(e.deltaY);
     }
+    if (level === 0 && grow === 1 && nestRef) return nestRef.wheel(e);
+    if (level === 0 && e.ctrlKey) {
+      e.preventDefault();
+      return pinch(e.deltaY);
+    }
+    if (level === 0 && (nested || three)) return e.preventDefault();
     if (!(sideways && level === 1) && canScroll(e.target, e.deltaY)) return;
     e.preventDefault();
     // a sideways swipe close up slides along the line straight away
@@ -592,6 +651,11 @@
   // past one moon returns to moon by moon.
   let pinchEdge = 0;
   function pinch(dy) {
+    // pinching in on the solar view opens it out into rings within rings
+    if (level === 0) {
+      if (!three) growBy(-dy * 0.006);
+      return;
+    }
     if (level !== 1) return;
     if (!linear) {
       if (dy > 0) setLinear(true);
@@ -676,7 +740,7 @@
   let tip = null;
   let tipFrom = null;
   function tipStart(e) {
-    if (level !== 0 || three || e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button, a, input, .views, .map, .filters, .key')) return;
+    if (level !== 0 || three || nested || e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button, a, input, .views, .map, .filters, .key')) return;
     tip = { x: e.clientX, y: e.clientY };
   }
   function tipMove(e) {
@@ -684,7 +748,7 @@
     if (Math.abs(e.clientY - tip.y) > 14 && Math.abs(e.clientY - tip.y) > Math.abs(e.clientX - tip.x)) {
       tipFrom = { x: tip.x, y: tip.y };
       tip = null;
-      three = true;
+      open3D();
     }
   }
   let drag = null;
@@ -1056,19 +1120,36 @@
     </filter>
   </svg>
   <div class="threads"><Mycelium opacity={0.2} /></div>
+  {#if peek && level === 0}<Preview lunation={peek} x={peekX} y={peekY} />{/if}
+  {#if nested && level === 0}
+    <Nested
+      {lunations}
+      {rhythms}
+      washes={rose?.quarters ?? []}
+      turnings={rose?.points ?? []}
+      bind:this={nestRef}
+      {grow}
+      frame={nestFrame}
+      onOpen={(i) => (setGrow(0), go(1, i))}
+      onClose={closeNest}
+      onPinchOut={(dy) => growBy(-dy * 0.006)}
+    />
+  {/if}
   {#if three && level === 0}
     <Spiral3D
       known={lunations.map((l, i) => ({ index: l.index, angle: theta[i], heat: l.heat, now: l.now, when: l.now ? 'now' : day(l.start) }))}
       {firstIndex}
-      onPick={(i) => ((three = false), go(1, i))}
+      onPick={(i) => ((three = false), (peek = null), go(1, i))}
       onFlat={() => ((three = false), (tipFrom = null))}
+      flat={flat3}
+      onPeek={peekAt}
       grab={tipFrom}
       quarters={rose?.quarters ?? []}
       points={rose?.points ?? []}
       art={SEASON_NAME}
     />
   {/if}
-  <div class="world" class:three={three && level === 0} class:phone class:small bind:this={world} data-level={level}>
+  <div class="world" class:three={three && level === 0} class:nesting={nested && level === 0} style:--grow={grow} class:phone class:small bind:this={world} data-level={level}>
     {#if n && compass && rose}
       <svg class="path compass" viewBox="-5000 -5000 10000 10000" aria-hidden="true">
         <defs>
@@ -1255,7 +1336,10 @@
         class:dim={!matches(l)}
         class:focused={level === 1 && li === i}
         style="transform: translate({p.x - D / 2}px, {p.y - D / 2}px); --glow: color-mix(in srgb, {l.heat} 55%, #fffaf2); --glow2: color-mix(in srgb, {l.heat} 45%, transparent)"
-        on:click={() => go(1, i)}
+        on:click={() => ((peek = null), go(1, i))}
+        on:mouseenter={(e) => level === 0 && peekAt(i, e)}
+        on:mousemove={(e) => level === 0 && peekAt(i, e)}
+        on:mouseleave={() => (peek = null)}
         aria-label="Lunation {l.index}: {l.name}, from {day(l.start)}"
       >
         <span class="wash-blob" style="--dx: {((i * 37) % 9) - 4}%; --dy: {((i * 53) % 9) - 4}%"></span>
@@ -1651,9 +1735,13 @@
   <!-- the compass's key, and its switch -->
   {#if n && level === 0}
     <aside class="key">
-      <button type="button" class="key-switch" on:click={() => (three = !three)} aria-pressed={three}>
+      <button type="button" class="key-switch" on:click={() => (three ? (three = false) : open3D())} aria-pressed={three}>
         <svg viewBox="-10 -10 20 20" aria-hidden="true"><ellipse rx="8" ry="3" cy="4" /><ellipse rx="5" ry="2" cy="-1" /><ellipse rx="2.5" ry="1" cy="-5" /></svg>
         {three ? 'the flat spiral' : 'the spiral in 3D'}
+      </button>
+      <button type="button" class="key-switch" on:click={() => (grow > 0.5 ? closeNest() : openNest())} aria-pressed={nested}>
+        <svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="8.5" /><circle r="5.5" /><circle r="2.5" /></svg>
+        {grow > 0.5 ? 'the spiral' : 'everything in one circle'}
       </button>
       <button type="button" class="key-switch" on:click={toggleCompass} aria-pressed={compass}>
         <svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="8" /><path d="M0 -8V8M-8 0H8" /></svg>
@@ -1674,7 +1762,7 @@
     </aside>
   {/if}
 
-  <p class="hint" class:hidden3d={three}>
+  <p class="hint" class:hidden3d={three || nested}>
     {level === 0 ? 'scroll in to travel moon by moon' : 'scroll on through the moons · scroll back quickly for the whole year'}
     {#if !live}<br /><span>draft themes · Holons not connected yet{member ? ' · member view' : ''}</span>{/if}
   </p>
@@ -1804,6 +1892,23 @@
   .world.three {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+  }
+
+  /* growing into the rings: the compass, its light and paintings stay, and
+     only the spiral itself gives way, as the rings fill the same space */
+  .world.nesting .path:not(.compass),
+  .world.nesting .moon,
+  .world.nesting .ghost,
+  .world.nesting .hub,
+  .world.nesting .label.year {
+    opacity: calc(1 - var(--grow));
+    transition: none;
+  }
+
+  .world.nesting .moon,
+  .world.nesting .hub {
     pointer-events: none;
   }
 

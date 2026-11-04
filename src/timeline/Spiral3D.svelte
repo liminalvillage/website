@@ -14,6 +14,8 @@
   export let firstIndex = 84;
   export let onPick = () => {};
   export let onFlat = () => {};
+  export let onPeek = () => {}; // (list index or null, pointer event): a glimpse of the hovered moon
+  export let flat = null; // where the flat spiral sat: { cx, cy, outer } in page pixels, to start from exactly there
   export let grab = null; // { x, y }: opened by pulling the flat spiral, the pull carries on here
   export let quarters = []; // the seasons compass: [{ a0, a1, colour, name }]
   export let points = []; // the solstices and equinoxes: [{ a, name, note, lon }]
@@ -48,6 +50,21 @@
   // fit both the width of the top ring and the height of the whole cone
   $: scale = Math.min(w / (2 * radiusOf(top) * 1.55), (h * 0.86) / (top * H * Math.cos(pitch) + 2 * radiusOf(top) * Math.sin(pitch)));
 
+  // seen from above it lies just where the flat spiral was, at its size;
+  // tipping up, it moves to its own place and fit
+  let box;
+  let boxTop = 0;
+  let boxLeft = 0;
+  $: if (box && w && h) ({ top: boxTop, left: boxLeft } = box.getBoundingClientRect());
+  const F = 900;
+  $: lie = flat ? Math.max(0, Math.min(1, (pitch - TILT) / (FLAT - TILT))) : 0;
+  $: ease = lie * lie * (3 - 2 * lie);
+  $: zTop0 = (top / 2) * H;
+  $: flatScale = flat ? flat.outer / (radiusOf(top) * (F / (F - zTop0))) : scale;
+  $: sc = scale + (flatScale - scale) * ease;
+  $: ox = w / 2 + (flat ? flat.cx - boxLeft - w / 2 : 0) * ease;
+  $: oy = h / 2 + (flat ? flat.cy - boxTop - h / 2 : 0) * ease;
+  $: squash = 0.9 + 0.1 * ease;
   const project = (index, angle) => place(radiusOf(index), angle, (index - top / 2) * H);
   function place(r, angle, z) {
     const x = r * Math.cos(angle);
@@ -57,11 +74,10 @@
     const y1 = x * Math.sin(yaw) + y * Math.cos(yaw);
     const y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
     const z2 = y1 * Math.sin(pitch) + z * Math.cos(pitch);
-    const F = 900;
     const k = F / (F + y2);
-    return { sx: w / 2 + x1 * scale * k, sy: h / 2 - z2 * scale * k * 0.9, depth: y2, k };
+    return { sx: ox + x1 * sc * k, sy: oy - z2 * sc * k * squash, depth: y2, k };
   }
-  $: moons = (yaw, pitch, scale, all.map((l) => ({ ...l, ...project(l.index, l.angle) })));
+  $: moons = (yaw, pitch, scale, sc, ox, oy, all.map((l) => ({ ...l, ...project(l.index, l.angle) })));
   // the line between each moon and the next, far ones first
   $: segments = moons
     .slice(1)
@@ -72,7 +88,7 @@
   // wash and the four turnings named, with a faint line down the cone
   $: rimR = radiusOf(top) * 1.22;
   $: zTop = (top / 2) * H;
-  $: washes = (yaw, pitch, scale, quarters.map((q) => {
+  $: washes = (yaw, pitch, scale, sc, ox, oy, quarters.map((q) => {
     const a1 = q.a1 > q.a0 ? q.a1 : q.a1 + Math.PI * 2;
     const ring = Array.from({ length: 25 }, (_, k) => place(rimR, q.a0 + ((a1 - q.a0) * k) / 24, zTop));
     const c = place(0, 0, zTop);
@@ -80,7 +96,7 @@
   }));
   // and all round its sides: the cone wrapped in the four washes, in thin
   // slices so it curves, the near side lighter than the far
-  $: sides = (yaw, pitch, scale, quarters.flatMap((q) => {
+  $: sides = (yaw, pitch, scale, sc, ox, oy, quarters.flatMap((q) => {
     const a1 = q.a1 > q.a0 ? q.a1 : q.a1 + Math.PI * 2;
     const n = Math.max(2, Math.ceil((a1 - q.a0) / 0.14));
     return Array.from({ length: n }, (_, k) => {
@@ -97,11 +113,11 @@
   // each turning's painting floats beside the cone at its season, turning
   // round with it, nearer ones clearer, far ones faint; large enough that
   // neighbours melt into one another
-  $: paintings = (yaw, pitch, scale, points.filter((pt) => art[pt.lon]).map((pt) => {
+  $: paintings = (yaw, pitch, scale, sc, ox, oy, points.filter((pt) => art[pt.lon]).map((pt) => {
     const p = place(rimR * 1.3, pt.a, zTop * 0.25);
     return { ...pt, name: art[pt.lon], ...p, size: Math.min(w, h) * 0.78 * p.k, near: Math.max(0, Math.min(1, 0.5 - p.depth / (2 * rimR))) };
   }).sort((p1, p2) => p2.depth - p1.depth));
-  $: turnings = (yaw, pitch, scale, points.map((pt) => ({
+  $: turnings = (yaw, pitch, scale, sc, ox, oy, points.map((pt) => ({
     name: pt.name,
     note: pt.note,
     label: place(rimR * 1.12, pt.a, zTop),
@@ -113,7 +129,7 @@
     // tipping up out of the flat view, then turning slowly, but never
     // under the pointer, so a moon can be caught
     if (opening && !drag) {
-      pitch += (TILT - pitch) * 0.06;
+      pitch += (TILT - pitch) * 0.03;
       if (Math.abs(pitch - TILT) < 0.005) opening = false;
     } else if (spin && !drag && !hover && artHover === null) yaw += 0.0025;
     frame = requestAnimationFrame(loop);
@@ -148,7 +164,7 @@
 <svelte:window on:pointermove={move} on:pointerup={up} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="cone" bind:clientWidth={w} bind:clientHeight={h} on:pointerdown={down} class:dragging={drag}>
+<div class="cone" bind:this={box} bind:clientWidth={w} bind:clientHeight={h} on:pointerdown={down} class:dragging={drag}>
   <svg viewBox="0 0 {w} {h}" aria-label="The lunations as a spiral cone, from Lunation 1 at the foot to {top} at the top">
     <defs>
       <radialGradient id="cone-sun">
@@ -192,7 +208,7 @@
         <circle class="past" cx={p.sx} cy={p.sy} r={2.2 * p.k} on:mouseenter={() => (hover = p)} on:mouseleave={() => (hover = null)} />
       {:else}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <g class="moon" class:now={p.now} transform="translate({p.sx} {p.sy}) scale({p.k})" on:click|stopPropagation={() => onPick(p.i)} on:mouseenter={() => (hover = p)} on:mouseleave={() => (hover = null)} role="button" tabindex="-1" aria-label="Lunation {p.index}">
+        <g class="moon" class:now={p.now} transform="translate({p.sx} {p.sy}) scale({p.k})" on:click|stopPropagation={() => onPick(p.i)} on:mouseenter={(e) => ((hover = p), onPeek(p.i, e))} on:mousemove={(e) => onPeek(p.i, e)} on:mouseleave={() => ((hover = null), onPeek(null))} role="button" tabindex="-1" aria-label="Lunation {p.index}">
           <circle class="blob" r="19" cx={((p.index * 37) % 5) - 2} cy={((p.index * 53) % 5) - 2} style="fill: color-mix(in srgb, {p.heat} 50%, transparent)" />
           <circle class="paper" r="16" style="fill: color-mix(in srgb, {p.heat} 14%, #fffdf8)" />
           <circle class="ink" r="15" />
@@ -215,12 +231,19 @@
 
 <style>
   .cone {
+    animation: cone-in 0.45s ease both;
     position: absolute;
     inset: 84px 0 90px;
     cursor: grab;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+  }
+
+  @keyframes cone-in {
+    from {
+      opacity: 0;
+    }
   }
 
   .cone.dragging {
