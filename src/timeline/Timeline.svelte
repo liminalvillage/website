@@ -1430,7 +1430,7 @@
              the line, and only the kinds of time stay up here -->
         <!-- the kinds of time across the top, along the line and by the moon alike;
              by the moon, with how many of each it holds -->
-        <div class="line-head">
+        <div class="line-head" class:resting={acrossYears}>
             <span>kinds of time</span>
             {#each Object.entries(KINDS) as [key, k]}
               <!-- by the moon, a longer name takes a line of its own -->
@@ -1498,20 +1498,15 @@
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <div class="moon-view" class:across={acrossYears} on:pointerdown={dragStart} out:unroll in:fadeIn>
             <!-- the same time of year before (behind, above) and after (in front, below) -->
-            {#each yearStack as y (y.k)}
-              <div class="year-disc" class:ghost={y.ghost} class:after={y.k > 0} style="--k: {y.k}; --heat: {y.heat}">
-                <span class="year-ring"></span>
-              </div>
-            {/each}
-            <!-- the years as a small upright line beside the stack, flat and
-                 sharp: each year at the height of its ring, this one marked -->
+            <!-- the same time of year across the years, as a small upright line
+                 beside the moon: this one marked, the others a tap away -->
             {#if acrossYears}
               <ol class="year-line" transition:rise={{ y: 6, duration: 300 }}>
                 {#each [...yearStack.filter((y) => y.k < 0), { k: 0, index: here.index, name: here.name, start: here.start, now: true }, ...yearStack.filter((y) => y.k > 0)] as y (y.k)}
-                  <li class:here={y.now} class:ghost={y.ghost} style="--k: {y.k}">
+                  <li class:here={y.now} class:ghost={y.ghost} style="--k: {y.k}" title={y.ghost ? 'not on the timeline yet' : null}>
                     <button type="button" disabled={y.now || y.ghost} on:click|stopPropagation={() => stepYear(y.k)}>
                       <i></i><b>{yearOf(y.start)}</b>
-                      <span>Lunation {y.index}{y.name ? ` · ${y.name}` : ''}{y.ghost ? ' · not on the timeline yet' : ''}</span>
+                      <span>Lunation {y.index}{y.name ? ` · ${y.name}` : ''}</span>
                     </button>
                   </li>
                 {/each}
@@ -3998,6 +3993,16 @@
     display: none;
   }
 
+  /* while the years are out, the kinds of time step aside for them */
+  .line-head {
+    transition: opacity 0.3s ease;
+  }
+
+  .line-head.resting {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .closeup:not(.linear) .line-head .br {
     display: block;
     flex-basis: 100%;
@@ -4118,62 +4123,23 @@
     transition: transform 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
   }
 
-  /* across years: this year's moon stays flat and sharp; the other years
-     lie as tilted rings above and below it */
+  /* across years: stepping to another year, its moon fades in */
   .moon-view.across > :global(.moon-cycle) {
-    transform: scale(0.62);
+    animation: year-fade 0.6s ease;
   }
 
-  .year-disc {
-    grid-area: 1 / 1;
-    position: relative;
-    width: min(338px, 49.6vw);
-    height: min(338px, 49.6vw);
-    transform: translateY(calc(var(--k) * 168px)) scale(calc(0.62 - (var(--k) * var(--k)) * 0.04), calc((0.62 - (var(--k) * var(--k)) * 0.04) * 0.42));
-    pointer-events: none;
-    z-index: 1;
-    animation: year-in 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
-  }
-
-  /* the other years: clear enough, the ones to come and the ones not on the
-     timeline fainter */
-  .year-disc {
-    opacity: calc(0.8 - (var(--k) * var(--k)) * 0.12);
-  }
-
-  .year-disc.ghost {
-    opacity: calc(0.45 - (var(--k) * var(--k)) * 0.06);
-  }
-
-  .year-ring {
-    pointer-events: none;
-  }
-
-  @keyframes year-in {
+  @keyframes year-fade {
     from {
       opacity: 0;
-      transform: translateY(0) scale(0.62, 0.26);
     }
-  }
-
-  .year-ring {
-    position: absolute;
-    inset: 0;
-    border: 1.5px solid color-mix(in srgb, var(--bark-900) 35%, transparent);
-    border-radius: 50%;
-    background: radial-gradient(circle closest-side, transparent 55%, color-mix(in srgb, var(--heat) 28%, transparent) 100%);
-  }
-
-  .year-disc.ghost .year-ring {
-    border-style: dashed;
-    background: color-mix(in srgb, var(--tl-paper, #fffaf2) 50%, transparent);
   }
 
   /* the year line: flat, beside the stack, a dot and a year at the height
      of each ring, joined by a thread */
   .year-line {
     position: absolute;
-    left: calc(50% + min(150px, 22vw) + 40px);
+    left: 100%;
+    margin-left: 8px;
     top: 50%;
     margin: 0;
     padding: 0;
@@ -4185,15 +4151,15 @@
     content: '';
     position: absolute;
     left: 4px;
-    top: -336px;
-    height: 672px;
+    top: -220px;
+    height: 440px;
     border-left: 1px dashed color-mix(in srgb, var(--bark-900) 30%, transparent);
   }
 
   .year-line li {
     position: absolute;
     left: 0;
-    top: calc(var(--k) * 168px);
+    top: calc(var(--k) * 110px);
     transform: translateY(-50%);
   }
 
