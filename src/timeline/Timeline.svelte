@@ -364,14 +364,20 @@
     return { x: p.x, y: p.y, w: D * 1.2, h: D * 1.2 };
   }
 
-  function apply() {
+  // --inv (lines and words kept a steady size on screen) restyles the whole
+  // drawing, so on the way between moons it is set only now and then
+  let invLs = null;
+  function apply(final = false) {
     if (!world) return;
     const s = Math.exp(cam.ls);
     const cy = TOP + (vh - TOP - BOTTOM) / 2;
     world.style.transform = cam.tilt
       ? `translate(${vw / 2}px, ${cy}px) scale(1, ${Math.cos((cam.tilt * Math.PI) / 180).toFixed(4)}) translate(${-cam.x * s}px, ${-cam.y * s}px) scale(${s})`
       : `translate(${vw / 2 - cam.x * s}px, ${cy - cam.y * s}px) scale(${s})`;
-    world.style.setProperty('--inv', 1 / s);
+    if (final || !travelling || invLs === null || Math.abs(cam.ls - invLs) > 0.35) {
+      world.style.setProperty('--inv', 1 / s);
+      invLs = cam.ls;
+    }
   }
 
   // Close up, the lunation's own circle grows until its paper fills the
@@ -379,6 +385,14 @@
   // back a little, glides along the spiral, and grows into the next one
   const fill = () => (Math.hypot(vw, vh) * 1.12) / D;
   let travelling = false;
+  // a new lunation always opens at its top, never part-way down
+  let closeupEl;
+  let shownIndex = null;
+  $: if (level === 1 && li !== shownIndex) {
+    shownIndex = li;
+    if (closeupEl) closeupEl.scrollTop = 0;
+    if (typeof window !== 'undefined' && window.scrollY) window.scrollTo({ top: 0 });
+  }
   function fly(instant = false, from = null) {
     if (!theta.length) return;
     const f = frame();
@@ -416,8 +430,8 @@
       travelling = true;
       gsap.to(o, {
         p: 1,
-        duration: Math.min(1.9 + 0.35 * (Math.abs(t1 - t0) - 1), 3.2),
-        ease: 'sine.inOut',
+        duration: Math.min(1.05 + 0.22 * (Math.abs(t1 - t0) - 1), 1.7),
+        ease: 'power2.inOut',
         onUpdate() {
           const q = at(t0 + (t1 - t0) * o.p);
           cam.x = q.x + (to.x - at(t1).x) * o.p;
@@ -427,8 +441,8 @@
         },
         onComplete() {
           Object.assign(cam, to);
-          apply();
           travelling = false;
+          apply(true);
           busy = false;
           landed = true;
         },
@@ -1166,7 +1180,7 @@
 
 <svelte:window on:resize={resize} on:keydown={onKey} on:pointermove={dragMove} on:pointerup={dragEnd} />
 
-<main class="tl" class:landed={level === 1 && !linear && landed} class:close={level === 1 && !travelling} bind:this={page} on:pointerdown={tipStart} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
+<main class="tl" class:travel={travelling} class:landed={level === 1 && !linear && landed} class:close={level === 1 && !travelling} bind:this={page} on:pointerdown={tipStart} on:touchstart|passive={onTouchStart} on:touchmove|passive={onTouchMove} on:touchend={onTouchEnd}>
   <div class="glow" aria-hidden="true"></div>
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <filter id="tl-wash" x="-20%" y="-20%" width="140%" height="140%">
@@ -1409,7 +1423,7 @@
 
   <!-- close up: the same order every time -->
   {#if level === 1 && here}
-      <section class="closeup" class:has-invite={inviting} class:linear class:wide class:away={travelling} on:scroll={(e) => e.currentTarget.scrollLeft && (e.currentTarget.scrollLeft = 0)} out:rise={{ y: 16, duration: 220 }}>
+      <section class="closeup" bind:this={closeupEl} class:has-invite={inviting} class:linear class:wide class:away={travelling} on:scroll={(e) => e.currentTarget.scrollLeft && (e.currentTarget.scrollLeft = 0)} out:rise={{ y: 16, duration: 220 }}>
         <!-- the title and the three below change in place, one after the
              other (never over each other), as the line flows on -->
         <!-- along the line, no single moon heads the page: each names itself on
@@ -1419,7 +1433,10 @@
         <div class="line-head">
             <span>kinds of time</span>
             {#each Object.entries(KINDS) as [key, k]}
+              <!-- by the moon, a longer name takes a line of its own -->
+              {#if k.label.length > 14}<i class="br"></i>{/if}
               <button type="button" class="kind-chip" class:off={off.has(key)} class:none={!linear && !kindCount[key]} style="--c: {k.colour}" title="{k.note} · tap to switch {off.has(key) ? 'on' : 'off'}" on:click={() => toggleKind(key)} aria-pressed={!off.has(key)}><svg class="kind-icon" viewBox="-8 -8 16 16" aria-hidden="true"><path d={ICON[k.icon]} /></svg>{k.label}{#if !linear}<small>{kindCount[key] ?? 0}</small>{/if}</button>
+              {#if k.label.length > 14}<i class="br"></i>{/if}
             {/each}
             <button type="button" class="kind-chip lens" class:on={children} style="--c: {CHILDREN}" on:click={() => (children = !children)} aria-pressed={children}><i></i>children</button>
           </div>
@@ -1881,6 +1898,19 @@
     top: 0;
     transform-origin: 0 0;
     transition: opacity 0.5s ease;
+  }
+
+  /* between moons the camera glides: the heaviest layers (the blurred rays,
+     the paintings) rest for the journey and come back when it lands */
+  .travel .world {
+    will-change: transform;
+  }
+
+  .travel :global(.sun-rays),
+  .travel :global(.season-art),
+  .travel :global(.threads) {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease;
   }
 
   /* Zooming in, everything but the chosen moon quietly clears away, so
@@ -3962,6 +3992,16 @@
     justify-content: flex-end;
     max-width: 300px;
     padding: 0;
+  }
+
+  .line-head .br {
+    display: none;
+  }
+
+  .closeup:not(.linear) .line-head .br {
+    display: block;
+    flex-basis: 100%;
+    height: 0;
   }
 
   /* narrow, close to the edge: a tag or two to a row, the label on its own */
