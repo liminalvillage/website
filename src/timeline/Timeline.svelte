@@ -1501,7 +1501,8 @@
             <!-- the same time of year across the years, as a small upright line
                  beside the moon: this one marked, the others a tap away -->
             {#if acrossYears}
-              <ol class="year-line" transition:rise={{ y: 6, duration: 300 }}>
+              <ol class="year-line" transition:rise={{ y: 6, duration: 300 }} aria-label="This moon across the years">
+                <li class="year-head"><b>This moon across the years</b><span>the same time of year, before and after: tap a year to compare</span></li>
                 {#each [...yearStack.filter((y) => y.k < 0), { k: 0, index: here.index, name: here.name, start: here.start, now: true }, ...yearStack.filter((y) => y.k > 0)] as y (y.k)}
                   <li class:here={y.now} class:ghost={y.ghost} style="--k: {y.k}" title={y.ghost ? 'not on the timeline yet' : null}>
                     <button type="button" disabled={y.now || y.ghost} on:click|stopPropagation={() => stepYear(y.k)}>
@@ -4161,6 +4162,26 @@
     left: 0;
     top: calc(var(--k) * 110px);
     transform: translateY(-50%);
+  }
+
+  /* what the line is, above its top */
+  .year-line .year-head {
+    top: -294px;
+    display: grid;
+    gap: 2px;
+    width: 190px;
+    transform: none;
+  }
+
+  .year-head b {
+    font: 400 13px 'Outfit', system-ui, sans-serif;
+    color: #2f3760;
+  }
+
+  .year-head span {
+    font: 300 11px/1.35 'Playpen Sans', 'Quicksand', sans-serif;
+    color: var(--bark-700, #5a4632);
+    white-space: normal;
   }
 
   .year-line button {
