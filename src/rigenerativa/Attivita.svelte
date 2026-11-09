@@ -9,110 +9,93 @@
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import { bySlug, settoreUrl, settoreHost } from './settori.js';
 
+  import { pick } from './i18n.js';
+
   // Condensed from art. 4 (oggetto sociale) of the atto costitutivo, 15 aprile 2026.
-  const groups = [
-    {
-      title: 'Luoghi',
-      icon: Building2,
-      areas: [
-        {
-          name: 'Rigenerazione degli spazi fisici',
-          settore: 'edilizia',
-          text: 'Gestione, costruzione e restauro di edifici e aree dismesse; General Contractor; bioedilizia e architettura bioclimatica; fotovoltaico e accumulo off-grid; biolaghi e fitodepurazione; efficienza energetica (ESCO).',
-        },
-        {
-          name: 'Vita negli spazi rigenerati',
-          settore: 'ospitalita',
-          text: 'Attività outdoor, turismo lento e itinerari culturali e spirituali; ospitalità diffusa e glamping; ristorazione e filiera corta; eventi, festival e residenze artistiche; benessere e yoga.',
-        },
-        {
-          name: "L'acqua come bene comune",
-          settore: 'acqua',
-          text: 'Gestione comunitaria di sorgenti, pozzi e bacini; concessioni idriche; infrastrutture idriche locali; modelli di governance ispirati ai principi di Elinor Ostrom.',
-        },
-        {
-          name: 'Stewardship dei beni comuni',
-          settore: 'governance',
-          text: 'Ruolo di custode fiduciario di terre e patrimoni; community land trust, cohousing e diritto di superficie; accompagnamento di comunità e istituzioni verso la gestione condivisa.',
-        },
+  // Each area's text is a list of offerings separated by semicolons.
+  const t = pick({
+    it: {
+      eyebrow: 'Attività',
+      title: 'Cosa facciamo',
+      sub: (n) => `Un'offerta integrata e modulare, dal cantiere alla comunità: ${n} ambiti di attività in quattro campi.`,
+      tabs: 'Campi di attività',
+      sector: (name) => `Settore ${name}`,
+      discover: (name) => `Scopri il settore ${name}`,
+      groups: [
+        ['Luoghi', [
+          ['Rigenerazione degli spazi fisici', 'Gestione, costruzione e restauro di edifici e aree dismesse; General Contractor; bioedilizia e architettura bioclimatica; fotovoltaico e accumulo off-grid; biolaghi e fitodepurazione; efficienza energetica (ESCO).'],
+          ['Vita negli spazi rigenerati', 'Attività outdoor, turismo lento e itinerari culturali e spirituali; ospitalità diffusa e glamping; ristorazione e filiera corta; eventi, festival e residenze artistiche; benessere e yoga.'],
+          ["L'acqua come bene comune", 'Gestione comunitaria di sorgenti, pozzi e bacini; concessioni idriche; infrastrutture idriche locali; modelli di governance ispirati ai principi di Elinor Ostrom.'],
+          ['Stewardship dei beni comuni', 'Ruolo di custode fiduciario di terre e patrimoni; community land trust, cohousing e diritto di superficie; accompagnamento di comunità e istituzioni verso la gestione condivisa.'],
+        ]],
+        ['Terra ed economia viva', [
+          ['Economia viva e filiere rigenerative', 'Botteghe e mercati di prodotti locali; agroecologia e permacultura; food forest e orti collettivi; Community Supported Agriculture; apicoltura; fattorie didattiche; rewilding e pascolo rigenerativo.'],
+          ['Riciclo e tracciamento delle risorse', 'Recupero di materiali edilizi e industriali; filiere di upcycling; Digital Product Passport e material flow analysis; consulenza su simbiosi industriale, LCA e rendicontazione CSRD.'],
+          ['Macchinari per processi rigenerativi', 'Produzione e manutenzione di macchine agricole e agroforestali, sistemi di compostaggio, depurazione e riscaldamento a biomassa; logistica sostenibile e mobilità condivisa.'],
+          ['Carbonio, biodiversità e finanza rigenerativa', 'Crediti di carbonio e di biodiversità da riforestazione e agricoltura rigenerativa; pagamenti per servizi ecosistemici; green bond e capitale paziente per gli ecosistemi.'],
+        ]],
+        ['Tecnologia e governance', [
+          ['Tecnologia digitale e reti', 'Software gestionali SaaS; BIM e digital twin di edifici e territori; piattaforme GIS cooperative e osservatori territoriali aperti; software per la federazione di reti multi-nodo.'],
+          ['Intelligenza artificiale', 'Computer vision per cantieri e riconoscimento di specie; agenti AI per il coordinamento di reti di fornitori; individuazione di scarti riutilizzabili; manutenzione predittiva e pianificazione territoriale.'],
+          ['Governance distribuita', 'Sociocrazia, S3, olocrazia e decisioni per consenso; piattaforme decisionali digitali; modelli di economia pluricapitale e misurazione dell’impatto; gestione di aree naturali protette.'],
+          ['Reti rigenerative e licenze del modello', 'Un modello replicabile di rigenerazione territoriale attraverso nodi locali affiliati; licenze del marchio e del metodo; formazione dei gestori; marchio collettivo di qualità rigenerativa.'],
+        ]],
+        ['Conoscenza e scambio', [
+          ['Formazione e ricerca', 'Corsi in presenza e online; fablab e maker space; poli di ricerca applicata; supporto all’accesso a fondi europei e nazionali (Horizon Europe, LIFE, PNRR) e alla nascita di startup.'],
+          ['Comunicazione ed editoria', 'Video, podcast e documentari; marketing territoriale; campagne di crowdfunding; pubblicazioni su rigenerazione, bioedilizia, permacultura ed economia circolare.'],
+          ['Voucher e scambio locale', 'Voucher fisici e digitali per servizi e spazi della rete; valute complementari, banca del tempo e crediti reciproci; crowdfunding e fondi di co-investimento comunitario.'],
+        ]],
       ],
     },
-    {
-      title: 'Terra ed economia viva',
-      icon: Wheat,
-      areas: [
-        {
-          name: 'Economia viva e filiere rigenerative',
-          settore: 'agricoltura',
-          text: 'Botteghe e mercati di prodotti locali; agroecologia e permacultura; food forest e orti collettivi; Community Supported Agriculture; apicoltura; fattorie didattiche; rewilding e pascolo rigenerativo.',
-        },
-        {
-          name: 'Riciclo e tracciamento delle risorse',
-          settore: 'edilizia',
-          text: 'Recupero di materiali edilizi e industriali; filiere di upcycling; Digital Product Passport e material flow analysis; consulenza su simbiosi industriale, LCA e rendicontazione CSRD.',
-        },
-        {
-          name: 'Macchinari per processi rigenerativi',
-          settore: 'agricoltura',
-          text: 'Produzione e manutenzione di macchine agricole e agroforestali, sistemi di compostaggio, depurazione e riscaldamento a biomassa; logistica sostenibile e mobilità condivisa.',
-        },
-        {
-          name: 'Carbonio, biodiversità e finanza rigenerativa',
-          settore: 'agricoltura',
-          text: 'Crediti di carbonio e di biodiversità da riforestazione e agricoltura rigenerativa; pagamenti per servizi ecosistemici; green bond e capitale paziente per gli ecosistemi.',
-        },
+    en: {
+      eyebrow: 'Activities',
+      title: 'What we do',
+      sub: (n) => `An integrated, modular offer, from the building site to the community: ${n} areas of activity across four fields.`,
+      tabs: 'Fields of activity',
+      sector: (name) => `${name} sector`,
+      discover: (name) => `Explore the ${name.toLowerCase()} sector`,
+      groups: [
+        ['Places', [
+          ['Regenerating physical spaces', 'Management, construction and restoration of abandoned buildings and sites; General Contractor; green building and bioclimatic architecture; solar power and off-grid storage; natural pools and constructed wetlands; energy efficiency (ESCO).'],
+          ['Life in regenerated spaces', 'Outdoor activities, slow tourism and cultural and spiritual routes; distributed hospitality and glamping; food service and short supply chains; events, festivals and artist residencies; wellbeing and yoga.'],
+          ['Water as a commons', 'Community management of springs, wells and reservoirs; water concessions; local water infrastructure; governance models inspired by the principles of Elinor Ostrom.'],
+          ['Stewardship of the commons', 'Fiduciary steward of land and heritage; community land trusts, cohousing and surface rights; guiding communities and institutions towards shared management.'],
+        ]],
+        ['Land and living economy', [
+          ['Living economy and regenerative supply chains', 'Shops and markets for local produce; agroecology and permaculture; food forests and community gardens; Community Supported Agriculture; beekeeping; educational farms; rewilding and regenerative grazing.'],
+          ['Recycling and resource tracking', 'Recovery of construction and industrial materials; upcycling supply chains; Digital Product Passport and material flow analysis; advice on industrial symbiosis, LCA and CSRD reporting.'],
+          ['Machinery for regenerative processes', 'Manufacture and maintenance of farming and agroforestry machinery, composting, water treatment and biomass heating systems; sustainable logistics and shared mobility.'],
+          ['Carbon, biodiversity and regenerative finance', 'Carbon and biodiversity credits from reforestation and regenerative farming; payments for ecosystem services; green bonds and patient capital for ecosystems.'],
+        ]],
+        ['Technology and governance', [
+          ['Digital technology and networks', 'SaaS management software; BIM and digital twins of buildings and territories; cooperative GIS platforms and open territorial observatories; software for federating multi-node networks.'],
+          ['Artificial intelligence', 'Computer vision for building sites and species recognition; AI agents to coordinate supplier networks; spotting reusable waste; predictive maintenance and land-use planning.'],
+          ['Distributed governance', 'Sociocracy, S3, holacracy and consent-based decisions; digital decision-making platforms; multi-capital economic models and impact measurement; management of protected natural areas.'],
+          ['Regenerative networks and model licensing', 'A replicable model of territorial regeneration through affiliated local nodes; licensing of the brand and the method; training for managers; a collective mark of regenerative quality.'],
+        ]],
+        ['Knowledge and exchange', [
+          ['Training and research', 'In-person and online courses; fablabs and maker spaces; applied research hubs; support in accessing European and national funding (Horizon Europe, LIFE, Italy’s Recovery Plan PNRR) and in launching startups.'],
+          ['Communication and publishing', 'Video, podcasts and documentaries; place marketing; crowdfunding campaigns; publications on regeneration, green building, permaculture and the circular economy.'],
+          ['Vouchers and local exchange', 'Physical and digital vouchers for the network’s services and spaces; complementary currencies, time banking and mutual credit; crowdfunding and community co-investment funds.'],
+        ]],
       ],
     },
-    {
-      title: 'Tecnologia e governance',
-      icon: Waypoints,
-      areas: [
-        {
-          name: 'Tecnologia digitale e reti',
-          settore: 'tecnologia',
-          text: 'Software gestionali SaaS; BIM e digital twin di edifici e territori; piattaforme GIS cooperative e osservatori territoriali aperti; software per la federazione di reti multi-nodo.',
-        },
-        {
-          name: 'Intelligenza artificiale',
-          settore: 'tecnologia',
-          text: 'Computer vision per cantieri e riconoscimento di specie; agenti AI per il coordinamento di reti di fornitori; individuazione di scarti riutilizzabili; manutenzione predittiva e pianificazione territoriale.',
-        },
-        {
-          name: 'Governance distribuita',
-          settore: 'governance',
-          text: 'Sociocrazia, S3, olocrazia e decisioni per consenso; piattaforme decisionali digitali; modelli di economia pluricapitale e misurazione dell’impatto; gestione di aree naturali protette.',
-        },
-        {
-          name: 'Reti rigenerative e licenze del modello',
-          settore: 'rete',
-          text: 'Un modello replicabile di rigenerazione territoriale attraverso nodi locali affiliati; licenze del marchio e del metodo; formazione dei gestori; marchio collettivo di qualità rigenerativa.',
-        },
-      ],
-    },
-    {
-      title: 'Conoscenza e scambio',
-      icon: BookOpen,
-      areas: [
-        {
-          name: 'Formazione e ricerca',
-          settore: 'formazione',
-          text: 'Corsi in presenza e online; fablab e maker space; poli di ricerca applicata; supporto all’accesso a fondi europei e nazionali (Horizon Europe, LIFE, PNRR) e alla nascita di startup.',
-        },
-        {
-          name: 'Comunicazione ed editoria',
-          settore: 'formazione',
-          text: 'Video, podcast e documentari; marketing territoriale; campagne di crowdfunding; pubblicazioni su rigenerazione, bioedilizia, permacultura ed economia circolare.',
-        },
-        {
-          name: 'Voucher e scambio locale',
-          settore: 'rete',
-          text: 'Voucher fisici e digitali per servizi e spazi della rete; valute complementari, banca del tempo e crediti reciproci; crowdfunding e fondi di co-investimento comunitario.',
-        },
-      ],
-    },
+  });
+
+  // Icons and sector pages, in the same order as the copy above.
+  const shape = [
+    [Building2, ['edilizia', 'ospitalita', 'acqua', 'governance']],
+    [Wheat, ['agricoltura', 'edilizia', 'agricoltura', 'agricoltura']],
+    [Waypoints, ['tecnologia', 'tecnologia', 'governance', 'rete']],
+    [BookOpen, ['formazione', 'formazione', 'rete']],
   ];
 
-  // Each area's text is a list of offerings separated by semicolons.
+  const groups = shape.map(([icon, slugs], g) => ({
+    title: t.groups[g][0],
+    icon,
+    areas: slugs.map((settore, i) => ({ name: t.groups[g][1][i][0], text: t.groups[g][1][i][1], settore })),
+  }));
+
   const chips = (text) => text.replace(/\.$/, '').split(/;\s*/).map((c) => c[0].toUpperCase() + c.slice(1));
 
   let offsets = [];
@@ -149,13 +132,13 @@
   <div class="rg-container">
     <div class="heading" data-reveal>
       <div>
-        <p class="rg-eyebrow">Attività</p>
-        <h2 class="rg-h2">Cosa facciamo</h2>
-        <p class="rg-sub">Un'offerta integrata e modulare, dal cantiere alla comunità: {total} ambiti di attività in quattro campi.</p>
+        <p class="rg-eyebrow">{t.eyebrow}</p>
+        <h2 class="rg-h2">{t.title}</h2>
+        <p class="rg-sub">{t.sub(total)}</p>
       </div>
     </div>
 
-    <div class="tabs" role="tablist" aria-label="Campi di attività" data-reveal="stagger">
+    <div class="tabs" role="tablist" aria-label={t.tabs} data-reveal="stagger">
       {#each groups as g, i}
         <button
           id="ri-tab-{i}"
@@ -197,7 +180,7 @@
                   <ul class="chips">
                     {#each chips(a.text) as c}<li>{c}</li>{/each}
                   </ul>
-                  <a class="more" href={settoreUrl(a.settore)}>Settore {bySlug[a.settore].name}: {settoreHost(a.settore)} <ArrowUpRight size={16} strokeWidth={1.75} /></a>
+                  <a class="more" href={settoreUrl(a.settore)}>{t.sector(bySlug[a.settore].name)}: {settoreHost(a.settore)} <ArrowUpRight size={16} strokeWidth={1.75} /></a>
                 </div>
               {/if}
             </li>
@@ -215,7 +198,7 @@
                 <li in:fly={{ y: 10, duration: 450, delay: 80 + i * 45, easing: cubicOut }}>{c}</li>
               {/each}
             </ul>
-            <a class="more" href={settoreUrl(current.settore)}>Scopri il settore {bySlug[current.settore].name} <ArrowUpRight size={18} strokeWidth={1.75} /></a>
+            <a class="more" href={settoreUrl(current.settore)}>{t.discover(bySlug[current.settore].name)} <ArrowUpRight size={18} strokeWidth={1.75} /></a>
           </div>
         {/key}
         <span class="mark" aria-hidden="true"><svelte:component this={groups[group].icon} size={168} strokeWidth={0.75} /></span>

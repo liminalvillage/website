@@ -2,6 +2,24 @@
   import { onMount } from 'svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import X from '@lucide/svelte/icons/x';
+  import { lang, LANGS, setLang, pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      items: ['Chi siamo', 'Percorso', 'Attività', 'La rete', 'Ecosistema', 'Rigeneratori', 'Contatti'],
+      open: 'Apri il menu',
+      close: 'Chiudi il menu',
+      language: 'Lingua',
+      names: { it: 'Italiano', en: 'English' },
+    },
+    en: {
+      items: ['About', 'Journey', 'Activities', 'Network', 'Ecosystem', 'Regenerators', 'Contact'],
+      open: 'Open the menu',
+      close: 'Close the menu',
+      language: 'Language',
+      names: { it: 'Italiano', en: 'English' },
+    },
+  });
 
   let mobileMenuOpen = false;
   let scrolled = false;
@@ -19,14 +37,8 @@
   };
 
   // Sector pages pass their own sections and a brand link back to rigenerativa.it.
-  export let items = [
-    { label: 'Chi siamo', href: '#ri-chi-siamo' },
-    { label: 'Percorso', href: '#ri-percorso' },
-    { label: 'Attività', href: '#ri-attivita' },
-    { label: 'La rete', href: '#ri-rete' },
-    { label: 'Rigeneratori', href: '#ri-rigeneratori' },
-    { label: 'Contatti', href: '#ri-contatti' },
-  ];
+  export let items = ['#ri-chi-siamo', '#ri-percorso', '#ri-attivita', '#ri-rete', '#ri-ecosistema', '#ri-rigeneratori', '#ri-contatti']
+    .map((href, i) => ({ label: t.items[i], href }));
   export let brandHref = '#ri-top';
   const menuItems = items;
 
@@ -61,7 +73,7 @@
     <button
       class="toggler"
       on:click={toggleMenu}
-      aria-label={mobileMenuOpen ? 'Chiudi il menu' : 'Apri il menu'}
+      aria-label={mobileMenuOpen ? t.close : t.open}
       aria-expanded={mobileMenuOpen}
     >
       {#if mobileMenuOpen}<X size={26} strokeWidth={1.5} />{:else}<Menu size={26} strokeWidth={1.5} />{/if}
@@ -80,6 +92,18 @@
           </a>
         </li>
       {/each}
+      <li class="langs" role="group" aria-label={t.language}>
+        {#each LANGS as l}
+          <button
+            class="lang"
+            class:active={l === lang}
+            lang={l}
+            aria-pressed={l === lang}
+            title={t.names[l]}
+            on:click={() => setLang(l)}
+          >{l}</button>
+        {/each}
+      </li>
     </ul>
   </div>
   <div class="progress" style="transform: scaleX({progress})" aria-hidden="true"></div>
@@ -197,6 +221,40 @@
     transform: scaleX(1);
   }
 
+  .langs {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-left: 0.4rem;
+    padding-left: 1.1rem;
+    border-left: 1px solid color-mix(in srgb, var(--nav-ink) 28%, transparent);
+  }
+
+  .lang {
+    background: none;
+    border: none;
+    padding: 0.25rem 0.35rem;
+    font: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--nav-ink);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: color 0.5s ease, opacity 0.3s ease;
+  }
+
+  .lang:hover,
+  .lang.active {
+    opacity: 1;
+  }
+
+  .lang.active {
+    color: var(--rg-gold);
+    cursor: default;
+  }
+
   .progress {
     position: absolute;
     left: 0;
@@ -274,6 +332,21 @@
 
     .menu li a.active {
       color: var(--rg-forest);
+    }
+
+    .menu li.langs {
+      margin: 0;
+      padding: 0.6rem 0.85rem;
+      border-left: none;
+    }
+
+    .lang {
+      color: var(--rg-bark);
+      padding: 0.5rem 0.4rem;
+    }
+
+    .lang.active {
+      color: var(--rg-soil);
     }
   }
 </style>

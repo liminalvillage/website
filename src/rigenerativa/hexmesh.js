@@ -1,17 +1,28 @@
-// The hero network told on the real H3 hierarchy around Castorano.
-// Projects (resolution-8 cells) come online one at a time, mostly beside
+// The hero network told on the real H3 hierarchy of the lower Tronto valley,
+// from Ascoli Piceno to the sea. The valley floor is marked on the grid and
+// the first projects come online along it. Projects (resolution-7 cells)
+// come online one at a time, mostly beside
 // projects already running, so clusters grow and meet. Neighbouring projects
 // exchange: their shared border lights up and a pulse crosses it. When four
 // of a cell's seven H3 children are online, the parent cell one resolution up
-// comes online too and starts exchanging with its own neighbours — r8 projects
-// combine into r7 nuclei, r6 local networks, and finally the r5 territory.
+// comes online too and starts exchanging with its own neighbours — r7 projects
+// combine into r6 nuclei, r5 local networks, and finally the r4 territory.
 // Then the whole fades and the story starts again. A tap brings the project
 // under it online. Under reduced motion the finished network is drawn still.
-import { latLngToCell, cellToParent, cellToChildren, gridRing, cellToLatLng, cellToBoundary } from 'h3-js';
+import { latLngToCell, cellToParent, cellToChildren, gridRing, gridDisk, gridPathCells, cellToLatLng, cellToBoundary } from 'h3-js';
+import { pick } from './i18n.js';
 
-const HOME = { lat: 42.8987, lng: 13.7277 }; // Castorano (AP)
-const BASE_RES = 8;
-const TOP_RES = 5;
+// The Tronto's valley floor, upstream to downstream (approximate).
+const TRONTO = [
+  [42.853, 13.585], // Ascoli Piceno
+  [42.858, 13.625], // Marino del Tronto
+  [42.864, 13.68],  // Castel di Lama
+  [42.866, 13.755], // Pagliare del Tronto
+  [42.88, 13.815],  // Monsampolo del Tronto
+  [42.895, 13.913], // the mouth, Porto d'Ascoli
+];
+const BASE_RES = 7;
+const TOP_RES = 4;
 const QUORUM = 4;          // online children (of 7) that bring a parent online
 const STEP_MS = 330;       // one project comes online per step
 const EXCHANGE_MS = 260;   // a new exchange starts this often
@@ -20,15 +31,28 @@ const FADE_MS = 3200;
 const GOLD = '221, 185, 121';
 const CREAM = '244, 239, 228';
 
+const LABELS = pick({
+  it: ['Progetti', 'Nuclei', 'Reti locali', 'Territorio'],
+  en: ['Projects', 'Clusters', 'Local networks', 'Territory'],
+});
+
 export const LEVELS = [
-  { res: 8, label: 'Progetti' },
-  { res: 7, label: 'Nuclei' },
-  { res: 6, label: 'Reti locali' },
-  { res: 5, label: 'Territorio' },
+  { res: 7, label: LABELS[0] },
+  { res: 6, label: LABELS[1] },
+  { res: 5, label: LABELS[2] },
+  { res: 4, label: LABELS[3] },
 ];
 
-export const HOME_CELL = latLngToCell(HOME.lat, HOME.lng, BASE_RES);
-const TOP_CELL = cellToParent(HOME_CELL, TOP_RES);
+const RIVER = TRONTO.map(([lat, lng]) => latLngToCell(lat, lng, BASE_RES));
+const TOP_CELL = cellToParent(RIVER[0], TOP_RES);
+
+// The valley floor: the river's cells and one ring either side, within the territory.
+export const VALLEY = new Set(
+  RIVER.slice(1)
+    .flatMap((c, i) => gridPathCells(RIVER[i], c))
+    .flatMap((c) => gridDisk(c, 1))
+    .filter((c) => cellToParent(c, TOP_RES) === TOP_CELL)
+);
 
 export function hexmesh(canvas, { area = canvas.parentElement, reduced = false, onCell = () => {}, onStats = () => {} } = {}) {
   const ctx = canvas.getContext('2d');
@@ -58,12 +82,14 @@ export function hexmesh(canvas, { area = canvas.parentElement, reduced = false, 
     const spanX = Math.max(...xs) - Math.min(...xs);
     const spanY = Math.max(...ys) - Math.min(...ys);
     const mobile = w < 700;
-    // The territory cell sits right of the headline on desktop and fills the width on phones.
+    // The territory cell sits right of the headline on desktop and fills the width on phones;
+    // the valley lies in its southern part, so it is placed just above the legend.
     const fitW = mobile ? w * 1.05 : Math.min(w * 0.5, 820);
-    const fitH = mobile ? h * 0.7 : h * 0.84;
+    const fitH = mobile ? h * 0.62 : h * 0.74;
     scale = Math.min(fitW / spanX, fitH / spanY);
     ox = mobile ? w * 0.5 : w - Math.max(w * 0.06, 40) - (spanX * scale) / 2;
-    oy = mobile ? h * 0.6 : h * 0.54;
+    const valleyLat = TRONTO.reduce((a, [lat]) => a + lat, 0) / TRONTO.length;
+    oy = (mobile ? h * 0.7 : h * 0.72) + (valleyLat - lat0) * scale;
   }
 
   function build() {
@@ -106,6 +132,13 @@ export function hexmesh(canvas, { area = canvas.parentElement, reduced = false, 
     gctx.lineWidth = 0.75;
     gctx.strokeStyle = `rgba(${CREAM}, 0.07)`;
     for (const c of levels[0].cells) gctx.stroke(c.path);
+    gctx.fillStyle = `rgba(${GOLD}, 0.1)`;
+    gctx.strokeStyle = `rgba(${GOLD}, 0.32)`;
+    for (const c of levels[0].cells) {
+      if (!VALLEY.has(c.id)) continue;
+      gctx.fill(c.path);
+      gctx.stroke(c.path);
+    }
     gctx.setLineDash([3, 6]);
     gctx.strokeStyle = `rgba(${CREAM}, 0.16)`;
     gctx.stroke(levels[levels.length - 1].cells[0].path);
@@ -163,12 +196,15 @@ export function hexmesh(canvas, { area = canvas.parentElement, reduced = false, 
     const base = levels[0].cells;
     const live = [];
     base.forEach((c, i) => c.on && live.push(i));
+    const valley = [...VALLEY].map((id) => levels[0].at.get(id)).filter((i) => i !== undefined && !base[i].on);
     let target = -1;
-    if (!live.length) target = levels[0].at.get(HOME_CELL);
+    if (live.length < 6 && valley.length) target = pick(valley);
     for (let tries = 0; target < 0 && tries < 12; tries++) {
       if (Math.random() < 0.8) {
         const free = base[pick(live)].nbrs.filter((n) => !base[n].on);
         if (free.length) target = weighted(free);
+      } else if (valley.length && Math.random() < 0.5) {
+        target = pick(valley);
       } else {
         const k = Math.floor(Math.random() * base.length);
         if (!base[k].on) target = k;
@@ -300,15 +336,6 @@ export function hexmesh(canvas, { area = canvas.parentElement, reduced = false, 
     drawCells(now);
     drawExchanges(now);
 
-    const home = levels[0].cells[levels[0].at.get(HOME_CELL)];
-    if (home) {
-      const pulse = reduced ? 0.6 : 0.5 + 0.5 * Math.sin(now / 900);
-      ctx.fillStyle = `rgba(${GOLD}, ${0.3 + pulse * 0.25})`;
-      ctx.fill(home.path);
-      ctx.strokeStyle = `rgba(${GOLD}, 1)`;
-      ctx.lineWidth = 1.25;
-      ctx.stroke(home.path);
-    }
     ctx.globalAlpha = 1;
 
     if (hovered >= 0) {

@@ -1,30 +1,38 @@
 <script>
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import MapPin from '@lucide/svelte/icons/map-pin';
+  import { pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      eyebrow: 'La rete',
+      title: 'I luoghi che <em>rigeneriamo</em>',
+      sub: ["Rigenerativa opera all'interno della rete", ', che unisce comunità, tecnologie e modelli aperti per una civiltà ecologica.'],
+      visit: 'Visita il sito',
+      sites: [
+        ['Hub di innovazione eco-tech', 'Il cuore della rete: un villaggio dove si sperimentano tecnologie aperte, vita comunitaria e progetti rigenerativi.'],
+        ['Spazio di co-creazione', "Un'ex fabbrica trasformata in laboratori, co-living e iniziative comunitarie, a dieci minuti da Ascoli Piceno."],
+        ['Scuola vivente nel bosco', 'Un rifugio in montagna dedicato al lavoro interiore, alle relazioni profonde e alla cura della terra.'],
+      ],
+    },
+    en: {
+      eyebrow: 'The network',
+      title: 'The places we <em>regenerate</em>',
+      sub: ['Rigenerativa works within the', ' network, which brings together communities, technologies and open models for an ecological civilisation.'],
+      visit: 'Visit the website',
+      sites: [
+        ['Eco-tech innovation hub', 'The heart of the network: a village for experimenting with open technology, community living and regenerative projects.'],
+        ['Co-creation space', 'A former factory turned into workshops, co-living and community initiatives, ten minutes from Ascoli Piceno.'],
+        ['Living school in the woods', 'A mountain retreat devoted to inner work, deep relationships and care for the land.'],
+      ],
+    },
+  });
 
   const sites = [
-    {
-      name: 'Liminal Village',
-      role: 'Hub di innovazione eco-tech',
-      blurb: 'Il cuore della rete: un villaggio dove si sperimentano tecnologie aperte, vita comunitaria e progetti rigenerativi.',
-      image: '/images/regenerativa/site-liminal.jpeg',
-      href: 'https://liminalvillage.com',
-    },
-    {
-      name: 'ReFactory',
-      role: 'Spazio di co-creazione',
-      blurb: "Un'ex fabbrica trasformata in laboratori, co-living e iniziative comunitarie, a dieci minuti da Ascoli Piceno.",
-      image: '/images/regenerativa/site-refactory.jpeg',
-      href: 'https://refactory.earth',
-    },
-    {
-      name: 'Casa Selva',
-      role: 'Scuola vivente nel bosco',
-      blurb: 'Un rifugio in montagna dedicato al lavoro interiore, alle relazioni profonde e alla cura della terra.',
-      image: '/images/regenerativa/site-casaselva.jpeg',
-      href: 'https://casaselva.earth',
-    },
-  ];
+    { name: 'Liminal Village', image: '/images/regenerativa/site-liminal.jpeg', href: 'https://liminalvillage.com' },
+    { name: 'ReFactory', image: '/images/regenerativa/site-refactory.jpeg', href: 'https://refactory.earth' },
+    { name: 'Casa Selva', image: '/images/regenerativa/site-casaselva.jpeg', href: 'https://casaselva.earth' },
+  ].map((s, i) => ({ ...s, role: t.sites[i][0], blurb: t.sites[i][1] }));
 
   const canHover = typeof matchMedia !== 'undefined'
     && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches;
@@ -52,10 +60,10 @@
 <section id="ri-rete" class="rete rg-section">
   <div class="rg-container">
     <div class="heading" data-reveal>
-      <p class="rg-eyebrow">La rete</p>
-      <h2 class="rg-h2">I luoghi che <em>rigeneriamo</em></h2>
+      <p class="rg-eyebrow">{t.eyebrow}</p>
+      <h2 class="rg-h2">{@html t.title}</h2>
       <p class="rg-sub">
-        Rigenerativa opera all'interno della rete <a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa</a>, che unisce comunità, tecnologie e modelli aperti per una civiltà ecologica.
+        {t.sub[0]} <a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa</a>{t.sub[1]}
       </p>
     </div>
 
@@ -77,7 +85,7 @@
             <p class="role">{s.role}</p>
             <h3>{s.name}</h3>
             <p class="blurb">{s.blurb}</p>
-            <span class="more">Visita il sito <ArrowUpRight class="arrow" size={16} strokeWidth={1.75} /></span>
+            <span class="more">{t.visit} <ArrowUpRight class="arrow" size={16} strokeWidth={1.75} /></span>
           </div>
           <span class="sheen" aria-hidden="true"></span>
         </a>

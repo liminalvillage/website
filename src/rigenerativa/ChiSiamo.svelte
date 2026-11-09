@@ -4,29 +4,35 @@
   import Hammer from '@lucide/svelte/icons/hammer';
   import Sprout from '@lucide/svelte/icons/sprout';
   import Network from '@lucide/svelte/icons/network';
+  import { pick } from './i18n.js';
 
-  const lead =
-    "Rigenerativa S.r.l. è il braccio operativo della rete ReGenerativa nelle Marche. Prendiamo in gestione edifici civili e industriali, aree rurali e strutture dismesse, e li accompagniamo dal cantiere alla vita quotidiana: progettazione bioclimatica, costruzione, programmazione culturale, agricoltura rigenerativa e gestione condivisa con le comunità locali.";
-  const words = lead.split(' ');
+  const t = pick({
+    it: {
+      eyebrow: 'Chi siamo',
+      title: "Un'unica impresa, una <em>soluzione dalla A alla Z</em> per la rigenerazione dei luoghi",
+      lead: "Rigenerativa S.r.l. è il braccio operativo della rete ReGenerativa nelle Marche. Prendiamo in gestione edifici, terre e strutture dismesse e li accompagniamo dal cantiere alla vita quotidiana, insieme alle comunità locali.",
+      pillars: [
+        ['Costruire', "Bioedilizia, restauro e recupero adattivo con materiali naturali e riciclati, energia off-grid e gestione dell'acqua."],
+        ['Abitare', 'Ospitalità diffusa, turismo lento, eventi, filiera corta e agricoltura supportata dalla comunità negli spazi rigenerati.'],
+        ['Custodire', 'Beni comuni, governance distribuita e strumenti digitali aperti per coordinare una rete di nodi locali replicabile.'],
+      ],
+    },
+    en: {
+      eyebrow: 'About us',
+      title: 'One company, an <em>A-to-Z solution</em> for regenerating places',
+      lead: 'Rigenerativa S.r.l. is the operating arm of the ReGenerativa network in the Marche region of Italy. We take on buildings, land and abandoned structures and carry them from the building site to everyday life, together with local communities.',
+      pillars: [
+        ['Build', 'Green building, restoration and adaptive reuse with natural and recycled materials, off-grid energy and water management.'],
+        ['Inhabit', 'Distributed hospitality, slow tourism, events, short supply chains and community supported agriculture in the regenerated spaces.'],
+        ['Steward', 'Commons, distributed governance and open digital tools to coordinate a replicable network of local nodes.'],
+      ],
+    },
+  });
+
+  const words = t.lead.split(' ');
 
   // Each pillar's icon draws itself in as it scrolls into view.
-  const pillars = [
-    {
-      title: 'Costruire',
-      text: "Bioedilizia, restauro e recupero adattivo con materiali naturali e riciclati, energia off-grid e gestione dell'acqua.",
-      icon: Hammer,
-    },
-    {
-      title: 'Abitare',
-      text: 'Ospitalità diffusa, turismo lento, eventi, filiera corta e agricoltura supportata dalla comunità negli spazi rigenerati.',
-      icon: Sprout,
-    },
-    {
-      title: 'Custodire',
-      text: 'Beni comuni, governance distribuita e strumenti digitali aperti per coordinare una rete di nodi locali replicabile.',
-      icon: Network,
-    },
-  ];
+  const pillars = [Hammer, Sprout, Network].map((icon, i) => ({ icon, title: t.pillars[i][0], text: t.pillars[i][1] }));
 
   let section;
 
@@ -61,8 +67,8 @@
 <section id="ri-chi-siamo" class="chi-siamo rg-section" bind:this={section}>
   <div class="rg-container">
     <div class="heading" data-reveal>
-      <p class="rg-eyebrow">Chi siamo</p>
-      <h2 class="rg-h2">Un'impresa che si prende la <em>piena responsabilità</em> della trasformazione dei luoghi</h2>
+      <p class="rg-eyebrow">{t.eyebrow}</p>
+      <h2 class="rg-h2">{@html t.title}</h2>
     </div>
 
     <p class="lead">
@@ -177,6 +183,7 @@
     color: var(--rg-muted);
     font-size: 0.95rem;
   }
+
 
   @media (max-width: 860px) {
     .lead {

@@ -1,12 +1,44 @@
 <script>
   import { onMount } from 'svelte';
   import { gsap, reduced } from './motion.js';
-  import { hexmesh, HOME_CELL, LEVELS } from './hexmesh.js';
+  import { hexmesh, VALLEY, LEVELS } from './hexmesh.js';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import MapPin from '@lucide/svelte/icons/map-pin';
   import Hexagon from '@lucide/svelte/icons/hexagon';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
+  import { pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      h1: ['Rigeneriamo luoghi,', '<em>comunità</em> e territori'],
+      tagline: 'Trasformiamo spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali, con un\'infrastruttura tecnologica aperta che unisce bioedilizia, agroecologia e governance dei beni comuni.',
+      cta: 'Collabora con noi',
+      what: 'Cosa facciamo',
+      layers: 'Livelli della rete sulla griglia H3',
+      cell: 'Cella H3',
+      tap: 'Tocca un esagono: un nuovo progetto entra in rete',
+      click: 'Clicca un esagono: un nuovo progetto entra in rete',
+      scroll: 'Scorri in basso',
+      discover: 'Scopri',
+      place: 'Valle del Tronto, Marche',
+      valley: 'Valle del Tronto',
+    },
+    en: {
+      h1: ['Regenerating places,', '<em>communities</em> and territories'],
+      tagline: 'We turn abandoned and underused spaces into living, multi-purpose places, on an open technology infrastructure that brings together green building, agroecology and commons governance.',
+      cta: 'Work with us',
+      what: 'What we do',
+      layers: 'Network levels on the H3 grid',
+      cell: 'H3 cell',
+      tap: 'Tap a hexagon: a new project joins the network',
+      click: 'Click a hexagon: a new project joins the network',
+      scroll: 'Scroll down',
+      discover: 'Explore',
+      place: 'Tronto Valley, Marche, Italy',
+      valley: 'Tronto Valley',
+    },
+  });
 
   let hero;
   let canvas;
@@ -42,24 +74,25 @@
   <div class="hero-content rg-container">
     <p class="eyebrow">
       <span>Rigenerativa S.r.l.</span>
-      <span class="place"><MapPin size="1.3em" strokeWidth={1.75} />Castorano, Marche</span>
+      <span class="place"><MapPin size="1.3em" strokeWidth={1.75} />{t.place}</span>
     </p>
     <h1>
-      <span class="line"><span>Rigeneriamo luoghi,</span></span>
-      <span class="line"><span><em>comunità</em> e territori</span></span>
+      {#each t.h1 as line}
+        <span class="line"><span>{@html line}</span></span>
+      {/each}
     </h1>
     <p class="tagline">
-      Trasformiamo spazi dismessi e sottoutilizzati in luoghi vivi e polifunzionali, unendo bioedilizia, agroecologia, tecnologia aperta e governance dei beni comuni.
+      {t.tagline}
     </p>
     <div class="hero-actions">
-      <a href="#ri-contatti" class="rg-btn rg-btn-gold">Collabora con noi <ArrowRight class="arrow" size="1.4em" strokeWidth={1.75} /></a>
-      <a href="#ri-attivita" class="rg-btn rg-btn-ghost">Cosa facciamo</a>
+      <a href="#ri-contatti" class="rg-btn rg-btn-gold">{t.cta} <ArrowRight class="arrow" size="1.4em" strokeWidth={1.75} /></a>
+      <a href="#ri-attivita" class="rg-btn rg-btn-ghost">{t.what}</a>
     </div>
   </div>
 
   <div class="hero-foot rg-container">
     <div class="story">
-    <ol class="layers" aria-label="Livelli della rete sulla griglia H3">
+    <ol class="layers" aria-label={t.layers}>
       {#each stats as l, i}
         {#if i}<li class="sep" aria-hidden="true"><ChevronRight size={14} strokeWidth={1.5} /></li>{/if}
         <li class="layer" class:on={l.online > 0}>
@@ -71,16 +104,16 @@
       {/each}
     </ol>
     <p class="hint">
-      <span class="hex" class:home={!cell || cell === HOME_CELL}><Hexagon size="1.5em" strokeWidth={1.75} /></span>
+      <span class="hex" class:home={!cell || VALLEY.has(cell)}><Hexagon size="1.5em" strokeWidth={1.75} /></span>
       {#if cell}
-        <span>Cella H3 <code>{cell}</code>{cell === HOME_CELL ? ' · Castorano' : ''}</span>
+        <span>{t.cell} <code>{cell}</code>{VALLEY.has(cell) ? ` · ${t.valley}` : ''}</span>
       {:else}
-        <span>{touch ? 'Tocca' : 'Clicca'} un esagono: un nuovo progetto entra in rete</span>
+        <span>{touch ? t.tap : t.click}</span>
       {/if}
     </p>
     </div>
-    <a href="#ri-chi-siamo" class="scroll-hint" aria-label="Scorri in basso">
-      <span>Scopri</span>
+    <a href="#ri-chi-siamo" class="scroll-hint" aria-label={t.scroll}>
+      <span>{t.discover}</span>
       <ChevronDown class="bob" size="1.6em" strokeWidth={1.5} />
     </a>
   </div>
@@ -180,7 +213,7 @@
     animation-delay: 0.14s;
   }
 
-  h1 em {
+  h1 :global(em) {
     color: var(--rg-gold-soft);
     font-style: italic;
     font-weight: 400;

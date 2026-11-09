@@ -7,6 +7,7 @@
   import Percorso from './Percorso.svelte';
   import Attivita from './Attivita.svelte';
   import Rete from './Rete.svelte';
+  import Ecosistema from './Ecosistema.svelte';
   import Rigeneratori from './Rigeneratori.svelte';
   import Contatti from './Contatti.svelte';
   import Footer from './Footer.svelte';
@@ -35,6 +36,7 @@
   <Percorso />
   <Attivita />
   <Rete />
+  <Ecosistema />
   <Rigeneratori />
   <Contatti />
   <Footer />

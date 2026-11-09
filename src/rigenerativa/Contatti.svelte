@@ -8,30 +8,70 @@
   import Check from '@lucide/svelte/icons/check';
 
   import { EMAIL, mailto } from './contact.js';
+  import { pick } from './i18n.js';
 
-  const asks = [
-    {
-      title: 'Hai uno spazio da rigenerare?',
-      icon: House,
-      text: 'Edifici, terreni o strutture dismesse: valutiamo insieme un progetto di gestione e trasformazione.',
-      subject: 'Uno spazio da rigenerare',
-      body: "Buongiorno,\n\nvorrei proporvi uno spazio da rigenerare.\n\nDove si trova:\nChe tipo di spazio è (edificio, terreno, struttura dismessa):\nCosa immagino:\n\n",
+  const t = pick({
+    it: {
+      eyebrow: 'Contatti',
+      title: 'Costruiamo <em>insieme</em>',
+      lede: "Raccontaci da dove parti: prepariamo noi l'email.",
+      reason: 'Il motivo del contatto',
+      write: 'Scrivici',
+      copied: 'Indirizzo copiato',
+      copy: 'Copia',
+      asks: [
+        {
+          title: 'Hai uno spazio da rigenerare?',
+          text: 'Edifici, terreni o strutture dismesse: valutiamo insieme un progetto di gestione e trasformazione.',
+          subject: 'Uno spazio da rigenerare',
+          body: "Buongiorno,\n\nvorrei proporvi uno spazio da rigenerare.\n\nDove si trova:\nChe tipo di spazio è (edificio, terreno, struttura dismessa):\nCosa immagino:\n\n",
+        },
+        {
+          title: 'Sei un ente o un comune?',
+          text: 'Co-progettazione, gare, fondi europei e modelli di gestione condivisa dei beni comuni.',
+          subject: 'Collaborazione con un ente',
+          body: "Buongiorno,\n\nscrivo per conto di (ente / comune):\n\nVorremmo approfondire:\n\n",
+        },
+        {
+          title: 'Vuoi aprire un nodo?',
+          text: 'Il nostro modello è replicabile: formazione, strumenti digitali e affiliazione alla rete.',
+          subject: 'Aprire un nodo della rete',
+          body: "Buongiorno,\n\nvorrei aprire un nodo della rete.\n\nDove:\nChi siamo:\n\n",
+        },
+      ],
     },
-    {
-      title: 'Sei un ente o un comune?',
-      icon: Landmark,
-      text: 'Co-progettazione, gare, fondi europei e modelli di gestione condivisa dei beni comuni.',
-      subject: 'Collaborazione con un ente',
-      body: "Buongiorno,\n\nscrivo per conto di (ente / comune):\n\nVorremmo approfondire:\n\n",
+    en: {
+      eyebrow: 'Contact',
+      title: "Let's build <em>together</em>",
+      lede: "Tell us where you're starting from: we'll draft the email for you.",
+      reason: 'Why you are getting in touch',
+      write: 'Write to us',
+      copied: 'Address copied',
+      copy: 'Copy',
+      asks: [
+        {
+          title: 'Do you have a space to regenerate?',
+          text: "Buildings, land or abandoned structures: let's assess a management and transformation project together.",
+          subject: 'A space to regenerate',
+          body: "Hello,\n\nI'd like to propose a space to regenerate.\n\nWhere it is:\nWhat kind of space it is (building, land, abandoned structure):\nWhat I have in mind:\n\n",
+        },
+        {
+          title: 'Are you a public body or municipality?',
+          text: 'Co-design, tenders, European funding and models for shared management of the commons.',
+          subject: 'Partnership with a public body',
+          body: "Hello,\n\nI'm writing on behalf of (organisation / municipality):\n\nWe would like to discuss:\n\n",
+        },
+        {
+          title: 'Want to open a node?',
+          text: 'Our model is replicable: training, digital tools and affiliation to the network.',
+          subject: 'Opening a network node',
+          body: "Hello,\n\nI'd like to open a node of the network.\n\nWhere:\nWho we are:\n\n",
+        },
+      ],
     },
-    {
-      title: 'Vuoi aprire un nodo?',
-      icon: Hexagon,
-      text: 'Il nostro modello è replicabile: formazione, strumenti digitali e affiliazione alla rete.',
-      subject: 'Aprire un nodo della rete',
-      body: "Buongiorno,\n\nvorrei aprire un nodo della rete.\n\nDove:\nChi siamo:\n\n",
-    },
-  ];
+  });
+
+  const asks = [House, Landmark, Hexagon].map((icon, i) => ({ icon, ...t.asks[i] }));
 
   // A sector page tags the subject, so the mailbox can tell edilizia from agricoltura.
   export let topic = '';
@@ -59,12 +99,12 @@
   <div class="rg-container">
     <div class="cta" data-reveal>
       <div class="cta-head">
-        <p class="rg-eyebrow">Contatti</p>
-        <h2 class="rg-h2">Costruiamo <em>insieme</em></h2>
-        <p class="lede">Raccontaci da dove parti: prepariamo noi l'email.</p>
+        <p class="rg-eyebrow">{t.eyebrow}</p>
+        <h2 class="rg-h2">{@html t.title}</h2>
+        <p class="lede">{t.lede}</p>
       </div>
 
-      <div class="asks" role="radiogroup" aria-label="Il motivo del contatto">
+      <div class="asks" role="radiogroup" aria-label={t.reason}>
         {#each asks as a, i}
           <button
             class="ask"
@@ -82,9 +122,9 @@
       </div>
 
       <div class="actions">
-        <a class="rg-btn rg-btn-gold" {href}><Mail size={18} strokeWidth={1.75} />Scrivici: {ask.subject.toLowerCase()} <ArrowRight class="arrow" size={18} strokeWidth={1.75} /></a>
+        <a class="rg-btn rg-btn-gold" {href}><Mail size={18} strokeWidth={1.75} />{t.write}: {ask.subject.toLowerCase()} <ArrowRight class="arrow" size={18} strokeWidth={1.75} /></a>
         <button class="copy" on:click={copy} aria-live="polite">
-          {#if copied}<Check size={16} strokeWidth={2} />Indirizzo copiato{:else}<Copy size={16} strokeWidth={1.75} />Copia {EMAIL}{/if}
+          {#if copied}<Check size={16} strokeWidth={2} />{t.copied}{:else}<Copy size={16} strokeWidth={1.75} />{t.copy} {EMAIL}{/if}
         </button>
       </div>
     </div>
@@ -122,7 +162,7 @@
     color: #fff;
   }
 
-  .cta .rg-h2 em {
+  .cta .rg-h2 :global(em) {
     color: var(--rg-gold-soft);
   }
 

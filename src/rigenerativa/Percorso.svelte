@@ -7,39 +7,75 @@
   import Sprout from '@lucide/svelte/icons/sprout';
   import Users from '@lucide/svelte/icons/users';
 
+  import { pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      eyebrow: 'Il percorso',
+      title: 'Dal cantiere alla <em>vita quotidiana</em>',
+      steps: [
+        {
+          title: 'Presa in gestione',
+          text: "Capannoni, casali, terreni ed edifici pubblici in disuso: li prendiamo in carico con contratti di gestione, concessioni o custodia fiduciaria.",
+          tags: ['Patrimoni sottoutilizzati', 'Edifici dismessi', 'Terre incolte'],
+        },
+        {
+          title: 'Progettazione bioclimatica',
+          text: "Progettiamo con il clima, l'acqua e i materiali che il luogo offre: bioclimatica, digital twin, energia off-grid.",
+          tags: ['Bioclimatica', 'BIM', 'Off-grid'],
+        },
+        {
+          title: 'Costruzione',
+          text: 'Bioedilizia, restauro e recupero adattivo come General Contractor, con materiali naturali e riciclati.',
+          tags: ['Bioedilizia', 'Restauro', 'Materiali riciclati'],
+        },
+        {
+          title: 'Vita culturale e agricola',
+          text: 'Il luogo si riempie: cultura, ospitalità ed eventi; agroecologia e agricoltura supportata dalla comunità.',
+          tags: ['Cultura', 'Ospitalità', 'Agroecologia'],
+        },
+        {
+          title: 'Gestione condivisa',
+          text: 'Accompagniamo le comunità locali verso la cura condivisa dei beni comuni.',
+          tags: ['Beni comuni', 'Governance', 'Comunità'],
+        },
+      ],
+    },
+    en: {
+      eyebrow: 'The journey',
+      title: 'From building site to <em>everyday life</em>',
+      steps: [
+        {
+          title: 'Taking charge',
+          text: 'Warehouses, farmhouses, farmland and disused public buildings: we take them on through management agreements, concessions or fiduciary stewardship.',
+          tags: ['Underused assets', 'Disused buildings', 'Idle land'],
+        },
+        {
+          title: 'Bioclimatic design',
+          text: 'We design with the climate, water and materials the place offers: bioclimatic architecture, digital twins, off-grid energy.',
+          tags: ['Bioclimatic', 'BIM', 'Off-grid'],
+        },
+        {
+          title: 'Construction',
+          text: 'Green building, restoration and adaptive reuse as General Contractor, with natural and recycled materials.',
+          tags: ['Green building', 'Restoration', 'Recycled materials'],
+        },
+        {
+          title: 'Cultural and farming life',
+          text: 'The place fills up: culture, hospitality and events; agroecology and community supported agriculture.',
+          tags: ['Culture', 'Hospitality', 'Agroecology'],
+        },
+        {
+          title: 'Shared stewardship',
+          text: 'We guide local communities towards shared care of the commons.',
+          tags: ['Commons', 'Governance', 'Community'],
+        },
+      ],
+    },
+  });
+
   // The path named in the Chi siamo lead: from taking a place on to sharing it.
-  const steps = [
-    {
-      title: 'Presa in gestione',
-      icon: KeyRound,
-      text: 'Edifici civili e industriali, aree rurali e strutture dismesse: ne assumiamo la piena responsabilità, con forme di gestione, concessione o custodia fiduciaria.',
-      tags: ['Edifici', 'Terre', 'Strutture dismesse'],
-    },
-    {
-      title: 'Progettazione bioclimatica',
-      icon: PencilRuler,
-      text: "Ascoltiamo il luogo e progettiamo con il clima, l'acqua e i materiali che offre: architettura bioclimatica, BIM e digital twin, energia off-grid.",
-      tags: ['Bioclimatica', 'BIM', 'Off-grid'],
-    },
-    {
-      title: 'Costruzione',
-      icon: Hammer,
-      text: 'Bioedilizia, restauro e recupero adattivo come General Contractor, con materiali naturali e riciclati, fitodepurazione e biolaghi.',
-      tags: ['Bioedilizia', 'Restauro', 'Materiali riciclati'],
-    },
-    {
-      title: 'Vita culturale e agricola',
-      icon: Sprout,
-      text: 'Il luogo si riempie: programmazione culturale, ospitalità, eventi e residenze; agroecologia, food forest e agricoltura supportata dalla comunità.',
-      tags: ['Cultura', 'Ospitalità', 'Agroecologia'],
-    },
-    {
-      title: 'Gestione condivisa',
-      icon: Users,
-      text: 'Accompagniamo le comunità locali verso la cura condivisa dei beni comuni, con governance distribuita e strumenti digitali aperti.',
-      tags: ['Beni comuni', 'Governance', 'Comunità'],
-    },
-  ];
+  const steps = [KeyRound, PencilRuler, Hammer, Sprout, Users].map((icon, i) => ({ icon, ...t.steps[i] }));
 
   let section;
   let track;
@@ -76,8 +112,8 @@
   <div class="frame">
     <div class="intro rg-container">
       <div>
-        <p class="rg-eyebrow">Il percorso</p>
-        <h2 class="rg-h2">Dal cantiere alla <em>vita quotidiana</em></h2>
+        <p class="rg-eyebrow">{t.eyebrow}</p>
+        <h2 class="rg-h2">{@html t.title}</h2>
       </div>
       <p class="counter" aria-hidden="true">
         <span class="now">0{current + 1}</span><span class="of">/ 0{steps.length}</span>
@@ -138,7 +174,7 @@
     color: #fff;
   }
 
-  .intro .rg-h2 em {
+  .intro .rg-h2 :global(em) {
     color: var(--rg-gold-soft);
   }
 

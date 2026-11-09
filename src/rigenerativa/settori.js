@@ -9,8 +9,10 @@ import Cpu from '@lucide/svelte/icons/cpu';
 import Scale from '@lucide/svelte/icons/scale';
 import GraduationCap from '@lucide/svelte/icons/graduation-cap';
 import Hexagon from '@lucide/svelte/icons/hexagon';
+import { lang } from './i18n.js';
+import en from './settori.en.js';
 
-export const settori = [
+const it = [
   {
     slug: 'edilizia',
     name: 'Edilizia',
@@ -363,6 +365,9 @@ export const settori = [
     ],
   },
 ];
+
+// Slugs stay Italian: they are the subdomains.
+export const settori = lang === 'en' ? it.map((s) => ({ ...s, ...en[s.slug] })) : it;
 
 export const bySlug = Object.fromEntries(settori.map((s) => [s.slug, s]));
 

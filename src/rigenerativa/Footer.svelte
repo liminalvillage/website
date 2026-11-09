@@ -1,6 +1,37 @@
 <script>
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import { settori, settoreUrl, homeUrl, currentSettore } from './settori.js';
+  import { pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      mission: 'Rigenerazione di spazi, comunità e territori nelle Marche e oltre.',
+      explore: 'Esplora',
+      links: ['Chi siamo', 'Percorso', 'Attività', 'Ecosistema', 'Rigeneratori', 'Contatti'],
+      sectors: 'Settori',
+      network: 'La rete',
+      legal: 'Dati societari',
+      sede: 'Sede legale',
+      piva: 'P.IVA e C.F.',
+      rea: 'REA',
+      capitale: 'Capitale sociale',
+      vat: 'P.IVA',
+    },
+    en: {
+      mission: 'Regenerating spaces, communities and territories in the Marche region and beyond.',
+      explore: 'Explore',
+      links: ['About', 'Journey', 'Activities', 'Ecosystem', 'Regenerators', 'Contact'],
+      sectors: 'Sectors',
+      network: 'The network',
+      legal: 'Company details',
+      sede: 'Registered office',
+      piva: 'VAT no. and tax code',
+      rea: 'REA (business register no.)',
+      capitale: 'Share capital',
+      vat: 'VAT',
+    },
+  });
+  const links = ['#ri-chi-siamo', '#ri-percorso', '#ri-attivita', '#ri-ecosistema', '#ri-rigeneratori', '#ri-contatti'];
 
   // On a sector subdomain the home sections live on rigenerativa.it.
   const here = currentSettore();
@@ -14,7 +45,7 @@
     sede: 'Contrada Ferretti 56, 63081 Castorano (AP)',
     piva: '02607380447',
     rea: 'AP-315936',
-    capitale: '€ 10.000,00 i.v.',
+    capitale: pick({ it: '€ 10.000,00 i.v.', en: '€10,000.00 fully paid up' }),
   };
 </script>
 
@@ -25,24 +56,22 @@
         <img src="/images/regenerativa/logo.png" alt="Rigenerativa" class="logo" />
         <span class="brand-name">Rigenerativa</span>
         <p class="mission">
-          Rigenerazione di spazi, comunità e territori nelle Marche e oltre.
+          {t.mission}
         </p>
       </div>
 
       <div class="cols">
         <div class="col">
-          <h4>Esplora</h4>
+          <h4>{t.explore}</h4>
           <ul>
-            <li><a href={home('#ri-chi-siamo')}>Chi siamo</a></li>
-            <li><a href={home('#ri-percorso')}>Percorso</a></li>
-            <li><a href={home('#ri-attivita')}>Attività</a></li>
-            <li><a href={home('#ri-rigeneratori')}>Rigeneratori</a></li>
-            <li><a href={home('#ri-contatti')}>Contatti</a></li>
+            {#each links as href, i}
+              <li><a href={home(href)}>{t.links[i]}</a></li>
+            {/each}
           </ul>
         </div>
 
         <div class="col">
-          <h4>Settori</h4>
+          <h4>{t.sectors}</h4>
           <ul>
             {#each settori as s}
               <li><a href={settoreUrl(s.slug)} aria-current={here === s.slug ? 'page' : null}>{s.name}</a></li>
@@ -51,7 +80,7 @@
         </div>
 
         <div class="col">
-          <h4>La rete</h4>
+          <h4>{t.network}</h4>
           <ul>
             <li><a href="https://regenerativa.earth" target="_blank" rel="noopener noreferrer">ReGenerativa<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
             <li><a href="https://liminalvillage.com" target="_blank" rel="noopener noreferrer">Liminal Village<ArrowUpRight class="ext" size={14} strokeWidth={1.75} /></a></li>
@@ -61,20 +90,20 @@
         </div>
 
         <div class="col">
-          <h4>Dati societari</h4>
+          <h4>{t.legal}</h4>
           <ul class="legal">
             <li>{company.name}</li>
-            <li>Sede legale: {company.sede}</li>
-            <li>P.IVA e C.F. {company.piva}</li>
-            <li>REA {company.rea}</li>
-            <li>Capitale sociale {company.capitale}</li>
+            <li>{t.sede}: {company.sede}</li>
+            <li>{t.piva} {company.piva}</li>
+            <li>{t.rea} {company.rea}</li>
+            <li>{t.capitale} {company.capitale}</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="bottom">
-      <p>&copy; 2026–{year} {company.name} · P.IVA {company.piva}</p>
+      <p>&copy; 2026–{year} {company.name} · {t.vat} {company.piva}</p>
     </div>
   </div>
 </footer>

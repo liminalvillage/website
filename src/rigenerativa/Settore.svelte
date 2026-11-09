@@ -11,6 +11,44 @@
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import Globe from '@lucide/svelte/icons/globe';
+  import { pick } from './i18n.js';
+
+  const t = pick({
+    it: {
+      menu: ['Approccio', 'Servizi', 'Metodo', 'Settori', 'Rigeneratori', 'Contatti'],
+      crumbs: 'Percorso di navigazione',
+      activities: 'Attività',
+      sector: 'Settore',
+      talk: 'Parliamone',
+      services: 'I servizi',
+      approach: 'Approccio',
+      servicesEyebrow: 'Servizi',
+      servicesTitle: (name) => `Cosa offriamo in <em>${name.toLowerCase()}</em>`,
+      servicesSub: (n) => `${n} servizi, combinabili tra loro e con quelli degli altri settori della rete.`,
+      method: 'Metodo',
+      methodTitle: 'Come <em>lavoriamo</em>',
+      others: 'Gli altri settori',
+      othersTitle: "Un'offerta <em>integrata</em>",
+      othersSub: 'Ogni progetto attraversa più settori: dal cantiere al campo, dalla comunità agli strumenti digitali.',
+    },
+    en: {
+      menu: ['Approach', 'Services', 'Method', 'Sectors', 'Regenerators', 'Contact'],
+      crumbs: 'Breadcrumb',
+      activities: 'Activities',
+      sector: 'Sector',
+      talk: "Let's talk",
+      services: 'Our services',
+      approach: 'Approach',
+      servicesEyebrow: 'Services',
+      servicesTitle: (name) => `What we offer in <em>${name.toLowerCase()}</em>`,
+      servicesSub: (n) => `${n} services that combine with one another and with those of the network's other sectors.`,
+      method: 'Method',
+      methodTitle: 'How we <em>work</em>',
+      others: 'Other sectors',
+      othersTitle: 'An <em>integrated</em> offer',
+      othersSub: 'Every project spans several sectors: from building site to field, from community to digital tools.',
+    },
+  });
 
   export let slug;
 
@@ -18,14 +56,8 @@
   const index = settori.indexOf(s);
   const others = settori.filter((o) => o !== s);
 
-  const menu = [
-    { label: 'Approccio', href: '#ri-approccio' },
-    { label: 'Servizi', href: '#ri-servizi' },
-    { label: 'Metodo', href: '#ri-metodo' },
-    { label: 'Settori', href: '#ri-settori' },
-    { label: 'Rigeneratori', href: '#ri-rigeneratori' },
-    { label: 'Contatti', href: '#ri-contatti' },
-  ];
+  const menu = ['#ri-approccio', '#ri-servizi', '#ri-metodo', '#ri-settori', '#ri-rigeneratori', '#ri-contatti']
+    .map((href, i) => ({ label: t.menu[i], href }));
 
   let root;
   let hero;
@@ -57,16 +89,16 @@
     <div class="shade" aria-hidden="true"></div>
 
     <div class="hero-content rg-container">
-      <nav class="crumbs" aria-label="Percorso di navigazione">
+      <nav class="crumbs" aria-label={t.crumbs}>
         <a href={homeUrl()}>Rigenerativa</a>
         <ChevronRight size={14} strokeWidth={1.5} />
-        <a href={homeUrl('#ri-attivita')}>Attività</a>
+        <a href={homeUrl('#ri-attivita')}>{t.activities}</a>
         <ChevronRight size={14} strokeWidth={1.5} />
         <span aria-current="page">{s.name}</span>
       </nav>
       <p class="eyebrow">
         <span class="badge"><svelte:component this={s.icon} size={18} strokeWidth={1.5} /></span>
-        <span>Settore {String(index + 1).padStart(2, '0')} / {String(settori.length).padStart(2, '0')}</span>
+        <span>{t.sector} {String(index + 1).padStart(2, '0')} / {String(settori.length).padStart(2, '0')}</span>
         <span class="host"><Globe size="1.2em" strokeWidth={1.75} />{settoreHost(s.slug)}</span>
       </p>
       <h1>
@@ -76,8 +108,8 @@
       </h1>
       <p class="tagline">{s.tagline}</p>
       <div class="hero-actions">
-        <a href="#ri-contatti" class="rg-btn rg-btn-gold">Parliamone <ArrowRight class="arrow" size="1.4em" strokeWidth={1.75} /></a>
-        <a href="#ri-servizi" class="rg-btn rg-btn-ghost">I servizi</a>
+        <a href="#ri-contatti" class="rg-btn rg-btn-gold">{t.talk} <ArrowRight class="arrow" size="1.4em" strokeWidth={1.75} /></a>
+        <a href="#ri-servizi" class="rg-btn rg-btn-ghost">{t.services}</a>
       </div>
     </div>
   </section>
@@ -85,7 +117,7 @@
   <section id="ri-approccio" class="rg-section">
     <div class="rg-container">
       <div class="intro" data-reveal>
-        <p class="rg-eyebrow">Approccio</p>
+        <p class="rg-eyebrow">{t.approach}</p>
         <p class="lead">{s.lead}</p>
       </div>
       <div class="principles" data-reveal="stagger">
@@ -103,9 +135,9 @@
   <section id="ri-servizi" class="servizi rg-section">
     <div class="rg-container">
       <div class="heading" data-reveal>
-        <p class="rg-eyebrow">Servizi</p>
-        <h2 class="rg-h2">Cosa offriamo in <em>{s.name.toLowerCase()}</em></h2>
-        <p class="rg-sub">{s.services.length} servizi, combinabili tra loro e con quelli degli altri settori della rete.</p>
+        <p class="rg-eyebrow">{t.servicesEyebrow}</p>
+        <h2 class="rg-h2">{@html t.servicesTitle(s.name)}</h2>
+        <p class="rg-sub">{t.servicesSub(s.services.length)}</p>
       </div>
       <ol class="services" data-reveal="stagger">
         {#each s.services as sv, i}
@@ -142,8 +174,8 @@
   <section id="ri-metodo" class="rg-section">
     <div class="rg-container">
       <div class="heading" data-reveal>
-        <p class="rg-eyebrow">Metodo</p>
-        <h2 class="rg-h2">Come <em>lavoriamo</em></h2>
+        <p class="rg-eyebrow">{t.method}</p>
+        <h2 class="rg-h2">{@html t.methodTitle}</h2>
       </div>
       <ol class="steps" data-reveal="stagger">
         {#each s.steps as st, i}
@@ -162,9 +194,9 @@
   <section id="ri-settori" class="settori rg-section">
     <div class="rg-container">
       <div class="heading" data-reveal>
-        <p class="rg-eyebrow">Gli altri settori</p>
-        <h2 class="rg-h2">Un'offerta <em>integrata</em></h2>
-        <p class="rg-sub">Ogni progetto attraversa più settori: dal cantiere al campo, dalla comunità agli strumenti digitali.</p>
+        <p class="rg-eyebrow">{t.others}</p>
+        <h2 class="rg-h2">{@html t.othersTitle}</h2>
+        <p class="rg-sub">{t.othersSub}</p>
       </div>
       <div class="sector-grid" data-reveal="stagger">
         {#each others as o}
