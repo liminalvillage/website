@@ -10,7 +10,8 @@
   };
 
   const menuItems = [
-    { label: 'ABOUT', href: '#about' },
+    { label: 'THE EXPERIENCE', href: '#about' },
+    { label: 'WHAT YOU LEARN', href: '#learn' },
     { label: 'THE VILLAGE', href: '#thevillage' },
     { label: 'LUNATIONS', href: '/lunations' },
     { label: 'DNA', href: '/dna' },

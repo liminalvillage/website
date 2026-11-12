@@ -2,7 +2,7 @@
   import Navbar from './lib/Navbar.svelte';
   import Hero from './lib/Hero.svelte';
   import About from './lib/About.svelte';
-  import ThreePillars from './lib/ThreePillars.svelte';
+  import FourQuadrants from './lib/FourQuadrants.svelte';
   import Network from './lib/Network.svelte';
   import Village from './lib/Village.svelte';
   import Lunations from './lib/Lunations.svelte';
@@ -14,9 +14,9 @@
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Liminal Village',
-    alternateName: 'Liminal Village — Open Source Innovation Eco-Tech Hub',
+    alternateName: 'Liminal Village — Learning Centre for a Regenerative Eco-Civilization',
     url: 'https://liminalvillage.com/',
-    description: 'A co-living and co-creation eco-tech hub and intentional community in central Italy, inspired by the Resource-Based Economy and Game B, organised around lunar cycles.',
+    description: 'A learning centre in central Italy. Participants sign up for a lunar-cycle learning experience and learn, by living them, the thoughtware (Integral Theory, NVC, Holacracy, Permaculture…) and the open-source software (Holons, Holosphere, RegenOS) that connect the four quadrants of a regenerative eco-civilization.',
     address: { '@type': 'PostalAddress', addressRegion: 'Ascoli Piceno, Marche', addressCountry: 'IT' },
     memberOf: { '@type': 'Organization', name: 'ReGenerativa', url: 'https://regenerativa.earth/' },
     sameAs: ['https://docs.liminalvillage.com/'],
@@ -40,7 +40,7 @@
   <Navbar />
   <Hero />
   <About />
-  <ThreePillars />
+  <FourQuadrants />
   <Village />
   <Lunations />
   <Network />
