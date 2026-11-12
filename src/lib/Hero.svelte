@@ -39,9 +39,9 @@
   <div class="hero-content">
     <div class="hero-text">
       <h1>Liminal Village</h1>
-      <p class="subtitle">Open Source Innovation Eco-Tech Hub</p>
+      <p class="subtitle">A learning centre for the eco-civilization</p>
       <p class="network-line">
-        A node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network
+        Learn and apply the software that connects the four quadrants · a node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network
       </p>
     </div>
     <LunationTimer />

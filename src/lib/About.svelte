@@ -5,23 +5,25 @@
     </div>
     <div class="section-content">
       <p>
-        Liminal Village is a co-living and co-creation eco-tech hub in the center of Italy.
-        We have been experimenting with forming and weaving temporary communities aimed at
-        creating value for the world, heal themselves and heal the collective, by emphasising
-        the balance of personal, local and global regeneration. Inspired by the concept of a
-        Resource-Based Economy, Liminal, meaning "a place of transition" or "a place that
-        occupies both sides", is an embodied experimental ground where value-aligned people
-        come together to co-create and experience the future they would like to see (eg:
-        <a href="https://www.gameb.wiki/index.php?title=Game_B" target="_blank" rel="noopener">Game B</a>).
-        Using natural cycles to guide progress, we focus on reinventing how we can live in
-        harmony with each other and the planet, by "upgrading the operating system of society"
-        and transitioning from scarcity based market economies to "access abundance".
+        Liminal Village is a learning centre in the hills of central Italy. You don't visit
+        it — you sign up for a learning experience. For the length of a lunar cycle you live
+        here, and you learn, by doing, the tools that can move us towards an ecological
+        civilization: open-source software for coordinating needs, resources and contributions,
+        and the social practices that make such software work between real people.
+      </p>
+      <p>
+        Liminal means "a place of transition". It is an embodied experimental ground where
+        value-aligned people come together to practise the future they would like to see —
+        a <a href="https://www.gameb.wiki/index.php?title=Game_B" target="_blank" rel="noopener">Game B</a>
+        world of "access abundance" rather than scarcity. The village is a living laboratory
+        of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a>
+        network: what is learned here is applied here, and then carried to other places.
       </p>
       <p>
         Why we exist, what we value and how we live together is all in
         <a href="/dna">our DNA →</a>
       </p>
-      <p class="lead"><strong>Visitors of the Liminal Village are invited to focus on these three aspects:</strong></p>
+      <p class="lead"><strong>What you learn connects four quadrants — and the software that links them:</strong></p>
     </div>
   </div>
 </section>
