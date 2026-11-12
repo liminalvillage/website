@@ -5,22 +5,26 @@
   const quadrants = [
     {
       key: 'I', title: 'I · Inner', icon: 'fa-seedling', color: '#D6A15B',
-      learn: 'Set your own direction. Find your Ikigai, outgrow an old self, learn something new, write your book or your TED talk.',
+      learn: 'Set your own direction. Outgrow an old self, learn something new, write your book or your TED talk.',
+      thought: 'Ikigai · Internal Family Systems · Enneagram',
       tools: 'Your Network Passport: a record of what you give that follows you, lowers your price in the network and never buys a vote.',
     },
     {
       key: 'It', title: 'It · Doing', icon: 'fa-tools', color: '#4a9d5f',
       learn: 'Build, grow, repair, regenerate. Work on the land, the biolake, the water systems, the food machines — and on real quests the village needs done.',
+      thought: 'Permaculture · open-source hardware · learning by doing',
       tools: 'Quests: needs posted by the village and the network, claimed, completed and validated in the open.',
     },
     {
       key: 'We', title: 'We · Together', icon: 'fa-users', color: '#7B9E6B',
-      learn: 'Live a lunar cycle with people you did not choose. Practise NVC, the Four Agreements, soft Holacracy — the social DNA that makes a temporary community work.',
+      learn: 'Live a lunar cycle with people you did not choose, and make a temporary community work.',
+      thought: 'Non-Violent Communication · The Four Agreements · Holacracy (soft)',
       tools: 'Holons: the coordination software that gives every group its own circle, ledger and decisions, nested inside the next.',
     },
     {
       key: 'Its', title: 'Its · Systems', icon: 'fa-globe-americas', color: '#5B8FB9',
       learn: 'Understand how places, resources, money and governance can run on one shared, readable shape — and carry it to the next place.',
+      thought: 'Integral Theory · Spiral Dynamics · Game B · Resource-Based Economy',
       tools: 'Holosphere and RegenOS: the geo-spatial and operating layers that let hubs see each other\'s needs, resources and surplus across a territory.',
     },
   ];
@@ -35,12 +39,13 @@
         </div>
         <h2>{q.title}</h2>
         <p>{q.learn}</p>
-        <p class="tools"><span>Software:</span> {q.tools}</p>
+        <p class="tools"><span>Thoughtware</span> {q.thought}</p>
+        <p class="tools"><span>Software</span> {q.tools}</p>
       </div>
     {/each}
   </div>
   <p class="frameworks-note">
-    The quadrants come from <a href="/frameworks#integral-theory">Integral Theory</a>; the software from the
+    The quadrants come from <a href="/frameworks#integral-theory">Integral Theory</a>; the thoughtware is in <a href="/dna">our DNA</a>; the software comes from the
     <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network, built in the open.
     A learning experience lasts one <a href="/lunations">lunation</a>.
   </p>
@@ -62,7 +67,8 @@
   .pillar-icon i { font-size: 2rem; }
   .pillar-card h2 { font-size: 1rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #222; margin-bottom: 1rem; }
   .pillar-card p { font-size: 0.9rem; color: #8a8274; line-height: 1.8; letter-spacing: 0.5px; }
-  .pillar-card .tools { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid #efebe4; font-size: 0.82rem; color: #6f6758; }
+  .pillar-card .tools { padding-top: 1rem; border-top: 1px solid #efebe4; font-size: 0.82rem; color: #6f6758; }
+  .pillar-card .tools:first-of-type { margin-top: auto; }
   .pillar-card .tools span { display: block; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: #b1a78f; margin-bottom: 0.35rem; }
   .frameworks-note { max-width: 800px; margin: 2.5rem auto 0; text-align: center; font-size: 0.85rem; color: #8a8274; line-height: 1.8; }
   .frameworks-note a { color: #6f6758; border-bottom: 1px solid #d6c7a8; text-decoration: none; }

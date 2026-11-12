@@ -7,9 +7,11 @@
       <p>
         Liminal Village is a learning centre in the hills of central Italy. You don't visit
         it — you sign up for a learning experience. For the length of a lunar cycle you live
-        here, and you learn, by doing, the tools that can move us towards an ecological
-        civilization: open-source software for coordinating needs, resources and contributions,
-        and the social practices that make such software work between real people.
+        here and learn, by doing, the two things a regenerative eco-civilization runs on:
+        <strong>thoughtware</strong> — the frameworks and practices for seeing whole, deciding
+        together and growing as a person — and <strong>software</strong> — the open-source tools
+        for coordinating needs, resources, contributions and governance across many places.
+        Neither works without the other. Here you learn them as one.
       </p>
       <p>
         Liminal means "a place of transition". It is an embodied experimental ground where
@@ -23,7 +25,7 @@
         Why we exist, what we value and how we live together is all in
         <a href="/dna">our DNA →</a>
       </p>
-      <p class="lead"><strong>What you learn connects four quadrants — and the software that links them:</strong></p>
+      <p class="lead"><strong>What you learn spans the four quadrants — thoughtware for each, and the software that connects them:</strong></p>
     </div>
   </div>
 </section>
