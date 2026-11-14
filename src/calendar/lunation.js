@@ -55,10 +55,13 @@ function indexContaining(ts) {
   return k;
 }
 
+// The cycle opened by the new moon whose synodic quotient from the base is N
+// is called N − 1199 (Lunation 84 opened on 10 October 2026), matching core
+// and the bot's /lunation. An earlier port subtracted 1200: one cycle short.
 function numberOf(newMoonMs) {
   const BASE_JULIAN = 2423436.40347;
   const BASE_SYNODIC = 29.530588861;
-  return Math.round((julianOf(newMoonMs) - BASE_JULIAN) / BASE_SYNODIC) - 1200;
+  return Math.round((julianOf(newMoonMs) - BASE_JULIAN) / BASE_SYNODIC) - 1199;
 }
 
 /** The lunar cycle containing `ts`: { index, from, to } (ms, inclusive). */

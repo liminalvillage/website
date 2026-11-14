@@ -45,9 +45,17 @@ async function boot() {
 
   if (site === 'regenerativa') {
     document.documentElement.setAttribute('data-site', 'regenerativa')
-    document.title = 'ReGenerativa — EcoCivilization 2030'
-    setMeta('description',
-      'ReGenerativa — a network of communities, technologies, and frameworks building the foundations for an ecological civilization. Join the movement for integral regeneration and bioregional networks.')
+    const { lang } = await import('./regenerativa/i18n.js')
+    document.documentElement.setAttribute('lang', lang)
+    if (lang === 'it') {
+      document.title = 'ReGenerativa — Una rete continua per la rigenerazione integrale'
+      setMeta('description',
+        'ReGenerativa APS/ETS connette persone, luoghi, progetti e risorse attraverso una rete continua di eventi ed esperienze che rigenerano la vita. Partiamo dalle Marche, con un modello replicabile in altre bioregioni.')
+    } else {
+      document.title = 'ReGenerativa — A continuous network for integral regeneration'
+      setMeta('description',
+        'ReGenerativa APS/ETS connects people, places, projects and resources through a continuous network of events and experiences that regenerate life. Starting in the Marche, Italy, with a model replicable across bioregions.')
+    }
     const [{ default: App }] = await Promise.all([
       import('./regenerativa/App.svelte'),
       import('./regenerativa/regenerativa.css'),

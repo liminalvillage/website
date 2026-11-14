@@ -1,170 +1,226 @@
-<section id="rg-top" class="hero">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="eyebrow">EcoCivilization 2030</p>
-    <h1>Regenerate the World, <em>Together</em></h1>
-    <p class="tagline">A network of communities, technologies, and frameworks building the foundations for an ecological civilization.</p>
-    <div class="hero-actions">
-      <a href="#rg-participate" class="btn btn-primary">Join the Movement</a>
-      <a href="#rg-vision" class="btn btn-ghost">Our Vision</a>
+<script>
+  import { onMount } from 'svelte';
+  import ArrowRight from '@lucide/svelte/icons/arrow-right';
+  import Sprout from '@lucide/svelte/icons/sprout';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import { reduced } from '../rigenerativa/motion.js';
+  import { sky } from './sky.js';
+  import { now } from './cycle.js';
+  import { pick } from './i18n.js';
+  import Moon from './Moon.svelte';
+
+  const t = pick({
+    en: {
+      eyebrow: 'ReGenerativa APS · Connect. Contribute. Regenerate.',
+      h1: ['A continuous network', 'for <em>integral regeneration</em>'],
+      tagline: 'Connecting people, places, projects and resources through experiences that regenerate life. We begin in the Marche, Italy, with a model made to grow into other bioregions.',
+      events: 'Find an experience',
+      docs: 'Join the network',
+      now: 'Now',
+      lunation: 'Lunation',
+      day: (d, n) => `day ${d} of ${n}`,
+      scroll: 'Scroll down',
+      spaces: 'Spaces in the network',
+    },
+    it: {
+      eyebrow: 'ReGenerativa APS · Connetti. Contribuisci. Rigenera.',
+      h1: ['Una rete continua', 'per la <em>rigenerazione integrale</em>'],
+      tagline: 'Connettiamo persone, luoghi, progetti e risorse attraverso esperienze che rigenerano la vita. Partiamo dalle Marche, con un modello pensato per crescere in altre bioregioni.',
+      events: "Trova un'esperienza",
+      docs: 'Entra nella rete',
+      now: 'Ora',
+      lunation: 'Lunazione',
+      day: (d, n) => `giorno ${d} di ${n}`,
+      scroll: 'Scorri in basso',
+      spaces: 'Spazi della rete',
+    },
+  });
+
+  // Where the three spaces sit in the sky (unit coordinates of the canvas).
+  const spaces = [
+    { name: 'Liminal Village', x: 0.7, y: 0.32 },
+    { name: 'ReFactory', x: 0.86, y: 0.55 },
+    { name: 'Casa Selva', x: 0.64, y: 0.72 },
+  ];
+
+  const cycle = now();
+  let canvas;
+
+  onMount(() => sky(canvas, { spaces, reduced }));
+</script>
+
+<section id="rn-top" class="hero">
+  <canvas bind:this={canvas} class="sky" aria-hidden="true"></canvas>
+  <ul class="labels" aria-label={t.spaces}>
+    {#each spaces as s}
+      <li style="left: {s.x * 100}%; top: {s.y * 100}%">{s.name}</li>
+    {/each}
+  </ul>
+
+  <div class="rg-container inner">
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h1>
+      <span>{t.h1[0]}</span>
+      <span>{@html t.h1[1]}</span>
+    </h1>
+    <p class="tagline">{t.tagline}</p>
+    <div class="actions">
+      <a href="#rn-events" class="rg-btn rg-btn-gold">{t.events} <ArrowRight class="arrow" size={16} /></a>
+      <a href="#rn-join" class="rg-btn rg-btn-ghost"><Sprout size={16} /> {t.docs}</a>
     </div>
-    <a href="#rg-vision" class="scroll-hint" aria-label="Scroll down">
-      <span class="arrow"></span>
+
+    <a class="now" href="/lunations.html">
+      <Moon phase={cycle.phase} size={22} />
+      <span class="now-label">{t.now}</span>
+      <span>{t.lunation} {cycle.index} · {t.day(cycle.day, cycle.days)}</span>
     </a>
   </div>
+
+  <a href="#rn-vision" class="scroll" aria-label={t.scroll}><ChevronDown size={22} strokeWidth={1.5} /></a>
 </section>
 
 <style>
   .hero {
     position: relative;
-    width: 100%;
     min-height: 100vh;
-    background-image: url('/images/regenerativa/hero.jpg');
-    background-position: center;
-    background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    min-height: 100svh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #fff;
+    background:
+      radial-gradient(ellipse 70% 60% at 75% 50%, rgba(63, 106, 69, 0.28), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 10% 100%, rgba(201, 163, 91, 0.12), transparent 70%),
+      var(--rg-night);
+    color: var(--rg-cream);
+    overflow: hidden;
   }
 
-  .hero-overlay {
+  .sky {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(44, 74, 49, 0.55) 0%,
-      rgba(63, 106, 69, 0.4) 50%,
-      rgba(201, 163, 91, 0.3) 100%
-    );
+    width: 100%;
+    height: 100%;
   }
 
-  .hero-content {
+  .labels {
+    list-style: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .labels li {
+    position: absolute;
+    transform: translate(18px, -50%);
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--rg-gold-soft);
+    white-space: nowrap;
+    opacity: 0;
+    animation: label-in 1.2s var(--rg-ease) forwards;
+  }
+
+  .labels li:nth-child(2) { animation-delay: 0.25s; }
+  .labels li:nth-child(3) { animation-delay: 0.5s; }
+
+  @keyframes label-in {
+    from { opacity: 0; transform: translate(10px, -50%); }
+    to { opacity: 0.9; transform: translate(18px, -50%); }
+  }
+
+  .inner {
     position: relative;
     z-index: 2;
-    text-align: center;
-    padding: 0 2rem;
-    max-width: 920px;
-    animation: rg-fade-in-slow 1.5s ease;
+    width: 100%;
+    padding-top: 7rem;
+    padding-bottom: 6rem;
   }
 
   .eyebrow {
-    color: rgba(244, 239, 228, 0.85);
-    font-size: 0.8rem;
+    color: var(--rg-gold);
+    font-size: 0.72rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    font-weight: 300;
+    font-weight: 600;
+    margin-bottom: 1.75rem;
   }
 
   h1 {
-    font-family: "Cormorant Garamond", serif;
-    color: #fff;
-    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    color: var(--rg-cream);
+    font-size: clamp(2.6rem, 6.2vw, 5.2rem);
     font-weight: 300;
-    letter-spacing: 4px;
-    margin: 0 0 1.5rem 0;
-    line-height: 1.05;
+    line-height: 1.02;
+    max-width: 15ch;
+    margin-bottom: 2rem;
   }
 
-  h1 em {
-    color: var(--rg-gold-soft);
+  h1 span { display: block; }
+
+  h1 :global(em) {
     font-style: italic;
-    font-weight: 400;
+    color: var(--rg-gold-soft);
   }
 
   .tagline {
-    color: rgba(244, 239, 228, 0.95);
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(1.1rem, 2.2vw, 1.55rem);
-    font-weight: 300;
-    font-style: italic;
-    letter-spacing: 1px;
-    margin-bottom: 3rem;
-    line-height: 1.55;
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
+    color: rgba(244, 239, 228, 0.8);
+    font-size: 1.08rem;
+    max-width: 540px;
+    margin-bottom: 2.5rem;
   }
 
-  .hero-actions {
+  .actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 1rem;
   }
 
-  .btn {
-    display: inline-block;
-    padding: 14px 36px;
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.4s ease;
-    border: 1.5px solid;
-    cursor: pointer;
+  .now {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 3.5rem;
+    padding: 0.55rem 1.1rem 0.55rem 0.7rem;
+    border: 1px solid rgba(244, 239, 228, 0.18);
+    border-radius: 999px;
+    background: rgba(20, 26, 22, 0.55);
+    backdrop-filter: blur(6px);
+    color: rgba(244, 239, 228, 0.85);
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
   }
 
-  .btn-primary {
-    background: var(--rg-gold);
-    color: var(--rg-bark);
+  .now:hover {
+    color: var(--rg-cream);
     border-color: var(--rg-gold);
   }
 
-  .btn-primary:hover {
-    background: var(--rg-gold-soft);
-    border-color: var(--rg-gold-soft);
-    color: var(--rg-bark);
-    transform: translateY(-2px);
+  .now-label {
+    color: var(--rg-gold);
+    font-size: 0.66rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
   }
 
-  .btn-ghost {
-    background: transparent;
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-
-  .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #fff;
-    color: #fff;
-    transform: translateY(-2px);
-  }
-
-  .scroll-hint {
+  .scroll {
     position: absolute;
-    bottom: -10vh;
     left: 50%;
+    bottom: 1.75rem;
     transform: translateX(-50%);
-    text-decoration: none;
+    color: rgba(244, 239, 228, 0.6);
+    z-index: 2;
+    animation: bob 2.4s ease-in-out infinite;
   }
 
-  .arrow {
-    display: block;
-    width: 22px;
-    height: 22px;
-    border-left: 2px solid rgba(255, 255, 255, 0.7);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
-    transform: rotate(-45deg);
-    animation: bounce 2.2s infinite;
+  @keyframes bob {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 6px); }
   }
 
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0) rotate(-45deg);
-    }
-    40% { transform: translateY(-10px) rotate(-45deg); }
-    60% { transform: translateY(-5px) rotate(-45deg); }
-  }
-
-  @media (max-width: 768px) {
-    .hero {
-      background-attachment: scroll;
-    }
-    h1 { letter-spacing: 3px; }
+  @media (max-width: 900px) {
+    .labels { display: none; }
+    .sky { opacity: 0.55; }
+    .now { font-size: 0.76rem; }
   }
 </style>
