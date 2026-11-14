@@ -3,6 +3,7 @@
   import Presentation from '@lucide/svelte/icons/presentation';
   import Users from '@lucide/svelte/icons/users';
   import KeyRound from '@lucide/svelte/icons/key-round';
+  import Play from '@lucide/svelte/icons/play';
   import { pick } from './i18n.js';
 
   const t = pick({
@@ -14,6 +15,8 @@
         'ReGenerativa is building a decentralised network of people, places, organisations and initiatives that work together to regenerate ecological, social, cultural and economic systems. At its heart is a continuous ecosystem of events, experiences, learning and shared projects that create tangible change.',
       ],
       mission: 'Our mission is to make regeneration <em>accessible, participatory and economically viable</em>, turning occasional inspiration into sustained collective action.',
+      video: 'Watch: the Regenerative Hubs Network, 2030 vision and now',
+      play: 'Play video',
       challengeEyebrow: 'The challenge',
       challengeTitle: 'Connecting what already exists',
       challenge: 'People everywhere are restoring soils, reinventing learning, living more collaboratively and building technology that respects planetary limits. Much of it stays fragmented:',
@@ -34,6 +37,8 @@
         'ReGenerativa sta costruendo una rete decentralizzata di persone, luoghi, organizzazioni e iniziative che collaborano per rigenerare sistemi ecologici, sociali, culturali ed economici. Al centro c\'è un ecosistema continuo di eventi, esperienze, apprendimento e progetti condivisi che producono un cambiamento concreto.',
       ],
       mission: 'La nostra missione è rendere la rigenerazione <em>accessibile, partecipata ed economicamente sostenibile</em>, trasformando l\'ispirazione occasionale in azione collettiva duratura.',
+      video: 'Guarda: la rete degli hub rigenerativi, visione 2030 e presente',
+      play: 'Riproduci il video',
       challengeEyebrow: 'La sfida',
       challengeTitle: 'Connettere ciò che già esiste',
       challenge: 'Ovunque c\'è chi rigenera i suoli, reinventa l\'educazione, vive in modo più collaborativo e crea tecnologie che rispettano i limiti del pianeta. Ma gran parte di questo resta frammentato:',
@@ -49,6 +54,10 @@
   });
 
   const icons = [Sprout, Presentation, Users, KeyRound];
+
+  // The network's video: a thumbnail until clicked, so YouTube loads only on request.
+  const VIDEO_ID = 'XdhPXocPf9g';
+  let playing = false;
 </script>
 
 <section id="rn-vision" class="rg-section vision">
@@ -64,6 +73,25 @@
     </div>
 
     <blockquote class="mission" data-reveal>{@html t.mission}</blockquote>
+
+    <figure class="video" data-reveal>
+      <div class="frame">
+        {#if playing}
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
+            title={t.video}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowfullscreen
+          ></iframe>
+        {:else}
+          <button class="poster" on:click={() => (playing = true)} aria-label="{t.play}: {t.video}">
+            <img src="https://i.ytimg.com/vi/{VIDEO_ID}/maxresdefault.jpg" alt="" loading="lazy" />
+            <span class="play"><Play size={30} strokeWidth={1.5} /></span>
+          </button>
+        {/if}
+      </div>
+      <figcaption>{t.video}</figcaption>
+    </figure>
 
     <div class="challenge">
       <div class="c-head" data-reveal>
@@ -112,6 +140,66 @@
   }
 
   .mission :global(em) { color: var(--rg-forest); }
+
+  .video { margin-bottom: 6rem; }
+
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--rg-night);
+    box-shadow: 0 30px 60px rgba(44, 53, 39, 0.18);
+  }
+
+  .frame iframe, .poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .poster { padding: 0; cursor: pointer; background: var(--rg-night); }
+
+  .poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.4s ease, transform 0.8s var(--rg-ease);
+  }
+
+  .poster:hover img { opacity: 0.95; transform: scale(1.02); }
+
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 84px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    border-radius: 50%;
+    background: var(--rg-gold);
+    color: var(--rg-night);
+    box-shadow: 0 0 0 10px rgba(201, 163, 91, 0.25);
+    transition: transform 0.4s var(--rg-ease);
+  }
+
+  .poster:hover .play { transform: translate(-50%, -50%) scale(1.08); }
+
+  figcaption {
+    margin-top: 1rem;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--rg-muted);
+    text-align: center;
+  }
 
   .challenge {
     padding: 4rem;
@@ -179,7 +267,10 @@
   @media (max-width: 900px) {
     .intro, .missing { grid-template-columns: 1fr; gap: 1.5rem; }
     .challenge { padding: 2.25rem 1.25rem; }
-    .mission { padding-left: 1.25rem; margin-bottom: 4rem; }
+    .mission { padding-left: 1.25rem; margin-bottom: 3rem; }
+    .video { margin-bottom: 4rem; }
+    .frame { border-radius: 14px; }
+    .play { width: 64px; height: 64px; }
   }
 
   @media (max-width: 560px) {
