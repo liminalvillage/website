@@ -1,8 +1,4 @@
 <script>
-  import Compass from '@lucide/svelte/icons/compass';
-  import CalendarDays from '@lucide/svelte/icons/calendar-days';
-  import Users from '@lucide/svelte/icons/users';
-  import Sparkles from '@lucide/svelte/icons/sparkles';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import { pick } from './i18n.js';
 
@@ -10,13 +6,7 @@
     en: {
       eyebrow: 'The digital mycelium',
       title: 'Technology that <em>serves relationships</em>',
-      sub: 'A distributed network needs more than a website or an events calendar. We are growing an open, interoperable infrastructure that acts like a mycelium between the physical hubs.',
-      who: [
-        ['Participants', 'Discover experiences, find projects that need support, offer skills or resources, talk to organisers and follow the outcomes of what they took part in.'],
-        ['Organisers', 'Manage events, find venues and collaborators, understand resource needs, coordinate tasks, document contributions and evaluate outcomes.'],
-        ['Communities', 'Keep their own agreements, governance practices and records, and share across the network only what they choose.'],
-        ['AI assistance', 'Matches needs with yields, surfaces overlooked resources, reduces admin and helps people navigate the network’s shared knowledge.'],
-      ],
+      sub: 'A distributed network needs more than a website or an events calendar. We are growing an open, interoperable infrastructure that acts like a mycelium between the physical hubs: participants find experiences and projects that need them, organisers coordinate venues, tasks and resources, communities keep their own agreements and records, and AI helps match needs with yields.',
       serve: 'Technology should serve relationships, not replace them. We build and test these tools through real community activity: every event, partnership and project improves both the social agreements and the systems that support them.',
       quests: 'See open quests',
       modelEyebrow: 'A replicable model',
@@ -32,13 +22,7 @@
     it: {
       eyebrow: 'Il micelio digitale',
       title: 'Tecnologia <em>al servizio delle relazioni</em>',
-      sub: 'Una rete distribuita ha bisogno di più di un sito o di un calendario di eventi. Stiamo facendo crescere un\'infrastruttura aperta e interoperabile che funziona come un micelio tra gli hub fisici.',
-      who: [
-        ['Partecipanti', 'Scoprono esperienze, trovano progetti che cercano sostegno, offrono competenze o risorse, parlano con gli organizzatori e seguono i risultati di ciò a cui hanno partecipato.'],
-        ['Organizzatori', 'Gestiscono eventi, trovano luoghi e collaboratori, capiscono le risorse necessarie, coordinano i compiti, documentano i contributi e valutano i risultati.'],
-        ['Comunità', 'Mantengono i propri accordi, pratiche di governance e archivi, e condividono con la rete solo ciò che scelgono.'],
-        ['Assistenza IA', 'Abbina bisogni e rese, fa emergere risorse trascurate, riduce il lavoro amministrativo e aiuta a orientarsi nel sapere condiviso della rete.'],
-      ],
+      sub: 'Una rete distribuita ha bisogno di più di un sito o di un calendario di eventi. Stiamo facendo crescere un\'infrastruttura aperta e interoperabile che funziona come un micelio tra gli hub fisici: chi partecipa trova esperienze e progetti a cui contribuire, chi organizza coordina spazi, compiti e risorse, le comunità custodiscono i propri accordi e registri, e l\'IA aiuta a far incontrare bisogni e rese.',
       serve: 'La tecnologia deve servire le relazioni, non sostituirle. Costruiamo e mettiamo alla prova questi strumenti attraverso attività reali di comunità: ogni evento, partenariato e progetto migliora sia gli accordi sociali sia i sistemi che li sostengono.',
       quests: 'Vedi le quest aperte',
       modelEyebrow: 'Un modello replicabile',
@@ -52,8 +36,6 @@
       cosmo: 'Rigenerazione radicata nei luoghi, con la portata di una rete <em>cosmo-locale</em>.',
     },
   });
-
-  const icons = [Compass, CalendarDays, Users, Sparkles];
 </script>
 
 <section id="rn-mycelium" class="rg-section mycelium">
@@ -64,15 +46,6 @@
       <p class="rg-sub">{t.sub}</p>
     </div>
 
-    <ul class="who" data-reveal="stagger">
-      {#each t.who as [name, body], i}
-        <li>
-          <span class="icon"><svelte:component this={icons[i]} size={20} strokeWidth={1.5} /></span>
-          <h3>{name}</h3>
-          <p>{body}</p>
-        </li>
-      {/each}
-    </ul>
 
     <div class="serve" data-reveal>
       <p>{t.serve}</p>
@@ -100,35 +73,6 @@
 
 <style>
   .heading { max-width: 760px; margin-bottom: 4rem; }
-
-  .who {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-  }
-
-  .who li {
-    padding: 1.75rem 1.5rem;
-    border-radius: 16px;
-    border: 1px solid var(--rg-line);
-    background: var(--rg-cream-soft);
-  }
-
-  .who h3 { font-size: 1.45rem; margin-bottom: 0.5rem; }
-  .who p { color: var(--rg-muted); font-size: 0.9rem; line-height: 1.7; }
-
-  .icon {
-    display: inline-flex;
-    width: 42px;
-    height: 42px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--rg-cream);
-    color: var(--rg-forest);
-    margin-bottom: 1rem;
-  }
 
   .serve {
     display: grid;
@@ -192,7 +136,6 @@
   .cosmo :global(em) { color: var(--rg-forest); }
 
   @media (max-width: 1000px) {
-    .who { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 860px) {
@@ -204,6 +147,5 @@
   }
 
   @media (max-width: 560px) {
-    .who { grid-template-columns: 1fr; }
   }
 </style>

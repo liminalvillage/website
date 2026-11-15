@@ -2,6 +2,7 @@
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import { pick } from './i18n.js';
+  import Photo from './Photo.svelte';
 
   const t = pick({
     en: {
@@ -24,6 +25,7 @@
         'Organisers, producers, land stewards and service providers need viable livelihoods. Buildings need maintenance and coordination takes time. A regenerative economy cannot run forever on invisible labour or the goodwill of a few.',
         'But preparing a meal, maintaining a trail, facilitating a hard conversation, writing software, caring for children or restoring an ecosystem also create value that transactions miss. We are developing ways to make these contributions visible and easier to coordinate, without reducing relationships to accounting.',
       ],
+      lunch: 'A shared lunch: food, time and care that no invoice counts',
       costTitle: 'Counting real resource costs',
       cost: 'One more guest means more food, but also more preparation, cleaning, beds, energy and coordination. Seeing these inputs lets us share responsibilities fairly and avoid overburdening the people who keep the commons.',
       holonRule: 'Each holon decides how contributions are recognised and scarce resources allocated, through transparent and consensual agreements.',
@@ -53,6 +55,7 @@
         "Organizzatori, produttori, custodi della terra e fornitori di servizi hanno bisogno di mezzi di sussistenza dignitosi. Gli edifici richiedono manutenzione e il coordinamento richiede tempo. Un'economia rigenerativa non può reggersi all'infinito sul lavoro invisibile o sulla buona volontà di pochi.",
         "Ma anche preparare un pasto, curare un sentiero, facilitare una conversazione difficile, scrivere software, prendersi cura dei bambini o ripristinare un ecosistema creano valore che le transazioni non vedono. Stiamo sviluppando modi per rendere visibili e più facili da coordinare questi contributi, senza ridurre le relazioni a contabilità.",
       ],
+      lunch: 'Un pranzo condiviso: cibo, tempo e cura che nessuna fattura conta',
       costTitle: 'Contare i costi reali',
       cost: "Un ospite in più significa più cibo, ma anche più preparazione, pulizie, posti letto, energia e coordinamento. Vedere questi input permette di distribuire le responsabilità in modo equo ed evitare di sovraccaricare chi si prende cura dei beni comuni.",
       holonRule: 'Ogni olone decide come riconoscere i contributi e allocare le risorse scarse, con accordi trasparenti e consensuali.',
@@ -116,6 +119,7 @@
       <div data-reveal>
         <h3>{t.valueTitle}</h3>
         {#each t.value as p}<p>{p}</p>{/each}
+        <div class="lunch"><Photo src="/images/regenerativa/shared-lunch.jpg" caption={t.lunch} ratio="16 / 10" /></div>
       </div>
       <aside data-reveal>
         <h4>{t.costTitle}</h4>
@@ -226,6 +230,8 @@
     gap: 3.5rem;
     align-items: start;
   }
+
+  .lunch { margin-top: 2rem; }
 
   .value p + p { margin-top: 1rem; color: var(--rg-muted); }
 

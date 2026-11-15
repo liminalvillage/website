@@ -27,7 +27,6 @@
       write: 'Write to us',
       apsTitle: 'Why an APS?',
       aps: 'ReGenerativa is an Associazione di Promozione Sociale and Ente del Terzo Settore, founded in Castorano (AP), Italy, on 21 June 2025. Its purpose is not just to produce a calendar of events, but to give independent people and organisations a shared civic home for initiatives, education, participation, experimentation, resource coordination and common infrastructure, so that the ecosystem becomes more capable than any of its members alone.',
-      need: 'We do not need everyone to share the same lifestyle, organisational culture or vision of the future. We need a common willingness to <em>collaborate, learn, respect one another’s autonomy and contribute</em>.',
       why: [
         ['We begin with events', 'because they bring people into relationship.'],
         ['We connect relationships into projects', 'because real change requires sustained action.'],
@@ -53,7 +52,6 @@
       write: 'Scrivici',
       apsTitle: 'Perché una APS?',
       aps: "ReGenerativa è un'Associazione di Promozione Sociale ed Ente del Terzo Settore, costituita a Castorano (AP) il 21 giugno 2025. Il suo scopo non è solo produrre un calendario di eventi, ma offrire a persone e organizzazioni indipendenti una casa civica comune per iniziative, formazione, partecipazione, sperimentazione, coordinamento delle risorse e infrastrutture condivise, perché l'ecosistema diventi più capace di qualsiasi suo membro da solo.",
-      need: "Non serve che tutti condividano lo stesso stile di vita, la stessa cultura organizzativa o la stessa visione del futuro. Serve una volontà comune di <em>collaborare, imparare, rispettare l'autonomia altrui e contribuire</em>.",
       why: [
         ['Partiamo dagli eventi', 'perché mettono le persone in relazione.'],
         ['Trasformiamo le relazioni in progetti', 'perché il cambiamento reale richiede azione continua.'],
@@ -105,8 +103,6 @@
       <h3>{t.apsTitle}</h3>
       <p>{t.aps}</p>
     </div>
-
-    <p class="need" data-reveal>{@html t.need}</p>
 
     <div class="manifesto" data-reveal>
       <ol>
@@ -191,17 +187,7 @@
   .aps h3 { font-size: 1.9rem; }
   .aps p { color: var(--rg-muted); }
 
-  .need {
-    max-width: 860px;
-    margin: 4.5rem auto;
-    text-align: center;
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-    line-height: 1.35;
-    color: var(--rg-bark);
-  }
 
-  .need :global(em) { color: var(--rg-forest); }
 
   .manifesto {
     padding: 4rem;

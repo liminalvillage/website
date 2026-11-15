@@ -5,6 +5,7 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Play from '@lucide/svelte/icons/play';
   import { pick } from './i18n.js';
+  import Photo from './Photo.svelte';
 
   const t = pick({
     en: {
@@ -26,6 +27,8 @@
         ['A family', 'wants to be part of a regenerative community, but does not know where to begin.'],
         ['A property owner', 'has an under-used building, while a nearby initiative badly needs space.'],
       ],
+      mapCaption: 'Mapping who is already doing what across the Marche',
+      meetingCaption: 'A network gathering: people, projects and needs around one table',
       missing: 'The missing ingredient is often not another project, but <em>the relationships and coordination</em> that let existing projects support one another.',
       missingSub: 'Instead of asking every initiative to become self-sufficient, ReGenerativa creates the conditions for them to become mutually supportive.',
     },
@@ -48,6 +51,8 @@
         ['Una famiglia', 'vorrebbe far parte di una comunità rigenerativa, ma non sa da dove cominciare.'],
         ['Un proprietario', 'ha un edificio sottoutilizzato, mentre un\'iniziativa vicina cerca disperatamente spazio.'],
       ],
+      mapCaption: 'Mappare chi sta già facendo cosa nelle Marche',
+      meetingCaption: 'Un incontro della rete: persone, progetti e bisogni attorno a un tavolo',
       missing: 'Spesso l\'ingrediente mancante non è un altro progetto, ma <em>le relazioni e il coordinamento</em> che permettono ai progetti esistenti di sostenersi a vicenda.',
       missingSub: 'Invece di chiedere a ogni iniziativa di essere autosufficiente, ReGenerativa crea le condizioni perché diventino reciprocamente solidali.',
     },
@@ -107,6 +112,10 @@
           </li>
         {/each}
       </ul>
+      <div class="photos" data-reveal="stagger">
+        <Photo src="/images/regenerativa/map.jpg" caption={t.mapCaption} ratio="3 / 4" />
+        <Photo src="/images/regenerativa/network-meeting.jpg" caption={t.meetingCaption} ratio="4 / 3" />
+      </div>
       <div class="missing" data-reveal>
         <p class="m-big">{@html t.missing}</p>
         <p class="m-sub">{t.missingSub}</p>
@@ -240,6 +249,14 @@
     margin-bottom: 1rem;
   }
 
+  .photos {
+    display: grid;
+    grid-template-columns: 9fr 16fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: start;
+  }
+
   .missing {
     margin-top: 3rem;
     padding-top: 2.5rem;
@@ -275,5 +292,6 @@
 
   @media (max-width: 560px) {
     .cases { grid-template-columns: 1fr; }
+    .photos { grid-template-columns: 1fr; }
   }
 </style>

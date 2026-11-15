@@ -17,11 +17,9 @@
         ['Economic and systemic', 'How we organise work, distribute resources, govern shared assets and make room for meaningful contribution.'],
       ],
       centre: 'Each dimension strengthens the others',
-      reinforce: 'A farm grows more resilient with healthy relationships and viable economics. A community works better when its members can navigate disagreement. Personal transformation means more when it becomes a real contribution. Our programming deliberately links these dimensions.',
       ethicsTitle: 'Inspired by permaculture ethics',
       ethics: ['Earth Care', 'People Care', 'Fair Share'],
       ethicsSub: 'We also draw on integral frameworks, systems thinking, developmental approaches and participatory governance, without asking anyone to subscribe to a single worldview.',
-      diversity: 'Regeneration thrives through diversity. The goal is not to make every initiative the same, but to help different initiatives form <em>productive, mutually supportive relationships</em>.',
     },
     it: {
       eyebrow: 'Rigenerazione integrale',
@@ -34,11 +32,9 @@
         ['Economica e sistemica', 'Come organizziamo il lavoro, distribuiamo le risorse, governiamo i beni comuni e diamo spazio a un contributo significativo.'],
       ],
       centre: 'Ogni dimensione rafforza le altre',
-      reinforce: "Una fattoria è più resiliente se sostenuta da relazioni sane ed economie sostenibili. Una comunità funziona meglio quando i suoi membri sanno attraversare il disaccordo. La trasformazione personale ha più senso quando diventa un contributo reale. La nostra programmazione collega queste dimensioni di proposito.",
       ethicsTitle: "Ispirati all'etica della permacultura",
       ethics: ['Cura della Terra', 'Cura delle Persone', 'Equa Condivisione'],
       ethicsSub: 'Attingiamo anche a modelli integrali, pensiero sistemico, approcci evolutivi e governance partecipativa, senza chiedere a nessuno di aderire a una sola visione del mondo.',
-      diversity: "La rigenerazione prospera nella diversità. L'obiettivo non è rendere ogni iniziativa uguale, ma aiutare iniziative diverse a creare <em>relazioni produttive e di reciproco sostegno</em>.",
     },
   });
 
@@ -64,8 +60,6 @@
       <div class="hub" aria-hidden="true"><span>{t.centre}</span></div>
     </div>
 
-    <p class="reinforce" data-reveal>{t.reinforce}</p>
-
     <div class="ethics" data-reveal>
       <div>
         <h3>{t.ethicsTitle}</h3>
@@ -75,8 +69,6 @@
         {#each t.ethics as e}<li>{e}</li>{/each}
       </ul>
     </div>
-
-    <blockquote class="diversity" data-reveal>{@html t.diversity}</blockquote>
   </div>
 </section>
 
@@ -141,13 +133,6 @@
     box-shadow: 0 0 0 10px var(--rg-cream);
   }
 
-  .reinforce {
-    max-width: 820px;
-    margin: 3rem auto 5rem;
-    text-align: center;
-    color: var(--rg-muted);
-    font-size: 1.02rem;
-  }
 
   .ethics {
     display: grid;
@@ -184,24 +169,12 @@
     padding: 0.75rem;
   }
 
-  .diversity {
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    font-weight: 300;
-    line-height: 1.3;
-    color: var(--rg-bark);
-    max-width: 860px;
-    margin: 5rem auto 0;
-    text-align: center;
-  }
 
-  .diversity :global(em) { color: var(--rg-forest); }
 
   @media (max-width: 860px) {
     .quad { grid-template-columns: 1fr; }
     .d0, .d1, .d2, .d3 { padding: 1.75rem 1.5rem; }
     .hub { display: none; }
-    .reinforce { text-align: left; margin: 2rem 0 3.5rem; }
     .ethics { grid-template-columns: 1fr; padding: 2.25rem 1.25rem; gap: 2rem; }
   }
 

@@ -14,7 +14,6 @@
         ['Capacity', 'Hubs become more capable and economically resilient, and new projects can start.'],
         ['Opportunities', 'More experiences and services attract more participants, organisers and partners.'],
       ],
-      tools: 'Shared digital tools and governance practices reduce the effort of coordinating a growing network, while accumulated knowledge makes it easier for new nodes to join.',
       measureTitle: 'Measuring what really matters',
       measure: 'Attendance, revenue and the number of events are useful, but not enough. We want to understand whether our activities:',
       indicators: [
@@ -40,7 +39,6 @@
         ['Capacità', 'Gli hub diventano più capaci ed economicamente resilienti, e nascono nuovi progetti.'],
         ['Opportunità', 'Più esperienze e servizi attirano più partecipanti, organizzatori e partner.'],
       ],
-      tools: 'Strumenti digitali e pratiche di governance condivise riducono la fatica di coordinare una rete che cresce, mentre il sapere accumulato rende più facile l\'ingresso di nuovi nodi.',
       measureTitle: 'Misurare ciò che conta davvero',
       measure: 'Presenze, ricavi e numero di eventi sono utili, ma non bastano. Vogliamo capire se le nostre attività:',
       indicators: [
@@ -104,8 +102,6 @@
         {/each}
       </ol>
     </div>
-
-    <p class="tools" data-reveal>{t.tools}</p>
 
     <div class="measure">
       <div data-reveal>
@@ -192,12 +188,6 @@
   .steps h3 { font-size: 1.45rem; margin-bottom: 0.2rem; }
   .steps p { font-size: 0.9rem; line-height: 1.65; }
 
-  .tools {
-    max-width: 780px;
-    margin: 3.5rem auto 7rem;
-    text-align: center;
-    font-size: 1rem;
-  }
 
   .measure {
     display: grid;
@@ -245,6 +235,5 @@
     .wheel-wrap, .measure { grid-template-columns: 1fr; gap: 2.5rem; }
     .wheel svg { max-width: 260px; }
     .measure { padding: 2rem 1.25rem; }
-    .tools { text-align: left; margin: 2.5rem 0 5rem; }
   }
 </style>

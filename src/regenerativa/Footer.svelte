@@ -5,7 +5,7 @@
 
   const t = pick({
     en: {
-      mission: 'A continuous network for integral regeneration: connecting people, places, projects and resources through experiences that regenerate life.',
+      mission: 'A network for integral regeneration: connecting people, places, projects and resources through experiences that regenerate life.',
       explore: 'Explore',
       links: ['Vision', 'Events', 'Integral regeneration', 'Hubs', 'Economy', 'Digital mycelium', 'Agreements', 'Join'],
       calendar: 'Lunar calendar',
@@ -18,7 +18,7 @@
       ops: 'Operating company',
     },
     it: {
-      mission: 'Una rete continua per la rigenerazione integrale: connettiamo persone, luoghi, progetti e risorse attraverso esperienze che rigenerano la vita.',
+      mission: 'Una rete per la rigenerazione integrale: connettiamo persone, luoghi, progetti e risorse attraverso esperienze che rigenerano la vita.',
       explore: 'Esplora',
       links: ['Visione', 'Eventi', 'Rigenerazione integrale', 'Hub', 'Economia', 'Micelio digitale', 'Accordi', 'Partecipa'],
       calendar: 'Calendario lunare',

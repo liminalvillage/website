@@ -48,13 +48,13 @@ async function boot() {
     const { lang } = await import('./regenerativa/i18n.js')
     document.documentElement.setAttribute('lang', lang)
     if (lang === 'it') {
-      document.title = 'ReGenerativa — Una rete continua per la rigenerazione integrale'
+      document.title = 'ReGenerativa — Una rete per la rigenerazione integrale'
       setMeta('description',
-        'ReGenerativa APS/ETS connette persone, luoghi, progetti e risorse attraverso una rete continua di eventi ed esperienze che rigenerano la vita. Partiamo dalle Marche, con un modello replicabile in altre bioregioni.')
+        'ReGenerativa APS/ETS connette persone, luoghi, progetti e risorse attraverso eventi ed esperienze che rigenerano la vita. Partiamo dalle Marche, con un modello replicabile in altre bioregioni.')
     } else {
-      document.title = 'ReGenerativa — A continuous network for integral regeneration'
+      document.title = 'ReGenerativa — A network for integral regeneration'
       setMeta('description',
-        'ReGenerativa APS/ETS connects people, places, projects and resources through a continuous network of events and experiences that regenerate life. Starting in the Marche, Italy, with a model replicable across bioregions.')
+        'ReGenerativa APS/ETS connects people, places, projects and resources through events and experiences that regenerate life. Starting in the Marche, Italy, with a model made to grow into other bioregions.')
     }
     const [{ default: App }] = await Promise.all([
       import('./regenerativa/App.svelte'),

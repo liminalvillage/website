@@ -15,12 +15,9 @@
       eyebrow: 'A continuous events network',
       title: 'The event ends, <em>its effects continue</em>',
       sub: 'Events are moments when knowledge, resources, relationships, culture and economic activity converge. We coordinate them across places and through the year, so that each one leads somewhere.',
-      ripplesTitle: 'More than an experience consumed',
-      ripples: [
-        ['A permaculture workshop', 'introduces participants to a local farmer', 'whose produce joins a community food network.'],
-        ['A wellness retreat', 'creates demand for beds, meals and services', 'supplied by several neighbouring initiatives.'],
-        ['A community festival', 'earns income for local producers', 'and brings new volunteers and organisers to restoration projects.'],
-      ],
+      momentsTitle: 'Already happening',
+      momentsSub: 'Circles, music and seasonal celebrations in the Marche: the network grows out of gatherings that are already taking place.',
+      moments: ['A circle on the hill, Summer Solstice 2026', 'Solstice night, dancing under the canopy', 'Morning circle in the pagoda', 'Around the fire at dusk', 'Olive harvest', 'Evening gathering, as the lights come on', 'Raising a yurt together', 'Live music in the pagoda'],
       formatsTitle: 'What happens in the network',
       formats: [
         ['Gatherings', 'Community dinners, cultural celebrations, local markets and full-moon evenings.'],
@@ -29,14 +26,6 @@
         ['Restoration days', 'Hands-on work camps restoring soil, water, buildings and landscapes.'],
         ['Residencies and labs', 'Artistic residencies, technological experiments and collaborative work sessions.'],
         ['Regenerative journeys', 'Multi-day experiences that weave several hubs, producers and guides together.'],
-      ],
-      pathTitle: 'A living pathway',
-      pathSub: 'Join one event, discover the next, then find your own way in.',
-      path: [
-        ['Participate', 'Attend a gathering, a course or a retreat.'],
-        ['Contribute', 'Lend skills, time or resources to an ongoing project.'],
-        ['Collaborate', 'Co-create experiences and projects with other hubs.'],
-        ['Steward', 'Start your own activity and help hold the network.'],
       ],
       rhythmTitle: 'Following the rhythms of nature',
       rhythmSub: 'Seasonal programmes follow the territory; smaller gatherings every lunation keep the network continuous.',
@@ -61,12 +50,9 @@
       eyebrow: 'Una rete di eventi continui',
       title: "L'evento finisce, <em>i suoi effetti continuano</em>",
       sub: "Gli eventi sono momenti in cui saperi, risorse, relazioni, cultura e attività economica convergono. Li coordiniamo tra i luoghi e lungo l'anno, perché ognuno porti da qualche parte.",
-      ripplesTitle: "Più di un'esperienza da consumare",
-      ripples: [
-        ['Un corso di permacultura', 'fa conoscere ai partecipanti un agricoltore locale', 'i cui prodotti entrano in una rete alimentare di comunità.'],
-        ['Un ritiro di benessere', 'crea domanda di posti letto, pasti e servizi', 'forniti da più iniziative vicine.'],
-        ['Una festa di comunità', 'genera reddito per i produttori locali', 'e porta nuovi volontari e organizzatori ai progetti di ripristino.'],
-      ],
+      momentsTitle: 'Sta già succedendo',
+      momentsSub: 'Cerchi, musica e celebrazioni stagionali nelle Marche: la rete nasce da incontri che stanno già accadendo.',
+      moments: ['Un cerchio sulla collina, Solstizio d\'estate 2026', 'La notte del Solstizio, danze sotto il telo', 'Cerchio del mattino nella pagoda', 'Attorno al fuoco al tramonto', 'Raccolta delle olive', 'Incontro serale, mentre si accendono le luci', 'Montare una yurta insieme', 'Musica dal vivo nella pagoda'],
       formatsTitle: 'Cosa succede nella rete',
       formats: [
         ['Incontri', 'Cene di comunità, feste culturali, mercati locali e serate di luna piena.'],
@@ -75,14 +61,6 @@
         ['Giornate di ripristino', 'Cantieri pratici per rigenerare suolo, acqua, edifici e paesaggi.'],
         ['Residenze e laboratori', 'Residenze artistiche, sperimentazioni tecnologiche e sessioni di lavoro collaborativo.'],
         ['Viaggi rigenerativi', 'Esperienze di più giorni che intrecciano hub, produttori e guide diverse.'],
-      ],
-      pathTitle: 'Un percorso vivo',
-      pathSub: 'Partecipa a un evento, scopri il successivo, poi trova la tua strada.',
-      path: [
-        ['Partecipa', 'Vieni a un incontro, un corso o un ritiro.'],
-        ['Contribuisci', 'Offri competenze, tempo o risorse a un progetto in corso.'],
-        ['Collabora', 'Co-crea esperienze e progetti con altri hub.'],
-        ['Custodisci', 'Avvia una tua attività e aiuta a tenere viva la rete.'],
       ],
       rhythmTitle: 'Seguendo i ritmi della natura',
       rhythmSub: 'I programmi stagionali seguono il territorio; incontri più piccoli a ogni lunazione rendono la rete continua.',
@@ -106,6 +84,10 @@
   });
 
   const formatIcons = [Flame, GraduationCap, Tent, Hammer, Palette, Compass];
+
+  // Real moments from the network, the first one shown largest.
+  const photos = ['solstice-circle', 'solstice-night', 'circle-sunlight', 'fire', 'olive-harvest', 'circle-dusk', 'yurt', 'music']
+    .map((name, i) => ({ src: `/images/regenerativa/${name}.jpg`, caption: t.moments[i] }));
 
   const cycle = now();
   const lunations = upcoming(3);
@@ -133,16 +115,20 @@
       <p class="rg-sub">{t.sub}</p>
     </div>
 
-    <h3 class="block-title" data-reveal>{t.ripplesTitle}</h3>
-    <ol class="ripples" data-reveal="stagger">
-      {#each t.ripples as [event, then, after]}
+    <div class="moments-head" data-reveal>
+      <h3 class="block-title">{t.momentsTitle}</h3>
+      <p class="path-sub">{t.momentsSub}</p>
+    </div>
+    <ul class="moments" data-reveal="stagger">
+      {#each photos as ph}
         <li>
-          <span class="r-event">{event}</span>
-          <span class="r-step"><ArrowRight size={14} /> {then}</span>
-          <span class="r-step"><ArrowRight size={14} /> {after}</span>
+          <figure>
+            <img src={ph.src} alt={ph.caption} loading="lazy" decoding="async" />
+            <figcaption>{ph.caption}</figcaption>
+          </figure>
         </li>
       {/each}
-    </ol>
+    </ul>
 
     <h3 class="block-title" data-reveal>{t.formatsTitle}</h3>
     <ul class="formats" data-reveal="stagger">
@@ -154,22 +140,6 @@
         </li>
       {/each}
     </ul>
-
-    <div class="path" data-reveal>
-      <div>
-        <h3 class="block-title">{t.pathTitle}</h3>
-        <p class="path-sub">{t.pathSub}</p>
-      </div>
-      <ol>
-        {#each t.path as [step, body], i}
-          <li>
-            <span class="p-num">{i + 1}</span>
-            <h4>{step}</h4>
-            <p>{body}</p>
-          </li>
-        {/each}
-      </ol>
-    </div>
 
     <div class="rhythm">
       <div class="r-head" data-reveal>
@@ -241,40 +211,49 @@
     margin-bottom: 1.75rem;
   }
 
-  .ripples {
+  .moments-head { max-width: 640px; margin-bottom: 2rem; }
+  .moments-head .block-title { margin-bottom: 0.75rem; }
+
+  .moments {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 240px;
+    gap: 0.75rem;
     margin-bottom: 6rem;
   }
 
-  .ripples li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding: 1.75rem 1.6rem;
+  .moments li:nth-child(1) { grid-column: span 4; grid-row: span 2; }
+  .moments li:nth-child(2) { grid-column: span 2; grid-row: span 2; }
+  .moments li:nth-child(n + 3) { grid-column: span 2; }
+
+  .moments figure {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
     border-radius: 16px;
-    border: 1px solid rgba(201, 163, 91, 0.3);
-    background: linear-gradient(160deg, rgba(201, 163, 91, 0.08), transparent 60%);
+    background: var(--rg-night-2);
   }
 
-  .r-event {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 1.5rem;
-    color: var(--rg-gold-soft);
+  .moments img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1.2s var(--rg-ease);
   }
 
-  .r-step {
-    display: flex;
-    gap: 0.6rem;
-    align-items: baseline;
-    font-size: 0.92rem;
-    color: rgba(244, 239, 228, 0.8);
-  }
+  .moments figure:hover img { transform: scale(1.04); }
 
-  .r-step :global(svg) { color: var(--rg-gold); position: relative; top: 2px; }
-  .r-step + .r-step { padding-left: 1.2rem; }
+  .moments figcaption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2.5rem 1.1rem 0.9rem;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: var(--rg-cream);
+    background: linear-gradient(transparent, rgba(20, 26, 22, 0.85));
+  }
 
   .formats {
     list-style: none;
@@ -299,61 +278,15 @@
 
   .formats :global(svg) { color: var(--rg-gold); }
 
-  .formats h4, .path h4, .seasons h4 {
+  .formats h4, .seasons h4 {
     font-size: 1.35rem;
     color: var(--rg-cream);
     margin: 0.9rem 0 0.4rem;
   }
 
-  .formats p, .path p, .seasons p { font-size: 0.88rem; line-height: 1.65; }
-
-  .path {
-    display: grid;
-    grid-template-columns: 1fr 2.4fr;
-    gap: 3rem;
-    padding: 3rem;
-    border-radius: 20px;
-    border: 1px solid rgba(244, 239, 228, 0.1);
-    margin-bottom: 7rem;
-  }
+  .formats p, .seasons p { font-size: 0.88rem; line-height: 1.65; }
 
   .path-sub { font-size: 0.95rem; }
-
-  .path ol {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    position: relative;
-  }
-
-  .path ol::before {
-    content: "";
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    right: 18px;
-    height: 1px;
-    background: linear-gradient(90deg, var(--rg-gold), rgba(201, 163, 91, 0.15));
-  }
-
-  .path li { position: relative; }
-  .path h4 { margin-top: 1rem; }
-
-  .p-num {
-    position: relative;
-    display: inline-flex;
-    width: 36px;
-    height: 36px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--rg-night);
-    border: 1px solid var(--rg-gold);
-    color: var(--rg-gold-soft);
-    font-family: "Cormorant Garamond", serif;
-    font-size: 1.1rem;
-  }
 
   .r-head { max-width: 640px; margin-bottom: 2rem; }
   .r-head .block-title { margin-bottom: 0.75rem; }
@@ -474,15 +407,14 @@
   .actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 
   @media (max-width: 1000px) {
-    .ripples { grid-template-columns: 1fr; }
     .formats, .seasons { grid-template-columns: 1fr 1fr; }
-    .path { grid-template-columns: 1fr; gap: 2rem; }
   }
 
   @media (max-width: 760px) {
-    .path { padding: 2rem 1.25rem; }
-    .path ol { grid-template-columns: 1fr 1fr; gap: 1.75rem 1.25rem; }
-    .path ol::before { display: none; }
+    .moments { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
+    .moments li:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .moments li:nth-child(n + 2) { grid-column: span 1; grid-row: span 1; }
+    .moments li:last-child { grid-column: span 2; }
     .lunar { grid-template-columns: 1fr; padding: 2rem 1.25rem; }
   }
 

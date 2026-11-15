@@ -2,6 +2,7 @@
   import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
   import Plus from '@lucide/svelte/icons/plus';
   import { pick } from './i18n.js';
+  import Photo from './Photo.svelte';
   import { agreementUrl } from './links.js';
 
   const t = pick({
@@ -13,11 +14,11 @@
       holonTitle: 'Holons: whole in themselves, part of something larger',
       holon: [
         'An event is a holon, with its own organisers, participants, aims, resources and agreements. A venue hosts many event holons; several venues collaborate as a bioregional network; regional networks connect through shared tools and interoperable agreements.',
-        'Each holon keeps real autonomy over its culture, governance, contribution arrangements and priorities, and agrees only to the minimum shared principles needed to cooperate.',
       ],
       rings: ['Event', 'Hub', 'Bioregion', 'Network'],
       startTitle: 'Where we begin: the Marche bioregion',
       startSub: 'An existing foundation of relationships, spaces and experimentation in central Italy, our living environment for developing and testing the model.',
+      panorama: 'A community meeting in the Marche',
       visit: 'Visit',
       sites: [
         ['Eco-tech and community hub', 'A living laboratory for collaborative living, permaculture, regenerative technologies and alternative economic arrangements.'],
@@ -37,11 +38,11 @@
       holonTitle: 'Oloni: interi in sé, parte di qualcosa di più grande',
       holon: [
         'Un evento è un olone, con i propri organizzatori, partecipanti, obiettivi, risorse e accordi. Un luogo ospita molti eventi; più luoghi collaborano come rete bioregionale; le reti regionali si connettono tramite strumenti condivisi e accordi interoperabili.',
-        'Ogni olone mantiene una vera autonomia su cultura, governance, modalità di contributo e priorità, e condivide solo i principi minimi necessari per cooperare.',
       ],
       rings: ['Evento', 'Hub', 'Bioregione', 'Rete'],
       startTitle: 'Da dove partiamo: la bioregione delle Marche',
       startSub: "Una base già viva di relazioni, spazi e sperimentazione nell'Italia centrale: l'ambiente in cui sviluppiamo e mettiamo alla prova il modello.",
+      panorama: 'Un incontro di comunità nelle Marche',
       visit: 'Visita',
       sites: [
         ['Hub eco-tech e di comunità', 'Un laboratorio vivente di vita collaborativa, permacultura, tecnologie rigenerative ed economie alternative.'],
@@ -94,6 +95,10 @@
     <div class="start" data-reveal>
       <h3>{t.startTitle}</h3>
       <p>{t.startSub}</p>
+    </div>
+
+    <div class="panorama" data-reveal>
+      <Photo src="/images/regenerativa/community-meeting.jpg" caption={t.panorama} ratio="1800 / 665" />
     </div>
 
     <div class="grid" data-reveal="stagger">
@@ -157,6 +162,8 @@
   .start { max-width: 720px; margin-bottom: 2.5rem; }
   .start h3 { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 300; margin-bottom: 0.75rem; }
   .start p { color: var(--rg-muted); }
+
+  .panorama { margin-bottom: 1.25rem; }
 
   .grid {
     display: grid;
