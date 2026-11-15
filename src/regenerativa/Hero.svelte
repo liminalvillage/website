@@ -4,7 +4,7 @@
   import Sprout from '@lucide/svelte/icons/sprout';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import { reduced } from '../rigenerativa/motion.js';
-  import { sky } from './sky.js';
+  import { network } from './network.js';
   import { now } from './cycle.js';
   import { pick } from './i18n.js';
   import Moon from './Moon.svelte';
@@ -12,7 +12,7 @@
   const t = pick({
     en: {
       eyebrow: 'ReGenerativa APS · Connect. Contribute. Regenerate.',
-      h1: ['A continuous network', 'for <em>integral regeneration</em>'],
+      h1: ['A network', 'for <em>integral regeneration</em>'],
       tagline: 'Connecting people, places, projects and resources through experiences that regenerate life. We begin in the Marche, Italy, with a model made to grow into other bioregions.',
       events: 'Find an experience',
       docs: 'Join the network',
@@ -24,7 +24,7 @@
     },
     it: {
       eyebrow: 'ReGenerativa APS · Connetti. Contribuisci. Rigenera.',
-      h1: ['Una rete continua', 'per la <em>rigenerazione integrale</em>'],
+      h1: ['Una rete', 'per la <em>rigenerazione integrale</em>'],
       tagline: 'Connettiamo persone, luoghi, progetti e risorse attraverso esperienze che rigenerano la vita. Partiamo dalle Marche, con un modello pensato per crescere in altre bioregioni.',
       events: "Trova un'esperienza",
       docs: 'Entra nella rete',
@@ -36,7 +36,7 @@
     },
   });
 
-  // Where the three spaces sit in the sky (unit coordinates of the canvas).
+  // Where the three spaces sit in the network (unit coordinates of the canvas).
   const spaces = [
     { name: 'Liminal Village', x: 0.7, y: 0.32 },
     { name: 'ReFactory', x: 0.86, y: 0.55 },
@@ -46,11 +46,11 @@
   const cycle = now();
   let canvas;
 
-  onMount(() => sky(canvas, { spaces, reduced }));
+  onMount(() => network(canvas, { spaces, reduced }));
 </script>
 
 <section id="rn-top" class="hero">
-  <canvas bind:this={canvas} class="sky" aria-hidden="true"></canvas>
+  <canvas bind:this={canvas} class="net" aria-hidden="true"></canvas>
   <ul class="labels" aria-label={t.spaces}>
     {#each spaces as s}
       <li style="left: {s.x * 100}%; top: {s.y * 100}%">{s.name}</li>
@@ -94,7 +94,7 @@
     overflow: hidden;
   }
 
-  .sky {
+  .net {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -220,7 +220,7 @@
 
   @media (max-width: 900px) {
     .labels { display: none; }
-    .sky { opacity: 0.55; }
+    .net { opacity: 0.55; }
     .now { font-size: 0.76rem; }
   }
 </style>
