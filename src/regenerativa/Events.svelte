@@ -7,36 +7,27 @@
   import Compass from '@lucide/svelte/icons/compass';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Moon from './Moon.svelte';
-  import { now, upcoming, seasons } from './cycle.js';
+  import { now, upcoming } from './cycle.js';
   import { lang, pick } from './i18n.js';
 
   const t = pick({
     en: {
-      eyebrow: 'A continuous events network',
+      eyebrow: 'Events',
       title: 'The event ends, <em>its effects continue</em>',
-      sub: 'Events are moments when knowledge, resources, relationships, culture and economic activity converge. We coordinate them across places and through the year, so that each one leads somewhere.',
+      sub: 'We coordinate gatherings across places and through the year, so that each one leads somewhere.',
       momentsTitle: 'Already happening',
-      momentsSub: 'Circles, music and seasonal celebrations in the Marche: the network grows out of gatherings that are already taking place.',
       moments: ['A circle on the hill, Summer Solstice 2026', 'Solstice night, dancing under the canopy', 'Morning circle in the pagoda', 'Around the fire at dusk', 'Olive harvest', 'Evening gathering, as the lights come on', 'Raising a yurt together', 'Live music in the pagoda'],
       formatsTitle: 'What happens in the network',
       formats: [
-        ['Gatherings', 'Community dinners, cultural celebrations, local markets and full-moon evenings.'],
-        ['Courses', 'Permaculture, natural building, facilitation, open technology — taught by practitioners of the network.'],
-        ['Retreats', 'Wellness, inner work, deep listening and time with the land.'],
-        ['Restoration days', 'Hands-on work camps restoring soil, water, buildings and landscapes.'],
-        ['Residencies and labs', 'Artistic residencies, technological experiments and collaborative work sessions.'],
-        ['Regenerative journeys', 'Multi-day experiences that weave several hubs, producers and guides together.'],
+        ['Gatherings', 'Dinners, celebrations, full-moon evenings.'],
+        ['Courses', 'Permaculture, natural building, facilitation.'],
+        ['Retreats', 'Inner work and time with the land.'],
+        ['Restoration days', 'Hands-on work on soil, water and buildings.'],
+        ['Residencies and labs', 'Art, technology, collaborative work.'],
+        ['Regenerative journeys', 'Multi-day trips across several hubs.'],
       ],
-      rhythmTitle: 'Following the rhythms of nature',
-      rhythmSub: 'Seasonal programmes follow the territory; smaller gatherings every lunation keep the network continuous.',
-      seasonText: {
-        spring: 'Growing, restoration and learning.',
-        summer: 'Culture, immersive experiences and regenerative tourism.',
-        autumn: 'Harvest, processing, community gatherings and reflection.',
-        winter: 'Learning, inner work, planning, technology and deeper collaboration.',
-      },
-      season: { spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter' },
-      threshold: { spring: 'Equinox', summer: 'Solstice', autumn: 'Equinox', winter: 'Solstice' },
+      rhythmTitle: 'Following the moon',
+      rhythmSub: 'A small gathering every lunation, a larger one each season.',
       youAreHere: 'We are here',
       lunation: 'Lunation',
       nextTitle: 'Next lunations',
@@ -47,31 +38,22 @@
       quests: 'Open quests',
     },
     it: {
-      eyebrow: 'Una rete di eventi continui',
+      eyebrow: 'Eventi',
       title: "L'evento finisce, <em>i suoi effetti continuano</em>",
-      sub: "Gli eventi sono momenti in cui saperi, risorse, relazioni, cultura e attività economica convergono. Li coordiniamo tra i luoghi e lungo l'anno, perché ognuno porti da qualche parte.",
+      sub: "Coordiniamo gli incontri tra i luoghi e lungo l'anno, perché ognuno porti da qualche parte.",
       momentsTitle: 'Sta già succedendo',
-      momentsSub: 'Cerchi, musica e celebrazioni stagionali nelle Marche: la rete nasce da incontri che stanno già accadendo.',
       moments: ['Un cerchio sulla collina, Solstizio d\'estate 2026', 'La notte del Solstizio, danze sotto il telo', 'Cerchio del mattino nella pagoda', 'Attorno al fuoco al tramonto', 'Raccolta delle olive', 'Incontro serale, mentre si accendono le luci', 'Montare una yurta insieme', 'Musica dal vivo nella pagoda'],
       formatsTitle: 'Cosa succede nella rete',
       formats: [
-        ['Incontri', 'Cene di comunità, feste culturali, mercati locali e serate di luna piena.'],
-        ['Corsi', 'Permacultura, bioedilizia, facilitazione, tecnologia aperta — tenuti da chi pratica nella rete.'],
-        ['Ritiri', 'Benessere, lavoro interiore, ascolto profondo e tempo con la terra.'],
-        ['Giornate di ripristino', 'Cantieri pratici per rigenerare suolo, acqua, edifici e paesaggi.'],
-        ['Residenze e laboratori', 'Residenze artistiche, sperimentazioni tecnologiche e sessioni di lavoro collaborativo.'],
-        ['Viaggi rigenerativi', 'Esperienze di più giorni che intrecciano hub, produttori e guide diverse.'],
+        ['Incontri', 'Cene, feste, serate di luna piena.'],
+        ['Corsi', 'Permacultura, bioedilizia, facilitazione.'],
+        ['Ritiri', 'Lavoro interiore e tempo con la terra.'],
+        ['Giornate di ripristino', 'Lavoro pratico su suolo, acqua ed edifici.'],
+        ['Residenze e laboratori', 'Arte, tecnologia, lavoro collaborativo.'],
+        ['Viaggi rigenerativi', 'Esperienze di più giorni tra più hub.'],
       ],
-      rhythmTitle: 'Seguendo i ritmi della natura',
-      rhythmSub: 'I programmi stagionali seguono il territorio; incontri più piccoli a ogni lunazione rendono la rete continua.',
-      seasonText: {
-        spring: 'Coltivare, ripristinare, imparare.',
-        summer: 'Cultura, esperienze immersive e turismo rigenerativo.',
-        autumn: 'Raccolto, trasformazione, incontri di comunità e riflessione.',
-        winter: 'Formazione, lavoro interiore, progettazione, tecnologia e collaborazione profonda.',
-      },
-      season: { spring: 'Primavera', summer: 'Estate', autumn: 'Autunno', winter: 'Inverno' },
-      threshold: { spring: 'Equinozio', summer: 'Solstizio', autumn: 'Equinozio', winter: 'Solstizio' },
+      rhythmTitle: 'Seguendo la luna',
+      rhythmSub: 'Un piccolo incontro a ogni lunazione, uno più grande a ogni stagione.',
       youAreHere: 'Siamo qui',
       lunation: 'Lunazione',
       nextTitle: 'Prossime lunazioni',
@@ -91,7 +73,6 @@
 
   const cycle = now();
   const lunations = upcoming(3);
-  const thresholds = seasons(4);
 
   const locale = lang === 'it' ? 'it-IT' : 'en-GB';
   const fmt = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
@@ -117,7 +98,6 @@
 
     <div class="moments-head" data-reveal>
       <h3 class="block-title">{t.momentsTitle}</h3>
-      <p class="path-sub">{t.momentsSub}</p>
     </div>
     <ul class="moments" data-reveal="stagger">
       {#each photos as ph}
@@ -147,15 +127,6 @@
         <p class="path-sub">{t.rhythmSub}</p>
       </div>
 
-      <ul class="seasons" data-reveal="stagger">
-        {#each thresholds as s, i}
-          <li class:next={i === 0}>
-            <span class="s-when">{t.threshold[s.key]} ≈ {fmt.format(s.date)}</span>
-            <h4>{t.season[s.key]}</h4>
-            <p>{t.seasonText[s.key]}</p>
-          </li>
-        {/each}
-      </ul>
 
       <div class="lunar" data-reveal>
         <div class="wheel">
@@ -278,47 +249,23 @@
 
   .formats :global(svg) { color: var(--rg-gold); }
 
-  .formats h4, .seasons h4 {
+  .formats h4 {
     font-size: 1.35rem;
     color: var(--rg-cream);
     margin: 0.9rem 0 0.4rem;
   }
 
-  .formats p, .seasons p { font-size: 0.88rem; line-height: 1.65; }
+  .formats p { font-size: 0.88rem; line-height: 1.65; }
 
   .path-sub { font-size: 0.95rem; }
 
   .r-head { max-width: 640px; margin-bottom: 2rem; }
   .r-head .block-title { margin-bottom: 0.75rem; }
 
-  .seasons {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-bottom: 3rem;
-  }
 
-  .seasons li {
-    padding: 1.5rem;
-    border-radius: 16px;
-    border: 1px solid rgba(244, 239, 228, 0.1);
-  }
 
-  .seasons li.next {
-    border-color: rgba(201, 163, 91, 0.6);
-    background: rgba(201, 163, 91, 0.08);
-  }
 
-  .seasons h4 { margin-top: 0.3rem; }
 
-  .s-when {
-    font-size: 0.64rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--rg-gold);
-  }
 
   .lunar {
     display: grid;
@@ -407,7 +354,7 @@
   .actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 
   @media (max-width: 1000px) {
-    .formats, .seasons { grid-template-columns: 1fr 1fr; }
+    .formats { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 760px) {
@@ -419,6 +366,6 @@
   }
 
   @media (max-width: 520px) {
-    .formats, .seasons { grid-template-columns: 1fr; }
+    .formats { grid-template-columns: 1fr; }
   }
 </style>

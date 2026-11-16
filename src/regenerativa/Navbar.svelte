@@ -8,7 +8,7 @@
 
   const t = pick({
     en: {
-      items: ['Vision', 'Events', 'Hubs', 'Economy', 'Agreements', 'Join'],
+      items: ['Vision', 'Events', 'Hubs', 'How it works', 'Agreements', 'Join'],
       docs: 'Docs',
       open: 'Open menu',
       close: 'Close menu',
@@ -16,7 +16,7 @@
       names: { en: 'English', it: 'Italiano' },
     },
     it: {
-      items: ['Visione', 'Eventi', 'Hub', 'Economia', 'Accordi', 'Partecipa'],
+      items: ['Visione', 'Eventi', 'Hub', 'Come funziona', 'Accordi', 'Partecipa'],
       docs: 'Documenti',
       open: 'Apri menu',
       close: 'Chiudi menu',
@@ -25,10 +25,10 @@
     },
   });
 
-  const items = ['#rn-vision', '#rn-events', '#rn-hubs', '#rn-economy', '#rn-agreements', '#rn-join']
+  const items = ['#rn-vision', '#rn-events', '#rn-hubs', '#rn-how', '#rn-agreements', '#rn-join']
     .map((href, i) => ({ label: t.items[i], href }));
 
-  const DARK = ['#rn-events', '#rn-flywheel'];
+  const DARK = ['#rn-events', '#rn-how'];
 
   let open = false;
   let scrolled = false;
@@ -44,7 +44,7 @@
       },
       { rootMargin: '-50% 0px -50% 0px' }
     );
-    ['#rn-top', ...items.map((m) => m.href), ...DARK, '#rn-integral', '#rn-mycelium'].forEach((h) => {
+    ['#rn-top', ...items.map((m) => m.href), ...DARK].forEach((h) => {
       const el = document.querySelector(h);
       if (el) io.observe(el);
     });

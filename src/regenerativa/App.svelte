@@ -5,11 +5,8 @@
   import Hero from './Hero.svelte';
   import About from './About.svelte';
   import Events from './Events.svelte';
-  import Integral from './Integral.svelte';
   import Spaces from './Spaces.svelte';
-  import Economy from './Economy.svelte';
-  import Flywheel from './Flywheel.svelte';
-  import Mycelium from './Mycelium.svelte';
+  import HowItWorks from './HowItWorks.svelte';
   import Agreements from './Agreements.svelte';
   import Join from './Join.svelte';
   import Footer from './Footer.svelte';
@@ -33,11 +30,8 @@
   <Hero />
   <About />
   <Events />
-  <Integral />
   <Spaces />
-  <Economy />
-  <Flywheel />
-  <Mycelium />
+  <HowItWorks />
   <Agreements />
   <Join />
   <Footer />

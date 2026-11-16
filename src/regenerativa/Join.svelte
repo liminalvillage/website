@@ -15,51 +15,31 @@
     en: {
       eyebrow: 'The invitation',
       title: 'Regeneration no one <em>achieves alone</em>',
-      sub: 'Participation can begin with something as simple as attending a community gathering, offering a workshop, sharing a resource or helping an initiative meet a need. From there, relationships deepen naturally into collaboration, shared projects and new enterprises.',
+      sub: 'Start small: come to a gathering, offer a skill or share a resource. Pick the door that fits you.',
       ways: [
-        ['Individuals', 'Accessible pathways from curiosity to meaningful participation: come to an event, lend a hand, become a member.', 'Membership agreement', 'Joining as an individual'],
-        ['Practitioners and organisers', 'Connections to people, spaces and complementary services for the experiences you want to create.', 'Mentorship agreement', 'Proposing an experience'],
-        ['Landowners and venue stewards', 'Ways to activate under-used land and buildings for regenerative use, while keeping ownership.', 'Ownership agreement', 'Offering a place'],
-        ['Associations and community groups', 'Keep your identity and structure; gain collaborators, venues, resources, visibility, knowledge and practical support.', 'Partnership agreement', 'Collaborating as an organisation'],
-        ['Municipalities and institutions', 'A framework connecting local initiatives, civic participation and territorial regeneration.', null, 'Institutional collaboration'],
-        ['Supporters', 'Give money, tools, land or time as a gift: recognised, accounted for, and never a way to buy influence.', 'Sponsorship agreement', 'Supporting the network'],
+        ['Individuals', 'Come to a gathering, lend a hand, become a member.', 'Membership agreement', 'Joining as an individual'],
+        ['Practitioners and organisers', 'Find venues, people and support for what you want to run.', 'Mentorship agreement', 'Proposing an experience'],
+        ['Landowners', 'Open land or a building to regenerative use and keep owning it.', 'Ownership agreement', 'Offering a place'],
+        ['Associations', 'Keep your identity; gain collaborators, spaces and resources.', 'Partnership agreement', 'Collaborating as an organisation'],
+        ['Municipalities', 'Connect local initiatives with territorial regeneration.', null, 'Institutional collaboration'],
+        ['Supporters', 'Give money, tools, land or time, never to buy influence.', 'Sponsorship agreement', 'Supporting the network'],
       ],
       write: 'Write to us',
-      apsTitle: 'Why an APS?',
-      aps: 'ReGenerativa is an Associazione di Promozione Sociale and Ente del Terzo Settore, founded in Castorano (AP), Italy, on 21 June 2025. Its purpose is not just to produce a calendar of events, but to give independent people and organisations a shared civic home for initiatives, education, participation, experimentation, resource coordination and common infrastructure, so that the ecosystem becomes more capable than any of its members alone.',
-      why: [
-        ['We begin with events', 'because they bring people into relationship.'],
-        ['We connect relationships into projects', 'because real change requires sustained action.'],
-        ['We coordinate resources', 'because regeneration must also be materially possible.'],
-        ['We connect it all into a distributed network', 'because the transformation we seek is larger than any single place.'],
-      ],
-      vision: 'A world where regeneration is not an occasional event, but <em>a continuous way of participating in life</em>.',
-      motto: 'Connect. Contribute. Regenerate.',
       questions: 'A question, an idea, a place to offer?',
     },
     it: {
       eyebrow: "L'invito",
       title: 'Una rigenerazione che nessuno <em>realizza da solo</em>',
-      sub: "Si può iniziare con qualcosa di semplice: partecipare a un incontro di comunità, proporre un laboratorio, condividere una risorsa o aiutare un'iniziativa a rispondere a un bisogno. Da lì le relazioni crescono naturalmente in collaborazioni, progetti condivisi e nuove imprese.",
+      sub: "Inizia in piccolo: vieni a un incontro, offri una competenza o condividi una risorsa. Scegli la porta adatta a te.",
       ways: [
-        ['Persone', 'Percorsi accessibili dalla curiosità a una partecipazione significativa: vieni a un evento, dai una mano, diventa socio.', 'Accordo di adesione', 'Partecipare come persona'],
-        ['Professionisti e organizzatori', 'Connessioni con persone, spazi e servizi complementari per le esperienze che vuoi creare.', 'Accordo di mentorato', "Proporre un'esperienza"],
-        ['Proprietari e custodi di luoghi', 'Modi per attivare terreni ed edifici sottoutilizzati a fini rigenerativi, restandone proprietari.', 'Accordo di proprietà', 'Offrire un luogo'],
-        ['Associazioni e gruppi di comunità', 'Mantieni identità e struttura; trova collaboratori, spazi, risorse, visibilità, saperi e supporto pratico.', 'Accordo di partenariato', 'Collaborare come organizzazione'],
-        ['Comuni e istituzioni', 'Una cornice che collega iniziative locali, partecipazione civica e rigenerazione territoriale.', null, 'Collaborazione istituzionale'],
-        ['Sostenitori', 'Dona denaro, strumenti, terra o tempo: riconosciuto, rendicontato, e mai un modo per comprare influenza.', 'Accordo di sostegno', 'Sostenere la rete'],
+        ['Persone', 'Vieni a un incontro, dai una mano, diventa socio.', 'Accordo di adesione', 'Partecipare come persona'],
+        ['Professionisti e organizzatori', 'Trova spazi, persone e supporto per ciò che vuoi proporre.', 'Accordo di mentorato', "Proporre un'esperienza"],
+        ['Proprietari', 'Apri un terreno o un edificio a un uso rigenerativo, restandone proprietario.', 'Accordo di proprietà', 'Offrire un luogo'],
+        ['Associazioni', 'Mantieni la tua identità; trova collaboratori, spazi e risorse.', 'Accordo di partenariato', 'Collaborare come organizzazione'],
+        ['Comuni', 'Collega le iniziative locali alla rigenerazione del territorio.', null, 'Collaborazione istituzionale'],
+        ['Sostenitori', 'Dona denaro, strumenti, terra o tempo, mai per comprare influenza.', 'Accordo di sostegno', 'Sostenere la rete'],
       ],
       write: 'Scrivici',
-      apsTitle: 'Perché una APS?',
-      aps: "ReGenerativa è un'Associazione di Promozione Sociale ed Ente del Terzo Settore, costituita a Castorano (AP) il 21 giugno 2025. Il suo scopo non è solo produrre un calendario di eventi, ma offrire a persone e organizzazioni indipendenti una casa civica comune per iniziative, formazione, partecipazione, sperimentazione, coordinamento delle risorse e infrastrutture condivise, perché l'ecosistema diventi più capace di qualsiasi suo membro da solo.",
-      why: [
-        ['Partiamo dagli eventi', 'perché mettono le persone in relazione.'],
-        ['Trasformiamo le relazioni in progetti', 'perché il cambiamento reale richiede azione continua.'],
-        ['Coordiniamo le risorse', 'perché la rigenerazione deve essere anche materialmente possibile.'],
-        ['Colleghiamo tutto in una rete distribuita', 'perché la trasformazione che cerchiamo è più grande di qualsiasi singolo luogo.'],
-      ],
-      vision: 'Un mondo in cui la rigenerazione non è un evento occasionale, ma <em>un modo continuo di partecipare alla vita</em>.',
-      motto: 'Connetti. Contribuisci. Rigenera.',
       questions: 'Una domanda, un\'idea, un luogo da offrire?',
     },
   });
@@ -98,21 +78,6 @@
         </li>
       {/each}
     </ul>
-
-    <div class="aps" data-reveal>
-      <h3>{t.apsTitle}</h3>
-      <p>{t.aps}</p>
-    </div>
-
-    <div class="manifesto" data-reveal>
-      <ol>
-        {#each t.why as [lead, rest]}
-          <li><strong>{lead}</strong> {rest}</li>
-        {/each}
-      </ol>
-      <p class="vision">{@html t.vision}</p>
-      <p class="motto">{t.motto}</p>
-    </div>
 
     <div class="contact" data-reveal>
       <p>{t.questions}</p>
@@ -174,61 +139,6 @@
 
   .links a.mail { color: var(--rg-muted); }
 
-  .aps {
-    display: grid;
-    grid-template-columns: 1fr 2.6fr;
-    gap: 3rem;
-    margin-top: 5rem;
-    padding: 2.5rem 0;
-    border-top: 1px solid var(--rg-line);
-    border-bottom: 1px solid var(--rg-line);
-  }
-
-  .aps h3 { font-size: 1.9rem; }
-  .aps p { color: var(--rg-muted); }
-
-
-
-  .manifesto {
-    padding: 4rem;
-    border-radius: 24px;
-    background:
-      radial-gradient(ellipse 60% 60% at 80% 0%, rgba(63, 106, 69, 0.35), transparent 70%),
-      var(--rg-night);
-    color: var(--rg-cream);
-  }
-
-  .manifesto ol { list-style: none; display: grid; gap: 1rem; margin-bottom: 3rem; }
-
-  .manifesto li {
-    font-size: 1.05rem;
-    color: rgba(244, 239, 228, 0.72);
-    padding-left: 1.25rem;
-    border-left: 1px solid rgba(201, 163, 91, 0.5);
-  }
-
-  .manifesto strong { color: var(--rg-cream); font-weight: 600; }
-
-  .vision {
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(1.8rem, 3.6vw, 2.9rem);
-    font-weight: 300;
-    line-height: 1.15;
-    color: var(--rg-cream);
-    max-width: 900px;
-  }
-
-  .vision :global(em) { color: var(--rg-gold-soft); }
-
-  .motto {
-    margin-top: 2rem;
-    color: var(--rg-gold);
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
   .contact {
     margin-top: 4rem;
     display: flex;
@@ -246,11 +156,6 @@
 
   @media (max-width: 1000px) {
     .ways { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (max-width: 760px) {
-    .aps { grid-template-columns: 1fr; gap: 1rem; }
-    .manifesto { padding: 2.5rem 1.25rem; }
   }
 
   @media (max-width: 600px) {

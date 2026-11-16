@@ -8,8 +8,7 @@
     en: {
       eyebrow: 'Shared agreements',
       title: 'The minimum <em>we hold in common</em>',
-      sub: 'Every holon keeps its own culture and governance, and agrees only to the minimum shared principles needed to cooperate. These are ours: a small constellation of clear, public agreements for everyone who hosts, stewards, teaches, builds or gives within the network.',
-      quote: 'An agreement here is not a transaction. It is a plain way of naming what you and the network each offer and protect.',
+      sub: 'Eight short, public agreements: one for each way of taking part. Pick a star to see what it covers.',
       hint: 'Choose a star',
       door: 'The door',
       read: 'Read the agreement',
@@ -27,19 +26,15 @@
       companionTitle: 'Start here',
       companion: [
         ['overview', 'Constellation Overview', 'The plain-language tour — a 3-minute read'],
-        ['intro', 'Introduction', 'The deeper why behind the agreements'],
         ['terms', 'General Terms and Conditions', 'The shared rulebook, including the Regenerative Covenant'],
-        ['statute', 'Statute of ReGenerativa APS', 'Our purpose as a non-profit, above every agreement'],
         ['safeguarding', 'Safeguarding and Code of Conduct', 'How we keep each other safe at every event'],
-        ['fund', 'The Fund in Plain Language', 'How the network’s money moves, and where it goes'],
       ],
       open: 'Open docs.regenerativa.earth',
     },
     it: {
       eyebrow: 'Accordi condivisi',
       title: 'Il minimo <em>che teniamo in comune</em>',
-      sub: 'Ogni olone mantiene la propria cultura e governance, e condivide solo i principi minimi necessari per cooperare. Questi sono i nostri: una piccola costellazione di accordi chiari e pubblici per chi ospita, custodisce, insegna, costruisce o dona nella rete.',
-      quote: 'Qui un accordo non è una transazione. È un modo semplice per dire cosa tu e la rete vi offrite e cosa proteggete.',
+      sub: 'Otto accordi brevi e pubblici: uno per ogni modo di partecipare. Scegli una stella per vedere cosa prevede.',
       hint: 'Scegli una stella',
       door: 'La porta',
       read: "Leggi l'accordo",
@@ -61,13 +56,10 @@
       companionTitle: 'Da dove iniziare',
       companion: [
         ['overview', 'Constellation Overview', 'Il giro in parole semplici — 3 minuti di lettura'],
-        ['intro', 'Introduction', 'Il perché profondo degli accordi'],
         ['terms', 'General Terms and Conditions', 'Il regolamento comune, con il Patto Rigenerativo'],
-        ['statuto', 'Statuto di ReGenerativa APS', 'Il nostro scopo come ente non profit, sopra ogni accordo'],
         ['safeguarding', 'Safeguarding and Code of Conduct', 'Come ci proteggiamo a vicenda in ogni evento'],
-        ['fund', 'The Fund in Plain Language', 'Come si muove il denaro della rete, e dove va'],
       ],
-      note: 'I documenti sono in inglese; lo Statuto è disponibile anche in italiano.',
+      note: 'I documenti sono in inglese.',
       open: 'Apri docs.regenerativa.earth',
     },
   });
@@ -152,7 +144,6 @@
       </div>
     </div>
 
-    <blockquote class="quote" data-reveal>“{t.quote}”</blockquote>
 
     <div class="companion">
       <h3 data-reveal>{t.companionTitle}</h3>
@@ -340,17 +331,6 @@
     color: rgba(244, 239, 228, 0.55);
   }
 
-  .quote {
-    font-family: "Cormorant Garamond", serif;
-    font-style: italic;
-    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    font-weight: 300;
-    line-height: 1.3;
-    color: var(--rg-bark);
-    max-width: 820px;
-    margin: 5rem auto;
-    text-align: center;
-  }
 
   .companion h3 {
     font-size: 1.8rem;

@@ -7,7 +7,7 @@
     en: {
       mission: 'A network for integral regeneration: connecting people, places, projects and resources through experiences that regenerate life.',
       explore: 'Explore',
-      links: ['Vision', 'Events', 'Integral regeneration', 'Hubs', 'Economy', 'Digital mycelium', 'Agreements', 'Join'],
+      links: ['Vision', 'Events', 'Hubs', 'How it works', 'Agreements', 'Join'],
       calendar: 'Lunar calendar',
       quests: 'Quests',
       spaces: 'Hubs',
@@ -20,7 +20,7 @@
     it: {
       mission: 'Una rete per la rigenerazione integrale: connettiamo persone, luoghi, progetti e risorse attraverso esperienze che rigenerano la vita.',
       explore: 'Esplora',
-      links: ['Visione', 'Eventi', 'Rigenerazione integrale', 'Hub', 'Economia', 'Micelio digitale', 'Accordi', 'Partecipa'],
+      links: ['Visione', 'Eventi', 'Hub', 'Come funziona', 'Accordi', 'Partecipa'],
       calendar: 'Calendario lunare',
       quests: 'Quest',
       spaces: 'Hub',
@@ -32,7 +32,7 @@
     },
   });
 
-  const hashes = ['#rn-vision', '#rn-events', '#rn-integral', '#rn-hubs', '#rn-economy', '#rn-mycelium', '#rn-agreements', '#rn-join'];
+  const hashes = ['#rn-vision', '#rn-events', '#rn-hubs', '#rn-how', '#rn-agreements', '#rn-join'];
   const year = new Date().getFullYear();
   const ext = { target: '_blank', rel: 'noopener noreferrer' };
 </script>
