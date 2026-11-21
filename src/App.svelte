@@ -5,6 +5,7 @@
   import ThreePillars from './lib/ThreePillars.svelte';
   import Network from './lib/Network.svelte';
   import Village from './lib/Village.svelte';
+  import Guides from './lib/Guides.svelte';
   import Lunations from './lib/Lunations.svelte';
   import Contact from './lib/Contact.svelte';
   import Footer from './lib/Footer.svelte';
@@ -42,6 +43,7 @@
   <About />
   <ThreePillars />
   <Village />
+  <Guides />
   <Lunations />
   <Network />
   <Contact />
