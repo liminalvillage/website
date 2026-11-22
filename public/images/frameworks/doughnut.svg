@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">Doughnut Economics</title>
+  <desc id="d">A ring between a social foundation of twelve human needs and an ecological ceiling of nine planetary boundaries: the safe and just space for humanity.</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <circle cx="300" cy="275" r="165" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <circle cx="300" cy="275" r="98" fill="#ffffff" stroke="#d6a15b" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#222222">  <text x="300" y="258" font-size="16" font-style="italic">the safe and</text>  <text x="300" y="278" font-size="16" font-style="italic">just space</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#717171">  <text x="300" y="302" font-size="11" >inner ring:</text>  <text x="300" y="316" font-size="11" >social foundation</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="300" y="147" font-size="11" >Water</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="366" y="164.7" font-size="11" >Food</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="414.3" y="213" font-size="11" >Health</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="432" y="279" font-size="11" >Education</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="414.3" y="345" font-size="11" >Income &amp; work</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="366" y="393.3" font-size="11" >Peace &amp; justice</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="300" y="411" font-size="11" >Political voice</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="234" y="393.3" font-size="11" >Social equity</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="185.7" y="345" font-size="11" >Gender equality</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="168" y="279" font-size="11" >Housing</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="185.7" y="213" font-size="11" >Networks</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#333333">  <text x="234" y="164.7" font-size="11" >Energy</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="300" y="61" font-size="11.5" >Climate</text>  <text x="300" y="75" font-size="11.5" >change</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="436.3" y="110.6" font-size="11.5" >Ocean</text>  <text x="436.3" y="124.6" font-size="11.5" >acidification</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="508.8" y="236.2" font-size="11.5" >Chemical</text>  <text x="508.8" y="250.2" font-size="11.5" >pollution</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="483.6" y="379" font-size="11.5" >Nitrogen</text>  <text x="483.6" y="393" font-size="11.5" >&amp; phosphorus</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="372.5" y="472.2" font-size="11.5" >Freshwater</text>  <text x="372.5" y="486.2" font-size="11.5" >withdrawals</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="227.5" y="472.2" font-size="11.5" >Land</text>  <text x="227.5" y="486.2" font-size="11.5" >conversion</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="116.4" y="379" font-size="11.5" >Biodiversity</text>  <text x="116.4" y="393" font-size="11.5" >loss</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="91.2" y="236.2" font-size="11.5" >Air</text>  <text x="91.2" y="250.2" font-size="11.5" >pollution</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#b9785a">  <text x="163.7" y="110.6" font-size="11.5" >Ozone</text>  <text x="163.7" y="124.6" font-size="11.5" >layer depletion</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#717171">  <text x="300" y="528" font-size="12" >outside: the ecological ceiling (nine planetary boundaries)</text></g>
+</svg>

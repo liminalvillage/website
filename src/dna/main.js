@@ -299,13 +299,14 @@ function openFramework(id, from) {
   const homes = genes.filter((g) => g.querySelector(`[data-fw="${id}"]`));
   const color = from?.closest('.gene') ? geneColor(from.closest('.gene')) : getComputedStyle(drawerPanel).getPropertyValue('--g') || '#D6A15B';
   const links = [...(fw.page ? [{ label: 'On our Frameworks page', href: fw.page, icon: 'fa-map' }] : []), ...fw.links];
+  const guides = (fw.guides || []).filter((g) => GUIDES[g]);
   drawerBody.innerHTML = `
     <div class="origin">Framework · ${esc(fw.origin)}</div>
     <h2 id="drawer-title">${esc(fw.title)}</h2>
     <p class="lede">${esc(fw.tagline)}</p>
     ${fw.image ? `<img src="${esc(fw.image.src)}" alt="${esc(fw.image.alt)}" loading="lazy">` : ''}
     <p>${esc(fw.body)}</p>
-    ${fw.guide && GUIDES[fw.guide] ? `<h4>Guide</h4><ul class="d-list"><li><button type="button" data-guide="${fw.guide}"><i class="fa-solid fa-user"></i>${esc(GUIDES[fw.guide].name)}<span class="go">→</span></button></li></ul>` : ''}
+    ${guides.length ? `<h4>${guides.length > 1 ? 'Guides' : 'Guide'}</h4><ul class="d-list">${guides.map((g) => `<li><button type="button" data-guide="${g}"><i class="fa-solid fa-user"></i>${esc(GUIDES[g].name)}<span class="go">→</span></button></li>`).join('')}</ul>` : ''}
     ${fw.steps ? `<div class="steps-row">${fw.steps.map((st) => `<span>${esc(st)}</span>`).join('')}</div>` : ''}
     <h4>Read more</h4>
     <ul class="d-list">${links.map(linkItem).join('')}</ul>
@@ -321,7 +322,7 @@ function openGuide(id, from) {
   if (!gd) return;
   const lineage = document.getElementById('lineage');
   const thresholds = [...document.querySelectorAll('#thresholds .allele')].filter((c) => c.querySelector(`[data-guide="${id}"]`));
-  const fws = Object.entries(FRAMEWORKS).filter(([, f]) => f.guide === id);
+  const fws = Object.entries(FRAMEWORKS).filter(([, f]) => f.guides?.includes(id));
   drawerBody.innerHTML = `
     <div class="origin">Guide · ${esc(gd.dimension)}${gd.movement ? ` · ${esc(gd.movement)}` : ''}</div>
     <h2 id="drawer-title">${esc(gd.name)}</h2>
@@ -397,6 +398,18 @@ document.addEventListener('click', (e) => {
   }
 });
 addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+// /dna#guide-<id> (linked from /frameworks): go to the Lineage gene and open that guide.
+const deepGuide = location.hash.match(/^#guide-([\w-]+)$/)?.[1];
+if (deepGuide && GUIDES[deepGuide]) {
+  const lineage = document.getElementById('lineage');
+  const at = lineage.querySelector(`[data-guide="${deepGuide}"]`) || lineage;
+  const card = at.closest('.allele') || lineage;
+  // jump, don't glide: opening the panel stops Lenis mid-scroll
+  if (lenis) lenis.scrollTo(card, { offset: -30, immediate: true });
+  else card.scrollIntoView();
+  openGuide(deepGuide, at);
+}
 
 // Structured data for search engines and AI crawlers that execute JS.
 // (Non-JS crawlers get the summary from /llms.txt.)

@@ -1,6 +1,8 @@
 // What the /dna detail panel shows: more on each gene, and on each framework
-// the DNA mentions. The six frameworks with a section on /frameworks are
-// summarised from public/frameworks.html and deep-link back to it.
+// the DNA mentions. Every framework has a section on /frameworks, grouped by the
+// six dimensions of the Council of Guides; these are short summaries of
+// public/frameworks.html and deep-link back to it (same ids). `guides` are ids
+// in GUIDES below — the guide panel lists the frameworks that name it.
 
 const SOCIAL_DNA = { label: 'Social DNA in our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' };
 
@@ -25,6 +27,7 @@ export const GENES = {
   },
   lineage: {
     blurb: 'A living constellation of ancestors, visionaries and guides, spiritual and intellectual, rather than a fixed pantheon. They inspire our decisions; they do not make them. Honor the wisdom of the past, question the assumptions of the present, and embody the possibilities of the future.',
+    frameworks: ['work-that-reconnects', 'ostrom-principles', 'nvc', 'dragon-dreaming', 'leverage-points', 'viable-system-model', 'holacracy', 'pattern-language', 'permaculture', 'doughnut-economics', 'internal-family-systems', 'integral-theory', 'emergent-strategy'],
     links: [
       { label: 'Frameworks we think with', href: '/frameworks', icon: 'fa-map' },
       { label: 'Readings & media', href: '/media', icon: 'fa-book' },
@@ -86,32 +89,38 @@ export const FRAMEWORKS = {
     origin: 'Don Miguel Ruiz · 1997',
     tagline: 'Four short promises to yourself that dissolve a lot of needless suffering.',
     body: 'A short book that draws on Toltec wisdom: be impeccable with your word, don’t take anything personally, don’t make assumptions, always do your best. In the village they are the simplest shared baseline for how we talk to each other.',
+    image: { src: '/images/frameworks/four-agreements.svg', alt: 'The four agreements in four boxes.' },
+    page: '/frameworks#four-agreements',
     links: [{ label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/The_Four_Agreements' }],
   },
   nvc: {
-    guide: 'rosenberg',
+    guides: ['rosenberg'],
     title: 'Non-Violent Communication',
     origin: 'Marshall Rosenberg · 1960s onwards',
     tagline: 'Say what happened, what you feel, what you need, and what you ask for.',
     body: 'NVC separates observation from judgment and connects feelings to the needs underneath them, ending in a clear, doable request. It is how we try to voice tensions so the other person can actually hear them.',
     steps: ['Observation', 'Feeling', 'Need', 'Request'],
+    page: '/frameworks#nvc',
     links: [
       { label: 'Center for Nonviolent Communication', href: 'https://www.cnvc.org/' },
       { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Nonviolent_Communication' },
     ],
   },
   holacracy: {
-    title: 'Holacracy (soft version)',
-    origin: 'Brian Robertson · 2007',
+    guides: ['koestler'],
+    title: 'Holons & soft Holacracy',
+    origin: 'Arthur Koestler · 1967 · Brian Robertson · 2007',
     tagline: 'Authority lives in roles, and every tension is fuel for improving them.',
-    body: 'Holacracy distributes authority to clearly defined roles instead of a hierarchy of people. We use a soft version: notice a tension, add a proposal rather than a complaint, and bring it to the right place — the person, the role or the circle.',
+    body: 'Koestler’s holon is a whole that is also part of a larger whole; Holacracy builds on it, distributing authority to clearly defined roles in nested circles instead of a hierarchy of people. We use a soft version: notice a tension, add a proposal rather than a complaint, and bring it to the right place — the person, the role or the circle.',
+    image: { src: '/images/frameworks/holons.svg', alt: 'Nested circles: roles inside circles inside the village.' },
+    page: '/frameworks#holacracy',
     links: [
       { label: 'holacracy.org', href: 'https://www.holacracy.org/' },
       { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Holacracy' },
     ],
   },
   'integral-theory': {
-    guide: 'wilber',
+    guides: ['wilber', 'koestler'],
     title: 'Integral Theory',
     origin: 'Ken Wilber · 1970s onwards',
     tagline: 'A “theory of everything” that asks which perspectives are missing from the picture.',
@@ -121,6 +130,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'Integral Life', href: 'https://integrallife.com/what-is-integral-approach/' }, { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Integral_theory' }],
   },
   'spiral-dynamics': {
+    guides: ['wilber'],
     title: 'Spiral Dynamics',
     origin: 'Clare W. Graves · Don Beck & Chris Cowan · 1996',
     tagline: 'How value systems emerge, in people and whole societies, as life conditions change.',
@@ -139,7 +149,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Ikigai' }],
   },
   permaculture: {
-    guide: 'holmgren',
+    guides: ['holmgren', 'wahl'],
     title: 'Permaculture',
     origin: 'Bill Mollison & David Holmgren · 1970s',
     tagline: 'Design that copies the patterns of natural ecosystems, guided by three ethics.',
@@ -149,7 +159,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'The 12 principles', href: 'https://permacultureprinciples.com/permaculture-principles/' }],
   },
   'internal-family-systems': {
-    guide: 'schwartz',
+    guides: ['schwartz'],
     title: 'Internal Family Systems',
     origin: 'Richard C. Schwartz · 1980s',
     tagline: 'The mind as an inner family of parts, led by a calm, curious Self.',
@@ -166,6 +176,86 @@ export const FRAMEWORKS = {
     image: { src: '/images/frameworks/enneagram.svg', alt: 'The enneagram figure with nine points.' },
     page: '/frameworks#enneagram',
     links: [{ label: 'Enneagram Institute', href: 'https://www.enneagraminstitute.com/how-the-enneagram-system-works/' }],
+  },
+  'work-that-reconnects': {
+    guides: ['macy'],
+    title: 'The Work That Reconnects',
+    origin: 'Joanna Macy · late 1970s onwards',
+    tagline: 'Turning grief for the world into the energy to act for it.',
+    body: 'A spiral of four stations — coming from gratitude, honouring our pain for the world, seeing with new eyes, going forth — that treats our pain for the world as a sign of connection, not a pathology, and turns it back into action for the Great Turning.',
+    image: { src: '/images/frameworks/work-that-reconnects.svg', alt: 'A spiral through four stations.' },
+    page: '/frameworks#work-that-reconnects',
+    links: [{ label: 'Work That Reconnects', href: 'https://workthatreconnects.org/' }],
+  },
+  'ostrom-principles': {
+    guides: ['ostrom', 'helfrich'],
+    title: 'Governing the commons',
+    origin: 'Elinor Ostrom · 1990',
+    tagline: 'Communities can look after shared resources themselves — if the rules are theirs.',
+    body: 'Eight design principles drawn from commons that lasted for generations: clear boundaries, rules that fit local conditions, rules made by those affected, monitoring, graduated sanctions, accessible conflict resolution, the right to self-organise, and nested enterprises.',
+    image: { src: '/images/frameworks/ostrom-principles.svg', alt: 'Eight principles in a ring around the commons.' },
+    page: '/frameworks#ostrom-principles',
+    links: [{ label: 'Free, Fair and Alive', href: 'https://freefairandalive.org/' }],
+  },
+  'dragon-dreaming': {
+    guides: ['croft'],
+    title: 'Dragon Dreaming',
+    origin: 'John Croft & Vivienne Elanta · 1990s',
+    tagline: 'Collective projects as a wheel: dream, plan, do — and celebrate.',
+    body: 'A project becomes collective when the dream is given away and becomes everyone’s. Celebrating is a quarter of the work, not an afterthought: the moment to harvest learning, thank people and rest.',
+    image: { src: '/images/frameworks/dragon-dreaming.svg', alt: 'A wheel of four phases: dreaming, planning, doing, celebrating.' },
+    page: '/frameworks#dragon-dreaming',
+    links: [{ label: 'Dragon Dreaming', href: 'https://dragondreaming.org/' }],
+  },
+  'leverage-points': {
+    guides: ['meadows', 'bateson'],
+    title: 'Leverage points',
+    origin: 'Donella Meadows · 1999',
+    tagline: 'Where to push on a system so that it actually changes.',
+    body: 'Twelve places to intervene in a system, from numbers and parameters (easy, weak) to information flows, rules, goals and the paradigm itself (hard to see, powerful). When something keeps going wrong, ask which loop, rule or goal produces it.',
+    image: { src: '/images/frameworks/leverage-points.svg', alt: 'Twelve leverage points from least to most effective.' },
+    page: '/frameworks#leverage-points',
+    links: [{ label: 'The Donella Meadows Project', href: 'https://donellameadows.org/' }],
+  },
+  'viable-system-model': {
+    guides: ['beer'],
+    title: 'Viable System Model',
+    origin: 'Stafford Beer · 1972',
+    tagline: 'What any system needs to stay alive and autonomous in a changing world.',
+    body: 'Five functions — operations, coordination, control, intelligence and policy — repeated at every level, so a whole stays coherent while its parts stay as autonomous as possible. A map for independent hubs that coordinate as one network.',
+    image: { src: '/images/frameworks/viable-system-model.svg', alt: 'Systems 1 to 5 of the Viable System Model.' },
+    page: '/frameworks#viable-system-model',
+    links: [{ label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Viable_system_model' }],
+  },
+  'pattern-language': {
+    guides: ['alexander'],
+    title: 'A Pattern Language',
+    origin: 'Christopher Alexander et al. · 1977',
+    tagline: 'A shared language that lets anyone design places that feel alive.',
+    body: '253 patterns, from regions and towns down to rooms and construction, each helping to complete the larger ones. A language rather than a blueprint, so the people who live in a place can design it — and the root of design patterns in software.',
+    image: { src: '/images/frameworks/pattern-language.svg', alt: 'Patterns at five scales.' },
+    page: '/frameworks#pattern-language',
+    links: [{ label: 'patternlanguage.com', href: 'https://www.patternlanguage.com/' }],
+  },
+  'doughnut-economics': {
+    guides: ['raworth', 'schumacher'],
+    title: 'Doughnut Economics',
+    origin: 'Kate Raworth · 2012',
+    tagline: 'Meet everyone’s needs within the means of the living planet.',
+    body: 'A ring between a social foundation no one should fall below and an ecological ceiling of nine planetary boundaries. The goal shifts from endless growth to thriving in balance — regenerative and distributive by design.',
+    image: { src: '/images/frameworks/doughnut.svg', alt: 'The Doughnut: social foundation inside, ecological ceiling outside.' },
+    page: '/frameworks#doughnut-economics',
+    links: [{ label: 'Doughnut Economics Action Lab', href: 'https://doughnuteconomics.org/' }],
+  },
+  'emergent-strategy': {
+    guides: ['brown'],
+    title: 'Emergent Strategy',
+    origin: 'adrienne maree brown · 2017',
+    tagline: 'Small, adaptive actions and relationships shape the larger patterns of change.',
+    body: 'Fractal, adaptive, interdependent, non-linear, resilient: how we treat each other in a small group is the strategy, because the pattern repeats at every scale. Move at the speed of trust.',
+    image: { src: '/images/frameworks/emergent-strategy.svg', alt: 'The six elements of emergent strategy.' },
+    page: '/frameworks#emergent-strategy',
+    links: [{ label: 'adriennemareebrown.net', href: 'https://adriennemareebrown.net/' }],
   },
 };
 

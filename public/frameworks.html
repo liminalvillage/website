@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frameworks · Liminal Village</title>
-<meta name="description" content="Six maps we use to understand ourselves, each other and the land: Integral Theory, Spiral Dynamics, Ikigai, Permaculture ethics and principles, Internal Family Systems and the Enneagram — with diagrams, short introductions and links to go deeper.">
+<meta name="description" content="The maps our guides left us, arranged along the six dimensions of our Council of Guides — consciousness, commons, systems, design, ecology and inner change: from Ostrom’s commons principles, Meadows’ leverage points and Beer’s Viable System Model to Permaculture, Doughnut Economics, Internal Family Systems and Nonviolent Communication, with diagrams, how we use each one and links to go deeper.">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 <link rel="canonical" href="https://liminalvillage.com/frameworks">
 <link rel="help" href="https://docs.liminalvillage.com/">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Liminal Village">
 <meta property="og:title" content="Frameworks · Liminal Village">
-<meta property="og:description" content="Integral Theory, Spiral Dynamics, Ikigai, Permaculture, Internal Family Systems and the Enneagram — diagrams, short introductions and links to go deeper.">
+<meta property="og:description" content="The maps our guides left us, along the six dimensions of our Council of Guides: commons, systems, design, ecology, consciousness and inner change — with diagrams and links to go deeper.">
 <meta property="og:url" content="https://liminalvillage.com/frameworks">
 <meta property="og:image" content="https://liminalvillage.com/images/droneview.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -20,11 +20,12 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --text:#333; --primary:#D6A15B; --light:#EFEFEF; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; }
+  /* --lineage is the colour of Gene 03 · Lineage on /dna, where the Council of Guides lives */
+  :root{ --text:#333; --primary:#D6A15B; --lineage:#A8606F; --light:#EFEFEF; --warm:#faf8f5; --dark:#222; --grey:#717171; --line:#e4e4e4; --bg:#fff; }
   /* Same page, ReGenerativa palette (see src/regenerativa/regenerativa.css) */
-  :root[data-site="regenerativa"]{ --text:#232b21; --primary:#c9a35b; --light:#f4efe4; --dark:#2c3527; --grey:#5e695a; --line:#e3dccc; --bg:#faf6ec; }
+  :root[data-site="regenerativa"]{ --text:#232b21; --primary:#c9a35b; --light:#f4efe4; --warm:#f4efe4; --dark:#2c3527; --grey:#5e695a; --line:#e3dccc; --bg:#faf6ec; }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{font-family:"Open Sans",sans-serif;font-size:15px;color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;}
@@ -37,17 +38,40 @@
   .back{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
   .back:hover{color:var(--primary);}
 
-  .intro{padding:64px 0 32px;text-align:center;}
+  .intro{padding:64px 0 28px;text-align:center;}
   .intro h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;letter-spacing:3px;color:var(--dark);line-height:1.1;}
   .intro h1 span{color:var(--primary);}
-  .intro p{max-width:620px;margin:18px auto 0;color:var(--grey);letter-spacing:.5px;}
+  .intro p{max-width:640px;margin:18px auto 0;color:var(--grey);letter-spacing:.3px;}
+  .intro blockquote{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:21px;line-height:1.4;color:var(--dark);max-width:620px;margin:26px auto 0;}
+  .intro blockquote em{color:var(--lineage);}
+  .intro .rule{font-size:13px;letter-spacing:.5px;color:var(--lineage);margin-top:14px;}
+  .intro .rule a{text-decoration:underline;}
 
-  .filters{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 0 40px;}
-  .filters a{border:1px solid var(--line);background:var(--bg);border-radius:24px;padding:7px 18px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);transition:all .3s;}
-  .filters a:hover{border-color:var(--primary);color:var(--primary);}
+  /* The constellation: six dimensions, their guides, their frameworks */
+  .constellation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:12px 0 48px;}
+  .star{border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;background:var(--bg);transition:border-color .3s,box-shadow .3s;}
+  .star:hover{border-color:var(--primary);box-shadow:0 8px 24px rgba(0,0,0,.05);}
+  .star h3{display:flex;align-items:center;gap:10px;font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;color:var(--dark);line-height:1.2;}
+  .star h3 a:hover{color:var(--primary);}
+  .star h3 i{font-size:14px;color:var(--lineage);width:18px;text-align:center;}
+  .star .who{font-size:12px;color:var(--grey);margin:4px 0 10px;}
+  .star .who a{border-bottom:1px dashed color-mix(in srgb,var(--lineage) 55%,transparent);}
+  .star .who a:hover{color:var(--lineage);}
+  .star ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+  .star li a{display:inline-block;background:var(--light);border-radius:14px;padding:3px 11px;font-size:11.5px;letter-spacing:.4px;color:var(--text);transition:all .3s;}
+  .star li a:hover{background:var(--primary);color:#fff;}
 
-  .fw{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:start;padding:56px 0;border-top:1px solid var(--line);scroll-margin-top:12px;}
-  .fw:nth-of-type(even) .pics{order:2;}
+  .dim{border-top:1px solid var(--line);padding:56px 0 8px;text-align:center;scroll-margin-top:12px;}
+  .dim .k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--lineage);}
+  .dim h2{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:40px;letter-spacing:1.5px;color:var(--dark);line-height:1.15;margin-top:4px;}
+  .dim p{max-width:600px;margin:10px auto 0;color:var(--grey);}
+  .dim .who{font-size:13px;margin-top:10px;color:var(--grey);}
+  .dim .who a{color:var(--dark);border-bottom:1px dashed var(--lineage);}
+  .dim .who a:hover{color:var(--lineage);}
+
+  .fw{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:start;padding:48px 0;scroll-margin-top:12px;}
+  .fw + .fw{border-top:1px dashed var(--line);}
+  .fw.flip .pics{order:2;}
 
   .main{display:block;width:100%;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:zoom-in;transition:box-shadow .3s;}
   .main:hover{box-shadow:0 10px 30px rgba(0,0,0,.08);}
@@ -73,6 +97,15 @@
   .points{columns:2;column-gap:28px;padding-left:20px;font-size:13.5px;color:#555;}
   .points li{break-inside:avoid;margin-bottom:4px;}
   .points li::marker{color:var(--primary);font-weight:600;}
+  .practice{background:var(--warm);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;}
+  .practice b{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:2px;font-weight:600;}
+  .info .practice p{font-size:14px;}
+  .guides{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--grey);}
+  .guides > span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lineage);}
+  .guides a{display:inline-flex;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--lineage) 35%,var(--line));border-radius:16px;padding:3px 12px;color:var(--dark);transition:all .3s;}
+  .guides a i{font-size:10px;color:var(--lineage);}
+  .guides a:hover{background:var(--lineage);border-color:var(--lineage);color:#fff;}
+  .guides a:hover i{color:#fff;}
   .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
   .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--dark);border-radius:6px;padding:9px 16px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dark);transition:all .3s;}
   .btn:hover{background:var(--dark);color:#fff;}
@@ -80,6 +113,7 @@
   .btn.ghost:hover{border-color:var(--primary);background:var(--bg);color:var(--primary);}
 
   .outro{border-top:1px solid var(--line);padding:48px 0 80px;text-align:center;color:var(--grey);}
+  .outro h2{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:32px;color:var(--dark);margin-bottom:10px;}
   .outro p{max-width:620px;margin:0 auto 20px;}
   .outro .actions{justify-content:center;}
 
@@ -98,11 +132,14 @@
   .lb .lbcap small{display:block;opacity:.7;font-size:11px;margin-top:2px;}
   .lb.single .nav,.lb.single .count{display:none;}
 
+  @media(max-width:860px){ .constellation{grid-template-columns:repeat(2,minmax(0,1fr));} }
   @media(max-width:760px){
     .intro{padding:44px 0 24px;}
     .intro h1{font-size:34px;}
+    .constellation{grid-template-columns:minmax(0,1fr);}
+    .dim h2{font-size:32px;}
     .fw{grid-template-columns:minmax(0,1fr);gap:24px;padding:40px 0;}
-    .fw:nth-of-type(even) .pics{order:0;}
+    .fw.flip .pics{order:0;}
     .info h2{font-size:30px;}
     .points{columns:1;}
   }
@@ -125,18 +162,23 @@
 <main class="wrap">
   <section class="intro">
     <h1>Frame<span>works</span></h1>
-    <p>Six maps we lean on to understand ourselves, each other and the land. None of them is the territory — each is a lens that makes some things easier to see. Here is a short introduction to each, with pictures and places to go deeper.</p>
+    <p>The maps our guides left us. Each one comes from someone in our <a href="/dna#lineage" style="text-decoration:underline">living constellation of guides</a>, and they are arranged here along the same six dimensions: how we see, how we share, how systems behave, how we build, how we tend the land, and how we change from the inside. None of them is the territory; each is a lens that makes some things easier to see.</p>
+    <blockquote>Honor the wisdom of the past, <em>question the assumptions of the present</em>, and embody the possibilities of the future.</blockquote>
+    <p class="rule">No gurus, no unquestionable truths: every map has blind spots, and every guide is there to be challenged. <a href="/dna#lineage">Meet the guides →</a></p>
   </section>
 
-  <nav class="filters" id="jump" aria-label="Frameworks on this page"></nav>
+  <nav class="constellation" id="jump" aria-label="The six dimensions and their frameworks"></nav>
 
   <div id="list"></div>
 
   <section class="outro">
-    <p>Want to see how these frameworks show up in daily community life? The social DNA page of our documentation describes how we actually use them.</p>
+    <h2>The constellation keeps growing</h2>
+    <p>These frameworks are tools, not doctrine. Our DNA describes how they show up in daily community life — the agreements we keep, the roles we hold and the tools we coordinate with. Is there a map you think belongs here?</p>
     <div class="actions">
-      <a class="btn" href="https://docs.liminalvillage.com/onboarding/social-dna" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> Social DNA</a>
+      <a class="btn" href="/dna#lineage"><i class="fa-solid fa-dna"></i> Our DNA · the guides</a>
+      <a class="btn ghost" href="https://docs.liminalvillage.com/onboarding/social-dna" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> Social DNA</a>
       <a class="btn ghost" href="/media"><i class="fa-solid fa-photo-film"></i> Readings &amp; Media</a>
+      <a class="btn ghost" href="/#contact"><i class="fa-solid fa-envelope"></i> Suggest one</a>
     </div>
   </section>
 </main>
@@ -144,7 +186,7 @@
 <footer>
   <div class="wrap">
     <div>© <span id="year"></span> <span data-site-name>Liminal Village</span> &nbsp;·&nbsp; <a href="/" id="homeLink">liminalvillage.com</a></div>
-    <div class="lic">Diagrams are credited individually; most come from Wikimedia Commons under Creative Commons licences.</div>
+    <div class="lic">Diagrams are credited individually; most come from Wikimedia Commons under Creative Commons licences, the rest are our own.</div>
   </div>
 </footer>
 
@@ -159,29 +201,378 @@
 
 <script>
 /*
+ * The six dimensions are the ones of the Council of Guides on /dna (Gene 03 · Lineage,
+ * dna.html + src/dna/content.js GUIDES). Keep names, guide ids and order in sync.
+ * Guide links open that guide's panel on /dna (/dna#guide-<id>).
+ */
+const GUIDE_NAMES = {
+  watts: 'Alan Watts', mckenna: 'Terence McKenna', macy: 'Joanna Macy',
+  ostrom: 'Elinor Ostrom', helfrich: 'Silke Helfrich', rosenberg: 'Marshall Rosenberg',
+  meadows: 'Donella Meadows', bateson: 'Gregory Bateson', beer: 'Stafford Beer',
+  fuller: 'Buckminster Fuller', fresco: 'Jacque Fresco', alexander: 'Christopher Alexander',
+  holmgren: 'David Holmgren', kimmerer: 'Robin Wall Kimmerer', wahl: 'Daniel Christian Wahl',
+  schwartz: 'Richard Schwartz', brown: 'adrienne maree brown', wilber: 'Ken Wilber',
+  koestler: 'Arthur Koestler', 'thich-nhat-hanh': 'Thich Nhat Hanh', illich: 'Ivan Illich',
+  schumacher: 'E. F. Schumacher', raworth: 'Kate Raworth', croft: 'John Croft', steiner: 'Rudolf Steiner',
+};
+
+const DIMENSIONS = [
+  { id: 'consciousness', title: 'Consciousness', icon: 'fa-eye', guides: ['watts', 'mckenna', 'macy'],
+    line: 'How we see: waking up from the feeling of separateness, and imagining beyond what is.' },
+  { id: 'commons', title: 'Commons', icon: 'fa-people-roof', guides: ['ostrom', 'helfrich', 'rosenberg'],
+    line: 'How we share: governing what we hold in common, and speaking so that cooperation is possible.' },
+  { id: 'systems', title: 'Systems', icon: 'fa-diagram-project', guides: ['meadows', 'bateson', 'beer'],
+    line: 'How wholes behave: feedback, leverage, and autonomy inside a viable whole.' },
+  { id: 'design', title: 'Design & technology', icon: 'fa-compass-drafting', guides: ['fuller', 'fresco', 'alexander'],
+    line: 'How we build: doing more with less, and making places that feel alive.' },
+  { id: 'ecology', title: 'Ecology', icon: 'fa-seedling', guides: ['holmgren', 'kimmerer', 'wahl'],
+    line: 'How we tend the land: designing with nature, within the means of the planet.' },
+  { id: 'inner', title: 'Inner & social change', icon: 'fa-yin-yang', guides: ['schwartz', 'brown', 'wilber'],
+    line: 'How we change: from the inside out, and from small relationships to larger patterns.' },
+];
+
+/*
  * Add or edit frameworks here. Pictures live in /public/images/frameworks/ (served at /images/frameworks/...).
+ * The short summaries in the /dna side panel live in src/dna/content.js (FRAMEWORKS) and deep-link here by id.
  *
- *  id:          anchor on the page, e.g. /frameworks#ikigai
+ *  id:          anchor on the page, e.g. /frameworks#ikigai (same id as in src/dna/content.js)
+ *  dimension:   one of DIMENSIONS[].id
+ *  guides:      ids of guides from the constellation this map comes from (see GUIDE_NAMES)
  *  title:       name of the framework
  *  origin:      who / when, shown above the title
  *  tagline:     one-sentence summary, shown in italics
  *  description: array of short paragraphs
+ *  practice:    how it shows up in the village
  *  keys:        optional key terms, shown as small chips
  *  points:      optional numbered list (e.g. the 12 permaculture principles)
  *  images:      [{ src, alt, caption, credit, license, source }] — the first one is shown large;
  *               source is the page the picture comes from (omit for our own diagrams)
  *  links:       [{ label, href }] deep-dive links — the first one is the main button
  */
+const OURS = { credit: 'Liminal Village', license: 'own diagram' };
 const FRAMEWORKS = [
+  // ---------- Consciousness ----------
+  {
+    id: 'work-that-reconnects',
+    dimension: 'consciousness',
+    guides: ['macy'],
+    title: 'The Work That Reconnects',
+    origin: 'Joanna Macy · late 1970s onwards',
+    tagline: 'Turning grief for the world into the energy to act for it.',
+    description: [
+      'Joanna Macy, a scholar of Buddhism and systems thinking, began this work in the 1970s with what she called despair and empowerment work. Its starting point is simple: the pain we feel for the world is not a private pathology but a sign of our connection to it, and numbing it costs us the very energy we need to respond.',
+      'The work moves through a spiral of four stations — coming from gratitude, honouring our pain for the world, seeing with new eyes, and going forth — and repeats it, a little deeper each time. It frames our moment as three simultaneous stories: Business as Usual, the Great Unravelling, and the Great Turning from an industrial growth society to a life-sustaining one. Active Hope, written with Chris Johnstone, is its most accessible introduction.',
+    ],
+    practice: 'Regenerative work is full of ecological grief, and burnout is often grief that had nowhere to go. The spiral gives circles a shape for letting it be spoken before turning back to what is ours to do.',
+    keys: ['Gratitude', 'Honouring our pain', 'Seeing with new eyes', 'Going forth', 'The Great Turning'],
+    images: [
+      { src: '/images/frameworks/work-that-reconnects.svg', alt: 'A spiral passing through four stations: coming from gratitude, honouring our pain for the world, seeing with new eyes, going forth.', caption: 'The spiral of the Work That Reconnects.', ...OURS },
+    ],
+    links: [
+      { label: 'Work That Reconnects Network', href: 'https://workthatreconnects.org/' },
+      { label: 'Active Hope', href: 'https://www.activehope.info/' },
+      { label: 'Wikipedia: Joanna Macy', href: 'https://en.wikipedia.org/wiki/Joanna_Macy' },
+    ],
+  },
+  {
+    id: 'spiral-dynamics',
+    dimension: 'consciousness',
+    guides: ['wilber'],
+    title: 'Spiral Dynamics',
+    origin: 'Clare W. Graves · Don Beck & Chris Cowan · 1996',
+    tagline: 'A map of how value systems emerge, in people and in whole societies, as life conditions change.',
+    description: [
+      'Spiral Dynamics builds on the research of psychologist Clare W. Graves. It describes a sequence of value systems, each a response to the problems the previous one could not solve, and gives each a colour: beige (survival), purple (tribe and tradition), red (power), blue (order and rules), orange (achievement), green (community and equality), yellow (systems thinking) and turquoise (the whole). Ken Wilber later folded it into Integral Theory as one of its lines of development.',
+      'The colours describe ways of thinking, not kinds of people: everyone carries several, and each later stage includes the earlier ones rather than replacing them. The model is most useful for translating between worldviews — noticing that a disagreement about rules, freedom or fairness is often a difference in what each side values, and that every stage has a healthy and an unhealthy expression.',
+    ],
+    practice: 'A community like ours leans green and yellow, and can easily look down on blue or orange. The spiral reminds us that the village also needs order, ambition and tradition — and helps us talk with neighbours, officials and partners who hold different values.',
+    keys: ['Beige', 'Purple', 'Red', 'Blue', 'Orange', 'Green', 'Yellow', 'Turquoise'],
+    images: [
+      { src: '/images/frameworks/spiral-dynamics-levels.jpg', alt: 'The eight Spiral Dynamics colours from beige to turquoise, each with three keywords, zig-zagging upwards.', caption: 'The eight value systems, alternating between a focus on “me” (left) and “we” (right).', credit: 'Synnervate', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Spiral-English-v5-Be-Tu-keywords.jpg' },
+      { src: '/images/frameworks/spiral-dynamics-graves-helix.png', alt: 'Graph after Clare W. Graves: a staircase of neurological coping systems rising against existential problems, alternating between express-self (pink) and sacrifice-self (blue) states, with the areas under the curve shaded to show that levels accumulate rather than replace each other.', caption: 'Graves’ original “double helix”: each level answers a new existential problem, alternating between expressing the self and sacrificing it — and earlier levels stay with us.', credit: 'Ixat totep, after Clare W. Graves', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Graves-double-helix-graph-shaded.png' },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Spiral_Dynamics' },
+      { label: 'spiraldynamics.org', href: 'https://spiraldynamics.org/' },
+      { label: 'Clare W. Graves', href: 'https://en.wikipedia.org/wiki/Clare_W._Graves' },
+    ],
+  },
+
+  // ---------- Commons ----------
+  {
+    id: 'ostrom-principles',
+    dimension: 'commons',
+    guides: ['ostrom', 'helfrich'],
+    title: 'Governing the commons',
+    origin: 'Elinor Ostrom · 1990 · Nobel Prize in Economics 2009',
+    tagline: 'Communities can look after shared resources themselves — if the rules are theirs.',
+    description: [
+      'The “tragedy of the commons” said that shared resources are always overused, so they must be either privatised or run by the state. Elinor Ostrom went and looked: at Swiss alpine meadows, Japanese mountain forests, Spanish and Philippine irrigation systems and Turkish inshore fisheries that communities had governed well for generations, some for centuries. In Governing the Commons she distilled what the long-lasting ones had in common into eight design principles.',
+      'Silke Helfrich and David Bollier later took the research into everyday life in Free, Fair and Alive: commoning is not only a way to manage resources but a way of living — sharing, deciding and caring together, with the relationships themselves as part of the commons.',
+    ],
+    practice: 'We try to run our shared spaces, tools, kitchen and digital commons this way: clear boundaries about who contributes, rules made by the people who live with them, light monitoring, and a ladder of responses before anything becomes a conflict. Because our community is fluid and partly temporary, we keep testing whether the principles still hold.',
+    points: [
+      'Clearly defined boundaries', 'Rules that fit local needs and conditions', 'Those affected by the rules can change them', 'Monitoring by the community or accountable to it',
+      'Graduated sanctions', 'Cheap, accessible conflict resolution', 'Recognised right to self-organise', 'Nested enterprises for larger systems',
+    ],
+    images: [
+      { src: '/images/frameworks/ostrom-principles.svg', alt: 'Eight numbered principles in a ring around a circle labelled the commons.', caption: 'Ostrom’s eight design principles for long-lasting commons.', ...OURS },
+    ],
+    links: [
+      { label: 'Wikipedia: Elinor Ostrom', href: 'https://en.wikipedia.org/wiki/Elinor_Ostrom' },
+      { label: 'Free, Fair and Alive', href: 'https://freefairandalive.org/' },
+      { label: 'Wikipedia: Common-pool resource', href: 'https://en.wikipedia.org/wiki/Common-pool_resource' },
+    ],
+  },
+  {
+    id: 'nvc',
+    dimension: 'commons',
+    guides: ['rosenberg'],
+    title: 'Nonviolent Communication',
+    origin: 'Marshall Rosenberg · 1960s onwards',
+    tagline: 'Say what happened, what you feel, what you need, and what you ask for.',
+    description: [
+      'Marshall Rosenberg developed NVC while working with civil-rights activists and in school desegregation in the 1960s. Its premise is that all human behaviour is an attempt to meet universal needs, and that conflict escalates when we hear blame and demands instead of the needs behind them.',
+      'It has four steps: an observation free of judgment, the feeling it stirs, the need underneath the feeling, and a concrete, doable request — one the other person is free to refuse. Just as much of NVC is about listening: hearing the feelings and needs behind someone else’s words, even when they arrive as criticism.',
+    ],
+    practice: 'NVC is how we try to voice a tension so the other person can actually hear it. We also watch for its shadow: used as a script, it can become a polite way to avoid conflict instead of meeting it.',
+    keys: ['Observation', 'Feeling', 'Need', 'Request', 'Empathic listening'],
+    images: [
+      { src: '/images/frameworks/nvc.svg', alt: 'Four steps in sequence: observation, feeling, need, request.', caption: 'The four steps, from what happened to what we ask for.', ...OURS },
+    ],
+    links: [
+      { label: 'Center for Nonviolent Communication', href: 'https://www.cnvc.org/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Nonviolent_Communication' },
+    ],
+  },
+  {
+    id: 'four-agreements',
+    dimension: 'commons',
+    guides: [],
+    title: 'The Four Agreements',
+    origin: 'Don Miguel Ruiz · 1997',
+    tagline: 'Four short promises to yourself that dissolve a lot of needless suffering.',
+    description: [
+      'A short book that draws on Toltec wisdom and offers four agreements to replace the unspoken ones we absorb growing up: be impeccable with your word, don’t take anything personally, don’t make assumptions, and always do your best.',
+      'They are simple enough to remember in the middle of a difficult conversation, which is exactly their strength. “Always do your best” also carries a release: your best changes from day to day, and that is enough.',
+    ],
+    practice: 'The simplest shared baseline for how we talk to each other: easy to learn on day one, long before NVC or Holacracy.',
+    keys: ['Word', 'Not personal', 'No assumptions', 'Your best'],
+    images: [
+      { src: '/images/frameworks/four-agreements.svg', alt: 'Four boxes: be impeccable with your word, don’t take anything personally, don’t make assumptions, always do your best.', caption: 'The four agreements.', ...OURS },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/The_Four_Agreements' },
+      { label: 'miguelruiz.com', href: 'https://www.miguelruiz.com/' },
+    ],
+  },
+  {
+    id: 'dragon-dreaming',
+    dimension: 'commons',
+    guides: ['croft'],
+    title: 'Dragon Dreaming',
+    origin: 'John Croft & Vivienne Elanta · Western Australia · 1990s',
+    tagline: 'Collective projects as a wheel: dream, plan, do — and celebrate.',
+    description: [
+      'Dragon Dreaming grew out of the Gaia Foundation of Western Australia and draws on Aboriginal Australian wisdom, systems thinking and deep ecology. It treats a project as a living cycle of four phases — dreaming, planning, doing and celebrating — each of which contains a smaller wheel of all four.',
+      'Two ideas stand out. A project only becomes collective when the original dream is given away and becomes everyone’s dream. And celebrating is not an optional party at the end but a quarter of the work: the moment to harvest learning, thank people and rest, without which projects burn out their makers. It holds three intentions throughout: personal growth, community building and service to the Earth.',
+    ],
+    practice: 'It fits the way we try to run quests and hackalongs, and the lunar calendar makes room for it: a new moon to dream and plan, a full moon to look at what we did and celebrate it.',
+    keys: ['Dreaming', 'Planning', 'Doing', 'Celebrating', 'Pinakarri — deep listening'],
+    images: [
+      { src: '/images/frameworks/dragon-dreaming.svg', alt: 'A wheel with four quarters: dreaming, planning, doing and celebrating, around the project.', caption: 'The four phases of a Dragon Dreaming project.', ...OURS },
+    ],
+    links: [
+      { label: 'Dragon Dreaming', href: 'https://dragondreaming.org/' },
+      { label: 'Quests to join', href: '/quests.html' },
+    ],
+  },
+
+  // ---------- Systems ----------
+  {
+    id: 'leverage-points',
+    dimension: 'systems',
+    guides: ['meadows', 'bateson'],
+    title: 'Leverage points',
+    origin: 'Donella Meadows · 1999 · Thinking in Systems, 2008',
+    tagline: 'Where to push on a system so that it actually changes.',
+    description: [
+      'Donella Meadows, lead author of The Limits to Growth, spent her life teaching people to see stocks, flows, delays and feedback loops — the structures that make systems behave the way they do, whoever happens to be inside them. In a short essay, Leverage Points: Places to Intervene in a System, she ranked twelve places to intervene, from the least effective to the most.',
+      'The surprise is the order. The numbers we argue about most — budgets, prices, targets — are near the bottom. Much more powerful are the information flows, the rules, the power to self-organise, the goals, and above all the paradigm the system grows out of. Gregory Bateson’s ecology of mind, with its attention to relationship, feedback and learning, is the older root of the same way of seeing.',
+    ],
+    practice: 'When something keeps going wrong in the village, we try to resist fixing the number and ask instead which loop, rule or goal produces it. Making information visible — tasks, roles, time and money on Holons — is one of our cheapest high-leverage moves.',
+    points: [
+      'Constants, parameters, numbers', 'Sizes of buffers and stocks', 'Structure of stocks and flows', 'Lengths of delays',
+      'Strength of balancing feedback loops', 'Gain of reinforcing feedback loops', 'Structure of information flows', 'Rules of the system',
+      'Power to add, change or self-organise structure', 'Goals of the system', 'The mindset or paradigm behind it', 'The power to transcend paradigms',
+    ],
+    images: [
+      { src: '/images/frameworks/leverage-points.svg', alt: 'Twelve stacked bands, from numbers and parameters at the top to the power to transcend paradigms at the bottom, growing wider and darker.', caption: 'The twelve leverage points, from least to most effective.', ...OURS },
+    ],
+    links: [
+      { label: 'Leverage Points (the essay)', href: 'https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/' },
+      { label: 'The Donella Meadows Project', href: 'https://donellameadows.org/' },
+      { label: 'Wikipedia: Twelve leverage points', href: 'https://en.wikipedia.org/wiki/Twelve_leverage_points' },
+    ],
+  },
+  {
+    id: 'viable-system-model',
+    dimension: 'systems',
+    guides: ['beer'],
+    title: 'Viable System Model',
+    origin: 'Stafford Beer · Brain of the Firm, 1972',
+    tagline: 'What any system needs to stay alive and autonomous in a changing world.',
+    description: [
+      'Stafford Beer was a pioneer of management cybernetics. Modelled loosely on the nervous system, his Viable System Model names five functions that any organisation able to survive on its own must have: the operations that do the actual work (System 1), coordination that stops them clashing (2), control that allocates resources and finds synergy here and now (3), intelligence that looks outward and ahead (4), and policy that holds identity and purpose (5).',
+      'The key idea is recursion: every operational unit is itself a viable system with the same five functions inside, nested within larger ones. That is how a whole can stay coherent while its parts stay as autonomous as possible — the opposite of command and control. Beer tested these ideas at national scale in Chile’s Project Cybersyn in the early 1970s.',
+    ],
+    practice: 'A map for ReGenerativa: independent hubs, each viable on its own, that coordinate as one network. It also makes us ask, of each hub and of the whole, which of the five functions is missing.',
+    keys: ['Operations', 'Coordination', 'Control', 'Intelligence', 'Policy', 'Recursion'],
+    images: [
+      { src: '/images/frameworks/viable-system-model.svg', alt: 'Systems 5, 4 and 3 stacked above three System 1 units, with System 2 coordinating them and each unit facing its own environment.', caption: 'The five systems, and the units that each face their own world.', ...OURS },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Viable_system_model' },
+      { label: 'Wikipedia: Stafford Beer', href: 'https://en.wikipedia.org/wiki/Stafford_Beer' },
+      { label: 'ReGenerativa', href: 'https://regenerativa.earth' },
+    ],
+  },
+  {
+    id: 'holacracy',
+    dimension: 'systems',
+    guides: ['koestler'],
+    title: 'Holons & soft Holacracy',
+    origin: 'Arthur Koestler · 1967 · Brian Robertson · 2007',
+    tagline: 'Everything is a whole and a part — so authority can live in roles, not people.',
+    description: [
+      'In The Ghost in the Machine, Arthur Koestler coined the word holon: something that is at the same time a whole in itself and a part of something larger, like a cell in an organ, or a person in a team. A hierarchy of holons — a holarchy — is not a chain of command but a nesting of wholes, each with its own autonomy.',
+      'Holacracy, developed by Brian Robertson, turns that into a way of organising. Authority is distributed to clearly defined roles, grouped in circles that are themselves roles in larger circles. Any “tension” — a gap between how things are and how they could be — is fuel for changing the roles, through governance and tactical meetings with explicit rules.',
+    ],
+    practice: 'We use a soft version: notice a tension, bring a proposal rather than a complaint, and take it to the right place — the person, the role or the circle. The name of our coordination platform, Holons, comes from Koestler.',
+    keys: ['Holon', 'Holarchy', 'Roles', 'Circles', 'Tensions'],
+    images: [
+      { src: '/images/frameworks/holons.svg', alt: 'Nested circles: roles inside circles inside the village.', caption: 'A holarchy: roles inside circles inside the village, each a whole and a part.', ...OURS },
+    ],
+    links: [
+      { label: 'Holons & HoloSphere', href: 'https://holons.io' },
+      { label: 'holacracy.org', href: 'https://www.holacracy.org/' },
+      { label: 'Wikipedia: Holon', href: 'https://en.wikipedia.org/wiki/Holon_(philosophy)' },
+    ],
+  },
+
+  // ---------- Design & technology ----------
+  {
+    id: 'pattern-language',
+    dimension: 'design',
+    guides: ['alexander'],
+    title: 'A Pattern Language',
+    origin: 'Christopher Alexander, Sara Ishikawa, Murray Silverstein · 1977',
+    tagline: 'A shared language that lets anyone design places that feel alive.',
+    description: [
+      'Christopher Alexander and his colleagues described 253 patterns — recurring problems in the built environment and the core of a solution to each — from the scale of regions and towns down to rooms and construction details. “Light on two sides of every room”, “Window place”, “Common land”, “Small public squares”: each pattern is small, and each helps complete the larger ones around it.',
+      'Because the patterns form a language rather than a blueprint, the people who will live in a place can combine them themselves. Later, in The Nature of Order, Alexander asked why some places have a quality of life that others lack. The idea escaped architecture entirely: design patterns, wikis and agile software all trace back to it.',
+    ],
+    practice: 'When we lay out paths, gathering places and workspaces on the land, we try to reach for patterns before plans. And because our tools are open-source software, his influence reaches the village twice.',
+    keys: ['Patterns', 'Scales', 'Quality without a name', 'Wholeness'],
+    images: [
+      { src: '/images/frameworks/pattern-language.svg', alt: 'Five stacked bands from region and town to construction, each with example patterns.', caption: 'Patterns at every scale, each completing the larger ones.', ...OURS },
+    ],
+    links: [
+      { label: 'patternlanguage.com', href: 'https://www.patternlanguage.com/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/A_Pattern_Language' },
+      { label: 'Wikipedia: Christopher Alexander', href: 'https://en.wikipedia.org/wiki/Christopher_Alexander' },
+    ],
+  },
+
+  // ---------- Ecology ----------
+  {
+    id: 'permaculture',
+    dimension: 'ecology',
+    guides: ['holmgren', 'wahl'],
+    title: 'Permaculture ethics & principles',
+    origin: 'Bill Mollison & David Holmgren · 1970s',
+    tagline: 'A design approach that copies the patterns of natural ecosystems, guided by three ethics.',
+    description: [
+      'Permaculture began in Australia in the 1970s as “permanent agriculture” and grew into a way of designing any human system — gardens, buildings, economies, communities — so that it behaves like an ecosystem: little waste, many connections, and more abundance over time.',
+      'Everything rests on three ethics: Earth Care, People Care and Fair Share (set limits and redistribute surplus). David Holmgren later distilled twelve design principles from them, listed below. Tools like zoning (placing things by how often you visit them) and the permaculture flower (the seven domains a sustainable culture has to redesign) turn the principles into practice. Daniel Christian Wahl’s Designing Regenerative Cultures carries the same thinking from the land into culture, economy and technology.',
+    ],
+    practice: 'The permaculture garden is the obvious place, but we try to ask of a new role or tool the same questions we ask of a new bed — where does its energy come from, and where does its waste go?',
+    points: [
+      'Observe and interact', 'Catch and store energy', 'Obtain a yield', 'Apply self‑regulation and accept feedback',
+      'Use and value renewable resources', 'Produce no waste', 'Design from patterns to details', 'Integrate rather than segregate',
+      'Use small and slow solutions', 'Use and value diversity', 'Use edges and value the marginal', 'Creatively use and respond to change',
+    ],
+    images: [
+      { src: '/images/frameworks/permaculture-ethics.svg', alt: 'Three overlapping circles labelled Earth Care, People Care and Fair Share.', caption: 'The three ethics at the heart of every permaculture design.', ...OURS },
+      { src: '/images/frameworks/permaculture-flower.png', alt: 'The permaculture flower: seven petals around ethics and design principles, crossed by a spiral.', caption: 'The permaculture flower: seven domains spiralling out from the ethics and design principles.', credit: 'The Permaculture Association, after David Holmgren', license: 'CC BY 3.0', source: 'https://commons.wikimedia.org/wiki/File:Holmgren_flower.png' },
+      { src: '/images/frameworks/permaculture-zones.svg', alt: 'Concentric rings showing permaculture zones 0 to 5, from the house out to wilderness.', caption: 'Zones 0–5: design outward from where people spend the most time.', credit: 'Felix Müller', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permaculture_Zones.svg' },
+      { src: '/images/frameworks/permaculture-systemic-vision.svg', alt: 'Diagram with ethics at the centre, surrounded by principles and design, the elements, and a ring of practices.', caption: 'A systemic view: ethics at the centre, then principles and design, then practices.', credit: 'Arthur Nanni', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permacultural_systemic_vision.svg' },
+    ],
+    links: [
+      { label: 'The 12 principles (permacultureprinciples.com)', href: 'https://permacultureprinciples.com/permaculture-principles/' },
+      { label: 'David Holmgren', href: 'https://holmgren.com.au/permaculture/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Permaculture' },
+    ],
+  },
+  {
+    id: 'doughnut-economics',
+    dimension: 'ecology',
+    guides: ['raworth', 'schumacher'],
+    title: 'Doughnut Economics',
+    origin: 'Kate Raworth · 2012 · book 2017',
+    tagline: 'Meet everyone’s needs within the means of the living planet.',
+    description: [
+      'Kate Raworth drew a new picture for economics: a ring. Its inner edge is a social foundation — water, food, health, education, housing, energy, political voice and the other essentials no one should fall short of. Its outer edge is an ecological ceiling — the nine planetary boundaries, from climate change to biodiversity loss, that we overshoot at our peril. Between them lies the safe and just space for humanity.',
+      'The goal shifts from endless growth to thriving in balance, and from a degenerative, divisive economy to one that is regenerative and distributive by design. It continues a line that runs back to E. F. Schumacher’s Small Is Beautiful: economics as if people — and the planet — mattered.',
+    ],
+    practice: 'A compass for the village economy: does a new activity lift someone onto the social foundation, and does it keep us under the ceiling? Our open books on Open Collective make the question answerable.',
+    keys: ['Social foundation', 'Ecological ceiling', 'Regenerative', 'Distributive'],
+    images: [
+      { src: '/images/frameworks/doughnut.svg', alt: 'A green ring between an inner circle of twelve social needs and an outer ring of nine planetary boundaries.', caption: 'The Doughnut: a social foundation inside, an ecological ceiling outside.', credit: 'Liminal Village, after Kate Raworth', license: 'own diagram' },
+    ],
+    links: [
+      { label: 'Doughnut Economics Action Lab', href: 'https://doughnuteconomics.org/' },
+      { label: 'kateraworth.com', href: 'https://www.kateraworth.com/doughnut/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Doughnut_(economic_model)' },
+    ],
+  },
+
+  // ---------- Inner & social change ----------
+  {
+    id: 'internal-family-systems',
+    dimension: 'inner',
+    guides: ['schwartz'],
+    title: 'Internal Family Systems',
+    origin: 'Richard C. Schwartz · 1980s',
+    tagline: 'The mind as an inner family of parts, led — when things go well — by a calm, curious Self.',
+    description: [
+      'Internal Family Systems (IFS) is a model of the psyche developed by family therapist Richard Schwartz. It starts from an ordinary experience — “a part of me wants this, another part doesn’t” — and takes it seriously. Exiles are young parts that carry old pain. Managers try to keep that pain from being touched by planning, controlling and pleasing. Firefighters jump in when it is touched anyway, with anything that numbs or distracts.',
+      'Underneath the parts everyone has a Self that is not a part: calm, curious, compassionate. There are “no bad parts” — each one is trying to protect you — and the work is to listen to them from Self rather than fight them. IFS is also a form of psychotherapy; deep work with exiles belongs with a trained practitioner.',
+    ],
+    practice: 'It gives us a shared language: “a part of me is angry” lands very differently from “I am angry with you”. It is also our inner complement to Ostrom — we suspect Self-led people make for healthier collective governance.',
+    keys: ['Self', 'Managers', 'Firefighters', 'Exiles'],
+    images: [
+      { src: '/images/frameworks/ifs-parts.svg', alt: 'The Self at the centre, connected to three groups of parts: managers, firefighters and exiles.', caption: 'The Self and the three kinds of parts. Managers and firefighters are both protectors.', ...OURS },
+      { src: '/images/frameworks/ifs-8cs.svg', alt: 'Self surrounded by eight qualities: calm, curiosity, compassion, clarity, confidence, courage, creativity, connectedness.', caption: 'The “8 Cs”: the qualities that show up when the Self is leading.', ...OURS },
+    ],
+    links: [
+      { label: 'IFS Institute', href: 'https://ifs-institute.com/' },
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Internal_Family_Systems_Model' },
+      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
+    ],
+  },
   {
     id: 'integral-theory',
+    dimension: 'inner',
+    guides: ['wilber', 'koestler'],
     title: 'Integral Theory',
     origin: 'Ken Wilber · 1970s onwards',
     tagline: 'A “theory of everything” that asks which perspectives are missing from the picture.',
     description: [
-      'Integral Theory is Ken Wilber’s attempt to fit the partial truths of science, psychology, culture and spirituality into one map. Its core model, AQAL (“all quadrants, all levels”), says that anything can be looked at from four irreducible perspectives: the inner life of the individual (I), the individual’s observable behaviour (It), shared culture and meaning (We), and the systems and structures we live in (Its).',
-      'On top of the quadrants it adds levels of development, lines (different capacities grow at different speeds), states and types. In practice it works as a checklist: when a project or a conflict is stuck, which quadrant are we ignoring? A community that only fixes its systems, or only works on its feelings, is leaving half the map blank.',
+      'Integral Theory is Ken Wilber’s attempt to fit the partial truths of science, psychology, culture and spirituality into one map. Its core model, AQAL (“all quadrants, all levels”), says that anything can be looked at from four irreducible perspectives: the inner life of the individual (I), the individual’s observable behaviour (It), shared culture and meaning (We), and the systems and structures we live in (Its). Wilber builds it out of Koestler’s holons: every level is a whole that is part of the next.',
+      'On top of the quadrants it adds levels of development, lines (different capacities grow at different speeds), states and types. In practice it works as a checklist: when a project or a conflict is stuck, which quadrant are we ignoring?',
     ],
+    practice: 'A community that only fixes its systems, or only works on its feelings, is leaving half the map blank. We use the quadrants to check that a change touches inner life, behaviour, culture and structure — and we keep asking whether developmental maps help us understand people or just rank them.',
     keys: ['AQAL', 'Quadrants', 'Levels', 'Lines', 'States', 'Types'],
     images: [
       { src: '/images/frameworks/integral-four-quadrants.jpg', alt: 'Four photographs arranged as the four quadrants: a meditating monk (subjective), a scientist in a lab (objective), a group dance (intersubjective) and a food web (interobjective).', caption: 'The four quadrants: subjective, objective, intersubjective and interobjective.', credit: 'Chris Wilmoth', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Integral_Theory.jpg' },
@@ -194,100 +585,38 @@ const FRAMEWORKS = [
     ],
   },
   {
-    id: 'spiral-dynamics',
-    title: 'Spiral Dynamics',
-    origin: 'Clare W. Graves · Don Beck & Chris Cowan · 1996',
-    tagline: 'A map of how value systems emerge, in people and in whole societies, as life conditions change.',
+    id: 'emergent-strategy',
+    dimension: 'inner',
+    guides: ['brown'],
+    title: 'Emergent Strategy',
+    origin: 'adrienne maree brown · 2017',
+    tagline: 'Small, adaptive actions and relationships shape the larger patterns of change.',
     description: [
-      'Spiral Dynamics builds on the research of psychologist Clare W. Graves. It describes a sequence of value systems, each a response to the problems the previous one could not solve, and gives each a colour: beige (survival), purple (tribe and tradition), red (power), blue (order and rules), orange (achievement), green (community and equality), yellow (systems thinking) and turquoise (the whole).',
-      'The colours describe ways of thinking, not kinds of people: everyone carries several, and each later stage includes the earlier ones rather than replacing them. The model is most useful for translating between worldviews — noticing that a disagreement about rules, freedom or fairness is often a difference in what each side values, and that every stage has a healthy and an unhealthy expression.',
+      'adrienne maree brown, a facilitator and organiser inspired by the science fiction of Octavia Butler, asked what movements for justice could learn from how nature changes: murmurations of starlings, mycelium, ferns. Her answer is a set of elements — fractal, adaptive, interdependent and decentralised, non-linear and iterative, resilient, and creating more possibilities.',
+      'The most quoted principles are short: small is good, small is all; what you pay attention to grows; move at the speed of trust; focus on critical connections more than critical mass. The way we treat each other in a small group is the strategy, because that pattern repeats at every scale.',
     ],
-    keys: ['Beige', 'Purple', 'Red', 'Blue', 'Orange', 'Green', 'Yellow', 'Turquoise'],
+    practice: 'ReGenerativa grows the way she describes: by experiment, adaptation and decentralisation rather than a master plan. The question we put to her: how do we keep emergence from becoming an excuse to avoid structure?',
+    keys: ['Fractal', 'Adaptive', 'Interdependent', 'Non-linear', 'Resilient', 'Speed of trust'],
     images: [
-      { src: '/images/frameworks/spiral-dynamics-levels.jpg', alt: 'The eight Spiral Dynamics colours from beige to turquoise, each with three keywords, zig-zagging upwards.', caption: 'The eight value systems, alternating between a focus on “me” (left) and “we” (right).', credit: 'Synnervate', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Spiral-English-v5-Be-Tu-keywords.jpg' },
-      { src: '/images/frameworks/spiral-dynamics-graves-helix.png', alt: 'Graph after Clare W. Graves: a staircase of neurological coping systems rising against existential problems, alternating between express-self (pink) and sacrifice-self (blue) states, with the areas under the curve shaded to show that levels accumulate rather than replace each other.', caption: 'Graves’ original “double helix”: each level answers a new existential problem, alternating between expressing the self and sacrificing it — and earlier levels stay with us.', credit: 'Ixat totep, after Clare W. Graves', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Graves-double-helix-graph-shaded.png' },
+      { src: '/images/frameworks/emergent-strategy.svg', alt: 'Six elements around a centre labelled emergent strategy: fractal, adaptive, interdependent, non-linear, resilient, more possibilities.', caption: 'The elements of emergent strategy.', ...OURS },
     ],
     links: [
-      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Spiral_Dynamics' },
-      { label: 'spiraldynamics.org', href: 'https://spiraldynamics.org/' },
-      { label: 'Clare W. Graves', href: 'https://en.wikipedia.org/wiki/Clare_W._Graves' },
-      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
-    ],
-  },
-  {
-    id: 'ikigai',
-    title: 'Ikigai',
-    origin: 'Japan · 生き甲斐 · “a reason for being”',
-    tagline: 'What makes life worth living — and, in its popular form, where what you love meets what the world needs.',
-    description: [
-      'Ikigai is a Japanese word made of iki (life) and gai (worth): whatever gives you a reason to get up in the morning. In Japan it is an everyday idea, and it can be something small — a craft, a garden, the people you cook for.',
-      'The four-circle diagram is a later, Western addition that has become a popular tool for finding direction. It asks four questions: what do you love, what are you good at, what does the world need, and what can you be paid for? Where two circles overlap you find passion, mission, vocation and profession; where all four meet is the sweet spot the diagram calls ikigai. We use it as a conversation starter for the question every newcomer brings: what is mine to do here?',
-    ],
-    keys: ['Passion', 'Mission', 'Vocation', 'Profession'],
-    images: [
-      { src: '/images/frameworks/ikigai.svg', alt: 'Ikigai Venn diagram of four coloured circles: what you love, what you are good at, what the world needs, what you can be paid for.', caption: 'The four circles and what lives in their overlaps.', credit: 'Eugenio Hansen, OFS', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Diagramo_de_Ikigajo_-en.svg' },
-      { src: '/images/frameworks/ikigai-classic.svg', alt: 'The same Ikigai diagram in black and white.', caption: 'The same diagram in its classic black‑and‑white form.', credit: 'Nimbosa, after Dennis Bodor and Emmy van Deurzen', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Ikigai-EN.svg' },
-    ],
-    links: [
-      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Ikigai' },
-      { label: 'Ikigai Tribe: what ikigai really means', href: 'https://ikigaitribe.com/ikigai/what-is-ikigai-explained/' },
-    ],
-  },
-  {
-    id: 'permaculture',
-    title: 'Permaculture ethics & principles',
-    origin: 'Bill Mollison & David Holmgren · 1970s',
-    tagline: 'A design approach that copies the patterns of natural ecosystems, guided by three ethics.',
-    description: [
-      'Permaculture began in Australia in the 1970s as “permanent agriculture” and grew into a way of designing any human system — gardens, buildings, economies, communities — so that it behaves like an ecosystem: little waste, many connections, and more abundance over time.',
-      'Everything rests on three ethics: Earth Care, People Care and Fair Share (set limits and redistribute surplus). David Holmgren later distilled twelve design principles from them, listed below. Tools like zoning (placing things by how often you visit them) and the permaculture flower (the seven domains a sustainable culture has to redesign) turn the principles into practice.',
-    ],
-    points: [
-      'Observe and interact', 'Catch and store energy', 'Obtain a yield', 'Apply self‑regulation and accept feedback',
-      'Use and value renewable resources', 'Produce no waste', 'Design from patterns to details', 'Integrate rather than segregate',
-      'Use small and slow solutions', 'Use and value diversity', 'Use edges and value the marginal', 'Creatively use and respond to change',
-    ],
-    images: [
-      { src: '/images/frameworks/permaculture-ethics.svg', alt: 'Three overlapping circles labelled Earth Care, People Care and Fair Share.', caption: 'The three ethics at the heart of every permaculture design.', credit: 'Liminal Village', license: 'own diagram' },
-      { src: '/images/frameworks/permaculture-flower.png', alt: 'The permaculture flower: seven petals around ethics and design principles, crossed by a spiral.', caption: 'The permaculture flower: seven domains spiralling out from the ethics and design principles.', credit: 'The Permaculture Association, after David Holmgren', license: 'CC BY 3.0', source: 'https://commons.wikimedia.org/wiki/File:Holmgren_flower.png' },
-      { src: '/images/frameworks/permaculture-zones.svg', alt: 'Concentric rings showing permaculture zones 0 to 5, from the house out to wilderness.', caption: 'Zones 0–5: design outward from where people spend the most time.', credit: 'Felix Müller', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permaculture_Zones.svg' },
-      { src: '/images/frameworks/permaculture-systemic-vision.svg', alt: 'Diagram with ethics at the centre, surrounded by principles and design, the elements, and a ring of practices.', caption: 'A systemic view: ethics at the centre, then principles and design, then practices.', credit: 'Arthur Nanni', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Permacultural_systemic_vision.svg' },
-    ],
-    links: [
-      { label: 'The 12 principles (permacultureprinciples.com)', href: 'https://permacultureprinciples.com/permaculture-principles/' },
-      { label: 'David Holmgren', href: 'https://holmgren.com.au/permaculture/' },
-      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Permaculture' },
-    ],
-  },
-  {
-    id: 'internal-family-systems',
-    title: 'Internal Family Systems',
-    origin: 'Richard C. Schwartz · 1980s',
-    tagline: 'The mind as an inner family of parts, led — when things go well — by a calm, curious Self.',
-    description: [
-      'Internal Family Systems (IFS) is a model of the psyche developed by family therapist Richard Schwartz. It starts from an ordinary experience — “a part of me wants this, another part doesn’t” — and takes it seriously. Exiles are young parts that carry old pain. Managers try to keep that pain from being touched by planning, controlling and pleasing. Firefighters jump in when it is touched anyway, with anything that numbs or distracts.',
-      'Underneath the parts everyone has a Self that is not a part: calm, curious, compassionate. There are “no bad parts” — each one is trying to protect you — and the work is to listen to them from Self rather than fight them. In community it gives a shared language: “a part of me is angry” lands very differently from “I am angry with you”. IFS is also a form of psychotherapy; deep work with exiles belongs with a trained practitioner.',
-    ],
-    keys: ['Self', 'Managers', 'Firefighters', 'Exiles'],
-    images: [
-      { src: '/images/frameworks/ifs-parts.svg', alt: 'The Self at the centre, connected to three groups of parts: managers, firefighters and exiles.', caption: 'The Self and the three kinds of parts. Managers and firefighters are both protectors.', credit: 'Liminal Village', license: 'own diagram' },
-      { src: '/images/frameworks/ifs-8cs.svg', alt: 'Self surrounded by eight qualities: calm, curiosity, compassion, clarity, confidence, courage, creativity, connectedness.', caption: 'The “8 Cs”: the qualities that show up when the Self is leading.', credit: 'Liminal Village', license: 'own diagram' },
-    ],
-    links: [
-      { label: 'IFS Institute', href: 'https://ifs-institute.com/' },
-      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Internal_Family_Systems_Model' },
-      { label: 'In our docs', href: 'https://docs.liminalvillage.com/onboarding/social-dna' },
+      { label: 'adriennemareebrown.net', href: 'https://adriennemareebrown.net/' },
+      { label: 'AK Press: Emergent Strategy', href: 'https://www.akpress.org/emergentstrategy.html' },
     ],
   },
   {
     id: 'enneagram',
+    dimension: 'inner',
+    guides: [],
     title: 'Enneagram',
     origin: 'Oscar Ichazo & Claudio Naranjo · 1960s–70s',
     tagline: 'Nine patterns of attention and motivation, drawn on a nine-pointed figure.',
     description: [
       'The Enneagram of Personality describes nine types, each organised around a core motivation and a characteristic blind spot: 1 the Reformer, 2 the Helper, 3 the Achiever, 4 the Individualist, 5 the Investigator, 6 the Loyalist, 7 the Enthusiast, 8 the Challenger and 9 the Peacemaker. The types sit in three centres — body (8, 9, 1), heart (2, 3, 4) and head (5, 6, 7).',
-      'The lines of the figure matter as much as the points: each type is coloured by its neighbours (“wings”) and moves along the inner lines towards other types in growth and under stress. Its scientific backing is thin, so we hold it lightly — as a mirror for noticing our own habits and for understanding why someone else reacts so differently, not as a box to put people in.',
+      'The lines of the figure matter as much as the points: each type is coloured by its neighbours (“wings”) and moves along the inner lines towards other types in growth and under stress.',
     ],
+    practice: 'Its scientific backing is thin, so we hold it lightly — as a mirror for noticing our own habits and for understanding why someone else reacts so differently, not as a box to put people in.',
     keys: ['Nine types', 'Three centres', 'Wings', 'Lines'],
     images: [
       { src: '/images/frameworks/enneagram.svg', alt: 'The enneagram figure: a circle with nine numbered points joined by a triangle and a six-pointed figure.', caption: 'The enneagram figure: nine points on a circle, joined by a triangle (3‑6‑9) and a hexad.', credit: 'Twisp', license: 'public domain', source: 'https://commons.wikimedia.org/wiki/File:Enneagram.svg' },
@@ -300,9 +629,35 @@ const FRAMEWORKS = [
       { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Enneagram_of_Personality' },
     ],
   },
+  {
+    id: 'ikigai',
+    dimension: 'inner',
+    guides: [],
+    title: 'Ikigai',
+    origin: 'Japan · 生き甲斐 · “a reason for being”',
+    tagline: 'What makes life worth living — and, in its popular form, where what you love meets what the world needs.',
+    description: [
+      'Ikigai is a Japanese word made of iki (life) and gai (worth): whatever gives you a reason to get up in the morning. In Japan it is an everyday idea, and it can be something small — a craft, a garden, the people you cook for.',
+      'The four-circle diagram is a later, Western addition that has become a popular tool for finding direction. It asks four questions: what do you love, what are you good at, what does the world need, and what can you be paid for? Where two circles overlap you find passion, mission, vocation and profession; where all four meet is the sweet spot the diagram calls ikigai.',
+    ],
+    practice: 'A conversation starter for the question every newcomer brings: what is mine to do here? Each villager’s ikigai is what you see on our Services page.',
+    keys: ['Passion', 'Mission', 'Vocation', 'Profession'],
+    images: [
+      { src: '/images/frameworks/ikigai.svg', alt: 'Ikigai Venn diagram of four coloured circles: what you love, what you are good at, what the world needs, what you can be paid for.', caption: 'The four circles and what lives in their overlaps.', credit: 'Eugenio Hansen, OFS', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Diagramo_de_Ikigajo_-en.svg' },
+      { src: '/images/frameworks/ikigai-classic.svg', alt: 'The same Ikigai diagram in black and white.', caption: 'The same diagram in its classic black‑and‑white form.', credit: 'Nimbosa, after Dennis Bodor and Emmy van Deurzen', license: 'CC BY-SA 4.0', source: 'https://commons.wikimedia.org/wiki/File:Ikigai-EN.svg' },
+    ],
+    links: [
+      { label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Ikigai' },
+      { label: 'Ikigai Tribe: what ikigai really means', href: 'https://ikigaitribe.com/ikigai/what-is-ikigai-explained/' },
+      { label: 'Services & skills', href: '/services' },
+    ],
+  },
 ];
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isExternal = href => /^https?:/.test(href);
+const guideLink = id => `<a href="/dna#guide-${esc(id)}">${esc(GUIDE_NAMES[id] || id)}</a>`;
+const shortTitle = fw => fw.title.replace(' ethics & principles', '');
 
 function creditHtml(im) {
   const text = esc([im.credit, im.license].filter(Boolean).join(' · '));
@@ -310,8 +665,16 @@ function creditHtml(im) {
 }
 
 function actionsHtml(fw) {
-  return (fw.links || []).map((l, i) =>
-    `<a class="btn${i ? ' ghost' : ''}" href="${esc(l.href)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${esc(l.label)}</a>`).join('');
+  return (fw.links || []).map((l, i) => {
+    const ext = isExternal(l.href);
+    return `<a class="btn${i ? ' ghost' : ''}" href="${esc(l.href)}"${ext ? ' target="_blank" rel="noopener"' : ''}><i class="fa-solid ${ext ? 'fa-arrow-up-right-from-square' : 'fa-arrow-right'}"></i> ${esc(l.label)}</a>`;
+  }).join('');
+}
+
+function guidesHtml(fw) {
+  if (!fw.guides?.length) return '';
+  return `<div class="guides"><span>Guides</span>${fw.guides.map(id =>
+    `<a href="/dna#guide-${esc(id)}" title="Meet ${esc(GUIDE_NAMES[id])} in our DNA"><i class="fa-solid fa-star"></i>${esc(GUIDE_NAMES[id])}</a>`).join('')}</div>`;
 }
 
 function picsHtml(fw, f) {
@@ -327,11 +690,29 @@ function picsHtml(fw, f) {
     ${thumbs}`;
 }
 
-document.getElementById('jump').innerHTML = FRAMEWORKS.map(fw => `<a href="#${esc(fw.id)}">${esc(fw.title.replace(' ethics & principles', ''))}</a>`).join('');
+const inDim = d => FRAMEWORKS.filter(fw => fw.dimension === d.id);
+
+// The constellation: six dimensions, each with its guides and its frameworks.
+document.getElementById('jump').innerHTML = DIMENSIONS.map(d => `
+  <div class="star">
+    <h3><i class="fa-solid ${d.icon}"></i><a href="#${d.id}">${esc(d.title)}</a></h3>
+    <div class="who">${d.guides.map(guideLink).join(' · ')}</div>
+    <ul>${inDim(d).map(fw => `<li><a href="#${esc(fw.id)}">${esc(shortTitle(fw))}</a></li>`).join('')}</ul>
+  </div>`).join('');
 
 const list = document.getElementById('list');
-list.innerHTML = FRAMEWORKS.map((fw, f) => `
-  <article class="fw" id="${esc(fw.id)}">
+let n = 0;
+list.innerHTML = DIMENSIONS.map(d => `
+  <section class="dim" id="${d.id}">
+    <div class="k">Dimension</div>
+    <h2>${esc(d.title)}</h2>
+    <p>${esc(d.line)}</p>
+    <div class="who">Guides: ${d.guides.map(guideLink).join(' · ')}</div>
+  </section>
+  ${inDim(d).map(fw => {
+    const f = FRAMEWORKS.indexOf(fw);
+    return `
+  <article class="fw${n++ % 2 ? ' flip' : ''}" id="${esc(fw.id)}" data-f="${f}">
     <figure class="pics">${picsHtml(fw, f)}</figure>
     <div class="info">
       <div class="src">${esc(fw.origin)}</div>
@@ -339,17 +720,20 @@ list.innerHTML = FRAMEWORKS.map((fw, f) => `
       <div class="tag">${esc(fw.tagline)}</div>
       ${fw.description.map(p => `<p>${esc(p)}</p>`).join('')}
       ${fw.points ? `<ol class="points">${fw.points.map(p => `<li>${esc(p)}</li>`).join('')}</ol>` : ''}
+      ${fw.practice ? `<div class="practice"><b>In the village</b><p>${esc(fw.practice)}</p></div>` : ''}
       ${fw.keys ? `<ul class="keys">${fw.keys.map(k => `<li>${esc(k)}</li>`).join('')}</ul>` : ''}
+      ${guidesHtml(fw)}
       <div class="actions">${actionsHtml(fw)}</div>
     </div>
-  </article>`).join('');
+  </article>`;
+  }).join('')}`).join('');
 
 // ---- pictures: thumbnails swap the large one, the large one opens the lightbox ----
 const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCount = document.getElementById('lbCount'), lbCap = document.getElementById('lbCap');
 let cur = { f: 0, i: 0 }, opener = null;
 
 function show(f, i) {
-  const fig = list.children[f].querySelector('.pics'), im = FRAMEWORKS[f].images[i], main = fig.querySelector('.main');
+  const fig = list.querySelector(`article[data-f="${f}"] .pics`), im = FRAMEWORKS[f].images[i], main = fig.querySelector('.main');
   main.dataset.i = i;
   main.firstElementChild.src = im.src;
   main.firstElementChild.alt = im.alt;
@@ -381,6 +765,9 @@ document.getElementById('lbNext').addEventListener('click', () => step(1));
 lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
 document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
 
+// The list is rendered by script, so the browser could not jump to #anchor on load.
+if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+
 // ---- site-specific labels ----
 document.getElementById('year').textContent = new Date().getFullYear();
 if (SITE === 'regenerativa') {
@@ -409,8 +796,9 @@ const ld = {
         name: fw.title,
         description: fw.tagline + ' ' + fw.description.join(' '),
         url: abs('/frameworks#' + fw.id),
+        inDefinedTermSet: abs('/frameworks#' + fw.dimension),
         image: fw.images.map(im => abs(im.src)),
-        sameAs: fw.links.map(l => l.href),
+        sameAs: fw.links.filter(l => isExternal(l.href)).map(l => l.href),
       },
     })),
   },

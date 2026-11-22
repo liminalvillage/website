@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">Nonviolent Communication: four steps</title>
+  <desc id="d">Four steps in sequence: observation, feeling, need, request.</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <rect x="110" y="50" width="380" height="84" rx="42" fill="#dfe9f2" stroke="#8fa9c2" stroke-width="2"/>
+  <circle cx="152" cy="92" r="26" fill="#8fa9c2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#ffffff" text-anchor="middle">  <text x="152" y="101" font-size="26" >1</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="200" y="88" font-size="26" >Observation</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="200" y="112" font-size="13.5" >what happened, without judging</text></g>
+  <path d="M300 138 l0 16 m-7 -8 l7 8 l7 -8" stroke="#bbbbbb" stroke-width="2" fill="none"/>
+  <rect x="110" y="162" width="380" height="84" rx="42" fill="#f6dcd2" stroke="#c98b74" stroke-width="2"/>
+  <circle cx="152" cy="204" r="26" fill="#c98b74"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#ffffff" text-anchor="middle">  <text x="152" y="213" font-size="26" >2</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="200" y="200" font-size="26" >Feeling</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="200" y="224" font-size="13.5" >what I feel about it</text></g>
+  <path d="M300 250 l0 16 m-7 -8 l7 8 l7 -8" stroke="#bbbbbb" stroke-width="2" fill="none"/>
+  <rect x="110" y="274" width="380" height="84" rx="42" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <circle cx="152" cy="316" r="26" fill="#7fa868"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#ffffff" text-anchor="middle">  <text x="152" y="325" font-size="26" >3</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="200" y="312" font-size="26" >Need</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="200" y="336" font-size="13.5" >the need underneath the feeling</text></g>
+  <path d="M300 362 l0 16 m-7 -8 l7 8 l7 -8" stroke="#bbbbbb" stroke-width="2" fill="none"/>
+  <rect x="110" y="386" width="380" height="84" rx="42" fill="#f3e6cf" stroke="#d6a15b" stroke-width="2"/>
+  <circle cx="152" cy="428" r="26" fill="#d6a15b"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#ffffff" text-anchor="middle">  <text x="152" y="437" font-size="26" >4</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="200" y="424" font-size="26" >Request</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="200" y="448" font-size="13.5" >a clear, doable ask, not a demand</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#717171" text-anchor="middle">  <text x="300" y="524" font-size="13" font-style="italic">“When I see … I feel … because I need … Would you be willing to …?”</text></g>
+</svg>

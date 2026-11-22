@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">The Viable System Model</title>
+  <desc id="d">Stafford Beer’s five systems: autonomous operations (System 1), coordination (2), control (3), intelligence (4) and policy (5).</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <rect x="150" y="20" width="300" height="62" rx="10" fill="#e4e0ee" stroke="#9a8fb8" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="164" y="47" font-size="19" >System 5 · Policy</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="164" y="67" font-size="12.5" >identity, purpose, the final word</text></g>
+  <rect x="150" y="100" width="300" height="62" rx="10" fill="#dfe9f2" stroke="#8fa9c2" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="164" y="127" font-size="19" >System 4 · Intelligence</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="164" y="147" font-size="12.5" >the outside world and the future</text></g>
+  <rect x="150" y="180" width="300" height="62" rx="10" fill="#f3e6cf" stroke="#d6a15b" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="164" y="207" font-size="19" >System 3 · Control</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="164" y="227" font-size="12.5" >resources and synergy, here and now</text></g>
+  <rect x="30" y="270" width="120" height="230" rx="10" fill="#f6dcd2" stroke="#c98b74" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="44" y="297" font-size="19" >System 2</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="44" y="317" font-size="12.5" ></text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="44" y="335" font-size="12.5" >coordination:</text>
+  <text x="44" y="352" font-size="12.5" >keeps the units</text>
+  <text x="44" y="369" font-size="12.5" >from clashing</text></g>
+  <rect x="180" y="270" width="270" height="66" rx="10" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="194" y="298" font-size="17" >System 1 · unit 1</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="194" y="318" font-size="12.5" >an autonomous operation</text></g>
+  <ellipse cx="525" cy="303" rx="55" ry="30" fill="#ffffff" stroke="#bbbbbb" stroke-width="2" stroke-dasharray="4 5"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#717171" text-anchor="middle">  <text x="525" y="307" font-size="12" >its world</text></g>
+  <line x1="450" y1="303" x2="470" y2="303" stroke="#bbbbbb" stroke-width="2"/>
+  <rect x="180" y="350" width="270" height="66" rx="10" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="194" y="378" font-size="17" >System 1 · unit 2</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="194" y="398" font-size="12.5" >an autonomous operation</text></g>
+  <ellipse cx="525" cy="383" rx="55" ry="30" fill="#ffffff" stroke="#bbbbbb" stroke-width="2" stroke-dasharray="4 5"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#717171" text-anchor="middle">  <text x="525" y="387" font-size="12" >its world</text></g>
+  <line x1="450" y1="383" x2="470" y2="383" stroke="#bbbbbb" stroke-width="2"/>
+  <rect x="180" y="430" width="270" height="66" rx="10" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#222222">  <text x="194" y="458" font-size="17" >System 1 · unit 3</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#333333">  <text x="194" y="478" font-size="12.5" >an autonomous operation</text></g>
+  <ellipse cx="525" cy="463" rx="55" ry="30" fill="#ffffff" stroke="#bbbbbb" stroke-width="2" stroke-dasharray="4 5"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#717171" text-anchor="middle">  <text x="525" y="467" font-size="12" >its world</text></g>
+  <line x1="450" y1="463" x2="470" y2="463" stroke="#bbbbbb" stroke-width="2"/>
+  <ellipse cx="525" cy="131" rx="55" ry="40" fill="#ffffff" stroke="#bbbbbb" stroke-width="2" stroke-dasharray="4 5"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#717171" text-anchor="middle">  <text x="525" y="128" font-size="12" >the wider</text>  <text x="525" y="143" font-size="12" >environment</text></g>
+  <line x1="450" y1="131" x2="470" y2="131" stroke="#bbbbbb" stroke-width="2"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#717171" text-anchor="middle">  <text x="300" y="528" font-size="12.5" >Each unit is itself a viable system: the same pattern repeats inside.</text></g>
+</svg>

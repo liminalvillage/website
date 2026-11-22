@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" role="img" aria-labelledby="t d">
+  <title id="t">The Four Agreements</title>
+  <desc id="d">Four boxes: be impeccable with your word, don’t take anything personally, don’t make assumptions, always do your best.</desc>
+  <rect width="600" height="540" fill="#ffffff"/>
+  <rect x="40" y="40" width="250" height="210" rx="18" fill="#dfe9f2" stroke="#8fa9c2" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#8fa9c2">  <text x="165" y="110" font-size="44" >1</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#222222">  <text x="165" y="165" font-size="22" >Be impeccable</text>
+  <text x="165" y="195" font-size="22" >with your word</text></g>
+  <rect x="310" y="40" width="250" height="210" rx="18" fill="#f6dcd2" stroke="#c98b74" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#c98b74">  <text x="435" y="110" font-size="44" >2</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#222222">  <text x="435" y="165" font-size="22" >Don’t take anything</text>
+  <text x="435" y="195" font-size="22" >personally</text></g>
+  <rect x="40" y="270" width="250" height="210" rx="18" fill="#e4ecd9" stroke="#7fa868" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#7fa868">  <text x="165" y="340" font-size="44" >3</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#222222">  <text x="165" y="395" font-size="22" >Don’t make</text>
+  <text x="165" y="425" font-size="22" >assumptions</text></g>
+  <rect x="310" y="270" width="250" height="210" rx="18" fill="#f3e6cf" stroke="#d6a15b" stroke-width="2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#d6a15b">  <text x="435" y="340" font-size="44" >4</text></g>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#222222">  <text x="435" y="395" font-size="22" >Always do</text>
+  <text x="435" y="425" font-size="22" >your best</text></g>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#717171">  <text x="300" y="522" font-size="12.5" >after Don Miguel Ruiz, The Four Agreements (1997)</text></g>
+</svg>
