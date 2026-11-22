@@ -268,6 +268,14 @@ button.g:hover,button.g:focus-visible{border-bottom-style:solid;}
 /* guide panel */
 .drawer-body .work{font-style:italic;color:var(--g);font-size:13px;margin-top:2px;}
 .drawer-body .challenge{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.4;color:var(--dark);border-left:3px solid var(--g);padding-left:14px;margin-top:4px;}
+.drawer-body h2 em{color:var(--g);font-style:italic;}
+.drawer-body .poles{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;margin-top:18px;align-items:stretch;}
+.drawer-body .poles .limen{height:auto;align-self:stretch;}
+.drawer-body .pole{background:color-mix(in srgb,var(--g) 7%,#fff);border-radius:10px;padding:12px 14px;}
+.drawer-body .pole-name{font-family:var(--serif);font-size:20px;color:var(--dark);display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.drawer-body .pole-name i{font-size:13px;color:var(--g);}
+.drawer-body .pole p{font-size:13px;line-height:1.5;margin-top:6px;color:var(--text);}
+.drawer-body .pole b{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--g);font-weight:600;}
 .drawer-body .nogurus{font-size:12px;color:var(--grey);margin-top:26px;}
 
 @media (max-width:1000px){ .glance{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto;} }
@@ -277,3 +285,4 @@ button.g:hover,button.g:focus-visible{border-bottom-style:solid;}
   .chapter h2{font-size:22px;}
 }
 .mini code{font-size:12px;background:var(--light);border-radius:3px;padding:0 4px;}
+@media (max-width:480px){ .drawer-body .poles{grid-template-columns:minmax(0,1fr);} .drawer-body .poles .limen{display:none;} }

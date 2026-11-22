@@ -6,7 +6,7 @@ import 'lenis/dist/lenis.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { GENES, FRAMEWORKS, GUIDES } from './content.js';
+import { GENES, FRAMEWORKS, GUIDES, THRESHOLDS } from './content.js';
 import './dna.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -338,6 +338,31 @@ function openGuide(id, from) {
   showDrawer(geneColor(lineage), from);
 }
 
+// A threshold from Gene 02: both poles with their gift and shadow, what emerges
+// between them, where it shows up in the village and the question it keeps open.
+function openThreshold(card, from) {
+  const th = THRESHOLDS[card.dataset.threshold];
+  if (!th) return openGene(card.closest('.gene'), from);
+  const gene = card.closest('.gene');
+  const pole = (p) => `<div class="pole"><div class="pole-name"><i class="fa-solid ${esc(p.icon)}"></i>${esc(p.name)}</div><p><b>Gift</b>${esc(p.gift)}</p><p><b>Shadow</b>${esc(p.shadow)}</p></div>`;
+  drawerBody.innerHTML = `
+    <div class="origin">Threshold · Gene ${String(genes.indexOf(gene) + 1).padStart(2, '0')} · ${esc(gene.dataset.gene)}</div>
+    <h2 id="drawer-title">${esc(th.a.name)} <em>&amp;</em> ${esc(th.b.name)}</h2>
+    <p class="work">${esc(th.line)}</p>
+    <div class="poles">${pole(th.a)}<span class="limen" aria-hidden="true"></span>${pole(th.b)}</div>
+    <h4>What emerges between them</h4>
+    <p class="lede">${esc(th.emerges)}</p>
+    <h4>In the village</h4>
+    <p>${esc(th.village)}</p>
+    <h4>The question it keeps open</h4>
+    <p class="challenge">${esc(th.question)}</p>
+    ${th.guides?.length ? `<h4>Guides</h4><ul class="d-list">${th.guides.filter((g) => GUIDES[g]).map((g) => `<li><button type="button" data-guide="${g}"><i class="fa-solid fa-user"></i>${esc(GUIDES[g].name)}<span class="go">→</span></button></li>`).join('')}</ul>` : ''}
+    ${th.frameworks?.length ? `<h4>Frameworks</h4><div class="d-chips">${th.frameworks.filter((f) => FRAMEWORKS[f]).map((f) => `<button type="button" data-fw="${f}">${esc(FRAMEWORKS[f].title)}</button>`).join('')}</div>` : ''}
+    <ul class="d-list"><li><button type="button" data-gene-id="${gene.id}"><i class="fa-solid fa-dna"></i>All thresholds · Gene ${String(genes.indexOf(gene) + 1).padStart(2, '0')}</button></li></ul>`;
+  delete drawerBody.dataset.gene;
+  showDrawer(geneColor(gene), from);
+}
+
 // Is this point on the helix itself? Returns the gene it passes through there.
 function strandGeneAt(x, y) {
   if (!layout || !helix) return null;
@@ -391,6 +416,7 @@ document.addEventListener('click', (e) => {
   if (explore) return openGene(explore.closest('.gene'), explore);
   if (t.closest('.drawer')) return;
   const card = t.closest('article.allele');
+  if (card?.dataset.threshold && !t.closest('a, button')) return openThreshold(card, card);
   if (card && !t.closest('a, button')) return openGene(card.closest('.gene'), card);
   if (!t.closest(OVER_CONTENT)) {
     const g = strandGeneAt(e.clientX, e.clientY);
