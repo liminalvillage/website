@@ -6,7 +6,7 @@ import 'lenis/dist/lenis.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { GENES, FRAMEWORKS } from './content.js';
+import { GENES, FRAMEWORKS, GUIDES } from './content.js';
 import './dna.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -191,7 +191,7 @@ if (!reduced) {
       .from('.hero .eyebrow', { y: 14, autoAlpha: 0, duration: 1 }, 0.1)
       .from(h1.chars, { yPercent: 110, duration: 1.3, stagger: 0.05 }, 0.2)
       .from('.hero p', { y: 16, autoAlpha: 0, duration: 1.2 }, 0.6)
-      .from('.genome li', { y: 12, autoAlpha: 0, duration: 0.9, stagger: 0.05 }, 0.75)
+      .from('.glance .ch', { y: 16, autoAlpha: 0, duration: 1, stagger: 0.1 }, 0.75)
       .from('#five-prime span', { scale: 0.4, autoAlpha: 0, duration: 1.2, ease: 'back.out(2)' }, 1)
       .add(() => h1.revert());
 
@@ -210,6 +210,13 @@ if (!reduced) {
         const fromLeft = pageLeft(el) + el.offsetWidth / 2 < layout.axisPx;
         gsap.fromTo(el, { x: fromLeft ? -36 : 36, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: i * 0.08, ease: 'power3.out', overwrite: true });
       }),
+    });
+
+    gsap.utils.toArray('.chapter').forEach((ch) => {
+      gsap.from(ch, {
+        y: 30, autoAlpha: 0, duration: 1.2, ease: 'expo.out',
+        scrollTrigger: { trigger: ch, start: 'top 88%', toggleActions: 'play none none reverse' },
+      });
     });
 
     gsap.from('.outro > *', {
@@ -232,9 +239,11 @@ const geneColor = (g) => g.style.getPropertyValue('--g').trim();
 const isExternal = (href) => /^https?:/.test(href);
 const linkItem = (l) =>
   `<li><a href="${esc(l.href)}"${isExternal(l.href) ? ' target="_blank" rel="noopener"' : ''}><i class="fa-solid ${esc(l.icon || 'fa-arrow-up-right-from-square')}"></i>${esc(l.label)}<span class="go">${isExternal(l.href) ? '↗' : '→'}</span></a></li>`;
+// card title without its stat badge ("Nature & Technology", not just "Nature")
 const titleOf = (card) => {
-  const h3 = card.querySelector('h3');
-  return (h3.firstChild?.textContent || h3.textContent).trim();
+  const h3 = card.querySelector('h3').cloneNode(true);
+  h3.querySelectorAll('.stat').forEach((el) => el.remove());
+  return h3.textContent.replace(/\s+/g, ' ').trim();
 };
 
 function showDrawer(color, from) {
@@ -296,12 +305,36 @@ function openFramework(id, from) {
     <p class="lede">${esc(fw.tagline)}</p>
     ${fw.image ? `<img src="${esc(fw.image.src)}" alt="${esc(fw.image.alt)}" loading="lazy">` : ''}
     <p>${esc(fw.body)}</p>
+    ${fw.guide && GUIDES[fw.guide] ? `<h4>Guide</h4><ul class="d-list"><li><button type="button" data-guide="${fw.guide}"><i class="fa-solid fa-user"></i>${esc(GUIDES[fw.guide].name)}<span class="go">→</span></button></li></ul>` : ''}
     ${fw.steps ? `<div class="steps-row">${fw.steps.map((st) => `<span>${esc(st)}</span>`).join('')}</div>` : ''}
     <h4>Read more</h4>
     <ul class="d-list">${links.map(linkItem).join('')}</ul>
     ${homes.length ? `<h4>Expressed in</h4><ul class="d-list">${homes.map((g) => `<li><button type="button" data-gene-id="${g.id}"><i class="fa-solid fa-dna"></i>Gene ${String(genes.indexOf(g) + 1).padStart(2, '0')} · ${esc(g.dataset.gene)}</button></li>`).join('')}</ul>` : ''}`;
   delete drawerBody.dataset.gene;
   showDrawer(color.trim(), from);
+}
+
+// A guide from Gene 03 · Lineage. Where they show up (thresholds, frameworks)
+// is read from the page, so the HTML stays the single source.
+function openGuide(id, from) {
+  const gd = GUIDES[id];
+  if (!gd) return;
+  const lineage = document.getElementById('lineage');
+  const thresholds = [...document.querySelectorAll('#thresholds .allele')].filter((c) => c.querySelector(`[data-guide="${id}"]`));
+  const fws = Object.entries(FRAMEWORKS).filter(([, f]) => f.guide === id);
+  drawerBody.innerHTML = `
+    <div class="origin">Guide · ${esc(gd.dimension)}${gd.movement ? ` · ${esc(gd.movement)}` : ''}</div>
+    <h2 id="drawer-title">${esc(gd.name)}</h2>
+    ${gd.work ? `<p class="work">${esc(gd.work)}</p>` : ''}
+    <p class="lede">${esc(gd.note)}</p>
+    ${gd.question ? `<h4>A question we put to them</h4><p class="challenge">${esc(gd.question)}</p>` : ''}
+    ${thresholds.length ? `<h4>On the thresholds</h4><ul class="d-list">${thresholds.map((c) => `<li><button type="button" data-scroll="${c.id}"><i class="fa-solid fa-grip-lines-vertical"></i>${esc(titleOf(c))}<span class="go">↓</span></button></li>`).join('')}</ul>` : ''}
+    ${fws.length ? `<h4>In our frameworks</h4><div class="d-chips">${fws.map(([fid, f]) => `<button type="button" data-fw="${fid}">${esc(f.title)}</button>`).join('')}</div>` : ''}
+    ${gd.links?.length ? `<h4>Read more</h4><ul class="d-list">${gd.links.map(linkItem).join('')}</ul>` : ''}
+    <p class="nogurus">No gurus, no unquestionable truths: our guides are there to be challenged.</p>
+    <ul class="d-list"><li><button type="button" data-gene-id="lineage"><i class="fa-solid fa-dna"></i>Gene 03 · Lineage</button></li></ul>`;
+  delete drawerBody.dataset.gene;
+  showDrawer(geneColor(lineage), from);
 }
 
 // Is this point on the helix itself? Returns the gene it passes through there.
@@ -338,6 +371,17 @@ document.addEventListener('click', (e) => {
     setTimeout(() => card.classList.add('pulse'), lenis ? 1400 : 300);
     return;
   }
+  const scrollTo = t.closest('[data-scroll]');
+  if (scrollTo) {
+    const card = document.getElementById(scrollTo.dataset.scroll);
+    closeDrawer();
+    goTo(card);
+    card.classList.remove('pulse');
+    setTimeout(() => card.classList.add('pulse'), lenis ? 1400 : 300);
+    return;
+  }
+  const guide = t.closest('[data-guide]');
+  if (guide) return openGuide(guide.dataset.guide, drawer.hidden ? guide : opener);
   const geneLink = t.closest('[data-gene-id]');
   if (geneLink) return openGene(document.getElementById(geneLink.dataset.geneId), opener);
   const fw = t.closest('[data-fw]');

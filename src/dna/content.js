@@ -23,6 +23,13 @@ export const GENES = {
       { ...SOCIAL_DNA, icon: 'fa-dna' },
     ],
   },
+  lineage: {
+    blurb: 'A living constellation of ancestors, visionaries and guides, spiritual and intellectual, rather than a fixed pantheon. They inspire our decisions; they do not make them. Honor the wisdom of the past, question the assumptions of the present, and embody the possibilities of the future.',
+    links: [
+      { label: 'Frameworks we think with', href: '/frameworks', icon: 'fa-map' },
+      { label: 'Readings & media', href: '/media', icon: 'fa-book' },
+    ],
+  },
   values: {
     blurb: 'Ten values that act as a compass for every decision. Each is paired with what it looks like in practice, so they can be lived and not just agreed with.',
     links: [
@@ -82,6 +89,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/The_Four_Agreements' }],
   },
   nvc: {
+    guide: 'rosenberg',
     title: 'Non-Violent Communication',
     origin: 'Marshall Rosenberg · 1960s onwards',
     tagline: 'Say what happened, what you feel, what you need, and what you ask for.',
@@ -103,6 +111,7 @@ export const FRAMEWORKS = {
     ],
   },
   'integral-theory': {
+    guide: 'wilber',
     title: 'Integral Theory',
     origin: 'Ken Wilber · 1970s onwards',
     tagline: 'A “theory of everything” that asks which perspectives are missing from the picture.',
@@ -130,6 +139,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'Wikipedia', href: 'https://en.wikipedia.org/wiki/Ikigai' }],
   },
   permaculture: {
+    guide: 'holmgren',
     title: 'Permaculture',
     origin: 'Bill Mollison & David Holmgren · 1970s',
     tagline: 'Design that copies the patterns of natural ecosystems, guided by three ethics.',
@@ -139,6 +149,7 @@ export const FRAMEWORKS = {
     links: [{ label: 'The 12 principles', href: 'https://permacultureprinciples.com/permaculture-principles/' }],
   },
   'internal-family-systems': {
+    guide: 'schwartz',
     title: 'Internal Family Systems',
     origin: 'Richard C. Schwartz · 1980s',
     tagline: 'The mind as an inner family of parts, led by a calm, curious Self.',
@@ -155,5 +166,158 @@ export const FRAMEWORKS = {
     image: { src: '/images/frameworks/enneagram.svg', alt: 'The enneagram figure with nine points.' },
     page: '/frameworks#enneagram',
     links: [{ label: 'Enneagram Institute', href: 'https://www.enneagraminstitute.com/how-the-enneagram-system-works/' }],
+  },
+};
+
+// Gene 03 · Lineage: the Council of Guides. No gurus: each guide comes with a
+// question we put to them. Where a guide appears on /dna (dimensions, thresholds,
+// frameworks) is read from the page itself, not listed here.
+const wiki = (page) => ({ label: 'Wikipedia', href: `https://en.wikipedia.org/wiki/${page}` });
+
+export const GUIDES = {
+  watts: {
+    name: 'Alan Watts', dimension: 'Consciousness', movement: 'Remembering',
+    note: 'Nonduality, interconnectedness and play: seeing through the illusion that we are separate from each other and from the world.',
+    question: 'Can insight into oneness carry the daily discipline that community life asks for?',
+    links: [{ label: 'alanwatts.org', href: 'https://alanwatts.org/' }, wiki('Alan_Watts')],
+  },
+  mckenna: {
+    name: 'Terence McKenna', dimension: 'Consciousness', movement: 'Reimagining',
+    note: 'Consciousness, imagination and cultural transformation; a lifelong invitation to question established reality.',
+    question: 'Where does visionary speculation need to meet evidence?',
+    links: [wiki('Terence_McKenna')],
+  },
+  macy: {
+    name: 'Joanna Macy', dimension: 'Consciousness', work: 'Active Hope · The Work That Reconnects',
+    note: 'The Great Turning from an extractive to a life-sustaining civilization, joining spirituality, systems thinking, ecological grief and collective action.',
+    question: 'How do we hold grief for the world and still act at the speed the moment needs?',
+    links: [{ label: 'Work That Reconnects', href: 'https://workthatreconnects.org/' }, wiki('Joanna_Macy')],
+  },
+  ostrom: {
+    name: 'Elinor Ostrom', dimension: 'Commons', movement: 'Regenerating', work: 'Governing the Commons',
+    note: 'Showed that communities can govern shared resources without either the state or the market: collective rules, shared responsibility, polycentric organisation.',
+    question: 'Her design principles come from long-standing local communities. Do they hold for a fluid, temporary one like ours?',
+    links: [wiki('Elinor_Ostrom')],
+  },
+  helfrich: {
+    name: 'Silke Helfrich', dimension: 'Commons', work: 'Free, Fair and Alive (with David Bollier)',
+    note: "Took Ostrom's research into everyday commoning: how people share, care, decide and build relationships around resources. Close to our contribution agreements and digital commons.",
+    question: 'How far can commoning scale beyond people who know each other?',
+    links: [{ label: 'freefairandalive.org', href: 'https://freefairandalive.org/' }, wiki('Silke_Helfrich')],
+  },
+  rosenberg: {
+    name: 'Marshall Rosenberg', dimension: 'Commons', work: 'Nonviolent Communication',
+    note: 'Needs-based communication, conflict transformation and agreements without coercion: what lets independent people live and work together without domination or avoidance.',
+    question: 'When does a communication method become a way to avoid conflict instead of meeting it?',
+    links: [{ label: 'Center for Nonviolent Communication', href: 'https://www.cnvc.org/' }, wiki('Marshall_Rosenberg')],
+  },
+  meadows: {
+    name: 'Donella Meadows', dimension: 'Systems', movement: 'Regenerating', work: 'Thinking in Systems · Leverage Points',
+    note: 'How feedback loops, incentives, structures and paradigms shape behaviour. Essential for a network that learns and evolves instead of depending on its founders.',
+    question: 'Who decides which leverage points to pull, and on whose behalf?',
+    links: [{ label: 'The Donella Meadows Project', href: 'https://donellameadows.org/' }, wiki('Donella_Meadows')],
+  },
+  bateson: {
+    name: 'Gregory Bateson', dimension: 'Systems', work: 'Steps to an Ecology of Mind',
+    note: 'Relationship, communication, feedback and learning: the pattern that connects living systems. A bridge between Watts, Meadows, ecology and cybernetics.',
+    question: 'How do we turn an ecology of mind into everyday decisions?',
+    links: [wiki('Gregory_Bateson')],
+  },
+  beer: {
+    name: 'Stafford Beer', dimension: 'Systems', work: 'Brain of the Firm · The Heart of Enterprise',
+    note: 'The Viable System Model: how autonomous units stay coordinated within a larger whole. A map for independent hubs connected through the Holosphere.',
+    question: 'Cybernetics grew up in firms and governments. Can it serve autonomy rather than control?',
+    links: [wiki('Stafford_Beer')],
+  },
+  fuller: {
+    name: 'Buckminster Fuller', dimension: 'Design & technology', movement: 'Reimagining',
+    note: 'Whole-systems thinking, doing more with less, and designing a world that works for everyone.',
+    question: 'Does designing from the whole system down leave room for local wisdom?',
+    links: [{ label: 'Buckminster Fuller Institute', href: 'https://www.bfi.org/' }, wiki('Buckminster_Fuller')],
+  },
+  fresco: {
+    name: 'Jacque Fresco', dimension: 'Design & technology', movement: 'Reimagining',
+    note: 'Technological abundance, post-scarcity economics and the Resource-Based Economy that first inspired Liminal Village.',
+    question: 'Can a fully designed, technology-run abundance leave space for local autonomy and dissent?',
+    links: [{ label: 'The Venus Project', href: 'https://www.thevenusproject.com/' }, wiki('Jacque_Fresco')],
+  },
+  alexander: {
+    name: 'Christopher Alexander', dimension: 'Design & technology', movement: 'Regenerating', work: 'A Pattern Language · The Nature of Order',
+    note: 'How buildings, gardens, paths and settlements can feel alive, support human relationships and grow organically. His patterns also shaped software design.',
+    question: 'Who gets to say which patterns feel alive?',
+    links: [{ label: 'patternlanguage.com', href: 'https://www.patternlanguage.com/' }, wiki('Christopher_Alexander')],
+  },
+  holmgren: {
+    name: 'David Holmgren', dimension: 'Ecology', movement: 'Regenerating', work: 'Permaculture: Principles and Pathways Beyond Sustainability',
+    note: 'Observe patterns, capture energy, close loops, integrate rather than segregate, and let natural systems carry more of the work.',
+    question: 'Can principles that grow a garden also grow a social system?',
+    links: [{ label: 'Permaculture Principles', href: 'https://permacultureprinciples.com/' }, wiki('David_Holmgren')],
+  },
+  kimmerer: {
+    name: 'Robin Wall Kimmerer', dimension: 'Ecology', movement: 'Remembering', work: 'Braiding Sweetgrass',
+    note: 'The language of gift, gratitude and reciprocity: not only taking from a place, but belonging to it and giving back.',
+    question: 'How do newcomers to a land practise reciprocity without appropriating Indigenous traditions?',
+    links: [wiki('Robin_Wall_Kimmerer')],
+  },
+  wahl: {
+    name: 'Daniel Christian Wahl', dimension: 'Ecology', work: 'Designing Regenerative Cultures',
+    note: 'Regeneration as place-based transformation of ecology, culture, economy, technology and relationships. Perhaps the closest synthesis of what we are attempting.',
+    question: 'What does regeneration look like on an ordinary Tuesday, not only in a framework?',
+    links: [{ label: 'danielchristianwahl.com', href: 'https://www.danielchristianwahl.com/' }],
+  },
+  schwartz: {
+    name: 'Richard Schwartz', dimension: 'Inner & social change', movement: 'Regenerating', work: 'No Bad Parts · Internal Family Systems',
+    note: 'Relating with compassion to the conflicting parts within us. A complement to Ostrom: can Self-led people make for healthier collective governance?',
+    question: 'Can a therapeutic model be used safely in community, outside the therapy room?',
+    links: [{ label: 'IFS Institute', href: 'https://ifs-institute.com/' }],
+  },
+  brown: {
+    name: 'adrienne maree brown', dimension: 'Inner & social change', work: 'Emergent Strategy',
+    note: 'How small-scale relationships and interactions shape larger social patterns. For a network that grows through experiment, adaptation and decentralisation.',
+    question: 'How do we keep emergence from becoming an excuse to avoid structure?',
+    links: [{ label: 'adriennemareebrown.net', href: 'https://adriennemareebrown.net/' }],
+  },
+  wilber: {
+    name: 'Ken Wilber', dimension: 'Inner & social change', work: 'Integral Theory',
+    note: 'Holarchies, developmental perspectives and integrating many ways of knowing.',
+    question: 'Do developmental maps risk ranking people instead of understanding them?',
+    links: [wiki('Ken_Wilber')],
+  },
+  // second circle
+  koestler: {
+    name: 'Arthur Koestler', dimension: 'Second circle',
+    note: 'Coined the holon: everything is at once a whole and a part of a larger whole. The root of the name Holons.',
+    links: [wiki('Holon_(philosophy)')],
+  },
+  'thich-nhat-hanh': {
+    name: 'Thich Nhat Hanh', dimension: 'Second circle', movement: 'Remembering',
+    note: 'Interbeing, mindfulness, compassion and spiritual practice lived in community.',
+    links: [{ label: 'Plum Village', href: 'https://plumvillage.org/' }, wiki('Thich_Nhat_Hanh')],
+  },
+  illich: {
+    name: 'Ivan Illich', dimension: 'Second circle', movement: 'Reimagining', work: 'Tools for Conviviality',
+    note: 'Convivial tools, autonomy, and institutions that serve human flourishing rather than the other way round.',
+    links: [wiki('Ivan_Illich')],
+  },
+  schumacher: {
+    name: 'E. F. Schumacher', dimension: 'Second circle', work: 'Small Is Beautiful',
+    note: 'Human-scale economies and appropriate technology: economics as if people mattered.',
+    links: [wiki('E._F._Schumacher')],
+  },
+  raworth: {
+    name: 'Kate Raworth', dimension: 'Second circle', work: 'Doughnut Economics',
+    note: 'Meeting everyone’s needs within the means of the planet: the safe and just space between a social foundation and an ecological ceiling.',
+    links: [{ label: 'Doughnut Economics Action Lab', href: 'https://doughnuteconomics.org/' }],
+  },
+  croft: {
+    name: 'John Croft', dimension: 'Second circle', work: 'Dragon Dreaming',
+    note: 'Collective projects in four phases: dreaming, planning, doing and celebrating.',
+    links: [{ label: 'Dragon Dreaming', href: 'https://dragondreaming.org/' }],
+  },
+  steiner: {
+    name: 'Rudolf Steiner', dimension: 'Second circle',
+    note: 'Anthroposophical approaches to education, agriculture and human development, which we engage with critically.',
+    question: 'Which of his practices hold up to evidence, and which do not?',
+    links: [wiki('Rudolf_Steiner')],
   },
 };

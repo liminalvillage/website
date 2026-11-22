@@ -12,7 +12,6 @@
   const menuItems = [
     { label: 'ABOUT', href: '#about' },
     { label: 'THE VILLAGE', href: '#thevillage' },
-    { label: 'GUIDES', href: '#guides' },
     { label: 'LUNATIONS', href: '/lunations' },
     { label: 'DNA', href: '/dna' },
     { label: 'SERVICES', href: '/services' },

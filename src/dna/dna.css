@@ -226,3 +226,53 @@ body.on-strand{cursor:pointer;}
   .drawer-panel{top:auto;width:100%;max-height:86vh;border-radius:18px 18px 0 0;}
   .drawer-body{padding:30px 20px 36px;}
 }
+
+/* ---------- the DNA at a glance (hero) ---------- */
+.hero{max-width:1100px;}
+.glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px;text-align:left;}
+.glance .ch{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px 20px 12px;box-shadow:0 10px 30px rgba(0,0,0,.04);}
+.ch-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
+.roman{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--primary);}
+.ch-head h2{font-family:var(--serif);font-weight:500;font-size:22px;color:var(--dark);}
+.glance ol{list-style:none;}
+.glance li + li{border-top:1px dashed var(--line);}
+.glance a{display:flex;gap:12px;align-items:flex-start;padding:10px 0;}
+.glance b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--g);color:#fff;font-size:10.5px;font-weight:600;margin-top:2px;}
+.glance span{font-size:13px;line-height:1.45;color:var(--grey);}
+.glance strong{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--dark);transition:color .3s;}
+.glance a:hover strong{color:var(--g);}
+
+/* chapter markers along the strand */
+.chapter{position:relative;z-index:2;width:max-content;max-width:calc(100% - 32px);margin:0 auto 70px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:40px;padding:14px 34px;box-shadow:0 10px 30px rgba(0,0,0,.06);scroll-margin-top:30px;}
+.chapter .roman{font-size:18px;}
+.chapter h2{display:inline;font-family:var(--serif);font-weight:500;font-size:28px;color:var(--dark);margin-left:8px;}
+.chapter p{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--grey);margin-top:2px;}
+
+/* ---------- Gene 03 · Lineage, and guides wherever they appear ---------- */
+.tag .rule{margin-top:14px;font-size:13.5px;}
+.tag .rule b{display:block;color:var(--g);font-weight:600;margin-bottom:4px;}
+button.g{all:unset;cursor:pointer;color:var(--g);border-bottom:1px dotted currentColor;}
+button.g:hover,button.g:focus-visible{border-bottom-style:solid;}
+.allele .walk{margin-top:6px;font-size:12px;letter-spacing:.3px;}
+.guides{list-style:none;margin-top:10px;text-align:left;}
+.guides li{padding:7px 0;border-top:1px dashed var(--line);line-height:1.4;}
+.guides button.g{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--dark);border-bottom-color:color-mix(in srgb,var(--g) 50%,#fff);}
+.guides button.g:hover,.guides button.g:focus-visible{color:var(--g);}
+.guides span{display:block;font-size:12px;color:var(--grey);}
+.steps li b:only-of-type{align-self:center;}
+.mini b{color:var(--dark);font-weight:600;}
+.mini.links a{display:block;color:#555;}
+.mini.links a:hover{color:var(--g);}
+.mini.links a b{margin-right:4px;}
+
+/* guide panel */
+.drawer-body .work{font-style:italic;color:var(--g);font-size:13px;margin-top:2px;}
+.drawer-body .challenge{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.4;color:var(--dark);border-left:3px solid var(--g);padding-left:14px;margin-top:4px;}
+.drawer-body .nogurus{font-size:12px;color:var(--grey);margin-top:26px;}
+
+@media (max-width:1000px){ .glance{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto;} }
+@media (max-width:860px){
+  .glance{margin-left:0;}
+  .chapter{margin:0 16px 50px 80px;width:auto;text-align:left;border-radius:14px;padding:12px 18px;}
+  .chapter h2{font-size:22px;}
+}
