@@ -42,13 +42,6 @@
 
   const isImage = (p: string | undefined) => /^(https?:\/\/|\/|data:image\/)/i.test(p ?? "");
 
-  /** The tooltip's first lines of a description, cut at a word. */
-  function snippet(text: string | undefined, max = 140): string {
-    const s = (text ?? "").replace(/\s+/g, " ").trim();
-    if (s.length <= max) return s;
-    return s.slice(0, s.lastIndexOf(" ", max) > 60 ? s.lastIndexOf(" ", max) : max) + "…";
-  }
-
   // The kiosk's English strings for this view (apps/kiosk/src/lib/i18n/en.ts).
   const MESSAGES: Record<string, string | { one: string; other: string }> = {
     "cal.newMoon": "New moon",
@@ -961,8 +954,6 @@
               <span class="yt-tip-title">{#if ev.pictogram && !isImage(ev.pictogram)}{ev.pictogram} {/if}{ev.title}</span>
               <span class="yt-tip-when">{dotWhen(ev)}</span>
               {#if ev.location}<span class="yt-tip-line">📍 {ev.location}</span>{/if}
-              {#if ev.category}<span class="yt-tip-line">{ev.category}</span>{/if}
-              {#if ev.description}<span class="yt-tip-desc">{snippet(ev.description)}</span>{/if}
               <span class="yt-tip-hint">Click for details</span>
             </span>
           </button>
@@ -998,8 +989,6 @@
         <span class="yt-tip-title">{#if s.ev.pictogram && !isImage(s.ev.pictogram)}{s.ev.pictogram} {/if}{s.ev.title}</span>
         <span class="yt-tip-when">{spanWhen(s.ev)} ·{s.ev.days} days</span>
         {#if s.ev.location}<span class="yt-tip-line">📍 {s.ev.location}</span>{/if}
-        {#if s.ev.category}<span class="yt-tip-line">{s.ev.category}</span>{/if}
-        {#if s.ev.description}<span class="yt-tip-desc">{snippet(s.ev.description)}</span>{/if}
         <span class="yt-tip-hint">Click for details</span>
       </span>
     </button>
@@ -1476,7 +1465,7 @@
     display: grid;
     gap: 0.15rem;
     width: max-content;
-    max-width: 17rem;
+    max-width: 14rem;
     white-space: normal;
     text-align: left;
     font-weight: 400;
@@ -1486,7 +1475,6 @@
   .yt-tip-title { font-weight: 700; font-size: 0.8rem; }
   .yt-tip-when { font-weight: 600; color: var(--gold-dark, var(--ink)); }
   .yt-tip-line { color: var(--muted); }
-  .yt-tip-desc { margin-top: 0.15rem; color: var(--ink); }
   .yt-tip-hint { margin-top: 0.2rem; font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
   .yt-dot:hover .yt-tip,
   .yt-dot:focus-visible .yt-tip,

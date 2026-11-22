@@ -23,7 +23,14 @@
 
   const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
+  // A click on the timeline opens the event in a modal; from there, its own page.
+  let opened = $state(null);
   function openEvent(ev) {
+    opened = ev;
+  }
+
+  function openPage(ev) {
+    opened = null;
     const url = `/lunations/${encodeURIComponent(ev.questId ?? ev.id)}${ev.recurring ? `?on=${ymd(ev.date)}` : ''}`;
     history.pushState({ fromTimeline: true }, '', url);
     route = parseRoute();
@@ -127,7 +134,9 @@
   }
 
   function onkeydown(e) {
-    if (e.key === 'Escape' && route) backToCalendar();
+    if (e.key !== 'Escape') return;
+    if (opened) opened = null;
+    else if (route) backToCalendar();
   }
 
   onMount(() => {
@@ -290,6 +299,39 @@
 </main>
 {/if}
 
+{#if opened}
+  {@const ev = opened}
+  <div class="scrim" onclick={() => (opened = null)} aria-hidden="true"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="close" onclick={() => (opened = null)} aria-label="Close">×</button>
+    <div class="modal-head">
+      {#if ev.pictogram}
+        <span class="picto small" style="background: {noteColor(ev.category)}" aria-hidden="true">
+          {#if isPictogramImage(ev.pictogram)}<img src={ev.pictogram} alt="" />{:else}{ev.pictogram}{/if}
+        </span>
+      {:else}
+        <span class="swatch" style="background: {noteColor(ev.category)}"></span>
+      {/if}
+      <div>
+        {#if ev.category}<p class="eyebrow">{ev.category}</p>{/if}
+        <h3 id="modal-title" class="display">{ev.title}</h3>
+      </div>
+    </div>
+    <p class="when">{when(ev)}</p>
+    <dl>
+      {#if ev.location}<dt>Where</dt><dd>{ev.location}</dd>{/if}
+      {#if ev.recurring}<dt>Repeats</dt><dd>Part of a recurring series</dd>{/if}
+      <dt>Lunation</dt><dd>{lunationAt(ev.date.getTime()).index}</dd>
+      {#if ev.completed}<dt>Status</dt><dd>Done</dd>{/if}
+    </dl>
+    {#if ev.description}<div class="desc modal-desc">{ev.description}</div>{/if}
+    <div class="cta">
+      <a class="btn gold" href={applyUrl(ev)}>Apply to join →</a>
+      <a class="btn ghost" href="/lunations/{encodeURIComponent(ev.questId ?? ev.id)}" onclick={(e) => { e.preventDefault(); openPage(ev); }}>Full page</a>
+    </div>
+  </div>
+{/if}
+
 <footer class="foot">
   <div class="wrap">© Liminal Village · Ascoli Piceno, Italy · <a href="/">liminalvillage.com</a></div>
 </footer>
@@ -351,6 +393,26 @@
   .swatch { width: 44px; height: 7px; border-radius: 4px; }
   .picto { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 30px; line-height: 1; }
   .picto img { width: 34px; height: 34px; object-fit: contain; }
+  .picto.small { width: 46px; height: 46px; border-radius: 12px; font-size: 24px; flex: none; }
+  .picto.small img { width: 28px; height: 28px; }
+
+  .scrim { position: fixed; inset: 0; z-index: 900; background: rgba(30, 22, 12, 0.35); backdrop-filter: blur(2px); animation: fade 0.2s ease; }
+  .modal {
+    position: fixed; z-index: 901; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(560px, calc(100% - 32px)); max-height: calc(100vh - 48px); overflow-y: auto;
+    display: grid; gap: 12px; justify-items: start;
+    padding: 26px 26px 22px; border-radius: 20px; background: var(--paper, #fff); box-shadow: var(--shadow-lift, 0 20px 60px rgba(0, 0, 0, 0.2));
+    animation: pop 0.22s ease;
+  }
+  @keyframes pop { from { opacity: 0; transform: translate(-50%, -46%); } }
+  @keyframes fade { from { opacity: 0; } }
+  .modal-head { display: flex; align-items: center; gap: 14px; padding-right: 28px; }
+  .modal-head .eyebrow { margin-bottom: 2px; }
+  .modal h3 { font-size: 26px; line-height: 1.15; }
+  .modal .modal-desc { font-size: 15px; line-height: 1.65; }
+  .modal .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .close { position: absolute; top: 12px; right: 14px; width: 34px; height: 34px; border-radius: 50%; font-size: 24px; line-height: 1; color: var(--muted); }
+  .close:hover { background: var(--gold-soft); color: var(--ink); }
   .when { font-weight: 600; color: var(--ink); font-size: 17px; }
   .desc { white-space: pre-line; font-size: 16px; line-height: 1.75; color: var(--ink); max-width: 64ch; }
   .also { list-style: none; display: grid; gap: 4px; font-size: 14.5px; color: var(--muted); }
