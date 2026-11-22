@@ -3,8 +3,8 @@
 // (netlify/lib/holosphere.mjs re-exports it), so moving to the next
 // lunation's holon is a one-line change here.
 
-/** The village holon of the current lunation (lunation84): quests, calendar, services. */
-export const VILLAGE_HOLON = '-1004438000774';
+/** The Liminal Village holon: quests, calendar, services. */
+export const VILLAGE_HOLON = '-1003864542239';
 
 /** Each portal's holon, picked by hostname. Empty = not connected yet. */
 export const PORTAL_HOLONS = {
