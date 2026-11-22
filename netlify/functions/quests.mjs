@@ -180,6 +180,7 @@ function publicQuest(raw, holon) {
     shortDesc: clean(raw.shortDesc),
     fullDesc: clean(raw.fullDesc),
     icon: clean(raw.icon),
+    pictogram: clean(raw.pictogram).slice(0, 2048),
     color: clean(raw.color),
     skills: asArray(raw.skills).filter((s) => typeof s === 'string'),
     duration: clean(raw.duration),

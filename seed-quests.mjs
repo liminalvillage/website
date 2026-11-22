@@ -78,6 +78,7 @@ const questSchema = {
 
     // ── Portal-specific extensions ──
     "icon":     { "type": "string", "description": "Font Awesome icon class (e.g. 'fa-leaf')", "default": "" },
+    "pictogram": { "type": "string", "description": "An emoji (e.g. '🌕') or a small image URL, drawn at the event's place on the calendars and as the quest's picture when it has none", "default": "" },
     "color":    { "type": "string", "description": "Hex color for quest theme (e.g. '#4a9d5f')", "default": "" },
     "skills":   { "type": "array", "description": "Skills needed for this quest", "items": { "type": "string" }, "default": [] },
     "tools":    { "type": "string", "description": "Tools provided and needed", "default": "" },

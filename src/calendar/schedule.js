@@ -128,7 +128,14 @@ export function toEvents(quests, year) {
     if (seen.has(id)) continue;
     seen.add(id);
     const completed = isCompleted(q);
-    const common = { title: q.title || 'Untitled', category: q.category || '', location: q.location || '' };
+    const common = {
+      questId: id,
+      title: q.title || 'Untitled',
+      category: q.category || '',
+      location: q.location || '',
+      pictogram: typeof q.pictogram === 'string' ? q.pictogram.trim() : '',
+      description: String(q.fullDesc || q.description || q.shortDesc || '').trim(),
+    };
     const occurrences = questFrequency(q)
       ? questOccurrences(q, completed ? { start: window.start, end: new Date() } : window)
       : [];
@@ -145,6 +152,9 @@ export function toEvents(quests, year) {
   }
   return out.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
+
+/** A `pictogram` is an emoji / short text, or an image when it looks like a URL. */
+export const isPictogramImage = (p) => /^(https?:\/\/|\/|data:image\/)/i.test(String(p ?? ''));
 
 // ── Colour: the kiosk's post-it palette, hashed by category ──────────
 
