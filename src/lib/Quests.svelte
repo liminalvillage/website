@@ -92,7 +92,7 @@
 
   const TYPE_STYLES = {
     task:     { icon: 'fa-list-check',   color: primary },
-    event:    { icon: 'fa-calendar-star', color: '#7B9E6B' },
+    event:    { icon: 'fa-calendar-days', color: '#7B9E6B' }, // free set: fa-calendar-star is Pro-only
     proposal: { icon: 'fa-lightbulb',    color: '#C27D4E' },
     request:  { icon: 'fa-hand-holding', color: '#8B6F5D' },
     offer:    { icon: 'fa-gift',         color: '#4a9d5f' },
@@ -189,6 +189,7 @@
       id: raw.id,
       title: raw.title || 'Untitled Quest',
       icon: raw.icon || typeStyle.icon,
+      pictogram: typeof raw.pictogram === 'string' ? raw.pictogram.trim() : '',
       color: raw.color || typeStyle.color,
       image: raw.image || '',
       shortDesc: raw.shortDesc || raw.description || '',
@@ -492,13 +493,9 @@
           <div class="hero-wrap">
             {#if q.image}
               <img class="hero-img" src={q.image} alt={q.title} onerror={handleImageError} />
-              <div class="icon-hero hidden" style="background:{q.color}15">
-                <i class="fas {q.icon}" style="color:{q.color}"></i>
-              </div>
+              <div class="icon-hero hidden" style="background:{q.color}15">{@render placeholder(q)}</div>
             {:else}
-              <div class="icon-hero" style="background:{q.color}15">
-                <i class="fas {q.icon}" style="color:{q.color}"></i>
-              </div>
+              <div class="icon-hero" style="background:{q.color}15">{@render placeholder(q)}</div>
             {/if}
             {#if q.federation}
               <div class="fed-overlay" title="From federated holon: {q.federation.originName}">
@@ -541,6 +538,17 @@
   </footer>
 {/if}
 
+<!-- No picture: the quest's pictogram if it has one, else its type's icon. -->
+{#snippet placeholder(q)}
+  {#if q.pictogram && /^(https?:\/\/|\/|data:image\/)/i.test(q.pictogram)}
+    <img class="picto-img" src={q.pictogram} alt="" aria-hidden="true" />
+  {:else if q.pictogram}
+    <span class="picto" aria-hidden="true">{q.pictogram}</span>
+  {:else}
+    <i class="fas {q.icon}" style="color:{q.color}" aria-hidden="true"></i>
+  {/if}
+{/snippet}
+
 <!-- Detail Overlay -->
 {#if selectedQuest}
   {@const q = selectedQuest}
@@ -554,13 +562,9 @@
     <div class="detail-card">
       {#if q.image}
         <img class="detail-hero" src={q.image} alt={q.title} onerror={handleImageError} />
-        <div class="detail-icon-hero hidden" style="background:{q.color}15">
-          <i class="fas {q.icon}" style="color:{q.color}"></i>
-        </div>
+        <div class="detail-icon-hero hidden" style="background:{q.color}15">{@render placeholder(q)}</div>
       {:else}
-        <div class="detail-icon-hero" style="background:{q.color}15">
-          <i class="fas {q.icon}" style="color:{q.color}"></i>
-        </div>
+        <div class="detail-icon-hero" style="background:{q.color}15">{@render placeholder(q)}</div>
       {/if}
       <div class="detail-body">
         <button class="back-btn" onclick={() => selectedQuestId = null}>
@@ -704,6 +708,10 @@
 
 <style>
   .hidden { display: none !important; }
+  .icon-hero .picto { font-size: 3.4rem; line-height: 1; }
+  .detail-icon-hero .picto { font-size: 4.2rem; line-height: 1; }
+  .icon-hero .picto-img { width: 72px; height: 72px; object-fit: contain; }
+  .detail-icon-hero .picto-img { width: 96px; height: 96px; object-fit: contain; }
 
   .welcome {
     min-height: 100vh;
@@ -782,7 +790,7 @@
   .quest-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.35s ease; }
   .quest-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
   .quest-card .hero-img { width: 100%; height: 180px; object-fit: cover; display: block; }
-  .icon-hero { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+  .icon-hero { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
   .card-body { padding: 1.25rem 1.5rem 1.5rem; }
   .quest-card h3 { font-size: 1rem; font-weight: 600; letter-spacing: 1px; color: #222; margin-bottom: 0.5rem; }
   .desc { font-size: 0.85rem; color: #8a8274; line-height: 1.6; margin-bottom: 1rem; }
@@ -800,7 +808,7 @@
   .quest-detail { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); overflow-y: auto; animation: fadeIn 0.3s ease; display: flex; justify-content: center; padding: 2rem; }
   .detail-card { background: #fff; border-radius: 16px; max-width: 720px; width: 100%; margin: auto; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: slideInUp 0.4s ease; }
   .detail-hero { width: 100%; height: 240px; object-fit: cover; display: block; }
-  .detail-icon-hero { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+  .detail-icon-hero { width: 100%; height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3.6rem; }
   .detail-body { padding: 2rem 2.5rem 2.5rem; }
   .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #8a8274; background: none; border: none; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.25rem; transition: color 0.3s; font-family: "Open Sans", sans-serif; }
   .back-btn:hover { color: var(--q-primary); }

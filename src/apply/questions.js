@@ -80,6 +80,7 @@ export const LABELS = {
   wellbeing: 'Wellbeing',
   referral: 'Referred by',
   visit: 'Visit in person',
+  event: 'Event (from the calendar)',
   arrival: 'Arrival',
   departure: 'Departure',
   transport: 'Transport',
@@ -136,7 +137,7 @@ export function missingFields(a) {
 export const SECTIONS = [
   { title: 'You', keys: ['name', 'email', 'location', 'age', 'x', 'linkedin', 'website', 'socials'] },
   { title: 'Story', keys: ['role', 'intention', 'ikigai', 'publicProfile', 'background', 'community', 'wellbeing', 'referral'] },
-  { title: 'Lunation', keys: ['visit', 'arrival', 'departure', 'transport', 'licence', 'accommodation'] },
+  { title: 'Lunation', keys: ['visit', 'event', 'arrival', 'departure', 'transport', 'licence', 'accommodation'] },
   { title: 'Contribution', keys: ['watched', 'tasks', 'contribution', 'capacity'] },
 ];
 
@@ -184,6 +185,7 @@ export function toHolonsRecord(a, { id, at, profileClaim }) {
     wellbeing: a.wellbeing,
     referral: a.referral,
     visit: a.visit,
+    event: a.event,
     ...(person && {
       arrival: a.arrival,
       departure: a.departure,

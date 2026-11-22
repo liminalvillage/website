@@ -3,14 +3,14 @@
 //
 //   GET /api/calendar   → { holon, quests: [...] }
 //
-// Only the fields a calendar needs leave the server — no participants, no
-// descriptions. Which quests count (tasks and events, not marketplace items;
+// Only the fields a calendar and its event pages need leave the server — no
+// participants. Which quests count (tasks and events, not marketplace items;
 // not cancelled or deleted; dated) mirrors @holons/core/tasks; the page
 // expands schedules and recurrences in the visitor's local time.
 import { VILLAGE_HOLON as HOLON_ID, readLenses } from '../lib/holosphere.mjs';
 const TASK_TYPES = ['', 'task', 'quest', 'todo', 'recurring'];
 const EVENT_TYPES = ['event', 'meeting', 'appointment'];
-const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location'];
+const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location', 'pictogram', 'description', 'shortDesc', 'fullDesc'];
 
 const isAgenda = (q) => {
   const type = String(q.type ?? '').trim().toLowerCase();

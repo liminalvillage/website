@@ -21,9 +21,17 @@
   const BLANK = {
     email: '', name: '', location: '', x: '', linkedin: '', website: '', age: '',
     role: [], roleOther: '', intention: '', ikigai: '', publicProfile: '', background: '', community: '', wellbeing: '', referral: '',
-    visit: '', arrival: '', departure: '', transport: [], transportOther: '', licence: '', accommodation: '',
+    visit: '', event: '', arrival: '', departure: '', transport: [], transportOther: '', licence: '', accommodation: '',
     watched: '', tasks: [], tasksOther: '', contribution: '', contributionOther: '', capacity: '', socials: '',
   };
+
+  // Arriving from an event on /lunations: ?event=<title>&arrival=YYYY-MM-DD&departure=YYYY-MM-DD.
+  const fromEvent = (() => {
+    const p = new URLSearchParams(location.search);
+    const date = (k) => (/^\d{4}-\d{2}-\d{2}$/.test(p.get(k) ?? '') ? p.get(k) : '');
+    const title = (p.get('event') ?? '').slice(0, 200);
+    return title || date('arrival') ? { title, arrival: date('arrival'), departure: date('departure') } : null;
+  })();
 
   // Four steps, four phases: the moon fills as the application does.
   const STEPS = [
@@ -52,7 +60,9 @@
   let company = $state(''); // honeypot
   let playing = $state(false); // the vision video in the Contribution step
   let profileLink = $state(''); // HolonsBot link that puts ikigai + LinkedIn on their profile
-  const hasDraft = Object.values(a).some((v) => (Array.isArray(v) ? v.length : v));
+  // What the event link filled in doesn't count as a started application.
+  const PREFILLED = fromEvent ? ['event', 'visit', 'arrival', 'departure'] : [];
+  const hasDraft = Object.entries(a).some(([k, v]) => !PREFILLED.includes(k) && (Array.isArray(v) ? v.length : v));
 
   const missing = $derived(missingFields(a));
   const stepMissing = $derived(missing.filter((k) => STEPS[step].keys.includes(k)));
@@ -66,13 +76,21 @@
   const today = new Date().toISOString().slice(0, 10);
 
   function loadDraft() {
+    let draft;
     try {
-      const draft = { ...BLANK, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') };
+      draft = { ...BLANK, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') };
       if (!Array.isArray(draft.role)) draft.role = draft.role ? [draft.role] : []; // drafts from when role was single-choice
-      return draft;
     } catch {
-      return { ...BLANK };
+      draft = { ...BLANK };
     }
+    if (fromEvent?.title) draft.event = fromEvent.title;
+    // An upcoming event they chose: come in person, on its dates (not in the past).
+    if (fromEvent?.arrival && fromEvent.arrival >= new Date().toISOString().slice(0, 10)) {
+      if (!draft.visit || draft.visit === 'remote') draft.visit = 'visit';
+      draft.arrival = fromEvent.arrival;
+      draft.departure = fromEvent.departure >= fromEvent.arrival ? fromEvent.departure : fromEvent.arrival;
+    }
+    return draft;
   }
 
   $effect(() => {
@@ -187,6 +205,9 @@
           A community for regeneration, co-creation, shared stewardship and integral development — in the hills of
           central Italy and across a growing regenerative network.
         </p>
+        {#if fromEvent?.title}
+          <p class="lead from-event">Applying to join <strong>{fromEvent.title}</strong>{#if a.arrival && a.arrival === fromEvent.arrival}{' '}— its dates are already filled in{/if}.</p>
+        {/if}
         <div class="cta">
           <button class="btn gold" onclick={() => go('form')}>{hasDraft ? 'Continue my application' : 'Start my application'} →</button>
           <span class="muted small">About 10 minutes · your answers are saved as you go</span>
@@ -599,6 +620,7 @@
   .hero .eyebrow { color: #f3d7a8; }
   .hero h1 { color: #fff; font-size: clamp(44px, 7vw, 84px); font-weight: 400; margin: 12px 0 16px; }
   .hero .lead { font-size: 18px; max-width: 54ch; color: rgba(255, 255, 255, 0.9); }
+  .hero .lead.from-event { margin-top: 12px; padding: 8px 14px; border-left: 3px solid var(--gold); background: rgba(0, 0, 0, 0.28); border-radius: 0 10px 10px 0; font-size: 16px; }
   .hero .muted { color: rgba(255, 255, 255, 0.75); }
   .cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 28px; }
   .cta.center { justify-content: center; }

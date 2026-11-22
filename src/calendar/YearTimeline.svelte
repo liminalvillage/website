@@ -32,9 +32,15 @@
     days: number;
     multiDay: boolean;
     category?: string;
+    location?: string;
+    description?: string;
+    /** An emoji, or an image URL, drawn in place of the square. */
+    pictogram?: string;
     allDay: boolean;
     sourceColor?: string;
   };
+
+  const isImage = (p: string | undefined) => /^(https?:\/\/|\/|data:image\/)/i.test(p ?? "");
 
   // The kiosk's English strings for this view (apps/kiosk/src/lib/i18n/en.ts).
   const MESSAGES: Record<string, string | { one: string; other: string }> = {
@@ -659,7 +665,15 @@
   }
 
   function dotTitle(ev: CalendarEvent): string {
-    const when = ev.allDay
+    return `${ev.title} · ${dotWhen(ev)}`;
+  }
+  function spanWhen(ev: CalendarEvent): string {
+    const fmt = (d: Date) =>
+      d.toLocaleDateString($locale, { day: "numeric", month: "short" });
+    return `${fmt(ev.date)} – ${fmt(ev.end ?? ev.date)}`;
+  }
+  function dotWhen(ev: CalendarEvent): string {
+    return ev.allDay
       ? ev.date.toLocaleDateString($locale, { day: "numeric", month: "short" })
       : ev.date.toLocaleString($locale, {
           day: "numeric",
@@ -667,12 +681,9 @@
           hour: "2-digit",
           minute: "2-digit",
         });
-    return `${ev.title} · ${when}`;
   }
   function spanTitle(ev: CalendarEvent): string {
-    const fmt = (d: Date) =>
-      d.toLocaleDateString($locale, { day: "numeric", month: "short" });
-    return `${ev.title} · ${fmt(ev.date)} – ${fmt(ev.end ?? ev.date)}`;
+    return `${ev.title} · ${spanWhen(ev)}`;
   }
 
   // ── Hover readout: the date under the cursor + its sky statistics ─────────
@@ -916,6 +927,7 @@
             type="button"
             class="yt-dot"
             class:is-foreign={!!ev.sourceColor}
+            class:has-picto={!!ev.pictogram}
             style="top: calc(50% - {STACK_BASE_REM +
               (i + 1) * ROW_REM}rem); background: {noteColorFor(
               ev.category,
@@ -924,6 +936,13 @@
             on:pointerdown={(e) => liftEv(e, ev)}
             on:click={(e) => openEv(e, ev)}
           >
+            {#if ev.pictogram}
+              {#if isImage(ev.pictogram)}
+                <img class="yt-picto" src={ev.pictogram} alt="" aria-hidden="true" />
+              {:else}
+                <span class="yt-picto" aria-hidden="true">{ev.pictogram}</span>
+              {/if}
+            {/if}
             {#if lw !== null}
               <span
                 class="yt-label"
@@ -931,7 +950,12 @@
                 aria-hidden="true">{ev.title}</span
               >
             {/if}
-            <span class="yt-tip">{dotTitle(ev)}</span>
+            <span class="yt-tip yt-tip-ev">
+              <span class="yt-tip-title">{#if ev.pictogram && !isImage(ev.pictogram)}{ev.pictogram} {/if}{ev.title}</span>
+              <span class="yt-tip-when">{dotWhen(ev)}</span>
+              {#if ev.location}<span class="yt-tip-line">📍 {ev.location}</span>{/if}
+              <span class="yt-tip-hint">Click for details</span>
+            </span>
           </button>
         {/each}
       </div>
@@ -953,10 +977,20 @@
       on:pointerdown={(e) => liftEv(e, s.ev)}
       on:click={(e) => openEv(e, s.ev)}
     >
+      {#if s.ev.pictogram}
+        <span class="yt-span-picto" aria-hidden="true">
+          {#if isImage(s.ev.pictogram)}<img class="yt-picto" src={s.ev.pictogram} alt="" />{:else}{s.ev.pictogram}{/if}
+        </span>
+      {/if}
       {#if s.labeled}
         <span class="yt-span-label" aria-hidden="true">{s.ev.title}</span>
       {/if}
-      <span class="yt-tip">{spanTitle(s.ev)}</span>
+      <span class="yt-tip yt-tip-ev">
+        <span class="yt-tip-title">{#if s.ev.pictogram && !isImage(s.ev.pictogram)}{s.ev.pictogram} {/if}{s.ev.title}</span>
+        <span class="yt-tip-when">{spanWhen(s.ev)} ·{s.ev.days} days</span>
+        {#if s.ev.location}<span class="yt-tip-line">📍 {s.ev.location}</span>{/if}
+        <span class="yt-tip-hint">Click for details</span>
+      </span>
     </button>
   {/each}
 
@@ -1279,6 +1313,52 @@
   .yt-dot:active {
     transform: translateX(-50%) scale(1.4);
   }
+  /* A pictogram stands in for the square: on a small chip of the category colour. */
+  .yt-dot.has-picto {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: -0.125rem;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+  .yt-picto {
+    display: block;
+    font-size: 0.62rem;
+    line-height: 1;
+    width: 0.62rem;
+    height: 0.62rem;
+    text-align: center;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  span.yt-picto { width: auto; height: auto; }
+  /* On a span: at its start, sitting just above the bar. */
+  .yt-span-picto {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.1rem);
+    display: grid;
+    place-items: center;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 4px;
+    background: var(--card);
+    box-shadow: var(--shadow-soft);
+    font-size: 0.6rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .yt-span.labeled .yt-span-picto {
+    position: static;
+    flex: none;
+    margin-left: 0.15rem;
+    width: auto;
+    height: auto;
+    background: none;
+    box-shadow: none;
+  }
   /* The card's title beside its square (part of the button, so it taps). */
   .yt-label {
     position: absolute;
@@ -1380,7 +1460,25 @@
     transition: opacity 0.12s ease;
     z-index: 30;
   }
+  /* An event's tooltip: its details, a few lines tall. */
+  .yt-tip-ev {
+    display: grid;
+    gap: 0.15rem;
+    width: max-content;
+    max-width: 14rem;
+    white-space: normal;
+    text-align: left;
+    font-weight: 400;
+    line-height: 1.35;
+    padding: 0.5rem 0.65rem;
+  }
+  .yt-tip-title { font-weight: 700; font-size: 0.8rem; }
+  .yt-tip-when { font-weight: 600; color: var(--gold-dark, var(--ink)); }
+  .yt-tip-line { color: var(--muted); }
+  .yt-tip-hint { margin-top: 0.2rem; font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
   .yt-dot:hover .yt-tip,
+  .yt-dot:focus-visible .yt-tip,
+  .yt-span:focus-visible .yt-tip,
   .yt-span:hover .yt-tip,
   .yt-sky:hover .yt-tip {
     opacity: 1;

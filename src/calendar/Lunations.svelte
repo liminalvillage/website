@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { phase_hunt } from 'lune';
   import YearTimeline from './YearTimeline.svelte';
-  import { toEvents, noteColor } from './schedule.js';
+  import { toEvents, noteColor, isPictogramImage } from './schedule.js';
   import { lunationAt } from './lunation.js';
 
   const DAY_MS = 86_400_000;
@@ -12,7 +12,63 @@
   let error = $state('');
   let now = $state(new Date());
   let year = $state(new Date().getFullYear());
+  // /lunations/<quest id>[?on=YYYY-MM-DD] is an event's own page; /lunations the timeline.
+  let route = $state(parseRoute());
+
+  function parseRoute() {
+    const m = /^\/lunations\/([^/]+)\/?$/.exec(location.pathname);
+    if (!m) return null;
+    return { id: decodeURIComponent(m[1]), on: new URLSearchParams(location.search).get('on') || '' };
+  }
+
+  const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  // A click on the timeline opens the event in a modal; from there, its own page.
   let opened = $state(null);
+  function openEvent(ev) {
+    opened = ev;
+  }
+
+  function openPage(ev) {
+    opened = null;
+    const url = `/lunations/${encodeURIComponent(ev.questId ?? ev.id)}${ev.recurring ? `?on=${ymd(ev.date)}` : ''}`;
+    history.pushState({ fromTimeline: true }, '', url);
+    route = parseRoute();
+    window.scrollTo(0, 0);
+  }
+
+  function backToCalendar(e) {
+    e?.preventDefault();
+    // Opened from the timeline: going back keeps its year and scroll. Landed here directly: go to it.
+    if (history.state?.fromTimeline) history.back();
+    else {
+      history.pushState({}, '', '/lunations');
+      route = null;
+    }
+  }
+
+  // The event the page shows: the quest, and the occurrence asked for (or the next one).
+  const page = $derived.by(() => {
+    if (!route) return null;
+    const quest = quests.find((q) => String(q.id ?? q.title) === route.id);
+    if (!quest) return { quest: null };
+    const y = now.getFullYear();
+    const all = [...toEvents([quest], y - 1), ...toEvents([quest], y), ...toEvents([quest], y + 1)];
+    const byId = new Map(all.map((e) => [e.id, e]));
+    const occ = [...byId.values()].sort((a, b) => a.date - b.date);
+    const upcoming = occ.filter((e) => (e.end ?? e.date) >= now);
+    const shown = (route.on && occ.find((e) => ymd(e.date) === route.on)) || upcoming[0] || occ[occ.length - 1];
+    return { quest, ev: shown, upcoming: upcoming.filter((e) => e !== shown).slice(0, 6) };
+  });
+
+  function applyUrl(ev) {
+    const p = new URLSearchParams({ event: ev.title, arrival: ymd(ev.date), departure: ymd(ev.end ?? ev.date) });
+    return `/apply?${p}`;
+  }
+
+  $effect(() => {
+    document.title = page?.ev ? `${page.ev.title} · Lunations · Liminal Village` : 'Lunations · Liminal Village';
+  });
 
   const events = $derived(toEvents(quests, year));
   const lunations = $derived(lunationsOf(year, events));
@@ -78,13 +134,20 @@
   }
 
   function onkeydown(e) {
-    if (e.key === 'Escape') opened = null;
+    if (e.key !== 'Escape') return;
+    if (opened) opened = null;
+    else if (route) backToCalendar();
   }
 
   onMount(() => {
     load();
+    const onpop = () => (route = parseRoute());
+    window.addEventListener('popstate', onpop);
     const tick = setInterval(() => (now = new Date()), 60_000);
-    return () => clearInterval(tick);
+    return () => {
+      clearInterval(tick);
+      window.removeEventListener('popstate', onpop);
+    };
   });
 </script>
 
@@ -102,6 +165,60 @@
   </div>
 </nav>
 
+{#if route}
+<main class="wrap event-page">
+  <a href="/lunations" class="back" onclick={backToCalendar}>← Back to the calendar</a>
+  {#if !page?.quest}
+    {#if loading}
+      <p class="muted">Loading the event…</p>
+    {:else if error}
+      <p class="notice error">Couldn’t load the village’s plans ({error}). <button class="link" onclick={load}>Try again</button></p>
+    {:else}
+      <h1 class="display">Event not found</h1>
+      <p>It may have been moved or cancelled. <a class="link" href="/lunations" onclick={backToCalendar}>See the calendar</a>.</p>
+    {/if}
+  {:else}
+    {@const ev = page.ev}
+    <article class="event">
+      {#if ev.pictogram}
+        <span class="picto" style="background: {noteColor(ev.category)}" aria-hidden="true">
+          {#if isPictogramImage(ev.pictogram)}<img src={ev.pictogram} alt="" />{:else}{ev.pictogram}{/if}
+        </span>
+      {:else}
+        <span class="swatch" style="background: {noteColor(ev.category)}"></span>
+      {/if}
+      {#if ev.category}<p class="eyebrow">{ev.category}</p>{/if}
+      <h1 class="display">{ev.title}</h1>
+      <p class="when">{when(ev)}</p>
+      <dl>
+        {#if ev.location}<dt>Where</dt><dd>{ev.location}</dd>{/if}
+        {#if ev.recurring}<dt>Repeats</dt><dd>Part of a recurring series{page.quest.frequency ? ` (${page.quest.frequency})` : ''}</dd>{/if}
+        <dt>Lunation</dt><dd>{lunationAt(ev.date.getTime()).index}</dd>
+        {#if ev.completed}<dt>Status</dt><dd>Done</dd>{/if}
+      </dl>
+      {#if ev.description}
+        <div class="desc">{ev.description}</div>
+      {/if}
+      {#if page.upcoming.length}
+        <h2 class="display">Also on</h2>
+        <ul class="also">
+          {#each page.upcoming as o (o.id)}<li>{when(o)}</li>{/each}
+        </ul>
+      {/if}
+      <div class="apply">
+        <p>
+          <strong>Want to take part?</strong> Lunations are open to members and supporters of Liminal Village.
+          Apply and we’ll get back to you.
+        </p>
+        <div class="cta">
+          <a class="btn gold" href={applyUrl(ev)}>Apply to join →</a>
+          <a class="btn ghost" href="https://opencollective.com/liminal" target="_blank" rel="noopener">Become a supporter</a>
+        </div>
+      </div>
+    </article>
+  {/if}
+</main>
+{:else}
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">Lunations</p>
@@ -136,7 +253,7 @@
     {/if}
 
     <div class="timeline">
-      <YearTimeline {events} {year} {now} noteColorFor={noteColor} onOpen={(ev) => (opened = ev)} />
+      <YearTimeline {events} {year} {now} noteColorFor={noteColor} onOpen={openEvent} />
     </div>
 
     <div class="timeline">
@@ -147,7 +264,7 @@
         title={currentTitle}
         {now}
         noteColorFor={noteColor}
-        onOpen={(ev) => (opened = ev)}
+        onOpen={openEvent}
       />
     </div>
 
@@ -180,26 +297,44 @@
     </ol>
   </section>
 </main>
+{/if}
+
+{#if opened}
+  {@const ev = opened}
+  <div class="scrim" onclick={() => (opened = null)} aria-hidden="true"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="close" onclick={() => (opened = null)} aria-label="Close">×</button>
+    <div class="modal-head">
+      {#if ev.pictogram}
+        <span class="picto small" style="background: {noteColor(ev.category)}" aria-hidden="true">
+          {#if isPictogramImage(ev.pictogram)}<img src={ev.pictogram} alt="" />{:else}{ev.pictogram}{/if}
+        </span>
+      {:else}
+        <span class="swatch" style="background: {noteColor(ev.category)}"></span>
+      {/if}
+      <div>
+        {#if ev.category}<p class="eyebrow">{ev.category}</p>{/if}
+        <h3 id="modal-title" class="display">{ev.title}</h3>
+      </div>
+    </div>
+    <p class="when">{when(ev)}</p>
+    <dl>
+      {#if ev.location}<dt>Where</dt><dd>{ev.location}</dd>{/if}
+      {#if ev.recurring}<dt>Repeats</dt><dd>Part of a recurring series</dd>{/if}
+      <dt>Lunation</dt><dd>{lunationAt(ev.date.getTime()).index}</dd>
+      {#if ev.completed}<dt>Status</dt><dd>Done</dd>{/if}
+    </dl>
+    {#if ev.description}<div class="desc modal-desc">{ev.description}</div>{/if}
+    <div class="cta">
+      <a class="btn gold" href={applyUrl(ev)}>Apply to join →</a>
+      <a class="btn ghost" href="/lunations/{encodeURIComponent(ev.questId ?? ev.id)}" onclick={(e) => { e.preventDefault(); openPage(ev); }}>Full page</a>
+    </div>
+  </div>
+{/if}
 
 <footer class="foot">
   <div class="wrap">© Liminal Village · Ascoli Piceno, Italy · <a href="/">liminalvillage.com</a></div>
 </footer>
-
-{#if opened}
-  <div class="scrim" onclick={() => (opened = null)} aria-hidden="true"></div>
-  <div class="detail" role="dialog" aria-modal="true" aria-labelledby="ev-title">
-    <span class="swatch" style="background: {noteColor(opened.category)}"></span>
-    <h3 id="ev-title" class="display">{opened.title}</h3>
-    <p class="when">{when(opened)}</p>
-    <dl>
-      {#if opened.category}<dt>Category</dt><dd>{opened.category}</dd>{/if}
-      {#if opened.location}<dt>Where</dt><dd>{opened.location}</dd>{/if}
-      {#if opened.recurring}<dt>Repeats</dt><dd>Part of a recurring series</dd>{/if}
-      {#if opened.completed}<dt>Status</dt><dd>Done</dd>{/if}
-    </dl>
-    <button class="btn ghost small" onclick={() => (opened = null)}>Close</button>
-  </div>
-{/if}
 
 <style>
   .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
@@ -250,17 +385,39 @@
   .dot.new { background: #1f2a29; }
   .count strong { color: var(--gold-dark); }
 
-  .scrim { position: fixed; inset: 0; z-index: 900; background: rgba(30, 22, 12, 0.3); backdrop-filter: blur(2px); }
-  .detail {
+  .event-page { padding: 28px 0 70px; }
+  .back { display: inline-block; margin-bottom: 18px; font-size: 14px; font-weight: 600; color: var(--gold-dark); }
+  .event { max-width: 720px; display: grid; gap: 14px; justify-items: start; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; }
+  .event h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.1; }
+  .event h2 { font-size: 22px; margin-top: 6px; }
+  .swatch { width: 44px; height: 7px; border-radius: 4px; }
+  .picto { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 30px; line-height: 1; }
+  .picto img { width: 34px; height: 34px; object-fit: contain; }
+  .picto.small { width: 46px; height: 46px; border-radius: 12px; font-size: 24px; flex: none; }
+  .picto.small img { width: 28px; height: 28px; }
+
+  .scrim { position: fixed; inset: 0; z-index: 900; background: rgba(30, 22, 12, 0.35); backdrop-filter: blur(2px); animation: fade 0.2s ease; }
+  .modal {
     position: fixed; z-index: 901; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(420px, calc(100% - 32px)); display: grid; gap: 10px; justify-items: start;
-    padding: 24px; border-radius: 20px; background: var(--paper); box-shadow: var(--shadow-lift);
-    animation: pop 0.25s var(--ease);
+    width: min(560px, calc(100% - 32px)); max-height: calc(100vh - 48px); overflow-y: auto;
+    display: grid; gap: 12px; justify-items: start;
+    padding: 26px 26px 22px; border-radius: 20px; background: var(--paper, #fff); box-shadow: var(--shadow-lift, 0 20px 60px rgba(0, 0, 0, 0.2));
+    animation: pop 0.22s ease;
   }
   @keyframes pop { from { opacity: 0; transform: translate(-50%, -46%); } }
-  .swatch { width: 36px; height: 6px; border-radius: 3px; }
-  .detail h3 { font-size: 26px; }
-  .when { font-weight: 600; color: var(--ink); }
+  @keyframes fade { from { opacity: 0; } }
+  .modal-head { display: flex; align-items: center; gap: 14px; padding-right: 28px; }
+  .modal-head .eyebrow { margin-bottom: 2px; }
+  .modal h3 { font-size: 26px; line-height: 1.15; }
+  .modal .modal-desc { font-size: 15px; line-height: 1.65; }
+  .modal .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .close { position: absolute; top: 12px; right: 14px; width: 34px; height: 34px; border-radius: 50%; font-size: 24px; line-height: 1; color: var(--muted); }
+  .close:hover { background: var(--gold-soft); color: var(--ink); }
+  .when { font-weight: 600; color: var(--ink); font-size: 17px; }
+  .desc { white-space: pre-line; font-size: 16px; line-height: 1.75; color: var(--ink); max-width: 64ch; }
+  .also { list-style: none; display: grid; gap: 4px; font-size: 14.5px; color: var(--muted); }
+  .apply { width: 100%; margin-top: 10px; padding: 16px 18px; border-left: 3px solid var(--gold); background: #fffaf2; border-radius: 0 var(--radius) var(--radius) 0; display: grid; gap: 12px; }
+  .apply .cta { display: flex; flex-wrap: wrap; gap: 10px; }
   dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 14px; }
   dt { color: var(--muted); }
   .foot { padding: 28px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }

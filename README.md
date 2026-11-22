@@ -79,7 +79,7 @@ npm run preview
 Villagers and what they offer, with online booking (booking system ported
 from `maxage`).
 
-- **Who is listed**: members (`users` lens) of the current lunation’s holon (lunation84, `-1004438000774`),
+- **Who is listed**: members (`users` lens) of the Liminal Village holon (`-1003864542239`),
   read live from the Holosphere Nostr relays by `netlify/lib/holosphere.mjs`.
 - **Ikigai & LinkedIn**: collected by @HolonsBot's `/onboarding` journey
   (steps *ikigai* and *linkedin*, editable later via *Change Profile*; the
@@ -114,7 +114,7 @@ Run locally with functions + Blobs: `npx netlify dev`.
 where Holosphere lives. The pages import it and the functions get it through
 `netlify/lib/holosphere.mjs`:
 
-- `VILLAGE_HOLON`: the current lunation's holon (lunation84, `-1004438000774`).
+- `VILLAGE_HOLON`: the Liminal Village holon (`-1003864542239`).
   `/quests` on liminalvillage.com, `/lunations` (`/api/calendar`) and `/services` all read it.
   **At a new lunation, change it here only.**
 - `PORTAL_HOLONS`: each portal's holon (Casa Selva, ReFactory, ReGenerativa), chosen by hostname via `portalFor`.

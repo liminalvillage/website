@@ -8,6 +8,7 @@
 /services        /services.html  200
 /services/admin  /services.html  200
 /lunations       /lunations.html  200
+/lunations/*     /lunations.html  200
 /calendar        /lunations       301
 /apply           /apply.html      200
 /apply/admin     /apply.html      200
