@@ -67,10 +67,10 @@ export const GENES = {
     ],
   },
   tools: {
-    blurb: 'A cybernetic operating system: open tools that make tasks, roles, time and money visible — and the inner and relational tools that keep the people using them well.',
+    blurb: 'Holons is the open-source community operating system the village runs on: tasks, shifts, roles, calendar, shared expenses, offers and requests, a library of things, proposals and appreciation, all inside the Telegram group, a web dashboard and a kiosk. Alongside it, the inner and relational tools that keep the people using it well.',
     frameworks: ['nvc', 'four-agreements', 'holacracy', 'ikigai', 'internal-family-systems', 'integral-theory', 'spiral-dynamics', 'enneagram'],
     links: [
-      { label: 'Holons & HoloSphere', href: 'https://holons.io', icon: 'fa-circle-nodes' },
+      { label: 'Holons', href: 'https://holons.io', icon: 'fa-circle-nodes' },
       { label: 'Lunations calendar', href: '/lunations', icon: 'fa-moon' },
       { label: 'Quests', href: '/quests.html', icon: 'fa-flag' },
       { label: 'Services', href: '/services', icon: 'fa-hands-holding-circle' },
@@ -225,7 +225,7 @@ export const GUIDES = {
   },
   beer: {
     name: 'Stafford Beer', dimension: 'Systems', work: 'Brain of the Firm · The Heart of Enterprise',
-    note: 'The Viable System Model: how autonomous units stay coordinated within a larger whole. A map for independent hubs connected through the Holosphere.',
+    note: 'The Viable System Model: how autonomous units stay coordinated within a larger whole. A map for independent hubs that coordinate as one network.',
     question: 'Cybernetics grew up in firms and governments. Can it serve autonomy rather than control?',
     links: [wiki('Stafford_Beer')],
   },

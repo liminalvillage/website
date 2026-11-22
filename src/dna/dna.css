@@ -276,3 +276,4 @@ button.g:hover,button.g:focus-visible{border-bottom-style:solid;}
   .chapter{margin:0 16px 50px 80px;width:auto;text-align:left;border-radius:14px;padding:12px 18px;}
   .chapter h2{font-size:22px;}
 }
+.mini code{font-size:12px;background:var(--light);border-radius:3px;padding:0 4px;}

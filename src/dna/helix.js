@@ -43,7 +43,8 @@ export function createHelix(canvas, { reduced = false } = {}) {
   let k = 1;      // world units per page pixel
   let grow = reduced ? 1 : 0;
   let hovered = -1;
-  let drift = 0;   // slow idle turn, on top of the scroll-driven one
+  let drift = 0;   // the strand's turn: constant speed, independent of scrolling
+  const SPIN = (Math.PI * 2) / 18; // one full turn every 18 s
   const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), dir = new THREE.Vector3(), v = new THREE.Vector3();
   const up = new THREE.Vector3(0, 1, 0);
 
@@ -170,9 +171,9 @@ export function createHelix(canvas, { reduced = false } = {}) {
     camera.lookAt(0, cy, 0);
     key.position.set(-4, cy + 6, camera.position.z);
     key.target.position.set(0, cy, 0);
-    // the strand screws round as you read down it: about one turn per 1.5 screens
-    if (!reduced) drift += dt * 0.06;
-    spin.rotation.y = drift + (scrollY / L.vh) * 4.2;
+    // turn at a steady pace; scrolling moves along the strand but doesn't speed it up
+    if (!reduced) drift += dt * SPIN;
+    spin.rotation.y = drift;
 
     // assemble on load: base pairs grow out from the middle of the screen
     if (grow < 1) {
