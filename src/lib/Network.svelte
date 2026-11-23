@@ -44,6 +44,20 @@
       {/each}
     </div>
 
+    <figure class="watch">
+      <div class="frame">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/XdhPXocPf9g?rel=0"
+          title="Regenerative Hubs 2030: the vision"
+          loading="lazy"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <figcaption>Watch: the Regenerative Hubs 2030 vision</figcaption>
+    </figure>
+
     <div class="links">
       <a class="more" href="https://regenerativa.earth" target="_blank" rel="noopener">Discover the network →</a>
       <!-- Hidden for now (quests & services): restore by removing the comment
@@ -79,6 +93,11 @@
   .role { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
   .name { font-size: 30px; color: #fff; }
   .go { font-size: 13px; font-weight: 600; color: #e8c490; }
+
+  .watch { margin: 48px auto 0; max-width: 880px; }
+  .watch .frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #3a3128; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+  .watch iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .watch figcaption { margin-top: 12px; text-align: center; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted, #717171); }
 
   .links { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 32px; }
 

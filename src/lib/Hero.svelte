@@ -25,6 +25,9 @@
 
   // YouTube's iframe API over postMessage, without loading its script.
   function listen() {
+    // If the player never reports "playing" (autoplay blocked, shields, slow
+    // network), show the video anyway after a moment rather than hide it forever.
+    setTimeout(() => { playing = true; }, 3500);
     send({ event: 'listening', id: 'hero' });
     kick();
     const retry = setInterval(() => {
@@ -46,7 +49,7 @@
     // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued
     const state = data?.event === 'onStateChange' ? data.info : data?.info?.playerState;
     if (typeof state === 'number') {
-      playing = state === 1 || (playing && state === 3);
+      if (state === 1) playing = true;
       if (state === -1 || state === 2 || state === 5) kick();
     }
 
