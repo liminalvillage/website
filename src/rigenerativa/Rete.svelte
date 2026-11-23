@@ -30,7 +30,7 @@
 
   const sites = [
     { name: 'Liminal Village', image: '/images/regenerativa/site-liminal.jpeg', href: 'https://liminalvillage.com' },
-    { name: 'ReFactory', image: '/images/regenerativa/site-refactory.jpeg', href: 'https://refactory.earth' },
+    { name: 'ReFactory', image: '/images/refactory/12.jpeg', href: 'https://refactory.earth' },
     { name: 'Casa Selva', image: '/images/regenerativa/site-casaselva.jpeg', href: 'https://casaselva.earth' },
   ].map((s, i) => ({ ...s, role: t.sites[i][0], blurb: t.sites[i][1] }));
 

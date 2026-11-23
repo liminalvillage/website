@@ -4,18 +4,19 @@
 //   GET /api/calendar   → { holon, quests: [...] }
 //
 // Only the fields a calendar and its event pages need leave the server — no
-// participants. Which quests count (tasks and events, not marketplace items;
-// not cancelled or deleted; dated) mirrors @holons/core/tasks; the page
-// expands schedules and recurrences in the visitor's local time.
+// participants. Which quests count: dated, not cancelled, events (event,
+// meeting, appointment) and open tasks — a completed task is history and
+// stays off the website. The page expands schedules and recurrences in the
+// visitor's local time.
 import { VILLAGE_HOLON as HOLON_ID, readLenses } from '../lib/holosphere.mjs';
 const TASK_TYPES = ['', 'task', 'quest', 'todo', 'recurring'];
 const EVENT_TYPES = ['event', 'meeting', 'appointment'];
 const FIELDS = ['id', 'title', 'type', 'status', 'completed', 'when', 'ends', 'until', 'frequency', 'completedOccurrences', 'category', 'location', 'pictogram', 'description', 'shortDesc', 'fullDesc'];
 
-const isAgenda = (q) => {
-  const type = String(q.type ?? '').trim().toLowerCase();
-  return TASK_TYPES.includes(type) || EVENT_TYPES.includes(type);
-};
+const typeOf = (q) => String(q.type ?? '').trim().toLowerCase();
+const statusOf = (q) => String(q.status ?? '').trim().toLowerCase();
+const isCompletedTask = (q) => statusOf(q) === 'completed' || (q.completed === true || (typeof q.completed === 'string' && q.completed.trim() !== '' && !q.frequency));
+const shown = (q) => EVENT_TYPES.includes(typeOf(q)) || (TASK_TYPES.includes(typeOf(q)) && !isCompletedTask(q));
 
 let cache = { at: 0, value: null };
 
@@ -23,7 +24,7 @@ async function quests() {
   if (cache.value && Date.now() - cache.at < 60_000) return cache.value;
   const lenses = await readLenses([HOLON_ID], ['quests']);
   const value = (lenses.get(HOLON_ID)?.get('quests') ?? [])
-    .filter((q) => isAgenda(q) && typeof q.when === 'string' && q.when && String(q.status ?? '').toLowerCase() !== 'cancelled')
+    .filter((q) => shown(q) && typeof q.when === 'string' && q.when && statusOf(q) !== 'cancelled')
     .map((q) => Object.fromEntries(FIELDS.filter((k) => q[k] !== undefined && q[k] !== null).map((k) => [k, q[k]])));
   cache = { at: Date.now(), value };
   return value;

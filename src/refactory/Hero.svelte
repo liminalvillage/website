@@ -19,7 +19,7 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background-image: url('/images/refactory/1.jpeg');
+    background-image: url('/images/refactory/12.jpeg');
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;

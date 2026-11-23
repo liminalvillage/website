@@ -28,3 +28,7 @@ deno.lock
 *.njsproj
 *.sln
 *.sw?
+
+# Local only: Claude worktrees, and Holons backups (contain participants' personal data)
+.claude/worktrees/
+scripts/lunation-events/backup-*.json
