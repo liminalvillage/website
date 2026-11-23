@@ -19,6 +19,7 @@
           </p>
         </div>
 
+        <!-- Hidden for now (quests & services): restore by removing the comment
         <div class="card">
           <div class="card-icon"><i class="fas fa-compass"></i></div>
           <h4>Quests &amp; projects</h4>
@@ -30,6 +31,7 @@
             Open quest portal <i class="fas fa-arrow-right"></i>
           </a>
         </div>
+        -->
 
         <div class="card">
           <div class="card-icon"><i class="fas fa-envelope-open-text"></i></div>

@@ -12,7 +12,7 @@
     { label: 'The Place', href: '#rf-place' },
     { label: 'Community', href: '#rf-community' },
     { label: 'Future', href: '#rf-future' },
-    { label: 'Quests', href: '/quests.html', external: true },
+    // Hidden for now (quests & services): restore by removing the comment: { label: 'Quests', href: '/quests.html', external: true },
     { label: 'Join', href: '#rf-visit' },
   ];
 </script>

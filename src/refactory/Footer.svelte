@@ -17,7 +17,7 @@
         <a href="#rf-place">The Place</a>
         <a href="#rf-community">Community</a>
         <a href="#rf-future">Future</a>
-        <a href="/quests.html">Quests</a>
+        <!-- Hidden for now (quests & services): restore by removing the comment: <a href="/quests.html">Quests</a> -->
         <a href="#rf-visit">Join</a>
       </div>
 

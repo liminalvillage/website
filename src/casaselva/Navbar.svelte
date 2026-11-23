@@ -18,7 +18,7 @@
     { label: 'Daily Life', href: '#cs-living' },
     { label: 'Network', href: '#cs-network' },
     { label: 'Readings', href: '#cs-readings' },
-    { label: 'Quests', href: '/quests.html', external: true },
+    // Hidden for now (quests & services): restore by removing the comment: { label: 'Quests', href: '/quests.html', external: true },
     { label: 'Visit', href: '#cs-visit' },
   ];
 </script>

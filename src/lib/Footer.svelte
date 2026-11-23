@@ -1,8 +1,9 @@
 <script>
   const explore = [
     { label: 'Lunations', href: '/lunations' },
-    { label: 'Quests', href: '/quests' },
-    { label: 'Services', href: '/services' },
+    // Hidden for now (quests & services): restore by removing the comment
+    // { label: 'Quests', href: '/quests' },
+    // { label: 'Services', href: '/services' },
     { label: 'Our DNA', href: '/dna' },
     { label: 'Frameworks', href: '/frameworks' },
     { label: 'Readings & media', href: '/media' },

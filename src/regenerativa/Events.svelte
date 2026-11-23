@@ -159,7 +159,7 @@
           </ul>
           <div class="actions">
             <a class="rg-btn rg-btn-gold" href="/lunations.html">{t.calendar} <ArrowRight class="arrow" size={16} /></a>
-            <a class="rg-btn rg-btn-ghost" href="/quests.html">{t.quests}</a>
+            <!-- Hidden for now (quests & services): restore by removing the comment: quests button -->
           </div>
         </div>
       </div>

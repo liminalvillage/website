@@ -13,8 +13,9 @@
   var LINKS = [
     { key: 'village', label: 'The village', href: '/#village' },
     { key: 'lunations', label: 'Lunations', href: '/lunations' },
-    { key: 'quests', label: 'Quests', href: '/quests' },
-    { key: 'services', label: 'Services', href: '/services' },
+    // Hidden for now (quests & services): restore by removing the comment
+    // { key: 'quests', label: 'Quests', href: '/quests' },
+    // { key: 'services', label: 'Services', href: '/services' },
     { key: 'dna', label: 'Our DNA', href: '/dna' },
     { key: 'media', label: 'Media', href: '/media' },
   ];

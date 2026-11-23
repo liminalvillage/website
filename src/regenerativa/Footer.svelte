@@ -53,7 +53,7 @@
           <ul>
             {#each hashes as h, i}<li><a href={h}>{t.links[i]}</a></li>{/each}
             <li><a href="/lunations.html">{t.calendar}</a></li>
-            <li><a href="/quests.html">{t.quests}</a></li>
+            <!-- Hidden for now (quests & services): restore by removing the comment: quests link -->
           </ul>
         </div>
         <div>

@@ -46,7 +46,8 @@
 
     <div class="links">
       <a class="more" href="https://regenerativa.earth" target="_blank" rel="noopener">Discover the network →</a>
-      <a class="more" href="/quests">Browse open quests →</a>
+      <!-- Hidden for now (quests & services): restore by removing the comment
+      <a class="more" href="/quests">Browse open quests →</a> -->
     </div>
   </div>
 </section>

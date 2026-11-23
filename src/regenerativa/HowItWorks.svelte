@@ -69,7 +69,7 @@
           {#each t.links as [key, label]}
             <a href={docsPages[key]} target="_blank" rel="noopener noreferrer">{label} <ArrowUpRight size={14} /></a>
           {/each}
-          <a href="/quests.html">{t.quests} <ArrowRight size={14} /></a>
+          <!-- Hidden for now (quests & services): restore by removing the comment: quests link -->
         </div>
       </div>
     </div>
