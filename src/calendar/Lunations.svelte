@@ -4,6 +4,8 @@
   import YearTimeline from './YearTimeline.svelte';
   import { toEvents, noteColor, isPictogramImage } from './schedule.js';
   import { lunationAt } from './lunation.js';
+  import { siteNav } from '../lib/siteNav.js';
+  import SiteFooter from '../lib/SiteFooter.svelte';
 
   const DAY_MS = 86_400_000;
 
@@ -153,17 +155,7 @@
 
 <svelte:window {onkeydown} />
 
-<nav class="nav">
-  <div class="wrap navin">
-    <a href="/" class="brand">Liminal Village</a>
-    <div class="links">
-      <a href="/quests">Quests</a>
-      <a href="/services">Services</a>
-      <a href="/frameworks">Frameworks</a>
-      <a href="/lunations" class="active" aria-current="page">Lunations</a>
-    </div>
-  </div>
-</nav>
+<header use:siteNav={'lunations'}></header>
 
 {#if route}
 <main class="wrap event-page">
@@ -332,17 +324,9 @@
   </div>
 {/if}
 
-<footer class="foot">
-  <div class="wrap">© Liminal Village · Ascoli Piceno, Italy · <a href="/">liminalvillage.com</a></div>
-</footer>
+<SiteFooter />
 
 <style>
-  .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
-  .links { display: flex; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .links a { color: var(--muted); transition: color 0.2s; }
-  .links a:hover, .links a.active { color: var(--gold-dark); }
 
   .hero { padding: 48px 0 20px; background: radial-gradient(1000px 360px at 85% -20%, #e9e6f3 0%, transparent 60%); }
   .hero h1 { font-size: clamp(36px, 4.6vw, 56px); margin: 10px 0 14px; }
@@ -420,16 +404,9 @@
   .apply .cta { display: flex; flex-wrap: wrap; gap: 10px; }
   dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 14px; }
   dt { color: var(--muted); }
-  .foot { padding: 28px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
-  .foot a { color: var(--gold-dark); }
-
-  @media (max-width: 820px) {
-    .links a:not(.active) { display: none; }
-  }
   @media (max-width: 640px) {
     .hero { padding: 32px 0 12px; }
     .lead { font-size: 15.5px; }
     .panel { padding: 12px 8px 10px; border-radius: 14px; }
-    .brand { font-size: 15px; letter-spacing: 3px; }
   }
 </style>

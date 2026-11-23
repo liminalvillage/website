@@ -1,95 +1,101 @@
 <script>
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const explore = [
+    { label: 'Lunations', href: '/lunations' },
+    { label: 'Quests', href: '/quests' },
+    { label: 'Services', href: '/services' },
+    { label: 'Our DNA', href: '/dna' },
+    { label: 'Frameworks', href: '/frameworks' },
+    { label: 'Readings & media', href: '/media' },
+  ];
+  const elsewhere = [
+    { label: 'Documentation', href: 'https://docs.liminalvillage.com/' },
+    { label: 'Projects', href: 'https://async.hackalong.io/' },
+    { label: 'ReGenerativa', href: 'https://regenerativa.earth' },
+    { label: 'Open Collective', href: 'https://opencollective.com/liminal' },
+  ];
+  const social = [
+    { icon: 'fa-instagram', label: 'Instagram', href: 'https://www.instagram.com/liminalvillage/' },
+    { icon: 'fa-linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/liminalvillage/' },
+    { icon: 'fa-facebook', label: 'Facebook', href: 'http://www.facebook.com/emergentcivilization' },
+    { icon: 'fa-twitter', label: 'Twitter', href: 'http://twitter.com/LiminalVillage' },
+  ];
 </script>
 
-<footer class="footer">
-  <div class="container">
-    <nav class="links" aria-label="More">
-      <a href="/frameworks">Frameworks</a>
-      <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a>
-      <a href="https://async.hackalong.io/" target="_blank" rel="noopener">Projects</a>
-      <a href="https://docs.liminalvillage.com/" target="_blank" rel="noopener">Docs</a>
+<footer id="contact" class="foot">
+  <div class="wrap cols">
+    <div class="about">
+      <a href="/" class="brand display">Liminal Village</a>
+      <p>
+        In between Europe and Africa, northern and southern Italy, the mountains and the sea, the hilltop and
+        the valley, nature and civilization.
+      </p>
+      <p class="where">
+        <a href="https://www.google.com/maps?q=Spinetoli,+Ascoli+Piceno,+Italy" target="_blank" rel="noopener">
+          Spinetoli, Ascoli Piceno · Marche, Italy ↗
+        </a>
+      </p>
+      <p><a class="ask" href="/apply">Info, visits, stays & volunteering → apply</a></p>
+    </div>
+
+    <nav aria-label="Explore">
+      <h4>Explore</h4>
+      {#each explore as l}<a href={l.href}>{l.label}</a>{/each}
     </nav>
-    <p>&copy; {new Date().getFullYear()} Liminal Village. All Rights Reserved.</p>
-    <button class="back-to-top" on:click={scrollToTop} aria-label="Back to top">
-      <i class="fas fa-arrow-up"></i>
-    </button>
+
+    <nav aria-label="Elsewhere">
+      <h4>Elsewhere</h4>
+      {#each elsewhere as l}<a href={l.href} target="_blank" rel="noopener">{l.label}</a>{/each}
+    </nav>
+  </div>
+
+  <div class="wrap base">
+    <span>© {new Date().getFullYear()} Liminal Village</span>
+    <div class="social">
+      {#each social as s}
+        <a href={s.href} target="_blank" rel="noopener" aria-label={s.label}><i class="fab {s.icon}" aria-hidden="true"></i></a>
+      {/each}
+    </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    background: #222;
-    color: #8a8274;
-    padding: 2rem 0;
-    text-align: center;
-    position: relative;
-  }
+  .foot { background: var(--paper); border-top: 1px solid var(--line); padding: 72px 0 28px; font-size: 14px; }
+  .cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+  .brand { font-size: 30px; }
+  .about p { margin-top: 12px; max-width: 420px; color: var(--muted); }
+  .where a, .ask { color: var(--gold-dark); font-weight: 600; }
+  .where a:hover, .ask:hover { color: var(--ink); }
+  nav { display: flex; flex-direction: column; gap: 8px; }
+  h4 { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink); margin-bottom: 6px; }
+  nav a { color: var(--muted); }
+  nav a:hover { color: var(--gold-dark); }
 
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .base {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 16px;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
   }
-
-  p {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #8a8274;
-    letter-spacing: 1px;
-  }
-
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.25rem;
-  }
-
-  .links a {
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #D6A15B;
-    text-decoration: none;
-  }
-
-  .links a:hover {
-    color: #fff;
-  }
-
-  .back-to-top {
-    background: rgba(214,161,91,0.15);
-    color: #D6A15B;
-    border: none;
-    width: 40px;
-    height: 40px;
+  .social { display: flex; gap: 8px; }
+  .social a {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    transition: all 0.2s;
   }
+  .social a:hover { border-color: var(--gold); color: var(--gold-dark); }
 
-  .back-to-top:hover {
-    background: #D6A15B;
-    color: #222;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(214,161,91,0.3);
-  }
-
-  @media (max-width: 576px) {
-    .container {
-      flex-direction: column;
-      gap: 1rem;
-    }
+  @media (max-width: 860px) {
+    .cols { grid-template-columns: 1fr 1fr; }
+    .about { grid-column: 1 / -1; }
   }
 </style>

@@ -370,7 +370,7 @@ function strandGeneAt(x, y) {
   const P = y + scrollY();
   return sections.find((g) => P >= g.top && P <= g.bottom) || null;
 }
-const OVER_CONTENT = '.allele, .tag, a, button, .rail, .top, footer, .hero, .drawer';
+const OVER_CONTENT = '.allele, .tag, a, button, .rail, .lv-nav, footer, .hero, .drawer';
 
 document.addEventListener('pointermove', (e) => {
   if (e.pointerType !== 'mouse' || !drawer.hidden) return;

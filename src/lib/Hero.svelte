@@ -1,31 +1,59 @@
 <script>
   import LunationTimer from './LunationTimer.svelte';
 
-  // Muted, looping YouTube video behind the hero; the drone photo shows until it loads.
-  // It starts at START, after the video's title frames and group shot, and the
-  // player is sent back there whenever its loop restarts from 0.
+  // Muted, looping YouTube video behind the hero; the drone photo shows until the
+  // video is actually playing, so a paused frame or a play button never shows.
+  // It starts at START, well into the footage, and is sent back there whenever
+  // its loop restarts from 0.
   const VIDEO_ID = 'xIC_wGnDEkE';
-  const START = 22;
+  const START = 45;
   const videoSrc = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&start=${START}&controls=0&playsinline=1&disablekb=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`;
 
   let player;
+  let playing = $state(false);
+  let kicks = 0;
 
   const send = (msg) => player?.contentWindow?.postMessage(JSON.stringify(msg), '*');
+  const command = (func, args = []) => send({ event: 'command', func, args });
+
+  // Some browsers ignore autoplay=1 in an iframe: ask the player directly,
+  // muted, a few times while it settles.
+  function kick() {
+    command('mute');
+    command('playVideo');
+  }
 
   // YouTube's iframe API over postMessage, without loading its script.
   function listen() {
     send({ event: 'listening', id: 'hero' });
+    kick();
+    const retry = setInterval(() => {
+      if (playing || ++kicks > 10) return clearInterval(retry);
+      send({ event: 'listening', id: 'hero' });
+      kick();
+    }, 1000);
   }
 
   function onMessage(e) {
-    if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname)) return;
+    let host;
+    try { host = new URL(e.origin).hostname; } catch { return; }
+    if (!/youtube(-nocookie)?\.com$/.test(host)) return;
     let data;
     try { data = JSON.parse(e.data); } catch { return; }
+
+    if (data?.event === 'onReady') kick();
+
+    // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued
+    const state = data?.event === 'onStateChange' ? data.info : data?.info?.playerState;
+    if (typeof state === 'number') {
+      playing = state === 1 || (playing && state === 3);
+      if (state === -1 || state === 2 || state === 5) kick();
+    }
+
     const t = data?.info?.currentTime;
-    const ended = data?.event === 'onStateChange' && data.info === 0;
-    if (ended || (typeof t === 'number' && t < START - 1)) {
-      send({ event: 'command', func: 'seekTo', args: [START, true] });
-      send({ event: 'command', func: 'playVideo', args: [] });
+    if (state === 0 || (typeof t === 'number' && t < START - 1)) {
+      command('seekTo', [START, true]);
+      command('playVideo');
     }
   }
 </script>
@@ -33,44 +61,42 @@
 <svelte:window onmessage={onMessage} />
 
 <section id="main-top" class="hero">
-  <div class="hero-video" aria-hidden="true">
+  <div class="hero-video" class:playing aria-hidden="true">
     <iframe bind:this={player} onload={listen} src={videoSrc} title="" tabindex="-1" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
   </div>
-  <div class="hero-content">
-    <div class="hero-text">
+  <div class="shade"></div>
+  <div class="wrap hero-in">
+    <div class="copy">
+      <p class="eyebrow">Co-living &amp; co-creation · Marche, Italy</p>
       <h1>Liminal Village</h1>
-      <p class="subtitle">Open Source Innovation Eco-Tech Hub</p>
-      <p class="network-line">
-        A node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network
+      <p class="tagline">
+        An open-source eco-tech hub in the hills of central Italy, where people come together to
+        co-create the future they want to live in, one lunar cycle at a time.
       </p>
+      <div class="actions">
+        <a class="btn light" href="/apply">Apply to visit</a>
+        <a class="btn ghost" href="#about">Discover the village</a>
+      </div>
+      <p class="network">A node of the <a href="https://regenerativa.earth" target="_blank" rel="noopener">ReGenerativa</a> network</p>
     </div>
     <LunationTimer />
-    <a href="#about" class="scroll-down" aria-label="Scroll down to About section">
-      <span class="arrow"></span>
-    </a>
   </div>
 </section>
 
 <style>
   .hero {
     position: relative;
-    width: 100%;
-    height: 100vh;
     min-height: 100vh;
-    background-image: url('/images/droneview.jpg');
-    background-position: center center;
-    background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    color: #fff;
+    background: #2a241c url('/images/droneview.jpg') center / cover no-repeat;
     overflow: hidden;
   }
 
-  .hero-video {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
+  .hero-video { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+  .hero-video.playing { opacity: 1; }
   /* Cover the hero with a 16:9 frame, like background-size: cover, zoomed a
      little so YouTube's title and logo overlays fall outside the hero */
   .hero-video iframe {
@@ -83,128 +109,66 @@
     border: 0;
   }
 
-  .hero-content {
+  .shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(15, 13, 10, 0.45) 0%, rgba(15, 13, 10, 0.2) 30%, rgba(15, 13, 10, 0.85) 100%),
+      linear-gradient(90deg, rgba(15, 13, 10, 0.75) 0%, rgba(15, 13, 10, 0.45) 45%, rgba(15, 13, 10, 0) 75%);
+  }
+
+  .hero-in {
     position: relative;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(34,34,34,0.55), rgba(214,161,91,0.2));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding-top: 140px;
+    padding-bottom: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 48px;
   }
 
-  .hero-text {
-    text-align: center;
-    animation: fadeInDown 1.5s ease;
-  }
-
-  .hero-text h1 {
+  .copy { max-width: 640px; animation: rise 1.2s var(--ease) both; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 24px rgba(0, 0, 0, 0.45); }
+  .copy .btn { text-shadow: none; }
+  .eyebrow { color: #e8c490; }
+  h1 {
+    margin-top: 14px;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(54px, 9vw, 112px);
+    line-height: 0.95;
+    letter-spacing: 0.5px;
     color: #fff;
-    font-size: 3.5rem;
-    font-weight: 300;
-    letter-spacing: 8px;
-    margin: 0;
-    text-transform: uppercase;
   }
-
-  .subtitle {
-    color: rgba(232, 196, 144, 0.9);
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    margin-top: 1rem;
+  .tagline {
+    margin-top: 22px;
+    font-size: 19px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
   }
-
-  .network-line {
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .actions .ghost { color: #fff; }
+  .network {
+    margin-top: 28px;
+    font-size: 13px;
+    letter-spacing: 0.4px;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: 0.75rem;
   }
+  .network a { color: #fff; border-bottom: 1px solid rgba(232, 196, 144, 0.8); }
 
-  .network-line a {
-    color: #fff;
-    border-bottom: 1px solid rgba(232, 196, 144, 0.9);
-    text-decoration: none;
-  }
+  /* The lunation card sits bottom-right instead of in the middle of the photo */
+  .hero-in :global(.lt) { margin-top: 0; }
 
-  .scroll-down {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-block;
-    text-decoration: none;
-  }
-
-  .arrow {
-    display: block;
-    width: 24px;
-    height: 24px;
-    border-left: 2px solid var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
-    transform: rotate(-45deg);
-    animation: bounce 2s infinite;
-    opacity: 0.7;
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0) rotate(-45deg);
-    }
-    40% {
-      transform: translateY(-10px) rotate(-45deg);
-    }
-    60% {
-      transform: translateY(-5px) rotate(-45deg);
-    }
-  }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-video {
-      display: none;
-    }
+    .hero-video { display: none; }
   }
 
-  @media (max-width: 768px) {
-    .hero {
-      background-attachment: scroll;
-    }
-
-    .hero-text h1 {
-      font-size: 2.2rem;
-      letter-spacing: 5px;
-    }
-
-    .subtitle {
-      font-size: 0.8rem;
-      letter-spacing: 3px;
-    }
-
-    .network-line {
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      padding: 0 1.5rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-text h1 {
-      font-size: 1.6rem;
-      letter-spacing: 3px;
-    }
-
-    .subtitle {
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-    }
-
-    .network-line {
-      font-size: 0.68rem;
-      letter-spacing: 1.5px;
-    }
+  @media (max-width: 900px) {
+    .hero-in { grid-template-columns: 1fr; gap: 32px; padding-top: 150px; padding-bottom: 48px; }
+    .tagline { font-size: 17px; }
+    /* text spans the full width here: darken the whole frame evenly */
+    .shade { background: linear-gradient(180deg, rgba(15, 13, 10, 0.55), rgba(15, 13, 10, 0.5) 40%, rgba(15, 13, 10, 0.88)); }
   }
 </style>

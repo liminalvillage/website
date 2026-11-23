@@ -5,6 +5,8 @@
   import Cancel from './Cancel.svelte';
   import Admin from './Admin.svelte';
   import { api } from './api.js';
+  import { siteNav } from '../lib/siteNav.js';
+  import SiteFooter from '../lib/SiteFooter.svelte';
 
   // Steward area: /services?admin (canonical) or /services/admin.
   const isAdmin = location.pathname.replace(/\/+$/, '') === '/services/admin' || new URLSearchParams(location.search).has('admin');
@@ -92,17 +94,7 @@
 {#if isAdmin}
   <Admin />
 {:else}
-  <nav class="nav">
-    <div class="wrap navin">
-      <a href="/" class="brand">Liminal Village</a>
-      <div class="links">
-        <a href="/quests">Quests</a>
-        <a href="/media">Media</a>
-        <a href="/frameworks">Frameworks</a>
-        <a href="/services" class="active" aria-current="page">Services</a>
-      </div>
-    </div>
-  </nav>
+  <header use:siteNav={'services'}></header>
 
   <header class="hero">
     <div class="wrap heroin">
@@ -191,9 +183,7 @@
     </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap">© Liminal Village · Ascoli Piceno, Italy · <a href="/">liminalvillage.com</a></div>
-  </footer>
+  <SiteFooter />
 
   {#if open}
     {#key open.id}
@@ -206,12 +196,6 @@
 {/if}
 
 <style>
-  .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
-  .links { display: flex; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .links a { color: var(--muted); transition: color 0.2s; }
-  .links a:hover, .links a.active { color: var(--gold-dark); }
 
   .hero { padding: 48px 0 24px; background: radial-gradient(1200px 400px at 80% -10%, #f3e3c9 0%, transparent 60%); }
   .heroin { display: grid; grid-template-columns: 1fr 220px; gap: 40px; align-items: center; }
@@ -260,13 +244,10 @@
   .cta h2 { font-size: 30px; color: #fff; }
   .cta .btn { background: var(--gold); }
   .cta .btn:hover { background: var(--gold-dark); }
-  .foot { padding: 28px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
-  .foot a { color: var(--gold-dark); }
 
   @media (max-width: 820px) {
     .heroin { grid-template-columns: 1fr; }
     .ikigai { display: none; }
-    .links a:not(.active) { display: none; }
     .how { grid-template-columns: 1fr; margin-top: 56px; }
   }
   @media (max-width: 640px) {
@@ -275,7 +256,6 @@
     .lead { font-size: 15.5px; }
     .stats { gap: 22px; }
     .stats dt { font-size: 28px; }
-    .brand { font-size: 15px; letter-spacing: 3px; }
     .grid { grid-template-columns: 1fr; gap: 14px; }
     .cta { padding: 24px; }
   }

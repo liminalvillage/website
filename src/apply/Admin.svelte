@@ -344,7 +344,7 @@
 <style>
   .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+  .brand { font-family: var(--display); font-size: 24px; font-weight: 500; letter-spacing: 1.5px; color: var(--ink); white-space: nowrap; }
   .links { display: flex; align-items: center; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
   .links a, .out { color: var(--muted); transition: color 0.2s; white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
   .links a:hover, .links a.active, .out:hover { color: var(--gold-dark); }
@@ -422,7 +422,7 @@
   }
   @media (max-width: 640px) {
     .wrap { padding: 0 16px; }
-    .brand { font-size: 15px; letter-spacing: 3px; }
+    .brand { font-size: 21px; }
     .links a:not(.active) { display: none; }
     dl { grid-template-columns: 1fr; gap: 2px; }
     dd { margin-bottom: 8px; }

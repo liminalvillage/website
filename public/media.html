@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/site-nav.css">
+<script src="/site-nav.js"></script>
 <title>Readings &amp; Media · Liminal Village</title>
 <meta name="description" content="Articles, papers, talks and videos from Liminal Village — readings on permaculture economics, cosmo-local networks, holons and regenerative communities.">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
@@ -27,12 +29,6 @@
   body{font-family:"Open Sans",sans-serif;font-size:15px;color:var(--text);background:#fff;line-height:1.7;-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none;transition:color .3s;}
   .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
-
-  header{border-bottom:1px solid var(--line);}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;}
-  .brand{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:500;letter-spacing:2px;color:var(--dark);}
-  .back{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
-  .back:hover{color:var(--primary);}
 
   .intro{padding:64px 0 32px;text-align:center;}
   .intro h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;letter-spacing:3px;color:var(--dark);line-height:1.1;}
@@ -75,12 +71,7 @@
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <a href="/" class="brand">Liminal Village</a>
-    <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to site</a>
-  </div>
-</header>
+<header data-site-nav data-current="media"></header>
 
 <main class="wrap">
   <section class="intro">

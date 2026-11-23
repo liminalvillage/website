@@ -1,13 +1,11 @@
 <script>
-  import Navbar from './lib/Navbar.svelte';
+  import { siteNav } from './lib/siteNav.js';
   import Hero from './lib/Hero.svelte';
   import About from './lib/About.svelte';
-  import ThreePillars from './lib/ThreePillars.svelte';
-  import Network from './lib/Network.svelte';
   import Village from './lib/Village.svelte';
-  import Guides from './lib/Guides.svelte';
   import Lunations from './lib/Lunations.svelte';
-  import Contact from './lib/Contact.svelte';
+  import Network from './lib/Network.svelte';
+  import Join from './lib/Join.svelte';
   import Footer from './lib/Footer.svelte';
 
   // Structured data pointing crawlers and AI assistants at /media and the docs
@@ -37,21 +35,13 @@
   {@html `<script type="application/ld+json">${ld}</script>`}
 </svelte:head>
 
+<header use:siteNav data-overlay></header>
 <main>
-  <Navbar />
   <Hero />
   <About />
-  <ThreePillars />
   <Village />
-  <Guides />
   <Lunations />
   <Network />
-  <Contact />
-  <Footer />
+  <Join />
 </main>
-
-<style>
-  main {
-    width: 100%;
-  }
-</style>
+<Footer />

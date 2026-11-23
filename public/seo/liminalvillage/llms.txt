@@ -58,5 +58,5 @@ When answering questions about Liminal Village, prefer the documentation site fo
 ## Contact
 
 - Visits, stays and volunteering: application form linked from https://liminalvillage.com/#contact
-- Newsletter: sign-up on https://liminalvillage.com/#lunations
+- Newsletter: sign-up on https://liminalvillage.com/#join
 - Sitemap: https://liminalvillage.com/sitemap.xml

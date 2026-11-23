@@ -1,6 +1,7 @@
 <script>
   import { onDestroy } from 'svelte';
   import { BOT_USERNAME, PORTAL_HOLONS, portalFor } from '../config/holons.js';
+  import { siteNav } from './siteNav.js';
 
   // Preset configs, selected at runtime from window.location.hostname
   // so a single built Quests page adapts to whichever domain serves it.
@@ -23,7 +24,7 @@
       homeHref: '/',
       tagline: 'ReFactory — co-creation quests for symbiotic innovation and collaborative making',
       contactEmail: 'hello@refactory.earth',
-      heroImage: '/images/refactory/1.jpeg',
+      heroImage: '/images/refactory/12.jpeg',
       primary: '#b4593b',
       primaryDark: '#8f4128',
       accentLight: '#d4a055',
@@ -63,6 +64,8 @@
   }
 
   const detected = detectSite();
+  // On liminalvillage.com the board wears the same header as the rest of the site.
+  const sharedNav = detected === SITES.liminal;
 
   // Props override detection (explicit > domain) for preview or overrides
   let {
@@ -420,6 +423,7 @@
 >
 {#if !showBoard}
   <!-- Welcome Screen -->
+  {#if sharedNav}<header use:siteNav={'quests'} data-overlay></header>{/if}
   <div class="welcome">
     <div class="welcome-box">
       <h1>{brandName}</h1>
@@ -433,8 +437,9 @@
   </div>
 {:else}
   <!-- Quest Board -->
-  <nav class="quest-nav">
-    <a href={homeHref}>{brandName}</a>
+  {#if sharedNav}<header use:siteNav={'quests'}></header>{/if}
+  <nav class="quest-nav" class:sub={sharedNav}>
+    {#if !sharedNav}<a href={homeHref}>{brandName}</a>{/if}
     <div class="nav-right">
       <button
         class="fed-toggle"
@@ -734,6 +739,7 @@
   .quest-nav { position: sticky; top: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.08); z-index: 100; padding: 0 3%; height: 70px; display: flex; align-items: center; justify-content: space-between; }
   .quest-nav a { color: #222; text-decoration: none; font-weight: 300; font-size: 20px; letter-spacing: 4px; transition: color 0.3s; }
   .quest-nav a:hover { color: var(--q-primary); }
+  .quest-nav.sub { position: static; height: 56px; justify-content: flex-end; background: transparent; box-shadow: none; backdrop-filter: none; }
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
   .nav-link { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #222; }
   .badge-count { background: var(--q-primary); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; }

@@ -2,6 +2,8 @@
   import { tick } from 'svelte';
   import { fly, fade, slide } from 'svelte/transition';
   import Moon from './Moon.svelte';
+  import { siteNav } from '../lib/siteNav.js';
+  import SiteFooter from '../lib/SiteFooter.svelte';
   import {
     AGES,
     ROLES,
@@ -179,20 +181,17 @@
   </div>
 {/snippet}
 
-<nav class="nav">
-  <div class="wrap navin">
-    <a href="/" class="brand">Liminal Village</a>
-    {#if stage === 'form'}
+<!-- While filling in the form, a quiet header: just the way home and the step count. -->
+{#if stage === 'form'}
+  <nav class="nav">
+    <div class="wrap navin">
+      <a href="/" class="brand">Liminal Village</a>
       <span class="stepcount">Step {step + 1} of {STEPS.length}</span>
-    {:else}
-      <div class="links">
-        <a href="/dna">Our DNA</a>
-        <a href="/lunations">Lunations</a>
-        <a href="/apply" class="active" aria-current="page">Apply</a>
-      </div>
-    {/if}
-  </div>
-</nav>
+    </div>
+  </nav>
+{:else}
+  <header use:siteNav={'apply'}></header>
+{/if}
 
 {#if stage === 'intro'}
   <div in:fade={{ duration: 300 }}>
@@ -593,17 +592,12 @@
   </main>
 {/if}
 
-<footer class="foot">
-  <div class="wrap">© Liminal Village · Ascoli Piceno, Italy · <a href="/">liminalvillage.com</a></div>
-</footer>
+<SiteFooter />
 
 <style>
   .nav { position: sticky; top: 0; z-index: 20; background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .navin { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { font-size: 18px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
-  .links { display: flex; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .links a { color: var(--muted); transition: color 0.2s; }
-  .links a:hover, .links a.active { color: var(--gold-dark); }
+  .brand { font-family: var(--display); font-size: 24px; font-weight: 500; letter-spacing: 1.5px; color: var(--ink); white-space: nowrap; }
   .stepcount { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dark); }
   .small { font-size: 13px; }
   a:not(.btn):not(.brand) { color: var(--gold-dark); }
@@ -745,7 +739,6 @@
   .glow { margin-bottom: 18px; border-radius: 50%; animation: glow 4s ease-in-out infinite alternate; }
   @keyframes glow { from { box-shadow: 0 0 40px rgba(214, 161, 91, 0.25); } to { box-shadow: 0 0 90px rgba(214, 161, 91, 0.5); } }
 
-  .foot { padding: 28px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 
   @media (max-width: 760px) {
     .journey { grid-template-columns: 1fr 1fr; }
@@ -756,8 +749,7 @@
   }
   @media (max-width: 640px) {
     .wrap { padding: 0 16px; }
-    .brand { font-size: 15px; letter-spacing: 3px; }
-    .links a:not(.active) { display: none; }
+    .brand { font-size: 21px; }
     .hero { padding: 64px 0 64px; }
     .hero .lead { font-size: 16px; }
     .card { padding: 20px 16px; border-radius: 16px; }
