@@ -11,3 +11,11 @@
   command = "npm run dev"
   targetPort = 5173
   port = 8888
+
+# Passkeys: rigenerativa.it is the relying party the KronOS and KairOS iOS
+# apps sign in against (webcredentials:rigenerativa.it). Apple reads this file
+# at the apex, unredirected, and expects JSON.
+[[headers]]
+  for = "/.well-known/apple-app-site-association"
+  [headers.values]
+    Content-Type = "application/json"
